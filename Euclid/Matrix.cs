@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,27 +50,34 @@ namespace Euclid
         {
             get { return _cols; }
         }
-
         public int Rows
         {
             get { return _rows; }
         }
-
-        public Boolean IsSquare
+        public bool IsSquare
         {
             get { return (_rows == _cols); }
         }
-
+        public bool IsSymetric
+        {
+            get
+            {
+                if (_rows != _cols) return false;
+                for (int i = 0; i < _rows; i++)
+                    for (int j = 0; j < _cols; j++)
+                        if (_data[i * _cols + j] != _data[j * _cols + i])
+                            return false;
+                return true;
+            }
+        }
         public int Size
         {
             get { return _data.Length; }
         }
-
         public double[] Data
         {
             get { return _data; }
         }
-
         public double this[int i, int j]
         {
             get
@@ -85,13 +91,11 @@ namespace Euclid
                 _data[i * _cols + j] = value;
             }
         }
-
         public double this[int i]
         {
             get { return _data[i]; }
             set { _data[i] = value; }
         }
-
         public Matrix Clone
         {
             get
@@ -113,7 +117,6 @@ namespace Euclid
                 return _L;
             }
         }
-
         public Matrix U
         {
             get
@@ -122,7 +125,6 @@ namespace Euclid
                 return _U;
             }
         }
-
         public double Determinant
         {
             get
@@ -135,7 +137,6 @@ namespace Euclid
                 return det;
             }
         }
-
         public Matrix Inverse
         {
             get
@@ -154,7 +155,6 @@ namespace Euclid
                 return inv;
             }
         }
-
         public Matrix FastInverse
         {
             get
@@ -209,7 +209,6 @@ namespace Euclid
                 return result;
             }
         }
-
         public Matrix CoMatrix
         {
             get
@@ -244,7 +243,6 @@ namespace Euclid
                 return sum;
             }
         }
-
         public Matrix Transpose
         {
             get
@@ -259,7 +257,6 @@ namespace Euclid
                 return t;
             }
         }
-
         public Matrix FastTranspose
         {
             get
@@ -268,6 +265,14 @@ namespace Euclid
                 Parallel.For(0, _rows * _cols, k => { t._data[k] = _data[(k % _rows) * _cols + (k / _rows)]; });
                 return t;
             }
+        }
+        public Matrix SymmetricPart
+        {
+            get { return 0.5 * (this + this.Transpose); }
+        }
+        public Matrix AntiSymmetricPart
+        {
+            get { return 0.5 * (this - this.Transpose); }
         }
 
         #region Norms and sums

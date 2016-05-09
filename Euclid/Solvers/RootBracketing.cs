@@ -7,6 +7,7 @@ namespace Euclid.Solvers
     {
         #region Declarations
         private double _lowerBound, _upperBound,
+            _tolerance,
             _result = 0,
             _error = 0;
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
@@ -27,7 +28,7 @@ namespace Euclid.Solvers
             _f = f;
             _maxIterations = maxIterations;
             _method = method;
-
+            _tolerance = Descents.ERR_EPSILON;
         }
 
         #region Accessors
@@ -57,6 +58,11 @@ namespace Euclid.Solvers
         {
             get { return _method; }
             set { _method = value; }
+        }
+        public double Tolerance
+        {
+            get { return _tolerance; }
+            set { _tolerance = value; }
         }
         #endregion
 
@@ -108,7 +114,8 @@ namespace Euclid.Solvers
                     return;
                 }
 
-                if (Math.Sign(_error) == 0)
+
+                if (Math.Sign(_error) == 0 || Math.Abs(_upperBound - _lowerBound) < _tolerance)
                 {
                     _status = SolverStatus.Normal;
                     _result = m;

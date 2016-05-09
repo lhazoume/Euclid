@@ -6,7 +6,6 @@ namespace Euclid.Distributions.Continuous
     {
         #region Declarations
         private double _mu, _sigma, _sigma2;
-        private Random _randomSource;
         #endregion
 
         #region Constructors

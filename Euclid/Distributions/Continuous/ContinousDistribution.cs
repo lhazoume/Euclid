@@ -4,6 +4,8 @@ namespace Euclid.Distributions.Continuous
 {
     public abstract class ContinousDistribution : IDistribution
     {
+        protected Random _randomSource;
+
         #region Accessors
         public abstract double Entropy { get; }
         public abstract double Maximum { get; }

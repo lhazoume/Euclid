@@ -8,6 +8,8 @@ namespace Euclid.Solvers
         #region Declarations
 
         private double _initialGuess,
+            _absoluteTolerance,
+            _slopeTolerance,
             _result = 0,
             _error = 0;
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
@@ -24,7 +26,8 @@ namespace Euclid.Solvers
             int maxIterations)
         {
             _initialGuess = initialGuess;
-
+            _absoluteTolerance = Descents.ERR_EPSILON;
+            _slopeTolerance = Descents.GRADIENT_EPSILON;
             _f = f;
             _df = df;
             _maxIterations = maxIterations;
@@ -54,6 +57,16 @@ namespace Euclid.Solvers
         {
             get { return _maxIterations; }
             set { _maxIterations = value; }
+        }
+        public double AbsoluteTolerance
+        {
+            get { return _absoluteTolerance; }
+            set { _absoluteTolerance = value; }
+        }
+        public double SlopeTolerance
+        {
+            get { return _slopeTolerance; }
+            set { _slopeTolerance = value; }
         }
 
         #endregion
@@ -107,7 +120,7 @@ namespace Euclid.Solvers
 
             _iterations = 1;
 
-            while (Math.Abs(_error) > Descents.ERR_EPSILON && Math.Abs(slope) > Descents.GRADIENT_EPSILON && _iterations <= _maxIterations)
+            while (Math.Abs(_error) > _absoluteTolerance && Math.Abs(slope) > _slopeTolerance && _iterations <= _maxIterations)
             {
                 _result = _result - _error / slope;
                 _error = _f(_result) - target;
@@ -116,11 +129,11 @@ namespace Euclid.Solvers
                 _iterations++;
             }
 
-            if (Math.Abs(_error) <= Descents.ERR_EPSILON)
+            if (Math.Abs(_error) <= _absoluteTolerance)
                 _status = SolverStatus.Normal;
             else if (_iterations > _maxIterations)
                 _status = SolverStatus.IterationExceeded;
-            else if (Math.Abs(slope) <= Descents.GRADIENT_EPSILON)
+            else if (Math.Abs(slope) <= _slopeTolerance)
                 _status = SolverStatus.BadFunction;
         }
 

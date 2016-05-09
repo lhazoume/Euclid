@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid
 {
     public sealed class Complex
     {
-        //TODO : test with double and decimal
         #region Declarations
         private double _re, _im;
         #endregion
 
+        #region Constructors
         public Complex(double real, double imaginary)
         {
             _re = real;
@@ -21,6 +17,7 @@ namespace Euclid
         public Complex()
             : this(0, 0)
         { }
+        #endregion
 
         #region Accessors
         public double Re
@@ -54,7 +51,7 @@ namespace Euclid
                 return 0.5 * Math.PI;
             return Math.Atan(_im / _re);
         }
-        public string ToSTring()
+        public override string ToString()
         {
             if (_im == 0) return _re.ToString();
             return string.Format("{0}{1}i{2}", _re, (_im > 0 ? "+" : "-"), Math.Abs(_im));
@@ -118,7 +115,6 @@ namespace Euclid
         {
             return c * d;
         }
-
         public static Complex operator /(Complex x, Complex y)
         {
             return x * y.Conjugate * (1.0 / y.SquareModule());

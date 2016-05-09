@@ -143,6 +143,18 @@ namespace Euclid
 
         // Function Methods
 
+        public static double Norm(double a, double b)
+        {
+            double r;
+            if (Math.Abs(a) > Math.Abs(b))
+            {
+                 r= b / a;
+                return Math.Abs(a) * Math.Sqrt(1 + r * r);
+            }
+            r = a / b;
+            return Math.Abs(b) * Math.Sqrt(1 + r * r);
+        }
+
         /// <summary>
         /// Returns the base 10 logarithm of the specified number.
         /// </summary>
@@ -153,56 +165,6 @@ namespace Euclid
             if (x <= 0.0) throw new ArithmeticException("range exception");
             return Math.Log(x) / 2.30258509299404568401;
         }
-
-
-        /// <summary>
-        /// Returns the hyperbolic cosine of the specified number.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static double cosh(double x)
-        {
-            double a;
-            a = x;
-            if (a < 0.0) a = Math.Abs(x);
-            a = Math.Exp(a);
-            return 0.5 * (a + 1 / a);
-        }
-
-
-        /// <summary>
-        /// Returns the hyperbolic sine of the specified number.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static double sinh(double x)
-        {
-            double a;
-            if (x == 0.0) return x;
-            a = x;
-            if (a < 0.0) a = Math.Abs(x);
-            a = Math.Exp(a);
-            if (x < 0.0) return -0.5 * (a - 1 / a);
-            else return 0.5 * (a - 1 / a);
-        }
-
-
-        /// <summary>
-        /// Returns the hyperbolic tangent of the specified number.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static double tanh(double x)
-        {
-            double a;
-            if (x == 0.0) return x;
-            a = x;
-            if (a < 0.0) a = Math.Abs(x);
-            a = Math.Exp(2.0 * a);
-            if (x < 0.0) return -(1.0 - 2.0 / (a + 1.0));
-            else return (1.0 - 2.0 / (a + 1.0));
-        }
-
 
         /// <summary>
         /// Returns the hyperbolic arc cosine of the specified number.
@@ -497,7 +459,7 @@ namespace Euclid
         public static double fac(double x)
         {
             double d = Math.Abs(x);
-            if (Math.Floor(d) == d) return (double)fac((int)x);
+            if (Math.Floor(d) == d) return (double)Factorial((int)x);
             else return gamma(x + 1.0);
         }
 
@@ -507,17 +469,14 @@ namespace Euclid
         /// </summary>
         /// <param name="j"></param>
         /// <returns></returns>
-        public static int fac(int j)
+        public static int Factorial(int j)
         {
             int i = j;
             int d = 1;
             if (j < 0) i = Math.Abs(j);
             while (i > 1)
-            {
                 d *= i--;
-            }
-            if (j < 0) return -d;
-            else return d;
+            return j < 0 ? -d : d;
         }
 
 

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -10,7 +6,6 @@ namespace Euclid.Distributions.Continuous
     {
         #region Declarations
         private double _mean, _standardDeviation;
-        private Random _randomSource;
         #endregion
 
         #region Constructors

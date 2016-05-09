@@ -3,3 +3,8 @@ C:\Users\Luc\Desktop\Projets\Euclid\Euclid\bin\Debug\Euclid.pdb
 C:\Users\Luc\Desktop\Projets\Euclid\Euclid\obj\Debug\Euclid.csprojResolveAssemblyReference.cache
 C:\Users\Luc\Desktop\Projets\Euclid\Euclid\obj\Debug\Euclid.dll
 C:\Users\Luc\Desktop\Projets\Euclid\Euclid\obj\Debug\Euclid.pdb
+C:\Users\Luc\Documents\GitHub\Euclid\Euclid\bin\Debug\Euclid.dll
+C:\Users\Luc\Documents\GitHub\Euclid\Euclid\bin\Debug\Euclid.pdb
+C:\Users\Luc\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.csprojResolveAssemblyReference.cache
+C:\Users\Luc\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.dll
+C:\Users\Luc\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.pdb

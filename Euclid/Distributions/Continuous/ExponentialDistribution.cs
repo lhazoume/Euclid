@@ -6,7 +6,6 @@ namespace Euclid.Distributions.Continuous
     {
         #region Declarations
         private double _lambda, _beta;
-        private Random _randomSource;
         #endregion
 
         #region Constructors
