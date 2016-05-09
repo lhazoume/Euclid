@@ -1,7 +1,9 @@
 # Euclid
 C# library for maths
 
-This is a work in progress, the classes are not in the definitive form but the structure should not evolve that much.
+This is a work in progress, the classes are not in the definitive form but the structure should not evolve that much. The library was built from the needs I met while crunching data for finance or other reasons, so there are parts that I did not code myself and I tried to keep all the licensing where it is. Feel free to ask me for better credits where needed.
+
+Coming : serious contents, examples for all classes, etc...
 
 Classes :
 - Matrix : all matrix operators, inversion, det, LU decomposition
