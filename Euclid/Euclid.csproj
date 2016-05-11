@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Euclid.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,7 +56,7 @@
     <Compile Include="Histograms\Bound.cs" />
     <Compile Include="Histograms\Bucket.cs" />
     <Compile Include="Histograms\Histogram.cs" />
-    <Compile Include="IndexedSeries\Analytics\Linear.cs" />
+    <Compile Include="IndexedSeries\Analytics\LinearModel.cs" />
     <Compile Include="IndexedSeries\Analytics\IPredictor.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\RegressionStatus.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\OrdinaryLeastSquaresLinearRegression.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="IndexedSeries\DataFrame.cs" />
     <Compile Include="IndexedSeries\IIndexedSeries.cs" />
     <Compile Include="Solvers\Descents.cs" />
-    <Compile Include="Solvers\FuncHelper.cs" />
     <Compile Include="Solvers\ISingleVariableSolver.cs" />
     <Compile Include="Solvers\NewtonRaphson.cs" />
     <Compile Include="Solvers\RootBracketing.cs" />

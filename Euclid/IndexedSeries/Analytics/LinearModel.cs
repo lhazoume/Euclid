@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Euclid.IndexedSeries.Analytics
 {
+    /// <summary>
+    /// Stores the metrics of a linear regression and allows prediction
+    /// </summary>
     public class LinearModel : IPredictor<double, double>
     {
         #region Declarations
@@ -15,6 +18,15 @@ namespace Euclid.IndexedSeries.Analytics
 
         #region Constructors
 
+        /// <summary>
+        /// Default constructor for a linear model
+        /// </summary>
+        /// <param name="constant">the constant term</param>
+        /// <param name="factors">the regression coefficients</param>
+        /// <param name="sampleSize">the sample size</param>
+        /// <param name="SSE">the sum of squared due to error</param>
+        /// <param name="SSR">the sum of squared due to the regression</param>
+        /// <param name="succeeded">the status of the regression</param>
         private LinearModel(double constant, double[] factors, int sampleSize, double SSE, double SSR, bool succeeded)
         {
             _succeeded = succeeded;
@@ -32,14 +44,29 @@ namespace Euclid.IndexedSeries.Analytics
                 _factors[i] = factors[i];
         }
 
+        /// <summary>
+        /// Builds a linear model for a failed regression
+        /// </summary>
         public LinearModel()
             : this(0, new double[] { 0 }, 0, 0, 0, false)
         { }
 
+        /// <summary>
+        /// Builds a constant linear model
+        /// </summary>
+        /// <param name="constant">the constant</param>
+        /// <param name="sampleSize">the sample size</param>
+        /// <param name="SSE">the sum of squares due to error</param>
         public LinearModel(double constant, int sampleSize, double SSE)
             : this(constant, new double[] { 0 }, sampleSize, SSE, 0, true)
         { }
 
+        /// <summary> Builds a linear model for a succesful regression </summary>
+        /// <param name="constant">the regression constant term</param>
+        /// <param name="factors">the regression linear coefficients</param>
+        /// <param name="sampleSize">the sample size</param>
+        /// <param name="SSE">the sum of squares due to the error</param>
+        /// <param name="SSR">the sum of squares due to the regression</param>
         public LinearModel(double constant, double[] factors, int sampleSize, double SSE, double SSR)
             : this(constant, factors, sampleSize, SSE, SSR, true)
         { }
@@ -47,18 +74,33 @@ namespace Euclid.IndexedSeries.Analytics
         #endregion
 
         #region Accessors
+        /// <summary>
+        /// the constant term
+        /// </summary>
         public double Constant
         {
             get { return _succeeded ? _constant : 0; }
         }
+
+        /// <summary>
+        /// the linear terms
+        /// </summary>
         public double[] Factors
         {
             get { return _succeeded ? _factors : new double[] { 0 }; }
         }
+
+        /// <summary>
+        /// the R² on the sample data
+        /// </summary>
         public double R2
         {
             get { return _succeeded ? _ssr / _sst : 0; }
         }
+
+        /// <summary>
+        /// the adjusted R² on the sample data
+        /// </summary>
         public double AdjustedR2
         {
             get
@@ -68,18 +110,34 @@ namespace Euclid.IndexedSeries.Analytics
                 return 0;
             }
         }
+
+        /// <summary>
+        /// specifies whether the regression succeeds
+        /// </summary>
         public bool Succeeded
         {
             get { return _succeeded; }
         }
+
+        /// <summary>
+        /// Sum of squares due to error
+        /// </summary>
         public double SSE
         {
             get { return _sse; }
         }
+
+        /// <summary>
+        /// Sum of squares due to the regression
+        /// </summary>
         public double SSR
         {
             get { return _ssr; }
         }
+
+        /// <summary>
+        /// Total sum of squares
+        /// </summary>
         public double SST
         {
             get { return _sst; }
@@ -87,24 +145,29 @@ namespace Euclid.IndexedSeries.Analytics
         #endregion
 
         #region ToString
+        /// <summary>
+        /// Returns a string that represents the linear model
+        /// </summary>
+        /// <returns>a string that represents the linear model</returns>
         public override string ToString()
         {
-            string result = string.Join(";", "[R2=" + R2 + "]", "[AdjustedR2=" + AdjustedR2 + "]", "[Constant=" + _constant + "]");
-            return result;
+            return string.Format("[R2={0}];[AdjustedR2={1}];[Constant={2}]", R2, AdjustedR2, _constant);
         }
         #endregion
 
         #region IPredictor
+        /// <summary>
+        /// Returns the estimator for the given set of data
+        /// </summary>
+        /// <param name="x">the set of regressors</param>
+        /// <returns>the estimator of the regressed data</returns>
         public double Predict(IList<double> x)
         {
+            double y = _constant;
             if (_succeeded)
-            {
-                double y = _constant;
                 for (int i = 0; i < Math.Min(_factors.Length, x.Count); i++)
                     y += _factors[i] * x[i];
-                return y;
-            }
-            return _constant;
+            return y;
         }
         #endregion
     }

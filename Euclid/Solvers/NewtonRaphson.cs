@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Numerics;
+using System;
 using System.Collections.Generic;
 
 namespace Euclid.Solvers

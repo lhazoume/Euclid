@@ -6,6 +6,10 @@ namespace Euclid.Numerics
 {
     public static class Differentiator
     {
+        public static Func<double, double> Differentiate(this Func<double, double> function)
+        {
+            return Differentiate(function, DifferenceForm.Central, 1e-9);
+        }
         public static Func<double, double> Differentiate(this Func<double, double> function, DifferenceForm form, double step)
         {
             if (function == null) throw new ArgumentNullException("The function should not be null");

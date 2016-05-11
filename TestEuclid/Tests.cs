@@ -22,20 +22,5 @@ namespace TestEuclid
             return false;
         }
 
-        public static bool MatrixDecomposition()
-        {
-            int n = 100;
-            Matrix rand = Matrix.RandomMatrix(n).SymmetricPart;
-            EigenDecomposition decomp = new EigenDecomposition(rand);
-            Complex[] eig = decomp.EigenValues;
-            Matrix eigenVectors = decomp.EigenVectors;
-            double cumulatedNorm = 0;
-            for (int i = 0; i < eig.Length; i++)
-            {
-                Matrix diff = (rand * eigenVectors.Column(i) - eig[i].Re * eigenVectors.Column(i));
-                cumulatedNorm += diff.NormSup;
-            }
-            return cumulatedNorm <= n * n * 1e-12;
-        }
     }
 }

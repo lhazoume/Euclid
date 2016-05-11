@@ -2,19 +2,21 @@
 
 namespace Euclid.LinearAlgebra
 {
+    /// <summary>
+    /// Class used to diagonalize symmetric matrices
+    /// </summary>
     public class EigenDecomposition
     {
         #region Declarations
-        private double[] _d, _e;      /// <summary>Arrays for internal storage of eigenvalues.</summary>
-        private Matrix _V;          /// <summary>Array for internal storage of eigenvectors.</summary>
+        private double[] _d, _e;
+        private Matrix _V;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Check for symmetry, then construct the eigenvalue decomposition
+        /// Initiates the class
         /// </summary>
-        /// <remarks>Provides access to D and V</remarks>
-        /// <param name="Arg">Square matrix</param>
+        /// <param name="matrix">the <c>Matrix</c> to decompose</param>
         public EigenDecomposition(Matrix matrix)
         {
             if (!matrix.IsSymetric)
@@ -24,14 +26,13 @@ namespace Euclid.LinearAlgebra
             _V = matrix.Clone;
             _d = new double[n];
             _e = new double[n];
-
-            SymmetricTridiagonalize();
-            SymmetricDiagonalize();
         }
         #endregion
 
         #region Accessors
-
+        /// <summary>
+        /// Returns the <c>Complex</c> eigen values of the matrix
+        /// </summary>
         public Complex[] EigenValues
         {
             get
@@ -44,6 +45,9 @@ namespace Euclid.LinearAlgebra
             }
         }
 
+        /// <summary>
+        /// Returns the diagonal <c>Matrix</c> which is the diagonalized form of the initial matrix
+        /// </summary>
         public Matrix DiagonalMatrix
         {
             get
@@ -67,6 +71,9 @@ namespace Euclid.LinearAlgebra
             }
         }
 
+        /// <summary>
+        /// Returns a <c>Matrix</c> whose columns are the eigen vectors of the matrix
+        /// </summary>
         public Matrix EigenVectors
         {
             get { return _V.Clone; }
@@ -75,6 +82,14 @@ namespace Euclid.LinearAlgebra
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Tridiagonalizes the matrix and then diagonalize it in the complex space
+        /// </summary>
+        public void Solve()
+        {
+            SymmetricTridiagonalize();
+            SymmetricDiagonalize();
+        }
 
         /// <summary>
         /// Symmetric Householder reduction to tridiagonal form.

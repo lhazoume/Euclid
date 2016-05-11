@@ -19,16 +19,37 @@ namespace Euclid
 
         #region Constructors
 
+        /// <summary>
+        /// Builds a 2x2 <c>Matrix</c>
+        /// </summary>
         public Matrix()
-            : this(1)
+            : this(2)
         { }
+
+        /// <summary>
+        /// Builds a square matrix full of zeros
+        /// </summary>
+        /// <param name="dimension">the number of rows or columns</param>
         public Matrix(int dimension)
             : this(dimension, dimension)
         {
         }
+
+        /// <summary>
+        /// Builds a rectangular matrix full of zeros
+        /// </summary>
+        /// <param name="rows">the number of rows</param>
+        /// <param name="cols">the number of columns</param>
         public Matrix(int rows, int cols)
             : this(rows, cols, 0)
         { }
+
+        /// <summary>
+        /// Builds a rectangular matrix filled with the specified value
+        /// </summary>
+        /// <param name="rows">the number of rows</param>
+        /// <param name="cols">the number of columns</param>
+        /// <param name="value">the value for all the fields of the matrix</param>
         public Matrix(int rows, int cols, double value)
         {
             if (rows <= 0) throw new ArgumentException("No matrix can have less than one row");
@@ -36,28 +57,43 @@ namespace Euclid
             _rows = rows;
             _cols = cols;
 
-            _data = new double[_rows * _cols];
+            int size = _rows * _cols;
+            _data = new double[size];
             if (value != 0)
-                for (int i = 0; i < _rows * _cols; i++)
+                for (int i = 0; i < size; i++)
                     _data[i] = value;
         }
 
         #endregion
 
         #region Accessors
-
+        /// <summary>
+        /// Returns the number of columns of the <c>Matrix</c>
+        /// </summary>
         public int Columns
         {
             get { return _cols; }
         }
+
+        /// <summary>
+        /// Returns the number of rows of the <c>Matrix</c>
+        /// </summary>
         public int Rows
         {
             get { return _rows; }
         }
+
+        /// <summary>
+        /// Specifies whether the <c>Matrix</c> is square
+        /// </summary>
         public bool IsSquare
         {
             get { return (_rows == _cols); }
         }
+
+        /// <summary>
+        /// Specifies whether the <c>Matrix</c> is square and symmetric
+        /// </summary>
         public bool IsSymetric
         {
             get
@@ -70,10 +106,15 @@ namespace Euclid
                 return true;
             }
         }
+
+        /// <summary>
+        /// Returns the number of values in the <c>Matrix</c>
+        /// </summary>
         public int Size
         {
             get { return _data.Length; }
         }
+
         public double[] Data
         {
             get { return _data; }
@@ -96,6 +137,10 @@ namespace Euclid
             get { return _data[i]; }
             set { _data[i] = value; }
         }
+
+        /// <summary>
+        /// Returns a deep copy of the <c>Matrix</c>
+        /// </summary>
         public Matrix Clone
         {
             get
@@ -232,6 +277,9 @@ namespace Euclid
 
         #endregion
 
+        /// <summary>
+        /// Returns the trace of the <c>Matrix</c>
+        /// </summary>
         public double Trace
         {
             get
@@ -277,6 +325,9 @@ namespace Euclid
 
         #region Norms and sums
 
+        /// <summary>
+        /// Return the sum of the absolute values
+        /// </summary>
         public double Norm1
         {
             get
@@ -289,10 +340,18 @@ namespace Euclid
                 return result;
             }
         }
+
+        /// <summary>
+        /// Returns the square root of the sum of squares
+        /// </summary>
         public double Norm2
         {
             get { return Math.Sqrt(this.SumOfSquares); }
         }
+
+        /// <summary>
+        /// Returns the largest value of the <c>Matrix</c> in absolute value
+        /// </summary>
         public double NormSup
         {
             get
@@ -302,6 +361,10 @@ namespace Euclid
                 return result;
             }
         }
+
+        /// <summary>
+        /// Returns the sum of the squared values
+        /// </summary>
         public double SumOfSquares
         {
             get
@@ -312,6 +375,10 @@ namespace Euclid
                 return result;
             }
         }
+
+        /// <summary>
+        /// Returns the sum of the values
+        /// </summary>
         public double Sum
         {
             get
@@ -701,11 +768,11 @@ namespace Euclid
         #region Static Matrices
 
         /// <summary>
-        /// Returns a matrix fullfilled with zeroes.
+        /// Returns a matrix filled with zeroes.
         /// </summary>
         /// <param name="iRows">The number of rows of the output</param>
         /// <param name="iCols">The number of columns of the output</param>
-        /// <returns>A matrix fullfilled with zeroes</returns>
+        /// <returns>A matrix filled with zeroes</returns>
         public static Matrix ZeroMatrix(int iRows, int iCols)
         {
             return new Matrix(iRows, iCols, 0);
@@ -831,6 +898,12 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>
+        /// Returns the Hadamard product
+        /// </summary>
+        /// <param name="m1">the left hand side</param>
+        /// <param name="m2">the right hand side</param>
+        /// <returns>a <c>Matrix</c> containing the Hadamard product</returns>
         private static Matrix Hadamard(Matrix m1, Matrix m2)
         {
             if (m1.Rows == m2.Rows && m1.Columns == m2.Columns)
@@ -878,7 +951,10 @@ namespace Euclid
 
             return true;
         }
-
+        /// <summary>
+        /// Returns a string that represents the matrix
+        /// </summary>
+        /// <returns>a string that represents the matrix</returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

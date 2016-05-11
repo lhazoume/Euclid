@@ -108,7 +108,7 @@ namespace Euclid
 
             for (int i = 0; i < z.Count; i++)
             {
-                double n = p.Evaluate(z[i]).Module();
+                double n = p.Evaluate(z[i]).Modulus();
                 if (n > buf) buf = n;
             }
 
@@ -130,8 +130,7 @@ namespace Euclid
         /// <summary>
         /// Computes the roots of polynomial p via Weierstrass iteration.
         /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
+        /// <returns>the complex roots of the <c>Polynomial</c></returns>
         public List<Complex> ComplexRoots()
         {
             double tolerance = 1e-12;
@@ -187,16 +186,16 @@ namespace Euclid
         /// <summary>
         /// Accesses the terms of the polynomial
         /// </summary>
-        /// <param name="i"></param>
-        /// <returns></returns>
+        /// <param name="i">the index</param>
+        /// <returns>a term of the polynomial</returns>
         public double this[int i]
         {
-            get
-            {
-                return i < _terms.Length ? _terms[i] : 0;
-            }
+            get { return i < _terms.Length ? _terms[i] : 0; }
         }
 
+        /// <summary>
+        /// Returns the polynomial's degree
+        /// </summary>
         public int Degree
         {
             get { return _degree; }
@@ -209,6 +208,8 @@ namespace Euclid
         {
             get
             {
+                if (_terms.Length == 0)
+                    return new Polynomial(0);
                 List<double> newTerms = new List<double>();
                 for (int i = 1; i < _terms.Length; i++)
                     newTerms.Add(_terms[i] * i);
@@ -250,6 +251,9 @@ namespace Euclid
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Returns a deep copy of the polynomial
+        /// </summary>
         public Polynomial Clone
         {
             get { return new Polynomial(_terms); }
@@ -272,6 +276,11 @@ namespace Euclid
         {
             return p * f;
         }
+
+        /// <summary> multiplies two polynomials </summary>
+        /// <param name="p1">the left hand side</param>
+        /// <param name="p2">the right hand side</param>
+        /// <returns>the <c>Polynomial</c> result of the polynomial</returns>
         public static Polynomial operator *(Polynomial p1, Polynomial p2)
         {
             int degree = p1.Degree + p2.Degree;
@@ -306,12 +315,25 @@ namespace Euclid
             return new Polynomial(newTerms);
         }
 
+        /// <summary>
+        /// Adds a polynomial to a scalar
+        /// </summary>
+        /// <param name="p">the polynomial left hand side</param>
+        /// <param name="c">the scalar right hand side</param>
+        /// <returns>the <c>Polynomial</c> result of the adition</returns>
         public static Polynomial operator +(Polynomial p, double c)
         {
             Polynomial tmp = p.Clone;
             p._terms[0] += c;
             return tmp;
         }
+
+        /// <summary>
+        /// Adds a polynomial to a scalar
+        /// </summary>
+        /// <param name="c">the scalar left hand side</param>
+        /// <param name="p">the polynomial right hand side</param>
+        /// <returns>the <c>Polynomial</c> result of the addition</returns>
         public static Polynomial operator +(double c, Polynomial p)
         {
             return p + c;
@@ -329,10 +351,24 @@ namespace Euclid
         {
             return p * -1;
         }
+
+        /// <summary>
+        /// Adds two polynomials
+        /// </summary>
+        /// <param name="p1">the left hand side</param>
+        /// <param name="p2">the right hand side</param>
+        /// <returns>the <c>Polynomial</c> result of the addition</returns>
         public static Polynomial operator +(Polynomial p1, Polynomial p2)
         {
             return Polynomial.Add(p1, p2);
         }
+
+         /// <summary>
+        /// Substracts one polynomial to another
+        /// </summary>
+        /// <param name="p1">the left hand side</param>
+        /// <param name="p2">the right hand side</param>
+        /// <returns>the <c>Polynomial</c> result of the substraction </returns>
         public static Polynomial operator -(Polynomial p1, Polynomial p2)
         {
             return Polynomial.Add(p1, -p2);

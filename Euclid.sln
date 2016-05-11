@@ -5,10 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euclid", "Euclid\Euclid.csproj", "{C685AEF9-4E07-40C7-AC2F-FF66C8A3A851}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEuclid", "TestEuclid\TestEuclid.csproj", "{AA3A2072-74CB-4C52-9443-179C9A24D502}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C685AEF9-4E07-40C7-AC2F-FF66C8A3A851} = {C685AEF9-4E07-40C7-AC2F-FF66C8A3A851}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidTests", "EuclidTests\EuclidTests.csproj", "{D7CDE632-63CA-4E34-A2D2-46DC4D982EDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +17,10 @@ Global
 		{C685AEF9-4E07-40C7-AC2F-FF66C8A3A851}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C685AEF9-4E07-40C7-AC2F-FF66C8A3A851}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C685AEF9-4E07-40C7-AC2F-FF66C8A3A851}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA3A2072-74CB-4C52-9443-179C9A24D502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA3A2072-74CB-4C52-9443-179C9A24D502}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA3A2072-74CB-4C52-9443-179C9A24D502}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA3A2072-74CB-4C52-9443-179C9A24D502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7CDE632-63CA-4E34-A2D2-46DC4D982EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7CDE632-63CA-4E34-A2D2-46DC4D982EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7CDE632-63CA-4E34-A2D2-46DC4D982EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7CDE632-63CA-4E34-A2D2-46DC4D982EDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

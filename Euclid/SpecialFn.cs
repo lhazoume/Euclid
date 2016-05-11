@@ -148,7 +148,7 @@ namespace Euclid
             double r;
             if (Math.Abs(a) > Math.Abs(b))
             {
-                 r= b / a;
+                r = b / a;
                 return Math.Abs(a) * Math.Sqrt(1 + r * r);
             }
             r = a / b;
