@@ -131,6 +131,7 @@ namespace Euclid.IndexedSeries
         public U this[int i, int j]
         {
             get { return _data[i, j]; }
+            set { _data[i, j] = value; }
         }
         public U this[T t, V v]
         {
@@ -220,7 +221,6 @@ namespace Euclid.IndexedSeries
             _labels[index] = value;
         }
 
-        public Series<T,U,V> GetSeries(V label)
         public Series<T, U, V> GetSeries(V label)
         {
             U[] data = this.GetColumnAt(label);
