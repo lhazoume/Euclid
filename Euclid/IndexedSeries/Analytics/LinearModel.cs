@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Euclid.IndexedSeries.Analytics
 {
@@ -11,6 +12,7 @@ namespace Euclid.IndexedSeries.Analytics
         #region Declarations
         private readonly double _constant;
         private readonly double[] _factors;
+        private readonly double[] _correlations;
         private readonly double _sse, _ssr, _sst;
         private readonly int _n, _p;
         private readonly bool _succeeded;
@@ -23,11 +25,12 @@ namespace Euclid.IndexedSeries.Analytics
         /// </summary>
         /// <param name="constant">the constant term</param>
         /// <param name="factors">the regression coefficients</param>
+        /// <param name="correlations">the zero-degree correlations</param>
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squared due to error</param>
         /// <param name="SSR">the sum of squared due to the regression</param>
         /// <param name="succeeded">the status of the regression</param>
-        private LinearModel(double constant, double[] factors, int sampleSize, double SSE, double SSR, bool succeeded)
+        private LinearModel(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, bool succeeded)
         {
             _succeeded = succeeded;
 
@@ -39,16 +42,20 @@ namespace Euclid.IndexedSeries.Analytics
             _sst = _ssr + _sse;
 
             _constant = constant;
-            _factors = new double[factors.Length];
-            for (int i = 0; i < factors.Length; i++)
+            _factors = new double[_p];
+            _correlations = new double[_p];
+            for (int i = 0; i < _p; i++)
+            {
                 _factors[i] = factors[i];
+                _correlations[i] = correlations[i];
+            }
         }
 
         /// <summary>
         /// Builds a linear model for a failed regression
         /// </summary>
         public LinearModel()
-            : this(0, new double[] { 0 }, 0, 0, 0, false)
+            : this(0, new double[] { 0 }, new double[] { 0 }, 0, 0, 0, false)
         { }
 
         /// <summary>
@@ -58,17 +65,18 @@ namespace Euclid.IndexedSeries.Analytics
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squares due to error</param>
         public LinearModel(double constant, int sampleSize, double SSE)
-            : this(constant, new double[] { 0 }, sampleSize, SSE, 0, true)
+            : this(constant, new double[] { 0 }, new double[] { 0 }, sampleSize, SSE, 0, true)
         { }
 
         /// <summary> Builds a linear model for a succesful regression </summary>
         /// <param name="constant">the regression constant term</param>
         /// <param name="factors">the regression linear coefficients</param>
+        /// <param name="correlations">the zero-degree correlations</param>
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squares due to the error</param>
         /// <param name="SSR">the sum of squares due to the regression</param>
-        public LinearModel(double constant, double[] factors, int sampleSize, double SSE, double SSR)
-            : this(constant, factors, sampleSize, SSE, SSR, true)
+        public LinearModel(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR)
+            : this(constant, factors, correlations, sampleSize, SSE, SSR, true)
         { }
 
         #endregion
@@ -90,6 +98,11 @@ namespace Euclid.IndexedSeries.Analytics
             get { return _succeeded ? _factors : new double[] { 0 }; }
         }
 
+        public double[] Correlations
+        {
+            get { return _succeeded ? _correlations : new double[] { 0 }; }
+        }
+
         /// <summary>
         /// the R² on the sample data
         /// </summary>
@@ -106,7 +119,7 @@ namespace Euclid.IndexedSeries.Analytics
             get
             {
                 if (_succeeded)
-                    return _sst == 0 ? 0 : 1 - _sse * (_n - 1) / (_sst * (_n - _p - 1));
+                    return _sst == 0 ? 0 : 1 - _sse * (_n - 1) / (_sst * (_n - _factors.Count(f => f != 0) - 1));
                 return 0;
             }
         }

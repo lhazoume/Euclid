@@ -10,12 +10,18 @@ namespace Euclid.IndexedSeries
     public class DataFrame<T, U, V> : IIndexedSeries<T, U, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IConvertible
     {
         #region Declarations
-        protected V[] _labels;
-        protected U[,] _data;
-        protected T[] _legends;
+        private V[] _labels;
+        private U[,] _data;
+        private T[] _legends;
         #endregion
 
         #region Constructors
+        public DataFrame(int rows, int columns)
+        {
+            _data = new U[rows, columns];
+            _labels = new V[columns];
+            _legends = new T[rows];
+        }
         public DataFrame(IEnumerable<V> labels, IEnumerable<T> legends, U[,] data)
         {
             _data = Arrays.Clone(data);
@@ -215,9 +221,10 @@ namespace Euclid.IndexedSeries
         }
 
         public Series<T,U,V> GetSeries(V label)
+        public Series<T, U, V> GetSeries(V label)
         {
             U[] data = this.GetColumnAt(label);
-            return new Series<T,U,V>(label, _legends, data);
+            return new Series<T, U, V>(label, _legends, data);
         }
         #endregion
 

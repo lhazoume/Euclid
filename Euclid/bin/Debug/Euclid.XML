@@ -317,12 +317,13 @@
             Stores the metrics of a linear regression and allows prediction
             </summary>
         </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.#ctor(System.Double,System.Double[],System.Int32,System.Double,System.Double,System.Boolean)">
+        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.#ctor(System.Double,System.Double[],System.Double[],System.Int32,System.Double,System.Double,System.Boolean)">
             <summary>
             Default constructor for a linear model
             </summary>
             <param name="constant">the constant term</param>
             <param name="factors">the regression coefficients</param>
+            <param name="correlations">the zero-degree correlations</param>
             <param name="sampleSize">the sample size</param>
             <param name="SSE">the sum of squared due to error</param>
             <param name="SSR">the sum of squared due to the regression</param>
@@ -341,10 +342,11 @@
             <param name="sampleSize">the sample size</param>
             <param name="SSE">the sum of squares due to error</param>
         </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.#ctor(System.Double,System.Double[],System.Int32,System.Double,System.Double)">
+        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.#ctor(System.Double,System.Double[],System.Double[],System.Int32,System.Double,System.Double)">
             <summary> Builds a linear model for a succesful regression </summary>
             <param name="constant">the regression constant term</param>
             <param name="factors">the regression linear coefficients</param>
+            <param name="correlations">the zero-degree correlations</param>
             <param name="sampleSize">the sample size</param>
             <param name="SSE">the sum of squares due to the error</param>
             <param name="SSR">the sum of squares due to the regression</param>
@@ -460,6 +462,11 @@
             Symmetric tridiagonal QL algorithm.
             </summary>
         </member>
+        <member name="T:Euclid.Matrix">
+            <summary>
+            Matrix of double
+            </summary>
+        </member>
         <member name="M:Euclid.Matrix.#ctor">
             <summary>
             Builds a 2x2 <c>Matrix</c>
@@ -511,14 +518,84 @@
             Returns the number of values in the <c>Matrix</c>
             </summary>
         </member>
+        <member name="P:Euclid.Matrix.Data">
+            <summary>
+            Returns the data of the matrix as a array of double with the rows one after the other
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.Item(System.Int32,System.Int32)">
+            <summary>
+            Allows reading and modifying the coefficients of the <c>Matrix</c>
+            </summary>
+            <param name="i">the row</param>
+            <param name="j">the column</param>
+            <returns>a double value</returns>
+        </member>
+        <member name="P:Euclid.Matrix.Item(System.Int32)">
+            <summary>
+            Allows reading and modifying the coefficients of the <c>Matrix</c>
+            </summary>
+            <param name="i">the coefficient index</param>
+            <returns>a double value</returns>
+        </member>
         <member name="P:Euclid.Matrix.Clone">
             <summary>
             Returns a deep copy of the <c>Matrix</c>
             </summary>
         </member>
+        <member name="P:Euclid.Matrix.L">
+            <summary>
+            The Lower triangular part of the LU decomposition
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.U">
+            <summary>
+            The Upper triangular part of the LU decomposition
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.Determinant">
+            <summary>
+            Returns the determinant of the <c>Matrix</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.Inverse">
+            <summary>
+            Returns the inverse of the <c>Matrix</c> when possible, null otherwise
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.FastInverse">
+            <summary>
+            Returns the inverse of the <c>Matrix</c> when possible, null otherwise. Done using multithreading !
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.CoMatrix">
+            <summary>
+            Returns the co-matrix of the current matrix
+            </summary>
+        </member>
         <member name="P:Euclid.Matrix.Trace">
             <summary>
             Returns the trace of the <c>Matrix</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.Transpose">
+            <summary>
+            Returns the transposed <c>Matrix</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.FastTranspose">
+            <summary>
+            Returns the transposed <c>Matrix</c> filled using multithreading
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.SymmetricPart">
+            <summary>
+            Returns the symmetric part of the <c>Matrix</c> ( 1/2 . (A^T + A))
+            </summary>
+        </member>
+        <member name="P:Euclid.Matrix.AntiSymmetricPart">
+            <summary>
+            Returns the symmetric part of the <c>Matrix</c> (1/2 . (A - A^T))
             </summary>
         </member>
         <member name="P:Euclid.Matrix.Norm1">
@@ -573,6 +650,78 @@
             <param name="v">The right hand side of the equation</param>
             <returns>The solution x of A*x=v</returns>
         </member>
+        <member name="M:Euclid.Matrix.Column(System.Int32)">
+            <summary>
+            Extracts a specific column
+            </summary>
+            <param name="j">the specified column</param>
+            <returns>a column matrix</returns>
+        </member>
+        <member name="M:Euclid.Matrix.Row(System.Int32)">
+            <summary>
+            Extracts a specific row
+            </summary>
+            <param name="i">the specified row</param>
+            <returns>a row matrix</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Multiply(Euclid.Matrix,System.Double)">
+            <summary>
+            Multiplies a <c>Matrix</c> by a scalar
+            </summary>
+            <param name="m">the left hand side <c>Matrix</c></param>
+            <param name="f">the scalar</param>
+            <returns>the <c>Matrix</c> result of the multiplication</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Multiply(System.Double,Euclid.Matrix)">
+            <summary>
+            Multiplies a <c>Matrix</c> by a scalar
+            </summary>
+            <param name="f">the scalar</param>
+            <param name="m">the right hand side <c>Matrix</c></param>
+            <returns>the <c>Matrix</c> result of the multiplication</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Division(Euclid.Matrix,System.Double)">
+            <summary>
+            Divides all the coefficients of a <c>Matrix</c> by a scalar
+            </summary>
+            <param name="m">the left hand side <c>Matrix</c></param>
+            <param name="f">the scalar</param>
+            <returns>the <c>Matrix</c> result of the division</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Multiply(Euclid.Matrix,Euclid.Matrix)">
+            <summary>
+            Multiplies two matrices
+            </summary>
+            <param name="m1">the left hand side <c>Matrix</c></param>
+            <param name="m2">the right hand side <c>Matrix</c></param>
+            <returns>the <c>Matrix</c> result of the multiplication</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_ExclusiveOr(Euclid.Matrix,Euclid.Matrix)">
+            <summary>
+            Multiplies two matrices using multithreading
+            </summary>
+            <param name="m1">the left hand side <c>Matrix</c></param>
+            <param name="m2">the right hand side <c>Matrix</c></param>
+            <returns>the <c>Matrix</c> result of the multiplication</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Implicit(System.Collections.Generic.List{System.Double})~Euclid.Matrix">
+            <summary>
+            Builds a <c>Matrix</c> from a array of double
+            </summary>
+            <param name="model">the list of data</param>
+        </member>
+        <member name="M:Euclid.Matrix.op_Implicit(System.Double[])~Euclid.Matrix">
+            <summary>
+            Builds a <c>Matrix</c> from a array of double
+            </summary>
+            <param name="model">the array of data</param>
+        </member>
+        <member name="M:Euclid.Matrix.op_Implicit(System.Double[0:,0:])~Euclid.Matrix">
+            <summary>
+            Builds a <c>Matrix</c> from a 2d-array of double
+            </summary>
+            <param name="model">the 2d-array of data</param>
+        </member>
         <member name="M:Euclid.Matrix.Add(Euclid.Matrix,Euclid.Matrix)">
             <summary>
             Performs a matrix addition, after going through dimension compatibility verifications.
@@ -581,11 +730,67 @@
             <param name="m2">Second matrix</param>
             <returns>The sum of m1 and m2</returns>
         </member>
+        <member name="M:Euclid.Matrix.op_Addition(Euclid.Matrix,System.Double)">
+            <summary>
+            Adds a scalar to all the coefficients of a <c>Matrix</c>
+            </summary>
+            <param name="m">the left hand side <c>Matrix</c></param>
+            <param name="c">the scalar</param>
+            <returns>the <c>Matrix</c> result of the addition</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Addition(System.Double,Euclid.Matrix)">
+            <summary>
+            Adds a scalar to all the coefficients of a <c>Matrix</c>
+            </summary>
+            <param name="c">the scalar</param>
+            <param name="m">the right hand side <c>Matrix</c></param>
+            <returns>the <c>Matrix</c> result of the addition</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Subtraction(Euclid.Matrix,System.Double)">
+            <summary>
+            Substracts a scalar to all the coefficients of a <c>Matrix</c>
+            </summary>
+            <param name="m">the left hand side <c>Matrix</c></param>
+            <param name="c">the scalar</param>
+            <returns>the <c>Matrix</c> result of the substraction</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Subtraction(System.Double,Euclid.Matrix)">
+            <summary>
+            Adds a scalar to the opposite of a <c>Matrix</c>
+            </summary>
+            <param name="c">the scalar</param>
+            <param name="m">the right hand side <c>Matrix</c></param>
+            <returns>the <c>Matrix</c> result of the substraction</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_UnaryNegation(Euclid.Matrix)">
+            <summary>
+            Returns the opposite of the <c>Matrix</c>
+            </summary>
+            <param name="m">the input matrix</param>
+            <returns>the <c>Matrix</c> opposite</returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Addition(Euclid.Matrix,Euclid.Matrix)">
+            <summary>
+            Performs the matrix addition
+            </summary>
+            <param name="m1">the left hand side matrix</param>
+            <param name="m2">the right hand side matrix</param>
+            <returns>a <c>Matrix</c></returns>
+        </member>
+        <member name="M:Euclid.Matrix.op_Subtraction(Euclid.Matrix,Euclid.Matrix)">
+            <summary>
+            Performs a matrix substraction
+            </summary>
+            <param name="m1">the left hand side</param>
+            <param name="m2">the right hand side</param>
+            <returns>the <c>Matrix</c> result of the substraction</returns>
+        </member>
         <member name="M:Euclid.Matrix.Power(Euclid.Matrix,System.Int32)">
             <summary>
             Evaluates the matrix raised to a power specified by pow.
             </summary>
-            <param name="pow">The power we want to raise the matrix to</param>
+            <param name="matrix">the matrix</param>
+            <param name="pow">The power to raise the matrix to</param>
             <returns>The matrix, raised to the power pow</returns>
         </member>
         <member name="M:Euclid.Matrix.ZeroMatrix(System.Int32,System.Int32)">
@@ -605,6 +810,51 @@
             <param name="iCols">The number of columns of the output</param>
             <returns>A  matrix with ones on the diagonal of ones starting at the (0,0) element</returns>
         </member>
+        <member name="M:Euclid.Matrix.BandMatrix(System.Int32,System.Double[])">
+            <summary>
+            Builds a square symmetric band-matrix
+            </summary>
+            <param name="size">the size of the matrix</param>
+            <param name="values">the values of the diagonals and sub-diagonals</param>
+            <returns>a square matrix</returns>
+        </member>
+        <member name="M:Euclid.Matrix.RandomMatrix(System.Int32)">
+            <summary>
+            Returns a square matrix full of uniform random values
+            </summary>
+            <param name="size">the number of rows / cols</param>
+            <returns>a square <c>Matrix</c></returns>
+        </member>
+        <member name="M:Euclid.Matrix.RandomMatrix(System.Int32,System.Int32)">
+            <summary>
+            Returns a rectangular matrix full of uniform random values
+            </summary>
+            <param name="rows">the number of rows</param>
+            <param name="columns">the number of columns</param>
+            <returns>a rectangular matrix</returns>
+        </member>
+        <member name="M:Euclid.Matrix.TransposeBySelf(Euclid.Matrix)">
+            <summary>
+            Returns the product X^T . X
+            </summary>
+            <param name="X">the <c>Matrix</c></param>
+            <returns>the <c>Matrix</c> result of the product</returns>
+        </member>
+        <member name="M:Euclid.Matrix.FastTransposeBySelf(Euclid.Matrix)">
+            <summary>
+            Returns the product X^T . X using multithreading
+            </summary>
+            <param name="X">the <c>Matrix</c></param>
+            <returns>the <c>Matrix</c> result of the product</returns>
+        </member>
+        <member name="M:Euclid.Matrix.Apply(Euclid.Matrix,System.Func{System.Double,System.Double})">
+            <summary>
+            Applies a function to transform the data of the matrix
+            </summary>
+            <param name="m">the matrix to transform</param>
+            <param name="func">the transforming function</param>
+            <returns>a <c>Matrix</c></returns>
+        </member>
         <member name="M:Euclid.Matrix.Hadamard(Euclid.Matrix,Euclid.Matrix)">
             <summary>
             Returns the Hadamard product
@@ -613,11 +863,130 @@
             <param name="m2">the right hand side</param>
             <returns>a <c>Matrix</c> containing the Hadamard product</returns>
         </member>
+        <member name="M:Euclid.Matrix.Scalar(Euclid.Matrix,Euclid.Matrix)">
+            <summary>
+            Returns the scalar product of the matrices
+            </summary>
+            <param name="m1">the left hand side</param>
+            <param name="m2">the right hand side</param>
+            <returns>a double value</returns>
+        </member>
+        <member name="M:Euclid.Matrix.Equals(Euclid.Matrix)">
+            <summary>
+            Determines whether the specified object is equal to the current object
+            </summary>
+            <param name="other">the object to compare with the current object</param>
+            <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c></returns>
+        </member>
         <member name="M:Euclid.Matrix.ToString">
             <summary>
             Returns a string that represents the matrix
             </summary>
             <returns>a string that represents the matrix</returns>
+        </member>
+        <member name="T:Euclid.Numerics.DifferenceForm">
+            <summary>
+            The difference form used to differentiate
+            </summary>
+        </member>
+        <member name="F:Euclid.Numerics.DifferenceForm.Forward">
+            <summary>the forward-rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.DifferenceForm.Backward">
+            <summary>the backward-rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.DifferenceForm.Central">
+            <summary>the central-rule</summary>
+        </member>
+        <member name="T:Euclid.Numerics.IntegrationForm">
+            <summary>
+            The integration method
+            </summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Left">
+            <summary>Left-point rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Right">
+            <summary>Right-point rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Middle">
+            <summary>Middle-point rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Trapeze">
+            <summary>Trapeze rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Simpson">
+            <summary>Simpson rule</summary>
+        </member>
+        <member name="T:Euclid.Numerics.Integrator">
+            <summary>
+            Iterative processor to calculate the integral of a function over an interval
+            </summary>
+        </member>
+        <member name="M:Euclid.Numerics.Integrator.#ctor(System.Double,System.Double,System.Func{System.Double,System.Double},Euclid.Numerics.IntegrationForm,System.Int32)">
+            <summary>
+            Builds a <c>Integrator</c>
+            </summary>
+            <param name="a">the lower bound of the interval</param>
+            <param name="b">the upper bound of the interval</param>
+            <param name="f">the function to integrate</param>
+            <param name="form">the IntegrationForm use to approximate</param>
+            <param name="maxIterations">the maximum iterations </param>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Function">
+            <summary>
+            Gets and sets the function to integrate
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.MaxIterations">
+            <summary>
+            Gets and sets the maximum number of iterations
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.LowerBound">
+            <summary>
+            Gets and sets the lower bound of the interval
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.UpperBound">
+            <summary>
+            Gets and sets the upper bound of the interval
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Form">
+            <summary>
+            Gets and sets the integration form
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Error">
+            <summary>
+            Returns the error of the integration
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Iterations">
+            <summary>
+            Returns the number of iterations of the integration process
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Status">
+            <summary>
+            Returns the status of the solver after the integration process
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Result">
+            <summary>
+            Returns the integral value of the function
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Convergence">
+            <summary>
+            Returns the details of the convergence sequence (integral and error)
+            </summary>
+        </member>
+        <member name="M:Euclid.Numerics.Integrator.Integrate">
+            <summary>
+            Performs the iterative integration of the function
+            </summary>
         </member>
         <member name="M:Euclid.Polynomial.#ctor(System.Int32)">
             <summary>
@@ -721,8 +1090,92 @@
             <summary>
             Evaluates the Polynomial raised to a power specified by pow.
             </summary>
+            <param name="p">the <c>Polynomial</c> target</param>
             <param name="pow">The power we want to raise the Polynomial to</param>
             <returns>The Polynomial, raised to the power pow</returns>
+        </member>
+        <member name="T:Euclid.Solvers.NewtonRaphson">
+            <summary>
+            Finds a root using the Newton-Raphson method
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.NewtonRaphson.#ctor(System.Double,System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Int32)">
+            <summary>
+            Builds a solver using the Newton-Raphson method
+            </summary>
+            <param name="initialGuess">the initial guess</param>
+            <param name="f">the function to solve for</param>
+            <param name="df">the derivative of the function to solve for</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+        </member>
+        <member name="M:Euclid.Solvers.NewtonRaphson.#ctor(System.Double,System.Func{System.Double,System.Double},System.Int32)">
+            <summary>
+            Builds a solver using the Newton-Raphson method
+            </summary>
+            <param name="initialGuess">the initial guess</param>
+            <param name="f">the function to solve for</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.Function">
+            <summary>
+            Gets and sets the function to solve for
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.InitialGuess">
+            <summary>
+            Gets and sets the initial guess
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.MaxIterations">
+            <summary>
+            Gets and sets the maximum number of iterations
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.AbsoluteTolerance">
+            <summary>
+            Gets and sets the tolerance for the target (threshold for target reached)
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.SlopeTolerance">
+            <summary>
+            Gets and sets the tolerance for the slope (threshold for stationarity)
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.Error">
+            <summary>
+            Returns the final error
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.Iterations">
+            <summary>
+            Returns the number of interations of the solver
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.Status">
+            <summary>
+            The final status of the solver
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.Result">
+            <summary>
+            The result of the solver
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.NewtonRaphson.Convergence">
+            <summary>
+            The details of the convergence (value, error)
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.NewtonRaphson.Solve">
+            <summary>
+            Solve the equation f(x)=0 using the Newton-Raphson method
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.NewtonRaphson.Solve(System.Double)">
+            <summary>
+            Solve the equation f(x)=target using the Newton-Raphson method
+            </summary>
+            <param name="target">the target</param>
         </member>
         <member name="T:Euclid.Solvers.SolverStatus">
             <summary>

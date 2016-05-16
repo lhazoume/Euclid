@@ -1,21 +1,22 @@
-﻿using System;
+﻿using Euclid.Arithmetics;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Euclid.IndexedSeries.Analytics.Regressions
 {
-    public class OrdinaryLeastSquaresLinearRegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
+    public class LazyPartialLeastSquaresLinearRegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
     {
         #region Declarations
         private bool _returnAverageIfFailed;
         private bool _withConstant;
-        private bool _computeErr;
         private RegressionStatus _status;
         private LinearModel _linearModel = null;
         private DataFrame<T, double, V> _x;
         private Series<T, double, V> _y;
         #endregion
 
-        public OrdinaryLeastSquaresLinearRegression(DataFrame<T, double, V> x, Series<T, double, V> y)
+        public LazyPartialLeastSquaresLinearRegression(DataFrame<T, double, V> x, Series<T, double, V> y)
         {
             if (x == null || y == null) throw new ArgumentNullException("the x and y should not be null");
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
@@ -24,7 +25,6 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             _y = y.Clone();
             _returnAverageIfFailed = false;
             _withConstant = true;
-            _computeErr = true;
             _status = RegressionStatus.NotRan;
         }
 
@@ -40,11 +40,6 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         {
             get { return _withConstant; }
             set { _withConstant = value; }
-        }
-        public bool ComputeError
-        {
-            get { return _computeErr; }
-            set { _computeErr = value; }
         }
         #endregion
 
@@ -82,7 +77,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             #endregion
 
             double yb = Y.Sum / n,
-                sst = _computeErr ? Y.SumOfSquares - n * yb * yb : 0;
+                sst = Y.SumOfSquares - n * yb * yb;
 
             #region Perform calculations
             Matrix tX = X.FastTranspose,
@@ -104,27 +99,48 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
                 A = radix ^ Y;
             #endregion
 
-            double sse = 0;
+            Matrix H = X ^ radix,
+                I = Matrix.IdentityMatrix(H.Rows, H.Columns),
+                cov = tX ^ Y;
+
+            #region Correlations
             double[] correls = new double[p];
-            if (_computeErr)
+            for (int i = 0; i < p; i++)
             {
-                Matrix H = X ^ radix,
-                    I = Matrix.IdentityMatrix(H.Rows, H.Columns),
-                    e = Y.FastTranspose ^ (I - H) ^ Y,
-                    cov = tX ^ Y;
-
-                #region Correlations
-                for (int i = 0; i < p; i++)
-                {
-                    double xb = X.Column(1 + i).Sum / n,
-                        sX = tXX[1 + i, 1 + i] / n - xb * xb,
-                        cXY = cov[1 + i] / n - yb * xb;
-                    correls[i] = cXY / Math.Sqrt(sX * sst);
-                }
-                #endregion
-
-                sse = e[0];
+                double xb = X.Column(1 + i).Sum / n,
+                    sX = tXX[1 + i, 1 + i] / n - xb * xb,
+                    cXY = cov[1 + i] / n - yb * xb;
+                correls[i] = cXY / Math.Sqrt(sX * sst);
             }
+            #endregion
+
+            #region Subsets
+            List<int> indices = new List<int>();
+            for (int i = 0; i < p; i++)
+                indices.Add(i);
+            IEnumerable<IEnumerable<int>> subsets = Subsets.SubSets(indices);
+            List<double> adjR2 = new List<double>();
+            for (int i = 0; i < subsets.Count(); i++)
+            {
+                IEnumerable<int> subset = subsets.ElementAt(i);
+                Matrix D = BuildDiagonalMatrix(A.Size, _withConstant, subset),
+                    XDR = X ^ (D ^ radix),
+                    ei = Y.FastTranspose ^ (I + (-2 * XDR) + Matrix.FastTransposeBySelf(XDR)) ^ Y;
+                double r2i = 1 - (ei[0] * (n - 1)) / (sst * (n - 1 - subset.Count()));
+                adjR2.Add(r2i);
+            }
+            double bestAdj = adjR2.Max();
+            int best = adjR2.IndexOf(bestAdj);
+            IEnumerable<int> bestSubset = subsets.ElementAt(best);
+            Matrix bestD = BuildDiagonalMatrix(A.Size, _withConstant, bestSubset);
+            Matrix bestXDR = X ^ (bestD ^ radix),
+                e = Y.FastTranspose ^ (I + (-2 * bestXDR) + Matrix.FastTransposeBySelf(bestXDR)) ^ Y;
+            double sse = e[0];
+            A = bestD * A;
+            #endregion
+
+
+
             #endregion
 
             #region Output
@@ -135,6 +151,19 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
 
             _linearModel = new LinearModel(beta0, beta.ToArray(), correls, n, sse, sst - sse);
             _status = RegressionStatus.Normal;
+        }
+
+        private static Matrix BuildDiagonalMatrix(int size, bool withConstant, IEnumerable<int> subset)
+        {
+            Matrix result = new Matrix(size);
+            if (withConstant) result[0, 0] = 1;
+
+            foreach (int c in subset)
+            {
+                int col = c + (withConstant ? 1 : 0);
+                result[col, col] = 1;
+            }
+            return result;
         }
     }
 }

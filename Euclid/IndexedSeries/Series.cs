@@ -10,11 +10,17 @@ namespace Euclid.IndexedSeries
     public class Series<T, U, V> : IIndexedSeries<T, U, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>
     {
         #region Declarations
-        protected V _label;
-        protected T[] _legends;
-        protected U[] _data;
+        private V _label;
+        private U[] _data;
+        private T[] _legends;
         #endregion
 
+        public Series(int rows)
+        {
+            _label = default(V);
+            _legends = new T[rows];
+            _data = new U[rows];
+        }
         public Series(V label, IEnumerable<T> legends, IEnumerable<U> data)
         {
             _data = data.ToArray();

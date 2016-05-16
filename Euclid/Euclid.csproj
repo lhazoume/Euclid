@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arithmetics\PascalTriangle.cs" />
+    <Compile Include="Arithmetics\Subsets.cs" />
     <Compile Include="Complex.cs" />
     <Compile Include="Distributions\Continuous\ChiSquaredDistribution.cs" />
     <Compile Include="Distributions\Continuous\LogNormalDistribution.cs" />
@@ -58,8 +59,10 @@
     <Compile Include="Histograms\Histogram.cs" />
     <Compile Include="IndexedSeries\Analytics\LinearModel.cs" />
     <Compile Include="IndexedSeries\Analytics\IPredictor.cs" />
+    <Compile Include="IndexedSeries\Analytics\Regressions\LazyPartialLeastSquaresLinearRegression.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\RegressionStatus.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\OrdinaryLeastSquaresLinearRegression.cs" />
+    <Compile Include="IndexedSeries\Slice.cs" />
     <Compile Include="LinearAlgebra\EigenDecomposition.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Numerics\DifferenceForm.cs" />

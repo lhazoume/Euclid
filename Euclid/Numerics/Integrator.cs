@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Euclid.Numerics
 {
+    /// <summary>
+    /// Iterative processor to calculate the integral of a function over an interval
+    /// </summary>
     public class Integrator
     {
         #region Declaration
@@ -18,6 +21,14 @@ namespace Euclid.Numerics
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion
 
+        /// <summary>
+        /// Builds a <c>Integrator</c>
+        /// </summary>
+        /// <param name="a">the lower bound of the interval</param>
+        /// <param name="b">the upper bound of the interval</param>
+        /// <param name="f">the function to integrate</param>
+        /// <param name="form">the IntegrationForm use to approximate</param>
+        /// <param name="maxIterations">the maximum iterations </param>
         public Integrator(double a, double b, Func<double, double> f, IntegrationForm form, int maxIterations)
         {
             _a = a;
@@ -30,53 +41,89 @@ namespace Euclid.Numerics
         #region Accessors
 
         #region Settables
-
+        /// <summary>
+        /// Gets and sets the function to integrate
+        /// </summary>
         public Func<double, double> Function
         {
             get { return _f; }
             set { _f = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the maximum number of iterations
+        /// </summary>
         public int MaxIterations
         {
             get { return _maxIterations; }
             set { _maxIterations = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the lower bound of the interval
+        /// </summary>
         public double LowerBound
         {
             get { return _a; }
             set { _a = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the upper bound of the interval
+        /// </summary>
         public double UpperBound
         {
             get { return _b; }
             set { _b = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the integration form
+        /// </summary>
         public IntegrationForm Form
         {
             get { return _form; }
             set { _form = value; }
         }
-
         #endregion
 
         #region Get
 
+        /// <summary>
+        /// Returns the error of the integration
+        /// </summary>
         public double Error
         {
             get { return _error; }
         }
+
+        /// <summary>
+        /// Returns the number of iterations of the integration process
+        /// </summary>
         public int Iterations
         {
             get { return _iterations; }
         }
+
+        /// <summary>
+        /// Returns the status of the solver after the integration process
+        /// </summary>
         public SolverStatus Status
         {
             get { return _status; }
         }
+
+        /// <summary>
+        /// Returns the integral value of the function
+        /// </summary>
         public double Result
         {
             get { return _result; }
         }
+
+        /// <summary>
+        /// Returns the details of the convergence sequence (integral and error)
+        /// </summary>
         public List<Tuple<double, double>> Convergence
         {
             get { return new List<Tuple<double, double>>(_convergence); }
@@ -88,6 +135,9 @@ namespace Euclid.Numerics
 
         #region Methods
 
+        /// <summary>
+        /// Performs the iterative integration of the function
+        /// </summary>
         public void Integrate()
         {
             if (_f == null) throw new NullReferenceException("Integrated function should not be null");

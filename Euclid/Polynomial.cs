@@ -379,6 +379,7 @@ namespace Euclid
         /// <summary>
         /// Evaluates the Polynomial raised to a power specified by pow.
         /// </summary>
+        /// <param name="p">the <c>Polynomial</c> target</param>
         /// <param name="pow">The power we want to raise the Polynomial to</param>
         /// <returns>The Polynomial, raised to the power pow</returns>
         public static Polynomial Power(Polynomial p, int pow)

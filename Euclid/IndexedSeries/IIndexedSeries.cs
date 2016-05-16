@@ -9,9 +9,5 @@ namespace Euclid.IndexedSeries
         V[] Labels { get; }
         int Rows { get; }
         int Columns { get; }
-
-        void RemoveRowAt(T t);
-        void ApplyOnData(Func<U, U> function);
-        void ApplyOnLegends(Func<T, T> function);
     }
 }
