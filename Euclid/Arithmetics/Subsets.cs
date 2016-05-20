@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid.Arithmetics
 {
+    /// <summary>
+    /// Subsets class
+    /// </summary>
     public static class Subsets
     {
+        /// <summary>
+        /// Returns all possibles subsets of a List
+        /// </summary>
+        /// <typeparam name="T">the template type</typeparam>
+        /// <param name="data">the original data</param>
+        /// <returns>the List of subsets</returns>
         public static List<List<T>> SubSets<T>(List<T> data)
         {
             if (data.Count() == 0)

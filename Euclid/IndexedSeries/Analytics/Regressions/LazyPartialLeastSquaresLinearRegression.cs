@@ -5,6 +5,11 @@ using System.Linq;
 
 namespace Euclid.IndexedSeries.Analytics.Regressions
 {
+    /// <summary>
+    /// LazyPartialLeastSquaresLinearRegression class (performs all 2^n possible regressions)
+    /// </summary>
+    /// <typeparam name="T">the legends' type</typeparam>
+    /// <typeparam name="V">the labels' type</typeparam>
     public class LazyPartialLeastSquaresLinearRegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
     {
         #region Declarations
@@ -16,6 +21,11 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         private Series<T, double, V> _y;
         #endregion
 
+        /// <summary>
+        /// Builds a LazyPartialLeastSquaresLinearRegression to regress a <c>Series</c> on a <c>DataFrame</c>
+        /// </summary>
+        /// <param name="x">the <c>DataFrame</c></param>
+        /// <param name="y">the <c>Series</c></param>
         public LazyPartialLeastSquaresLinearRegression(DataFrame<T, double, V> x, Series<T, double, V> y)
         {
             if (x == null || y == null) throw new ArgumentNullException("the x and y should not be null");
@@ -31,11 +41,14 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         #region  Accessors
 
         #region Settables
+        /// <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
         public bool ReturnAverageIfFailed
         {
             get { return _returnAverageIfFailed; }
             set { _returnAverageIfFailed = value; }
         }
+
+        /// <summary>Gets and sets whether the regression should involve a constant term</summary>
         public bool WithConstant
         {
             get { return _withConstant; }
@@ -44,10 +57,17 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         #endregion
 
         #region Get
+        /// <summary>
+        /// Gets the result <c>LinearModel</c>
+        /// </summary>
         public LinearModel LinearModel
         {
             get { return _linearModel; }
         }
+        
+        /// <summary>
+        /// Gets the regression's final status
+        /// </summary>
         public RegressionStatus Status
         {
             get { return _status; }
@@ -56,6 +76,9 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
 
         #endregion
 
+        /// <summary>
+        /// Performs the regression
+        /// </summary>
         public void Regress()
         {
             #region Matrices

@@ -4,6 +4,37 @@
         <name>Euclid</name>
     </assembly>
     <members>
+        <member name="T:Euclid.Arithmetics.BinomialCoefficients">
+            <summary>
+            Binomial coefficients class
+            </summary>
+        </member>
+        <member name="M:Euclid.Arithmetics.BinomialCoefficients.#ctor(System.Int32)">
+            <summary>
+            Calculates all the binomial coefficients for a given degree
+            </summary>
+            <param name="n">the degree</param>
+        </member>
+        <member name="P:Euclid.Arithmetics.BinomialCoefficients.Item(System.Int32)">
+            <summary>
+            Returns the binomial coefficient for a given index
+            </summary>
+            <param name="index">the index</param>
+            <returns>an <c>int</c></returns>
+        </member>
+        <member name="T:Euclid.Arithmetics.Subsets">
+            <summary>
+            Subsets class
+            </summary>
+        </member>
+        <member name="M:Euclid.Arithmetics.Subsets.SubSets``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Returns all possibles subsets of a List
+            </summary>
+            <typeparam name="T">the template type</typeparam>
+            <param name="data">the original data</param>
+            <returns>the List of subsets</returns>
+        </member>
         <member name="T:Euclid.Complex">
             <summary>
             Standard Complex numbers
@@ -40,7 +71,11 @@
             <summary>
             Returns the modulus of the <c>Complex</c>
             </summary>
-            <returns>the square modulus of the complex</returns>
+            <returns>the modulus of the complex</returns>
+        </member>
+        <member name="M:Euclid.Complex.SquareModulus">
+            <summary>Returns the square of the modulus of the <c>Complex</c></summary>
+            <returns>a double</returns>
         </member>
         <member name="M:Euclid.Complex.Argument">
             <summary>
@@ -75,6 +110,11 @@
             <summary>
             Returns a complex with both imaginary and real parts equal to zero
             </summary>
+        </member>
+        <member name="M:Euclid.Complex.Exp(Euclid.Complex)">
+            <summary>Returns a complex from its exponential form </summary>
+            <param name="c">the exponential argument</param>
+            <returns>a <c>Complex</c></returns>
         </member>
         <member name="M:Euclid.Complex.op_Addition(Euclid.Complex,Euclid.Complex)">
             <summary>
@@ -140,59 +180,359 @@
             <param name="y">the denominator</param>
             <returns>the <c>Complex</c> result of the division</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.CumulativeDistributionFunction(System.Double,System.Double,System.Double)">
+        <member name="T:Euclid.Distributions.Continuous.CauchyDistribution">
             <summary>
-            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).
+            Cauchy distribution class
             </summary>
-            <param name="mean">The mean(μ) of the normal distribution</param>
-            <param name="standardDeviation">The standard deviation (σ) of the normal distribution.Range: σ ≥ 0</param>
-            <param name="x">The location at which to compute the cumulative distribution function</param>
-            <returns>the cumulative distribution at location x</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.IsValidParameterSet(System.Double,System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.#ctor(System.Double,System.Double)">
             <summary>
-            Tests whether the provided values are valid parameters for this distribution.
+            Builds a Cauchy distribution
             </summary>
-            <param name="mean">The mean (μ) of the normal distribution</param>
-            <param name="standardDeviation">The standard deviation (σ) of the normal distribution. Range: σ ≥ 0</param>
-            <returns>true if the parameter set is valid, false, otherwise</returns>
+            <param name="x0">the location</param>
+            <param name="gamma">the scale</param>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.InverseCumulativeDistributionFunction(System.Double,System.Double,System.Double)">
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Maximum">
+            <summary>Gets the distribution's support's upper bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Minimum">
+            <summary>Gets the distribution's support's lower bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
+            <param name="x">the location at which to compute the function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.InverseCumulativeDistribution(System.Double)">
             <summary>
             Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
             </summary>
-            <param name="mean">The mean (μ) of the normal distribution</param>
-            <param name="standardDeviation">The standard deviation (σ) of the normal distribution.Range: σ ≥ 0</param>
-            <param name="probability">The location at which to compute the inverse cumulative density</param>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
             <returns>the inverse cumulative density at p</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.ProbabilityDensityFunction(System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.ProbabilityDensity(System.Double)">
             <summary>
-            Computes the probability density of the distribution (PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
             </summary>
-            <param name="mean">The mean (μ) of the normal distribution</param>
-            <param name="standardDeviation">The standard deviation (σ) of the normal distribution. Range: σ ≥ 0</param>
             <param name="x">The location at which to compute the density</param>
-            <returns>the density at x</returns>
+            <returns>a <c>double</c></returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.ProbabilityDensityFunctionLn(System.Double,System.Double,System.Double)">
+        <member name="T:Euclid.Distributions.Continuous.ChiSquaredDistribution">
             <summary>
-            Computes the log probability density of the distribution (lnPDF) at x, i.e. ln(∂P(X ≤ x)/∂x)
+            Chi squared distribution
             </summary>
-            <param name="mean">The mean (μ) of the normal distribution</param>
-            <param name="standardDeviation">The standard deviation (σ) of the normal distribution. Range: σ ≥ 0</param>
-            <param name="x">The location at which to compute the density</param>
-            <returns>the log density at x</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.Samples(System.Int32,System.Double,System.Double,System.Random)">
+        <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.#ctor(System.Int32)">
+            <summary>
+            Builds a Chi² distribution
+            </summary>
+            <param name="k">the number of freedom degrees</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Entropy">
+            <summary>
+            Gets the distribution's entropy
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Maximum">
+            <summary>
+            Gets the distribution's support's upper bound
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Mean">
+            <summary>
+            Gets the distribution's mean
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Median">
+            <summary>
+            Gets the distribution's median
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Minimum">
+            <summary>
+            Gets the distribution's support's lower bound
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Mode">
+            <summary>
+            Gets the distribution's mode
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Skewness">
+            <summary>
+            Gets the distribution's skewness
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.StandardDeviation">
+            <summary>
+            Gets the dsitribution's standard deviation
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Variance">
+            <summary>
+            Gets the distribution's variance
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.CumulativeDistribution(System.Double)">
+            <summary>
+            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
+            </summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>the cumulative distribution at location x</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+            </summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.Sample(System.Int32)">
             <summary>
             Generates a sequence of samples from the normal distribution using the algorithm
             </summary>
-            <param name="numberOfPoints"></param>
-            <param name="mean">The mean(μ) of the normal distribution</param>
-            <param name="standardDeviation">The standard deviation (σ) of the normal distribution.Range: σ ≥ 0</param>
-            <param name="randomSource">The random number generator to use</param>
-            <returns>a sequence of samples from the distribution</returns>
+            <param name="numberOfPoints">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.LaplaceDistribution">
+            <summary>
+            Laplace distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LaplaceDistribution.#ctor(System.Double,System.Double)">
+            <summary>
+            Builds a Laplace distribution
+            </summary>
+            <param name="mu">the location</param>
+            <param name="b">the scale</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Maximum">
+            <summary>Gets the distribution's support's upper bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Minimum">
+            <summary>Gets the distribution's support's lower bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LaplaceDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
+            <param name="x">the location at which to compute the function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LaplaceDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function
+            </summary>
+            <param name="p">the target probablity</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LaplaceDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LaplaceDistribution.ProbabilityLnDensity(System.Double)">
+            <summary>Computes the probability density function's logarithm at x</summary>
+            <param name="x">the location at which to compute the density</param>
+            <returns>a double</returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.LogNormalDistribution">
+            <summary>
+            Log Normal distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogNormalDistribution.#ctor(System.Double,System.Double)">
+            <summary>Builds a log normal distribution</summary>
+            <param name="mu">the average</param>
+            <param name="sigma">the standard deviation</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Maximum">
+            <summary>Gets the distribution's domain's upper bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Minimum">
+            <summary>Gets the distribution's domain's lower bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Variance">
+            <summary>Gets the distributions's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogNormalDistribution.CumulativeDistribution(System.Double)">
+            <summary>
+            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
+            </summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>the cumulative distribution at location x</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogNormalDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+            </summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogNormalDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogNormalDistribution.Sample(System.Int32)">
+            <summary>
+            Generates a sequence of samples from the log normal distribution
+            </summary>
+            <param name="numberOfPoints">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.ParetoDistribution">
+             <summary>
+            ¨Pareto distribution class
+             </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.#ctor(System.Double,System.Double)">
+            <summary>
+            Builds a Pareto distribution
+            </summary>
+            <param name="xm">the scale</param>
+            <param name="alpha">the shape</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Maximum">
+            <summary>Gets the distribution's domain's upper bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Minimum">
+            <summary> Gets the distribution's domain's lower bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.CumulativeDistribution(System.Double)">
+            <summary>
+            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).
+            </summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+            </summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.Sample(System.Int32)">
+            <summary>
+            Builds a sample of random variables under this distribution
+            </summary>
+            <param name="size">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.NormalDistribution">
+            <summary>
+            Normal distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.#ctor">
+            <summary>
+            Builds a standard normal distribution
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.#ctor(System.Double,System.Double)">
+            <summary>
+            Builds a normal distribution
+            </summary>
+            <param name="mean">the average</param>
+            <param name="standardDeviation">the standard deviation</param>
         </member>
         <member name="M:Euclid.Distributions.Continuous.NormalDistribution.CumulativeDistribution(System.Double)">
             <summary>
@@ -206,7 +546,7 @@
             Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
             </summary>
             <param name="x">The location at which to compute the density</param>
-            <returns></returns>
+            <returns>a <c>double</c></returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.NormalDistribution.InverseCumulativeDistribution(System.Double)">
             <summary>
@@ -219,8 +559,8 @@
             <summary>
             Generates a sequence of samples from the normal distribution using the algorithm
             </summary>
-            <param name="numberOfPoints">the size of the sample to generate</param>
-            <returns>a sequence of samples from the distribution</returns>
+            <param name="numberOfPoints">the sample's size</param>
+            <returns>an array of double</returns>
         </member>
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Entropy">
             <summary>
@@ -234,7 +574,7 @@
         </member>
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Mean">
             <summary>
-            Gets or sets the mean(μ) of the normal distribution
+            Gets the mean(μ) of the normal distribution
             </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Median">
@@ -252,11 +592,6 @@
             Gets the mode of the normal distribution
             </summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.NormalDistribution.RandomSource">
-            <summary>
-            Gets or sets the random number generator which is used to draw random samples
-            </summary>
-        </member>
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Skewness">
             <summary>
             Gets the skewness of the normal distribution
@@ -264,13 +599,291 @@
         </member>
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.StandardDeviation">
             <summary>
-            Gets or sets the standard deviation(σ) of the normal distribution.Range: σ ≥ 0
+            Gets the distribution's standard deviation
             </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Variance">
             <summary>
-            Gets or sets the variance of the normal distribution
+            Gets the distribution's variance
             </summary>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.ExponentialDistribution">
+            <summary>
+            Exponential distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.#ctor(System.Double)">
+            <summary>
+            Builds a Exponential distribution
+            </summary>
+            <param name="lambda">the rate</param>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.CumulativeDistribution(System.Double)">
+            <summary>
+            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
+            </summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>the cumulative distribution at location x</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+            </summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.Sample(System.Int32)">
+            <summary>
+            Generates a sequence of samples from the normal distribution using the algorithm
+            </summary>
+            <param name="numberOfPoints">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Minimum">
+            <summary>
+            Gets the distribution's support's lower bound
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Entropy">
+            <summary>
+            Gets the distribution's entropy
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Maximum">
+            <summary>
+            Gets the distribution's support's upper bound
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Mean">
+            <summary>
+            Gets the distribution's mean
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Median">
+            <summary>
+            Gets the distribution's median
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Mode">
+            <summary>
+            Gets the distribution's mode
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Skewness">
+            <summary>
+            Gets the distribution's mode
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Variance">
+            <summary>
+            Gets the distribution's variance
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.StandardDeviation">
+            <summary>
+            Gets the distribution's standard deviation
+            </summary>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.ContinousDistribution">
+            <summary>Abstract class base for continuous distributions</summary>
+        </member>
+        <member name="F:Euclid.Distributions.Continuous.ContinousDistribution._randomSource">
+            <summary>The random number generator</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Maximum">
+            <summary>Gets the distribution's support's upper bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Minimum">
+            <summary>Gets the distribution's support's lower bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.RandomSource">
+            <summary>
+            Gets or sets the random number generator which is used to draw random samples
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
+            <param name="x">the location at which to compute the function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function
+            </summary>
+            <param name="p">the target probablity</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.ProbabilityLnDensity(System.Double)">
+            <summary>Computes the probability density function's logarithm at x</summary>
+            <param name="x">the location at which to compute the density</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.Sample(System.Int32)">
+            <summary>
+            Generates a sequence of samples from the normal distribution using th algorithm
+            </summary>
+            <param name="size">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.TruncatedNormalDistribution">
+            <summary>
+            Truncated normal distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Builds a truncated normal distribution
+            </summary>
+            <param name="mu">the location</param>
+            <param name="sigma">the scale</param>
+            <param name="a">the interval's lower bound</param>
+            <param name="b">the interval's upper bound</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Maximum">
+            <summary>Gets the distribution's support's upper bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Minimum">
+            <summary>Gets the distribution's support's lower bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Skewness">
+            <summary>
+            Gets the distribution's skewness
+            </summary>
+            <remarks>using Shah and Jaiswal (1966)</remarks>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.StandardDeviation">
+            <summary>
+            Gets the distribution's standard deviation
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution function at x</summary>
+            <param name="x">the location at which to compute the function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function
+            </summary>
+            <param name="p">the target probablity</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="T:Euclid.Distributions.IDistribution">
+            <summary>Interface for all continuous distributions</summary>
+        </member>
+        <member name="M:Euclid.Distributions.IDistribution.CumulativeDistribution(System.Double)">
+            <summary>Evaluates the cumulative distribution function (left hand side)</summary>
+            <param name="x">the argument</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.IDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Evaluates the cumulative distribution's antecedant for a given probability
+            </summary>
+            <param name="p">the probability</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.IDistribution.ProbabilityDensity(System.Double)">
+            <summary>Evaluates the probability density function</summary>
+            <param name="x">the argument</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.IDistribution.ProbabilityLnDensity(System.Double)">
+            <summary>
+            Evaluates the log of the probability density function
+            </summary>
+            <param name="x">the argument</param>
+            <returns>a double</returns>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.Entropy">
+            <summary>
+            Returns the distribution's entropy
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.Maximum">
+            <summary>Returns the distribution's domain's upper bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.Mean">
+            <summary>
+            Returns the distribution's mean
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.Median">
+            <summary>
+            Returns the distribution's median
+            </summary>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.Minimum">
+            <summary>Returns the distribution's domain's upper bound</summary>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.Mode">
+            <summary>Returns the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.Skewness">
+            <summary>Returns the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.StandardDeviation">
+            <summary>Returns the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.IDistribution.Variance">
+            <summary>Returns the distribution's variance</summary>
         </member>
         <member name="T:Euclid.Helpers.Arrays">
             <summary>
@@ -311,6 +924,298 @@
             <param name="data">the array to transform</param>
             <param name="function">the function to apply to the values</param>
             <returns>an array with the transformed data</returns>
+        </member>
+        <member name="T:Euclid.Helpers.Parser">
+            <summary>
+            Parser helper class
+            </summary>
+        </member>
+        <member name="M:Euclid.Helpers.Parser.Parse``1(System.String)">
+            <summary>
+            Parses any data generic type when possible
+            </summary>
+            <typeparam name="T">the generic type</typeparam>
+            <param name="text"></param>
+            <returns>a T</returns>
+        </member>
+        <member name="T:Euclid.Histograms.Bound">
+            <summary>
+            Bound class : mainly used in intervals
+            </summary>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.#ctor(System.Double,System.Boolean)">
+            <summary>
+            Builds a bound
+            </summary>
+            <param name="value">the value</param>
+            <param name="isIncluded">specifies whether this value is included or not</param>
+        </member>
+        <member name="P:Euclid.Histograms.Bound.Value">
+            <summary>
+            Gets the bound's value
+            </summary>
+        </member>
+        <member name="P:Euclid.Histograms.Bound.IsIncluded">
+            <summary>
+            Gets the bound's status
+            </summary>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_LessThan(Euclid.Histograms.Bound,System.Double)">
+            <summary>
+            Compares a <c>Bound</c> to a double
+            </summary>
+            <param name="b">the left hand side <c>Bound</c></param>
+            <param name="x">the right hand side double</param>
+            <returns><c>true</c> if the Bound is lower, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_LessThan(System.Double,Euclid.Histograms.Bound)">
+            <summary>
+            Compares a double to a <c>Bound</c>
+            </summary>
+            <param name="x">the left hand side double</param>
+            <param name="b">the right hand side <c>Bound</c> </param>
+            <returns><c>true</c> if the Bound if higher, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_GreaterThan(Euclid.Histograms.Bound,System.Double)">
+            <summary>
+            Compares a Bound to a double
+            </summary>
+            <param name="b">the left hand side <c>Bound</c></param>
+            <param name="x">the right hand side double</param>
+            <returns><c>true</c> if the Bound is higher, <c>false</c> otherwise </returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_GreaterThan(System.Double,Euclid.Histograms.Bound)">
+            <summary>
+            Compares a Bound to a double
+            </summary>
+            <param name="x">the left hand side double</param>
+            <param name="b">the right hand side Bound</param>
+            <returns><c>true</c> if the Bound is lower, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_LessThanOrEqual(Euclid.Histograms.Bound,System.Double)">
+            <summary>
+            Compares a Bound to a double
+            </summary>
+            <param name="b">the left hand side Bound</param>
+            <param name="x">the right hand side double</param>
+            <returns><c>true</c> if Bound is lower or equal, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_GreaterThanOrEqual(Euclid.Histograms.Bound,System.Double)">
+            <summary>
+            Compares a Bound to a double
+            </summary>
+            <param name="b">the left hand side Bound</param>
+            <param name="x">the right hand side double</param>
+            <returns><c>true</c> if Bound is greater or equal, <c>false</c> otherwise </returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_LessThanOrEqual(System.Double,Euclid.Histograms.Bound)">
+            <summary>
+            Compares a double to a Bound
+            </summary>
+            <param name="x">the left hand side double</param>
+            <param name="b">the right hand side Bound</param>
+            <returns><c>true</c> if the Bound is greater or equal, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_GreaterThanOrEqual(System.Double,Euclid.Histograms.Bound)">
+            <summary>
+            Compares a double to a Bound
+            </summary>
+            <param name="x">the left hand side double</param>
+            <param name="b">the right hand side Bound</param>
+            <returns><c>true</c> if the Bound is lower or equal, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_Equality(Euclid.Histograms.Bound,System.Double)">
+            <summary>
+            Checks if a bound equals a double
+            </summary>
+            <param name="b">the left hand side Bound</param>
+            <param name="x">the right hand side double</param>
+            <returns><c>true</c> if they equal, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_Equality(System.Double,Euclid.Histograms.Bound)">
+            <summary>
+            Checks if a bound equals a double
+            </summary>
+            <param name="b">the right hand side Bound</param>
+            <param name="x">the left hand side double</param>
+            <returns><c>true</c> if they equal, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_Inequality(Euclid.Histograms.Bound,System.Double)">
+            <summary>
+            Compares a Bound to a double
+            </summary>
+            <param name="b">the left hand side Bound</param>
+            <param name="x">the right hand side double</param>
+            <returns><c>true</c> if the Bound doesnot match, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_Inequality(System.Double,Euclid.Histograms.Bound)">
+            <summary>
+            Compares a Bound to a double
+            </summary>
+            <param name="x">the left hand side double</param>
+            <param name="b">the right hand side Bound</param>
+            <returns><c>true</c> if the Bound doesnt match, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_Equality(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
+            <summary>
+            Checks the equality between two bounds (reference equality then null coincidence, then content coincidence)
+            </summary>
+            <param name="b1">the left hand side <c>Bound</c></param>
+            <param name="b2">the right hand side <c>Bound</c></param>
+            <returns>a bool</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_Inequality(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
+            <summary>
+            Checks the inequality between two bounds (based on the equal comparer)
+            </summary>
+            <param name="b1"></param>
+            <param name="b2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_LessThan(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
+            <summary>Compares two Bounds</summary>
+            <param name="b1">the left hand side Bound</param>
+            <param name="b2">the right hand side Bound</param>
+            <returns><c>true</c> if b1 is lower, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_GreaterThan(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
+            <summary>
+            Compares two Bounds
+            </summary>
+            <param name="b1">the left hand side Bound</param>
+            <param name="b2">the right hand side Bound</param>
+            <returns><c>true</c> if b1 is higher, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_LessThanOrEqual(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
+            <summary>
+            Compares two Bounds
+            </summary>
+            <param name="b1">the left hand side Bound</param>
+            <param name="b2">the right hand side Bound</param>
+            <returns><c>true</c> if b1 is lower or equal, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.op_GreaterThanOrEqual(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
+            <summary>
+            Compares two Bounds
+            </summary>
+            <param name="b1">the left hand side Bound</param>
+            <param name="b2">the right hand side Bound</param>
+            <returns><c>true</c> if b1 is greater or equal, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.Equals(Euclid.Histograms.Bound)">
+            <summary>
+            Checks the equality to another <c>Bound</c>
+            </summary>
+            <param name="other">the other <c>Bound</c></param>
+            <returns>a bool</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.Equals(System.Object)">
+            <summary>
+            Checks the equality to an object (inherited from IEquatable)
+            </summary>
+            <param name="other">the object </param>
+            <returns>a bool</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.GetHashCode">
+            <summary>
+            Returns this instance's hashcode
+            </summary>
+            <returns>an int</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Bound.CompareTo(Euclid.Histograms.Bound)">
+            <summary>
+            Compares this instance to another <c>Bound</c>
+            </summary>
+            <param name="other">the <c>Bound</c> to compare to</param>
+            <returns>-1 if &lt;, +1 if &gt;, 0 otherwise</returns>
+        </member>
+        <member name="T:Euclid.Histograms.Interval">
+            <summary>
+            Interval representation class
+            </summary>
+        </member>
+        <member name="M:Euclid.Histograms.Interval.#ctor(System.Double,System.Double,System.Boolean,System.Boolean)">
+            <summary>
+            Builds an interval
+            </summary>
+            <param name="lowerBound">the interval's lower bound</param>
+            <param name="upperBound">the interval's upper bound</param>
+            <param name="lowerIncluded">the lower bound's status </param>
+            <param name="upperIncluded">the upper bound's status</param>
+        </member>
+        <member name="M:Euclid.Histograms.Interval.#ctor(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
+            <summary>
+            Builds an interval
+            </summary>
+            <param name="lower">the lower bound</param>
+            <param name="upper">the upper bound</param>
+        </member>
+        <member name="M:Euclid.Histograms.Interval.#ctor(Euclid.Histograms.Interval)">
+            <summary>
+            Duplicates an <c>Interval</c>
+            </summary>
+            <param name="interval">the <c>Interval</c> to copy</param>
+        </member>
+        <member name="P:Euclid.Histograms.Interval.LowerBound">
+            <summary>Gets the interval's lower bound</summary>
+        </member>
+        <member name="P:Euclid.Histograms.Interval.UpperBound">
+            <summary>Gets the interval's upper bound</summary>
+        </member>
+        <member name="M:Euclid.Histograms.Interval.Contains(System.Double)">
+            <summary>
+            Checks if the double is inside the interval
+            </summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if x is inside the interval, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Interval.ToString">
+            <summary>
+            Gives a string representation of the Interval
+            </summary>
+            <returns>a string</returns>
+        </member>
+        <member name="T:Euclid.Histograms.Histogram">
+            <summary>
+            Histogram class
+            </summary>
+        </member>
+        <member name="M:Euclid.Histograms.Histogram.#ctor(Euclid.Histograms.Interval[])">
+            <summary>
+            Builds an <c>Histogram</c>
+            </summary>
+            <param name="intervals">the initial intervals</param>
+        </member>
+        <member name="P:Euclid.Histograms.Histogram.Count">
+            <summary>Gets the number of intervals</summary>
+        </member>
+        <member name="P:Euclid.Histograms.Histogram.TotalItems">
+            <summary>Gets the total number of items in the histogram</summary>
+        </member>
+        <member name="P:Euclid.Histograms.Histogram.Intervals">
+            <summary>
+            Gets the intervals
+            </summary>
+        </member>
+        <member name="P:Euclid.Histograms.Histogram.Item(System.Int32)">
+            <summary>Gets the number of items in the i-th bucket</summary>
+            <param name="bucket">the bucket's index</param>
+            <returns>an int</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Histogram.Tabulate(System.Double)">
+            <summary>Tabulates the value into to this instance</summary>
+            <param name="value">the value</param>
+        </member>
+        <member name="M:Euclid.Histograms.Histogram.Tabulate(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Tabulates these values into to this instance</summary>
+            <param name="values">the value</param>
+        </member>
+        <member name="M:Euclid.Histograms.Histogram.Create(System.Double,System.Double,System.Int32)">
+            <summary>Creates an <c>Histogram</c> with regular buckets</summary>
+            <param name="lowerBound">the support's lower bound</param>
+            <param name="upperBound">the support's upper bound</param>
+            <param name="numberOfIntervals">the number of intervals</param>
+            <returns>an <c>Histogram</c></returns>
         </member>
         <member name="T:Euclid.IndexedSeries.Analytics.LinearModel">
             <summary>
@@ -353,22 +1258,27 @@
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.Constant">
             <summary>
-            the constant term
+            Gets the constant term
             </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.Factors">
             <summary>
-            the linear terms
+            Gets the linear terms
+            </summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.Correlations">
+            <summary>
+            Gets the correlations between the explanatory variables and the regressand
             </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.R2">
             <summary>
-            the R² on the sample data
+            Gets the R² on the sample data
             </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.AdjustedR2">
             <summary>
-            the adjusted R² on the sample data
+            Gets the adjusted R² on the sample data
             </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.Succeeded">
@@ -378,17 +1288,17 @@
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.SSE">
             <summary>
-            Sum of squares due to error
+            Gets the sum of squares due to error
             </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.SSR">
             <summary>
-            Sum of squares due to the regression
+            Gets the sum of squares due to the regression
             </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.SST">
             <summary>
-            Total sum of squares
+            Gets the total sum of squares
             </summary>
         </member>
         <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.ToString">
@@ -403,6 +1313,53 @@
             </summary>
             <param name="x">the set of regressors</param>
             <returns>the estimator of the regressed data</returns>
+        </member>
+        <member name="T:Euclid.IndexedSeries.Analytics.IPredictor`2">
+            <summary>
+            Interface for predictors
+            </summary>
+            <typeparam name="T">the predicted type</typeparam>
+            <typeparam name="U">the predictors type</typeparam>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.IPredictor`2.Predict(System.Collections.Generic.IList{`1})">
+            <summary>Prediction method</summary>
+            <param name="x">the predictors</param>
+            <returns>the prediction</returns>
+        </member>
+        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2">
+            <summary>
+            LazyPartialLeastSquaresLinearRegression class (performs all 2^n possible regressions)
+            </summary>
+            <typeparam name="T">the legends' type</typeparam>
+            <typeparam name="V">the labels' type</typeparam>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1})">
+            <summary>
+            Builds a LazyPartialLeastSquaresLinearRegression to regress a <c>Series</c> on a <c>DataFrame</c>
+            </summary>
+            <param name="x">the <c>DataFrame</c></param>
+            <param name="y">the <c>Series</c></param>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.ReturnAverageIfFailed">
+            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.WithConstant">
+            <summary>Gets and sets whether the regression should involve a constant term</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.LinearModel">
+            <summary>
+            Gets the result <c>LinearModel</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.Status">
+            <summary>
+            Gets the regression's final status
+            </summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.Regress">
+            <summary>
+            Performs the regression
+            </summary>
         </member>
         <member name="T:Euclid.IndexedSeries.Analytics.Regressions.RegressionStatus">
             <summary>
@@ -420,6 +1377,468 @@
         </member>
         <member name="F:Euclid.IndexedSeries.Analytics.Regressions.RegressionStatus.BadData">
             <summary> the regression failed </summary>
+        </member>
+        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2">
+            <summary>
+            OrdinaryLeastSquaresLinearRegression class
+            </summary>
+            <typeparam name="T">the legends' type</typeparam>
+            <typeparam name="V">the labels' type</typeparam>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1})">
+            <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+            <param name="x">the <c>DataFrame</c></param>
+            <param name="y">the <c>Series</c></param>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.ReturnAverageIfFailed">
+            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.WithConstant">
+            <summary>Gets and sets whether the regression should involve a constant term</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.ComputeError">
+            <summary>Gets and sets whether the errors should be computed after the regression</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.LinearModel">
+            <summary>
+            Gets the result <c>LinearModel</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.Status">
+            <summary>
+            Gets the regression's final status
+            </summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.Regress">
+            <summary>
+            Performs the regression
+            </summary>
+        </member>
+        <member name="T:Euclid.IndexedSeries.Slice`3">
+            <summary>Class representing a Slice of synchronized data</summary>
+            <typeparam name="T">the legend type</typeparam>
+            <typeparam name="U">the data type</typeparam>
+            <typeparam name="V">the label type</typeparam>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.#ctor(System.Int32)">
+            <summary>Builds an empty <c>Slice</c></summary>
+            <param name="columns">the size of the Slice</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.#ctor(System.Collections.Generic.IEnumerable{`2},`0,System.Collections.Generic.IEnumerable{`1})">
+            <summary>Builds a <c>Slice</c></summary>
+            <param name="labels">the labels</param>
+            <param name="legend">the legend</param>
+            <param name="data">the data</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.#ctor(System.Xml.XmlNode)">
+            <summary>Builds a <c>Slice</c> from its serialized form</summary>
+            <param name="dataFrameNode">the <c>XmlNode</c></param>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Slice`3.Legends">
+            <summary>Gets the legends. Inherited (in this case, the legend is packaged into an array)</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Slice`3.Legend">
+            <summary>Gets and sets the legend</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Slice`3.Labels">
+            <summary>Returns the labels</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Slice`3.Columns">
+            <summary>Returns the number of columns</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Slice`3.Rows">
+            <summary>Returns the number of rows</summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.Clone">
+            <summary>Clones the slice</summary>
+            <returns>a <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.RemoveColumnAt(`2)">
+            <summary>Remove the data for a given label</summary>
+            <param name="label">the label</param>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Slice`3.Item(System.Int32)">
+            <summary>Gets and sets the i-th data </summary>
+            <param name="i">the index</param>
+            <returns>a data point</returns>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Slice`3.Item(`2)">
+            <summary>Gets and sets the data for a given label</summary>
+            <param name="v">the target label</param>
+            <returns>a data point</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.Add(`2,`1)">
+            <summary>Adds a data to the slice</summary>
+            <param name="label">the new label</param>
+            <param name="value">the new value</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.ApplyOnData(System.Func{`1,`1})">
+            <summary>Applies a function to the data</summary>
+            <param name="function">the function</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.GetLabel(System.Int32)">
+            <summary>Gets the i-th label's value</summary>
+            <param name="i">the index</param>
+            <returns>a label</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.SetLabel(System.Int32,`2)">
+            <summary>Sets the i-th label's value</summary>
+            <param name="i">the index</param>
+            <param name="value">the new value</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.ToXml(System.Xml.XmlWriter)">
+            <summary>Serializes the slice to Xml </summary>
+            <param name="writer">the <c>XmlWriter</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.FromXml(System.Xml.XmlNode)">
+            <summary>De-serializes the slice from a Xml node</summary>
+            <param name="node">the <c>XmlNode</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.ToCSV">
+            <summary>Builds a string representation the content of the slice </summary>
+            <returns>a <c>String</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.FromCSV(System.String)">
+            <summary>Fills a <c>Slice</c> from a string</summary>
+            <param name="text">the <c>String</c> content</param>
+        </member>
+        <member name="T:Euclid.IndexedSeries.Series`3">
+            <summary>Class representing a Series of data</summary>
+            <typeparam name="T">the legend type</typeparam>
+            <typeparam name="U">the data type</typeparam>
+            <typeparam name="V">the label type</typeparam>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(System.Int32)">
+            <summary>Builds an empty <c>Series</c></summary>
+            <param name="rows">the size of the <c>Series</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(`2,System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1})">
+            <summary>Builds a <c>Series</c></summary>
+            <param name="label">the label</param>
+            <param name="legends">the legends</param>
+            <param name="data">the data</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(System.Xml.XmlNode)">
+            <summary>Builds a <c>Series</c> from its serialized form</summary>
+            <param name="seriesNode">the <c>XmlNode</c></param>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Series`3.Legends">
+            <summary>Returns the legends of the <c>Series</c></summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Series`3.Labels">
+            <summary>Returns the labels of the <c>Series</c> (in this case, it is the only label)</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Series`3.Data">
+            <summary>Returns the data of the <c>Series</c></summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Series`3.Label">
+            <summary>Gets and sets the label</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Series`3.Columns">
+            <summary>Returns the number of columns of the <c>Series</c> (in this case, it is one)</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Series`3.Rows">
+            <summary>Returns the number of rows of the <c>Series</c></summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.Clone">
+            <summary>Clones the <c>Series</c></summary>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Series`3.Item(System.Int32)">
+            <summary>Gets and sets the i-th data of the <c>Series</c></summary>
+            <param name="index">the index</param>
+            <returns>a data point</returns>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Series`3.Item(`0)">
+            <summary>Gets and sets the data for a given legend</summary>
+            <param name="t">the legend</param>
+            <returns>a data point</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.RemoveRowAt(`0)">
+            <summary>Removes the row for a given legend</summary>
+            <param name="t">the legend</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.Add(`0,`1)">
+            <summary>Adds a line to the <c>Series</c></summary>
+            <param name="legend">the new legend</param>
+            <param name="value">the new data</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.Remove(System.Func{`0,`1,System.Boolean})">
+            <summary>Removes all the data-points that fit a predicate</summary>
+            <param name="predicate">the predicate</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.ApplyOnData(System.Func{`1,`1})">
+            <summary>Applies a function to all the data</summary>
+            <param name="function">the function</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.ApplyOnLegends(System.Func{`0,`0})">
+            <summary>Applies a function to all the legends</summary>
+            <param name="function">the function</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.Sum(System.Func{`1,`1})">
+            <summary>Returns the sum of the data passed through a function</summary>
+            <param name="function">the function</param>
+            <returns>a scalar</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.GetLegend(System.Int32)">
+            <summary>Gets the i-th legend value</summary>
+            <param name="index">the index</param>
+            <returns>a legend value</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.SetLegend(System.Int32,`0)">
+            <summary>Sets the i-th legend value </summary>
+            <param name="index">the index</param>
+            <param name="value">the new legend value</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.ToXml(System.Xml.XmlWriter)">
+            <summary>Serializes the <c>Series</c> to Xml </summary>
+            <param name="writer">the <c>XmlWriter</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.FromXml(System.Xml.XmlNode)">
+            <summary>De-serializes the <c>Series</c> from a Xml node</summary>
+            <param name="node">the <c>XmlNode</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.ToCSV">
+            <summary>Builds a string representing the content of the <c>Series</c></summary>
+            <returns>a <c>String</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.FromCSV(System.String)">
+            <summary>Fills a <c>Series</c> from a string</summary>
+            <param name="text">the <c>String</c> content</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.op_Addition(Euclid.IndexedSeries.Series{`0,`1,`2},Euclid.IndexedSeries.Series{`0,`1,`2})">
+            <summary>Adds two <c>Series</c></summary>
+            <param name="ts1">the left hand side <c>Series</c></param>
+            <param name="ts2">the right hand side <c>Series</c></param>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.op_Subtraction(Euclid.IndexedSeries.Series{`0,`1,`2},Euclid.IndexedSeries.Series{`0,`1,`2})">
+            <summary>Substracts one <c>Series</c> to another</summary>
+            <param name="ts1">the left hand side <c>Series</c></param>
+            <param name="ts2">the right hand side <c>Series</c></param>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.op_Multiply(Euclid.IndexedSeries.Series{`0,`1,`2},`1)">
+            <summary>Multiplies the <c>Series</c> by a factor</summary>
+            <param name="ts">the <c>Series</c></param>
+            <param name="factor">the factor </param>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.op_Multiply(`1,Euclid.IndexedSeries.Series{`0,`1,`2})">
+            <summary>Multiplies the <c>Series</c> by a factor</summary>
+            <param name="factor">the factor</param>
+            <param name="ts">the <c>Series</c></param>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.op_Division(Euclid.IndexedSeries.Series{`0,`1,`2},`1)">
+            <summary>Divides the <c>Series</c> by a factor</summary>
+            <param name="ts">the <c>Series</c></param>
+            <param name="factor">the factor</param>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.op_Addition(Euclid.IndexedSeries.Series{`0,`1,`2},`1)">
+            <summary>Adds a scalar to a <c>Series</c></summary>
+            <param name="ts">the <c>Series</c></param>
+            <param name="amount">the number</param>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.op_Addition(`1,Euclid.IndexedSeries.Series{`0,`1,`2})">
+            <summary>Adds a scalar to a <c>Series</c></summary>
+            <param name="amount">the scalar</param>
+            <param name="ts">the <c>Series</c></param>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.op_Subtraction(Euclid.IndexedSeries.Series{`0,`1,`2},`1)">
+            <summary>Substracts a scalar to a <c>Series</c></summary>
+            <param name="ts">the <c>Series</c></param>
+            <param name="amount">the scalar</param>
+            <returns>a <c>Series</c></returns>
+        </member>
+        <member name="T:Euclid.IndexedSeries.DataFrame`3">
+            <summary>
+            Class representing a DataFrame of synchronized data
+            </summary>
+            <typeparam name="T">the legend type</typeparam>
+            <typeparam name="U">the data type</typeparam>
+            <typeparam name="V">the label type</typeparam>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Builds an empty <c>DataFrame</c>
+            </summary>
+            <param name="rows">the number of rows</param>
+            <param name="columns">the number of columns</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Collections.Generic.IEnumerable{`2},System.Collections.Generic.IEnumerable{`0},`1[0:,0:])">
+            <summary>
+            Builds a <c>DataFrame</c>
+            </summary>
+            <param name="labels">the labels</param>
+            <param name="legends">the legends</param>
+            <param name="data">the data</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Xml.XmlNode)">
+            <summary>
+            Builds a <c>DataFrame</c> from its serialized form
+            </summary>
+            <param name="dataFrameNode">the <c>XmlNode</c></param>
+        </member>
+        <member name="P:Euclid.IndexedSeries.DataFrame`3.Legends">
+            <summary>
+            Gets the legends
+            </summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.DataFrame`3.Labels">
+            <summary>
+            Gets the labels
+            </summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.DataFrame`3.Columns">
+            <summary>
+            Gets the number of columns
+            </summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.DataFrame`3.Rows">
+            <summary>
+            Returns the number of rows
+            </summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Clone">
+            <summary>Clones the <c>DataFrame</c></summary>
+            <returns>a <c>DataFrame</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.RemoveColumnAt(`2)">
+            <summary>Remove the data for a given label</summary>
+            <param name="label">the label</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.RemoveRowAt(`0)">
+            <summary>Removes the row for a given legend</summary>
+            <param name="t">the legend</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Remove(System.Func{`0,`1,`2,System.Boolean})">
+            <summary>Removes all the rows containing a data-point that fits a predicate</summary>
+            <param name="predicate">the predicate</param>
+        </member>
+        <member name="P:Euclid.IndexedSeries.DataFrame`3.Item(System.Int32,System.Int32)">
+            <summary>Gets and sets the data for the i-th row and j-th column of the <c>DataFrame</c></summary>
+            <param name="i">the row index</param>
+            <param name="j">the column index</param>
+            <returns>a data point</returns>
+        </member>
+        <member name="P:Euclid.IndexedSeries.DataFrame`3.Item(`0,`2)">
+            <summary>
+            Gets and sets the data for a given legend and a given label
+            </summary>
+            <param name="t">the legend</param>
+            <param name="v">the label</param>
+            <returns>a data point</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSliceAt(`0)">
+            <summary>
+            Gets the data-point row of the given legend
+            </summary>
+            <param name="t">the legend</param>
+            <returns>a <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeriesAt(`2)">
+            <summary>
+            Gets the data-point column of the given label
+            </summary>
+            <param name="v">the label</param>
+            <returns> a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetRows">
+            <summary>
+            Gets all the data as an array of <c>Slice</c>
+            </summary>
+            <returns>an array of <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetColumns">
+            <summary>
+            Gets all the data as an array of <c>Series</c>
+            </summary>
+            <returns>an array of <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Add(`2,`1[])">
+            <summary>
+            Adds a column to the <c>DataFrame</c>
+            </summary>
+            <param name="label">the new column's label</param>
+            <param name="column">the new column's data</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Add(`2)">
+            <summary>
+            Adds an empty column to the <c>DataFrame</c>
+            </summary>
+            <param name="label">the new column's label</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ApplyOnData(System.Func{`1,`1})">
+            <summary>Applies a function to all the data</summary>
+            <param name="function">the function</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ApplyOnLegends(System.Func{`0,`0})">
+            <summary>Applies a function to all the legends</summary>
+            <param name="function">the function</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetLegend(System.Int32)">
+            <summary>Gets the i-th legend value</summary>
+            <param name="index">the index</param>
+            <returns>a legend value</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLegend(System.Int32,`0)">
+            <summary>Sets the i-th legend value </summary>
+            <param name="index">the index</param>
+            <param name="value">the new legend value</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetLabel(System.Int32)">
+            <summary>Gets the i-th label's value</summary>
+            <param name="i">the index</param>
+            <returns>a label</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLabel(System.Int32,`2)">
+            <summary>Sets the i-th label's value</summary>
+            <param name="i">the index</param>
+            <param name="value">the new value</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ToXml(System.Xml.XmlWriter)">
+            <summary>Serializes the <c>DataFrame</c> to Xml </summary>
+            <param name="writer">the <c>XmlWriter</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.FromXml(System.Xml.XmlNode)">
+            <summary>De-serializes the <c>DataFrame</c> from a Xml node</summary>
+            <param name="node">the <c>XmlNode</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ToCSV">
+            <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
+            <returns>a <c>String</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.FromCSV(System.String)">
+            <summary>Fills a <c>DataFrame</c> from a string</summary>
+            <param name="text">the <c>String</c> content</param>
+        </member>
+        <member name="T:Euclid.IndexedSeries.IIndexedSeries`3">
+            <summary>
+            Interface for all series : DataFrame, Slice, Series
+            </summary>
+            <typeparam name="T">the type of legends</typeparam>
+            <typeparam name="U">the type of the data</typeparam>
+            <typeparam name="V">the type of the labels</typeparam>
+        </member>
+        <member name="P:Euclid.IndexedSeries.IIndexedSeries`3.Legends">
+            <summary>Gets the legends</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.IIndexedSeries`3.Labels">
+            <summary> Gets the labels </summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.IIndexedSeries`3.Rows">
+            <summary>Gets the number of rows</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.IIndexedSeries`3.Columns">
+            <summary>Gets the number of columns </summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.IIndexedSeries`3.ApplyOnData(System.Func{`1,`1})">
+            <summary>Applies a function to the data</summary>
+            <param name="function">the function</param>
         </member>
         <member name="T:Euclid.LinearAlgebra.EigenDecomposition">
             <summary>
@@ -898,6 +2317,37 @@
         <member name="F:Euclid.Numerics.DifferenceForm.Central">
             <summary>the central-rule</summary>
         </member>
+        <member name="T:Euclid.Numerics.Differentiator">
+            <summary>
+            Numeric differentiation class
+            </summary>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double})">
+            <summary>
+            First degree numerical differentiation
+            </summary>
+            <param name="function">the function to differentiate</param>
+            <returns>the derivative</returns>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double},Euclid.Numerics.DifferenceForm,System.Double)">
+            <summary>
+            First degree numerical differentiation
+            </summary>
+            <param name="function">the function to differentiate</param>
+            <param name="form">the differentiation form</param>
+            <param name="step">the differentiation step</param>
+            <returns>the derivative</returns>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double},System.Int32,Euclid.Numerics.DifferenceForm,System.Double)">
+            <summary>
+            High degree numerical differentiation
+            </summary>
+            <param name="function">the function to differentiate</param>
+            <param name="n">the degree</param>
+            <param name="form">the differentiation form</param>
+            <param name="step">the differentiation degree</param>
+            <returns>the n-degree derivative</returns>
+        </member>
         <member name="T:Euclid.Numerics.IntegrationForm">
             <summary>
             The integration method
@@ -988,17 +2438,28 @@
             Performs the iterative integration of the function
             </summary>
         </member>
+        <member name="T:Euclid.Polynomial">
+            <summary>
+            Standard polynomial
+            </summary>
+        </member>
         <member name="M:Euclid.Polynomial.#ctor(System.Int32)">
             <summary>
-            Builds a polynomial with no terms except the highest
+            Builds a polynomial with no coefficients except the highest
             </summary>
             <param name="degree">the polynomial's degree</param>
         </member>
-        <member name="M:Euclid.Polynomial.#ctor(System.Collections.Generic.List{System.Double})">
+        <member name="M:Euclid.Polynomial.#ctor(System.Collections.Generic.IList{System.Double})">
             <summary>
-            Builds a polynomial through the terms
+            Builds a polynomial through the coefficients
             </summary>
-            <param name="terms">the terms of the polynomial</param>
+            <param name="terms">the coefficients of the polynomial</param>
+        </member>
+        <member name="M:Euclid.Polynomial.#ctor(System.Double[])">
+            <summary>
+            Builds a <c>Polynomial</c> from a list of coefficients
+            </summary>
+            <param name="coefficients">the coefficients</param>
         </member>
         <member name="M:Euclid.Polynomial.Normalize">
             <summary>
@@ -1012,11 +2473,22 @@
             <param name="x">The value for which the polynomial is evaluated</param>
             <returns></returns>
         </member>
+        <member name="M:Euclid.Polynomial.Evaluate(Euclid.Complex)">
+            <summary>Evaluates the polynomial's value for a given complex value</summary>
+            <param name="x">the argument</param>
+            <returns>a <c>Complex</c></returns>
+        </member>
         <member name="M:Euclid.Polynomial.ComplexRoots">
             <summary>
             Computes the roots of polynomial p via Weierstrass iteration.
             </summary>
             <returns>the complex roots of the <c>Polynomial</c></returns>
+        </member>
+        <member name="M:Euclid.Polynomial.Roots">
+            <summary>
+            Computes the real roots of the <c>Polynomial</c>
+            </summary>
+            <returns>a list of double</returns>
         </member>
         <member name="P:Euclid.Polynomial.Item(System.Int32)">
             <summary>
@@ -1035,10 +2507,33 @@
             Returns the derivative polynomial (one degree less)
             </summary>
         </member>
+        <member name="M:Euclid.Polynomial.ToString">
+            <summary>Returns a string representing the polynomial</summary>
+            <returns>a <c>string</c></returns>
+        </member>
+        <member name="M:Euclid.Polynomial.ToString(System.String)">
+            <summary>
+            Returns a string representing the polynomial
+            </summary>
+            <param name="format">the format for all coefficients</param>
+            <returns>a <c>String</c></returns>
+        </member>
         <member name="P:Euclid.Polynomial.Clone">
             <summary>
             Returns a deep copy of the polynomial
             </summary>
+        </member>
+        <member name="M:Euclid.Polynomial.op_Multiply(Euclid.Polynomial,System.Double)">
+            <summary>Multiplies a polynomial by a scalar</summary>
+            <param name="p">the <c>Polynomial</c></param>
+            <param name="f">the scalar</param>
+            <returns>a <c>Polynomial</c></returns>
+        </member>
+        <member name="M:Euclid.Polynomial.op_Multiply(System.Double,Euclid.Polynomial)">
+            <summary>Multiplies a polynomial by a scalar</summary>
+            <param name="f">the scalar</param>
+            <param name="p">the <c>Polynomial</c></param>
+            <returns>a <c>Polynomial</c></returns>
         </member>
         <member name="M:Euclid.Polynomial.op_Multiply(Euclid.Polynomial,Euclid.Polynomial)">
             <summary> multiplies two polynomials </summary>
@@ -1070,6 +2565,23 @@
             <param name="p">the polynomial right hand side</param>
             <returns>the <c>Polynomial</c> result of the addition</returns>
         </member>
+        <member name="M:Euclid.Polynomial.op_Subtraction(Euclid.Polynomial,System.Double)">
+            <summary>Substracts a scalar to a <c>Polynomial</c></summary>
+            <param name="p">the <c>Polynomial</c></param>
+            <param name="c">the scalar</param>
+            <returns>a <c>Polynomial</c></returns>
+        </member>
+        <member name="M:Euclid.Polynomial.op_Subtraction(System.Double,Euclid.Polynomial)">
+            <summary>Substracts a <c>Polynomial to a scalar</c></summary>
+            <param name="c">the scalar left hand side</param>
+            <param name="p">the <c>Polynomial</c> right hand side</param>
+            <returns>a <c>Polynomial</c></returns>
+        </member>
+        <member name="M:Euclid.Polynomial.op_UnaryNegation(Euclid.Polynomial)">
+            <summary>Returns the opposite of the <c>Polynomial</c></summary>
+            <param name="p">the <c>Polynomial</c></param>
+            <returns>a <c>Polynomial</c></returns>
+        </member>
         <member name="M:Euclid.Polynomial.op_Addition(Euclid.Polynomial,Euclid.Polynomial)">
             <summary>
             Adds two polynomials
@@ -1093,6 +2605,104 @@
             <param name="p">the <c>Polynomial</c> target</param>
             <param name="pow">The power we want to raise the Polynomial to</param>
             <returns>The Polynomial, raised to the power pow</returns>
+        </member>
+        <member name="T:Euclid.Serialization.CSVHelper">
+            <summary>
+            CSV Helper
+            </summary>
+        </member>
+        <member name="F:Euclid.Serialization.CSVHelper.Separator">
+            <summary>
+            The culture's list separator
+            </summary>
+        </member>
+        <member name="T:Euclid.Serialization.IXmlable">
+            <summary>
+            Interface allowing serialization and de-serialization from/to XML files
+            </summary>
+        </member>
+        <member name="M:Euclid.Serialization.IXmlable.ToXml(System.Xml.XmlWriter)">
+            <summary>Serializes a class to Xml </summary>
+            <param name="writer">the <c>XmlWriter</c></param>
+        </member>
+        <member name="M:Euclid.Serialization.IXmlable.FromXml(System.Xml.XmlNode)">
+            <summary>De-serializes an Xml node to fill the class</summary>
+            <param name="node">the <c>XmlNode</c></param>
+        </member>
+        <member name="T:Euclid.Serialization.ICSVable">
+            <summary>
+            Interface allowing serialization and de-serialization from/to CSV files
+            </summary>
+        </member>
+        <member name="M:Euclid.Serialization.ICSVable.ToCSV">
+            <summary>Builds a string representation of the content of the class </summary>
+            <returns>a <c>String</c></returns>
+        </member>
+        <member name="M:Euclid.Serialization.ICSVable.FromCSV(System.String)">
+            <summary>Fills a class from a string</summary>
+            <param name="text">the <c>String</c> content</param>
+        </member>
+        <member name="T:Euclid.Solvers.Descents">
+            <summary>
+            Default thresholds for iterative solvers
+            </summary>
+        </member>
+        <member name="F:Euclid.Solvers.Descents.ERR_EPSILON">
+            <summary>Default absolute tolerance for the solvers </summary>
+        </member>
+        <member name="F:Euclid.Solvers.Descents.GRADIENT_EPSILON">
+            <summary>Default tolerance for gradients and derivatives </summary>
+        </member>
+        <member name="T:Euclid.Solvers.ISingleVariableSolver">
+            <summary>
+            Interface for single variable solvers
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.ISingleVariableSolver.Function">
+            <summary>
+            Gets and sets the function to solve for
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.ISingleVariableSolver.Status">
+            <summary>
+            Gets the solver's status
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.ISingleVariableSolver.Iterations">
+            <summary>
+            Gets the number of iterations the solver went through
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.ISingleVariableSolver.MaxIterations">
+            <summary>
+            Gets and sets the maximum number of iterations
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.ISingleVariableSolver.Result">
+            <summary>
+            Gets the result
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.ISingleVariableSolver.Error">
+            <summary>
+            Gets the final error
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.ISingleVariableSolver.Convergence">
+            <summary>
+            Gets the convergence path
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.ISingleVariableSolver.Solve">
+            <summary>
+            Solves for the given function, parameters and initial conditions, target set @ 0
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.ISingleVariableSolver.Solve(System.Double)">
+            <summary>
+            Solves for the given function, parameters, initial conditions and target
+            </summary>
+            <param name="target">the target value for the function</param>
         </member>
         <member name="T:Euclid.Solvers.NewtonRaphson">
             <summary>
@@ -1177,6 +2787,102 @@
             </summary>
             <param name="target">the target</param>
         </member>
+        <member name="T:Euclid.Solvers.RootBracketing">
+            <summary>
+            Finds a root using root bracketing methods
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.RootBracketing.#ctor(System.Double,System.Double,System.Func{System.Double,System.Double},Euclid.Solvers.RootBracketingMethod,System.Int32)">
+            <summary>
+            Builds a solver using root bracketing methods
+            </summary>
+            <param name="initialLowerBound">the lower bound of the initial interval</param>
+            <param name="initialUpperBound">the upper bound of the initial interval</param>
+            <param name="f">the function to solve for</param>
+            <param name="method">the root bracketing method</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.Function">
+            <summary>
+            Gets and sets the function to solve for
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.LowerBound">
+            <summary>
+            Gets and sets the lower bound of the interval
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.UpperBound">
+            <summary>
+            Gets and sets the upper bound of the interval
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.MaxIterations">
+            <summary>
+            Gets and sets the maximum number of iterations
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.Method">
+            <summary>
+            Gets and sets the root bracketing method
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.Tolerance">
+            <summary>
+            Gets and sets the tolerance for the target (threshold for target reached)
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.Error">
+            <summary>
+            Returns the final error
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.Iterations">
+            <summary>
+            Returns the number of iterations of the solver
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.Result">
+            <summary>
+            The result of the solver
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.Status">
+            <summary>
+            The final status of the solver
+            </summary>
+        </member>
+        <member name="P:Euclid.Solvers.RootBracketing.Convergence">
+            <summary>
+            Gets the details of the convergence (value, error)
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.RootBracketing.Solve">
+            <summary>
+            Solve the equation f(x)=0 using the root bracketing method
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.RootBracketing.Solve(System.Double)">
+            <summary>
+            Solve the equation f(x)=target using the root bracketing method
+            </summary>
+            <param name="target">the target</param>
+        </member>
+        <member name="T:Euclid.Solvers.RootBracketingMethod">
+            <summary>
+            Specifies a root bracketing method
+            </summary>
+        </member>
+        <member name="F:Euclid.Solvers.RootBracketingMethod.Dichotomy">
+            <summary>
+            the dichotomy root bracketing
+            </summary>
+        </member>
+        <member name="F:Euclid.Solvers.RootBracketingMethod.FalsePosition">
+            <summary>
+            the false position root bracketing
+            </summary>
+        </member>
         <member name="T:Euclid.Solvers.SolverStatus">
             <summary>
             The status of a solver
@@ -1207,6 +2913,10 @@
              or most accurate algorithms.
             
              @version $Revision: 1.8 $, $Date: 2005/09/12 09:52:34 $
+        </member>
+        <member name="F:Euclid.Fn.EulerGamma">
+            <summary>The Euler-Mascheroni constant</summary>
+            <remarks>lim(n -> inf){ Sum(k=1 -> n) { 1/k - log(n) } }</remarks>
         </member>
         <member name="F:Euclid.Fn.BOLTZMAN">
             <summary>
@@ -1287,6 +2997,14 @@
             <summary>
             Astronomical Unit (radius of the Earth's orbit). Units cm
             </summary>
+        </member>
+        <member name="M:Euclid.Fn.Norm(System.Double,System.Double)">
+            <summary>
+            More precise way of calculating the norm
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns>the norm</returns>
         </member>
         <member name="M:Euclid.Fn.log10(System.Double)">
             <summary>
@@ -1374,12 +3092,18 @@
             <param name="j"></param>
             <returns></returns>
         </member>
-        <member name="M:Euclid.Fn.gamma(System.Double)">
+        <member name="M:Euclid.Fn.Gamma(System.Double)">
             <summary>
             Returns the gamma function of the specified number.
             </summary>
             <param name="x"></param>
             <returns></returns>
+        </member>
+        <member name="M:Euclid.Fn.DiGamma(System.Double)">
+            <summary>
+            Returns the digamma (psi) function of real values (except at 0, -1, -2, ...).
+            Digamma is the logarithmic derivative of the <see cref="M:Euclid.Fn.Gamma(System.Double)"/> function.
+            </summary>
         </member>
         <member name="M:Euclid.Fn.stirf(System.Double)">
             <summary>
@@ -1464,6 +3188,27 @@
             </summary>
             <param name="x"></param>
             <returns></returns>
+        </member>
+        <member name="M:Euclid.Fn.Phi(System.Double)">
+            <summary>
+            Computes the Phi function which is the cumulative distribution for the standard normal distribution
+            </summary>
+            <param name="x">The location at which to compute the Phi</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Fn.InvPhi(System.Double)">
+            <summary>
+            Computes the inverse of the Phi function
+            </summary>
+            <param name="p">The location at which to compute the inverse Phi function</param>
+            <returns></returns>
+        </member>
+        <member name="M:Euclid.Fn.GaussBell(System.Double)">
+            <summary>
+            Computes the Gauss-bell function
+            </summary>
+            <param name="x">The location at which to compute the function</param>
+            <returns>a <c>double</c></returns>
         </member>
         <member name="M:Euclid.Fn.polevl(System.Double,System.Double[],System.Int32)">
             <summary>

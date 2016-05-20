@@ -41,21 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arithmetics\PascalTriangle.cs" />
+    <Compile Include="Arithmetics\BinomialCoefficients.cs" />
     <Compile Include="Arithmetics\Subsets.cs" />
     <Compile Include="Complex.cs" />
+    <Compile Include="Distributions\Continuous\CauchyDistribution.cs" />
     <Compile Include="Distributions\Continuous\ChiSquaredDistribution.cs" />
+    <Compile Include="Distributions\Continuous\LaplaceDistribution.cs" />
     <Compile Include="Distributions\Continuous\LogNormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\ParetoDistribution.cs" />
     <Compile Include="Distributions\Continuous\NormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\ExponentialDistribution.cs" />
     <Compile Include="Distributions\Continuous\ContinousDistribution.cs" />
+    <Compile Include="Distributions\Continuous\TruncatedNormalDistribution.cs" />
     <Compile Include="Distributions\Empiric1DDistribution.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
     <Compile Include="Helpers\Arrays.cs" />
     <Compile Include="Helpers\Parser.cs" />
     <Compile Include="Histograms\Bound.cs" />
-    <Compile Include="Histograms\Bucket.cs" />
+    <Compile Include="Histograms\Interval.cs" />
     <Compile Include="Histograms\Histogram.cs" />
     <Compile Include="IndexedSeries\Analytics\LinearModel.cs" />
     <Compile Include="IndexedSeries\Analytics\IPredictor.cs" />

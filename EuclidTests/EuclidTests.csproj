@@ -51,7 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Arithmetics\PascalTriangleTests.cs" />
+    <Compile Include="Arithmetics\BinomialCoefficientsTests.cs" />
     <Compile Include="ComplexTests.cs" />
     <Compile Include="Helpers\ArraysTests.cs" />
     <Compile Include="Helpers\ParserTests.cs" />

@@ -59,6 +59,10 @@ namespace Euclid
         private const double SQRTH = 7.07106781186547524401E-1;
         private const double LOGPI = 1.14472988584940017414;
 
+        /// <summary>The Euler-Mascheroni constant</summary>
+        /// <remarks>lim(n -> inf){ Sum(k=1 -> n) { 1/k - log(n) } }</remarks>
+        public const double EulerGamma = 0.5772156649015328606065120900824024310421593359399235988057672348849d;
+
         // Physical Constants in cgs Units
 
         /// <summary>
@@ -143,6 +147,12 @@ namespace Euclid
 
         // Function Methods
 
+        /// <summary>
+        /// More precise way of calculating the norm
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns>the norm</returns>
         public static double Norm(double a, double b)
         {
             double r;
@@ -460,7 +470,7 @@ namespace Euclid
         {
             double d = Math.Abs(x);
             if (Math.Floor(d) == d) return (double)Factorial((int)x);
-            else return gamma(x + 1.0);
+            else return Gamma(x + 1.0);
         }
 
 
@@ -485,7 +495,7 @@ namespace Euclid
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static double gamma(double x)
+        public static double Gamma(double x)
         {
             double[] P = {
                          1.60119522476751861407E-4,
@@ -581,6 +591,85 @@ namespace Euclid
 
         }
 
+        /// <summary>
+        /// Returns the digamma (psi) function of real values (except at 0, -1, -2, ...).
+        /// Digamma is the logarithmic derivative of the <see cref="Gamma"/> function.
+        /// </summary>
+        public static double DiGamma(double x)
+        {
+            double y = 0;
+            double nz = 0.0;
+            bool negative = (x <= 0);
+
+            if (negative)
+            {
+                double q = x;
+                double p = Math.Floor(q);
+                negative = true;
+
+                if (Math.Abs(p - q) < 1E-9)
+                    return double.NaN; // singularity, undefined
+
+                nz = q - p;
+
+                if (nz != 0.5)
+                {
+                    if (nz > 0.5)
+                    {
+                        p = p + 1.0;
+                        nz = q - p;
+                    }
+
+                    nz = Math.PI / Math.Tan(Math.PI * nz);
+                }
+                else
+                    nz = 0.0;
+
+                x = 1.0 - x;
+            }
+
+            if ((x <= 10.0) && (x == Math.Floor(x)))
+            {
+                y = 0.0;
+                int n = (int)Math.Floor(x);
+                for (int i = 1; i <= n - 1; i++)
+                    y = y + 1.0 / i;
+
+                y = y - EulerGamma;
+            }
+            else
+            {
+                double s = x;
+                double w = 0.0;
+
+                while (s < 10.0)
+                {
+                    w = w + 1.0 / s;
+                    s = s + 1.0;
+                }
+
+                if (s < 1.0e17)
+                {
+                    double z = 1.0 / (s * s);
+                    double polv = 8.33333333333333333333e-2;
+                    polv = polv * z - 2.10927960927960927961e-2;
+                    polv = polv * z + 7.57575757575757575758e-3;
+                    polv = polv * z - 4.16666666666666666667e-3;
+                    polv = polv * z + 3.96825396825396825397e-3;
+                    polv = polv * z - 8.33333333333333333333e-3;
+                    polv = polv * z + 8.33333333333333333333e-2;
+                    y = z * polv;
+                }
+                else
+                    y = 0.0;
+
+                y = Math.Log(s) - 0.5 / s - y - w;
+            }
+
+            if (negative) return y - nz;
+
+            return y;
+        }
 
         /// <summary>
         /// Return the gamma function computed by Stirling's formula.
@@ -934,6 +1023,186 @@ namespace Euclid
             return y;
         }
 
+        /// <summary>
+        /// Computes the Phi function which is the cumulative distribution for the standard normal distribution
+        /// </summary>
+        /// <param name="x">The location at which to compute the Phi</param>
+        /// <returns>a double</returns>
+        public static double Phi(double x)
+        {
+            // This algorithm is ported from dcdflib:
+            // Cody, W.D. (1993). "ALGORITHM 715: SPECFUN - A Portabel FORTRAN
+            // Package of Special Function Routines and Test Drivers"
+            // acm Transactions on Mathematical Software. 19, 22-32.
+            int i;
+            double del, xden, xnum, xsq;
+            double result, ccum;
+            const double sixten = 1.60e0;
+            const double sqrpi = 3.9894228040143267794e-1;
+            const double thrsh = 0.66291e0;
+            const double root32 = 5.656854248e0;
+            const double zero = 0.0e0;
+            const double min = Double.Epsilon;
+            double y = Math.Abs(x);
+            const double half = 0.5e0;
+            const double one = 1.0e0;
+
+            double[] a = { 2.2352520354606839287e00, 1.6102823106855587881e02, 1.0676894854603709582e03, 1.8154981253343561249e04, 6.5682337918207449113e-2 };
+
+            double[] b = { 4.7202581904688241870e01, 9.7609855173777669322e02, 1.0260932208618978205e04, 4.5507789335026729956e04 };
+
+            double[] c =
+            {
+                3.9894151208813466764e-1, 8.8831497943883759412e00, 9.3506656132177855979e01,
+                5.9727027639480026226e02, 2.4945375852903726711e03, 6.8481904505362823326e03,
+                1.1602651437647350124e04, 9.8427148383839780218e03, 1.0765576773720192317e-8
+            };
+
+            double[] d =
+            {
+                2.2266688044328115691e01, 2.3538790178262499861e02, 1.5193775994075548050e03,
+                6.4855582982667607550e03, 1.8615571640885098091e04, 3.4900952721145977266e04,
+                3.8912003286093271411e04, 1.9685429676859990727e04
+            };
+            double[] p =
+            {
+                2.1589853405795699e-1, 1.274011611602473639e-1, 2.2235277870649807e-2,
+                1.421619193227893466e-3, 2.9112874951168792e-5, 2.307344176494017303e-2
+            };
+
+
+            double[] q = { 1.28426009614491121e00, 4.68238212480865118e-1, 6.59881378689285515e-2, 3.78239633202758244e-3, 7.29751555083966205e-5 };
+            if (y <= thrsh)
+            {
+                //
+                // Evaluate  anorm  for  |X| <= 0.66291
+                //
+                xsq = zero;
+                if (y > double.Epsilon) xsq = x * x;
+                xnum = a[4] * xsq;
+                xden = xsq;
+                for (i = 0; i < 3; i++)
+                {
+                    xnum = (xnum + a[i]) * xsq;
+                    xden = (xden + b[i]) * xsq;
+                }
+                result = x * (xnum + a[3]) / (xden + b[3]);
+                double temp = result;
+                result = half + temp;
+            }
+
+            //
+            // Evaluate  anorm  for 0.66291 <= |X| <= sqrt(32)
+            //
+            else if (y <= root32)
+            {
+                xnum = c[8] * y;
+                xden = y;
+                for (i = 0; i < 7; i++)
+                {
+                    xnum = (xnum + c[i]) * y;
+                    xden = (xden + d[i]) * y;
+                }
+                result = (xnum + c[7]) / (xden + d[7]);
+                xsq = Math.Floor(y * sixten) / sixten;
+                del = (y - xsq) * (y + xsq);
+                result = Math.Exp(-(xsq * xsq * half)) * Math.Exp(-(del * half)) * result;
+                ccum = one - result;
+                if (x > zero)
+                {
+                    result = ccum;
+                }
+            }
+
+            //
+            // Evaluate  anorm  for |X| > sqrt(32)
+            //
+            else
+            {
+                xsq = one / (x * x);
+                xnum = p[5] * xsq;
+                xden = xsq;
+                for (i = 0; i < 4; i++)
+                {
+                    xnum = (xnum + p[i]) * xsq;
+                    xden = (xden + q[i]) * xsq;
+                }
+                result = xsq * (xnum + p[4]) / (xden + q[4]);
+                result = (sqrpi - result) / y;
+                xsq = Math.Floor(x * sixten) / sixten;
+                del = (x - xsq) * (x + xsq);
+                result = Math.Exp(-(xsq * xsq * half)) * Math.Exp(-(del * half)) * result;
+                ccum = one - result;
+                if (x > zero)
+                    result = ccum;
+            }
+
+            if (result < min)
+                result = 0.0e0;
+            return result;
+
+        }
+
+        /// <summary>
+        /// Computes the inverse of the Phi function
+        /// </summary>
+        /// <param name="p">The location at which to compute the inverse Phi function</param>
+        /// <returns></returns>
+        public static double InvPhi(double p)
+        {
+            if (p < 0 || p > 1) throw new ArgumentOutOfRangeException("p", p, "The probability must be comprised in [0, 1].");
+            if (p == 0) return double.MinValue;
+            if (p == 1) return double.MaxValue;
+
+            #region Const values
+            double[] a = { -3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00 },
+                b = { -5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01 },
+                c = { -7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00 },
+                d = { 7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00 };
+            #endregion
+
+            double pLow = 0.02425,
+                pHigh = 1 - pLow,
+                result,
+                q;
+
+            if (p < pLow)
+            {
+                // Rational approximation for lower region:
+                q = Math.Sqrt(-2 * Math.Log(p));
+                result = (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) /
+                    ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+            }
+            else if (pHigh < p)
+            {
+                // Rational approximation for upper region:
+                q = Math.Sqrt(-2 * Math.Log(1 - p));
+                result = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) /
+                    ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+            }
+            else
+            {
+                // Rational approximation for central region:
+                q = p - 0.5;
+                double r = q * q;
+                result = (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q /
+                    (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// Computes the Gauss-bell function
+        /// </summary>
+        /// <param name="x">The location at which to compute the function</param>
+        /// <returns>a <c>double</c></returns>
+        public static double GaussBell(double x)
+        {
+            if (x == double.MinValue || x == double.MaxValue) return 0;
+            return Math.Exp((-0.5 * x * x)) / Math.Sqrt(2.0 * Math.PI);
+        }
 
         /// <summary>
         /// Evaluates polynomial of degree N
@@ -1142,7 +1411,7 @@ namespace Euclid
                 t *= Math.Pow(x, a);
                 t /= a;
                 t *= w;
-                t *= gamma(a + b) / (gamma(a) * gamma(b));
+                t *= Gamma(a + b) / (Gamma(a) * Gamma(b));
                 if (flag)
                 {
                     if (t <= MACHEP) t = 1.0 - MACHEP;
@@ -1384,7 +1653,7 @@ namespace Euclid
             u = a * Math.Log(x);
             if ((a + b) < MAXGAM && Math.Abs(u) < MAXLOG)
             {
-                t = gamma(a + b) / (gamma(a) * gamma(b));
+                t = Gamma(a + b) / (Gamma(a) * Gamma(b));
                 s = s * t * Math.Pow(x, a);
             }
             else

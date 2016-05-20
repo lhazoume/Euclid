@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace Euclid.Arithmetics.Tests
 {
     [TestClass()]
-    public class PascalTriangleTests
+    public class BinomialCoefficientsTests
     {
         [TestMethod()]
-        public void PascalTriangleTest()
+        public void BinomialCoefficientsTest()
         {
             Assert.Fail();
         }

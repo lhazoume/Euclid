@@ -1,8 +1,13 @@
 ﻿namespace Euclid.Solvers
 {
+    /// <summary>
+    /// Default thresholds for iterative solvers
+    /// </summary>
     public static class Descents
     {
-        public const double ERR_EPSILON = 10e-10;
-        public const double GRADIENT_EPSILON = 10e-7;
+        /// <summary>Default absolute tolerance for the solvers </summary>
+        public const double ERR_EPSILON = 1e-10;
+        /// <summary>Default tolerance for gradients and derivatives </summary>
+        public const double GRADIENT_EPSILON = 1e-7;
     }
 }

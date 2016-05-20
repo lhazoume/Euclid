@@ -2,6 +2,9 @@
 
 namespace Euclid.Distributions.Continuous
 {
+    /// <summary>
+    ///¨Pareto distribution class
+    /// </summary>
     public class ParetoDistribution : ContinousDistribution
     {
         #region Declarations
@@ -19,20 +22,30 @@ namespace Euclid.Distributions.Continuous
             _randomSource = randomSource;
         }
 
+        /// <summary>
+        /// Builds a Pareto distribution
+        /// </summary>
+        /// <param name="xm">the scale</param>
+        /// <param name="alpha">the shape</param>
         public ParetoDistribution(double xm, double alpha)
             : this(xm, alpha, new Random(DateTime.Now.Millisecond))
         { }
         #endregion
 
         #region Accessors
+        /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy
         {
             get { return Math.Log((_xm / _alpha) * Math.Exp(1 + 1 / _alpha)); }
         }
+
+        /// <summary>Gets the distribution's domain's upper bound</summary>
         public override double Maximum
         {
             get { return double.MaxValue; }
         }
+
+        /// <summary>Gets the distribution's mean</summary>
         public override double Mean
         {
             get
@@ -41,18 +54,26 @@ namespace Euclid.Distributions.Continuous
                 else return _alpha * _xm / (_alpha - 1);
             }
         }
+
+        /// <summary>Gets the distribution's median</summary>
         public override double Median
         {
             get { return _xm * Math.Pow(2, 1 / _alpha); }
         }
+
+        /// <summary> Gets the distribution's domain's lower bound</summary>
         public override double Minimum
         {
             get { return _xm; }
         }
+
+        /// <summary>Gets the distribution's mode</summary>
         public override double Mode
         {
             get { return _xm; }
         }
+
+        /// <summary>Gets the distribution's skewness</summary>
         public override double Skewness
         {
             get
@@ -61,6 +82,8 @@ namespace Euclid.Distributions.Continuous
                 else return 2 * (1 + _alpha) / (_alpha - 3) * Math.Sqrt((_alpha - 2) / _alpha);
             }
         }
+
+        /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation
         {
             get
@@ -69,6 +92,8 @@ namespace Euclid.Distributions.Continuous
                 else return (_xm / (_alpha - 1)) * Math.Sqrt(_alpha / (_alpha - 2));
             }
         }
+
+        /// <summary>Gets the distribution's variance</summary>
         public override double Variance
         {
             get
@@ -80,20 +105,43 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).
+        /// </summary>
+        /// <param name="x">The location at which to compute the cumulative distribution function</param>
+        /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
             if (x >= _xm) return Math.Pow(1 - (_xm / x), _alpha);
             else return 0;
         }
+
+        /// <summary>
+        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+        /// </summary>
+        /// <param name="p">The location at which to compute the inverse cumulative density</param>
+        /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
         {
             return _xm / Math.Exp(Math.Log(1 - p) / _alpha);
         }
+
+        /// <summary>
+        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+        /// </summary>
+        /// <param name="x">The location at which to compute the density</param>
+        /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
             if (x >= _xm) return _alpha * Math.Pow(_xm / x, _alpha) / x;
             else return 0;
         }
+
+        /// <summary>
+        /// Builds a sample of random variables under this distribution
+        /// </summary>
+        /// <param name="size">the sample's size</param>
+        /// <returns>an array of double</returns>
         public override double[] Sample(int size)
         {
             double[] result = new double[size];

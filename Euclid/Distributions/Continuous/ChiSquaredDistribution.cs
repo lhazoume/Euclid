@@ -3,6 +3,9 @@ using System;
 
 namespace Euclid.Distributions.Continuous
 {
+    /// <summary>
+    /// Chi squared distribution
+    /// </summary>
     public class ChiSquaredDistribution : ContinousDistribution
     {
         #region Declarations
@@ -17,56 +20,89 @@ namespace Euclid.Distributions.Continuous
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
         }
+
+        /// <summary>
+        /// Builds a Chi² distribution
+        /// </summary>
+        /// <param name="k">the number of freedom degrees</param>
         public ChiSquaredDistribution(int k)
             : this(k, new Random(DateTime.Now.Millisecond))
         { }
         #endregion
 
         #region Accessors
-        [Obsolete]
+        /// <summary>
+        /// Gets the distribution's entropy
+        /// </summary>
         public override double Entropy
         {
             get
             {
+                double halfK = 0.5 * _k;
+                return halfK + Math.Log(2 * Fn.Gamma(halfK)) + (1 - halfK) * Fn.DiGamma(halfK);
                 throw new NotImplementedException();
             }
         }
 
+        /// <summary>
+        /// Gets the distribution's support's upper bound
+        /// </summary>
         public override double Maximum
         {
             get { return double.PositiveInfinity; }
         }
 
+        /// <summary>
+        /// Gets the distribution's mean
+        /// </summary>
         public override double Mean
         {
             get { return _k; }
         }
 
+        /// <summary>
+        /// Gets the distribution's median
+        /// </summary>
         public override double Median
         {
             get { return _k * Math.Pow(1 - 2 / (9 * _k), 3); }
         }
 
+        /// <summary>
+        /// Gets the distribution's support's lower bound
+        /// </summary>
         public override double Minimum
         {
             get { return 0; }
         }
 
+        /// <summary>
+        /// Gets the distribution's mode
+        /// </summary>
         public override double Mode
         {
             get { return Math.Max(_k - 2, 0); }
         }
 
+        /// <summary>
+        /// Gets the distribution's skewness
+        /// </summary>
         public override double Skewness
         {
             get { return Math.Sqrt(8 / _k); }
         }
 
+        /// <summary>
+        /// Gets the dsitribution's standard deviation
+        /// </summary>
         public override double StandardDeviation
         {
             get { return Math.Sqrt(2 * _k); }
         }
 
+        /// <summary>
+        /// Gets the distribution's variance
+        /// </summary>
         public override double Variance
         {
             get { return 2 * _k; }
@@ -75,13 +111,22 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-
+        /// <summary>
+        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
+        /// </summary>
+        /// <param name="x">The location at which to compute the cumulative distribution function</param>
+        /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
         {
             if (x <= 0) return 0;
-            return Fn.igam(0.5 * _k, 0.5 * x) / Fn.gamma(0.5 * _k);
+            return Fn.igam(0.5 * _k, 0.5 * x) / Fn.Gamma(0.5 * _k);
         }
 
+        /// <summary>
+        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+        /// </summary>
+        /// <param name="p">The location at which to compute the inverse cumulative density</param>
+        /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
         {
             NewtonRaphson solver = new NewtonRaphson(_k, CumulativeDistribution, 10);
@@ -89,15 +134,25 @@ namespace Euclid.Distributions.Continuous
             return solver.Result;
         }
 
+        /// <summary>
+        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+        /// </summary>
+        /// <param name="x">The location at which to compute the density</param>
+        /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            return Math.Pow(0.5 * x, 0.5 * _k - 1) * Math.Exp(-0.5 * x) / (x * Fn.gamma(0.5 * _k));
+            return Math.Pow(0.5 * x, 0.5 * _k - 1) * Math.Exp(-0.5 * x) / (x * Fn.Gamma(0.5 * _k));
         }
 
-        public override double[] Sample(int size)
+        /// <summary>
+        /// Generates a sequence of samples from the normal distribution using the algorithm
+        /// </summary>
+        /// <param name="numberOfPoints">the sample's size</param>
+        /// <returns>an array of double</returns>
+        public override double[] Sample(int numberOfPoints)
         {
-            double[] result = new double[size];
-            for (int i = 0; i < size; i++)
+            double[] result = new double[numberOfPoints];
+            for (int i = 0; i < numberOfPoints; i++)
                 result[i] = InverseCumulativeDistribution(_randomSource.NextDouble());
             return result;
         }

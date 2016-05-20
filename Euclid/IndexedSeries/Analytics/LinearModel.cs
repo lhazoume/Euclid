@@ -83,7 +83,7 @@ namespace Euclid.IndexedSeries.Analytics
 
         #region Accessors
         /// <summary>
-        /// the constant term
+        /// Gets the constant term
         /// </summary>
         public double Constant
         {
@@ -91,20 +91,23 @@ namespace Euclid.IndexedSeries.Analytics
         }
 
         /// <summary>
-        /// the linear terms
+        /// Gets the linear terms
         /// </summary>
         public double[] Factors
         {
             get { return _succeeded ? _factors : new double[] { 0 }; }
         }
 
+        /// <summary>
+        /// Gets the correlations between the explanatory variables and the regressand
+        /// </summary>
         public double[] Correlations
         {
             get { return _succeeded ? _correlations : new double[] { 0 }; }
         }
 
         /// <summary>
-        /// the R² on the sample data
+        /// Gets the R² on the sample data
         /// </summary>
         public double R2
         {
@@ -112,7 +115,7 @@ namespace Euclid.IndexedSeries.Analytics
         }
 
         /// <summary>
-        /// the adjusted R² on the sample data
+        /// Gets the adjusted R² on the sample data
         /// </summary>
         public double AdjustedR2
         {
@@ -133,7 +136,7 @@ namespace Euclid.IndexedSeries.Analytics
         }
 
         /// <summary>
-        /// Sum of squares due to error
+        /// Gets the sum of squares due to error
         /// </summary>
         public double SSE
         {
@@ -141,7 +144,7 @@ namespace Euclid.IndexedSeries.Analytics
         }
 
         /// <summary>
-        /// Sum of squares due to the regression
+        /// Gets the sum of squares due to the regression
         /// </summary>
         public double SSR
         {
@@ -149,7 +152,7 @@ namespace Euclid.IndexedSeries.Analytics
         }
 
         /// <summary>
-        /// Total sum of squares
+        /// Gets the total sum of squares
         /// </summary>
         public double SST
         {

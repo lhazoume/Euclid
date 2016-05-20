@@ -63,13 +63,15 @@ namespace Euclid
         /// <summary>
         /// Returns the modulus of the <c>Complex</c>
         /// </summary>
-        /// <returns>the square modulus of the complex</returns>
+        /// <returns>the modulus of the complex</returns>
         public double Modulus()
         {
             return Math.Sqrt(_re * _re + _im * _im);
         }
 
-        public double SquareModule()
+        /// <summary>Returns the square of the modulus of the <c>Complex</c></summary>
+        /// <returns>a double</returns>
+        public double SquareModulus()
         {
             return _re * _re + _im * _im;
         }
@@ -137,6 +139,10 @@ namespace Euclid
         {
             get { return new Complex(0, 0); }
         }
+
+        /// <summary>Returns a complex from its exponential form </summary>
+        /// <param name="c">the exponential argument</param>
+        /// <returns>a <c>Complex</c></returns>
         public static Complex Exp(Complex c)
         {
             double f = Math.Exp(c._re),
@@ -233,7 +239,7 @@ namespace Euclid
         /// <returns>the <c>Complex</c> result of the division</returns>
         public static Complex operator /(Complex x, Complex y)
         {
-            return x * y.Conjugate * (1.0 / y.SquareModule());
+            return x * y.Conjugate * (1.0 / y.SquareModulus());
         }
         #endregion
     }

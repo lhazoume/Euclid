@@ -1,11 +1,18 @@
 ﻿namespace Euclid.Arithmetics
 {
-    public class PascalTriangle
+    /// <summary>
+    /// Binomial coefficients class
+    /// </summary>
+    public class BinomialCoefficients
     {
         private int[] _coefficients;
         private int _degree;
 
-        public PascalTriangle(int n)
+        /// <summary>
+        /// Calculates all the binomial coefficients for a given degree
+        /// </summary>
+        /// <param name="n">the degree</param>
+        public BinomialCoefficients(int n)
         {
             _degree = n;
             _coefficients = new int[1 + n];
@@ -21,6 +28,11 @@
             }
         }
 
+        /// <summary>
+        /// Returns the binomial coefficient for a given index
+        /// </summary>
+        /// <param name="index">the index</param>
+        /// <returns>an <c>int</c></returns>
         public int this[int index]
         {
             get { return _coefficients[index]; }

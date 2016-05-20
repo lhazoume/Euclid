@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Euclid.Solvers
 {
+    /// <summary>
+    /// Finds a root using root bracketing methods
+    /// </summary>
     public class RootBracketing : ISingleVariableSolver
     {
         #region Declarations
@@ -18,6 +21,14 @@ namespace Euclid.Solvers
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion
 
+        /// <summary>
+        /// Builds a solver using root bracketing methods
+        /// </summary>
+        /// <param name="initialLowerBound">the lower bound of the initial interval</param>
+        /// <param name="initialUpperBound">the upper bound of the initial interval</param>
+        /// <param name="f">the function to solve for</param>
+        /// <param name="method">the root bracketing method</param>
+        /// <param name="maxIterations">the maximum number of iterations</param>
         public RootBracketing(double initialLowerBound, double initialUpperBound,
             Func<double, double> f,
             RootBracketingMethod method,
@@ -34,31 +45,54 @@ namespace Euclid.Solvers
         #region Accessors
 
         #region Settables
+        /// <summary>
+        /// Gets and sets the function to solve for
+        /// </summary>
         public Func<double, double> Function
         {
             get { return _f; }
             set { _f = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the lower bound of the interval
+        /// </summary>
         public double LowerBound
         {
             get { return _lowerBound; }
             set { _lowerBound = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the upper bound of the interval
+        /// </summary>
         public double UpperBound
         {
             get { return _upperBound; }
             set { _upperBound = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the maximum number of iterations
+        /// </summary>
         public int MaxIterations
         {
             get { return _maxIterations; }
             set { _maxIterations = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the root bracketing method
+        /// </summary>
         public RootBracketingMethod Method
         {
             get { return _method; }
             set { _method = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the tolerance for the target (threshold for target reached)
+        /// </summary>
         public double Tolerance
         {
             get { return _tolerance; }
@@ -67,22 +101,44 @@ namespace Euclid.Solvers
         #endregion
 
         #region Get
-
+        /// <summary>
+        /// Returns the final error
+        /// </summary>
         public double Error
         {
             get { return _error; }
         }
+
+        /// <summary>
+        /// Returns the number of iterations of the solver
+        /// </summary>
         public int Iterations
         {
             get { return _iterations; }
         }
+
+        /// <summary>
+        /// The result of the solver
+        /// </summary>
         public double Result
         {
             get { return _result; }
         }
+
+        /// <summary>
+        /// The final status of the solver
+        /// </summary>
         public SolverStatus Status
         {
             get { return _status; }
+        }
+
+        /// <summary>
+        /// Gets the details of the convergence (value, error)
+        /// </summary>
+        public List<Tuple<double, double>> Convergence
+        {
+            get { return new List<Tuple<double, double>>(_convergence); }
         }
 
         #endregion
@@ -90,10 +146,18 @@ namespace Euclid.Solvers
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Solve the equation f(x)=0 using the root bracketing method
+        /// </summary>
         public void Solve()
         {
             Solve(0);
         }
+
+        /// <summary>
+        /// Solve the equation f(x)=target using the root bracketing method
+        /// </summary>
+        /// <param name="target">the target</param>
         public void Solve(double target)
         {
             _convergence.Clear();

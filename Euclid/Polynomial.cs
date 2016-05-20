@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Euclid
 {
+    /// <summary>
+    /// Standard polynomial
+    /// </summary>
     public sealed class Polynomial
     {
         #region Declarations
@@ -18,7 +21,7 @@ namespace Euclid
         #region Constructors
 
         /// <summary>
-        /// Builds a polynomial with no terms except the highest
+        /// Builds a polynomial with no coefficients except the highest
         /// </summary>
         /// <param name="degree">the polynomial's degree</param>
         public Polynomial(int degree)
@@ -30,10 +33,10 @@ namespace Euclid
         }
 
         /// <summary>
-        /// Builds a polynomial through the terms
+        /// Builds a polynomial through the coefficients
         /// </summary>
-        /// <param name="terms">the terms of the polynomial</param>
-        public Polynomial(List<double> terms)
+        /// <param name="terms">the coefficients of the polynomial</param>
+        public Polynomial(IList<double> terms)
         {
             if (terms.Count == 0)
             {
@@ -53,6 +56,10 @@ namespace Euclid
                 _terms[i] = terms[i];
         }
 
+        /// <summary>
+        /// Builds a <c>Polynomial</c> from a list of coefficients
+        /// </summary>
+        /// <param name="coefficients">the coefficients</param>
         public Polynomial(params double[] coefficients)
             : this(coefficients.ToList())
         { }
@@ -88,6 +95,9 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>Evaluates the polynomial's value for a given complex value</summary>
+        /// <param name="x">the argument</param>
+        /// <returns>a <c>Complex</c></returns>
         public Complex Evaluate(Complex x)
         {
             Complex result = Complex.Zero,
@@ -171,6 +181,10 @@ namespace Euclid
 
         #endregion
 
+        /// <summary>
+        /// Computes the real roots of the <c>Polynomial</c>
+        /// </summary>
+        /// <returns>a list of double</returns>
         public List<double> Roots()
         {
             List<Complex> cRoots = ComplexRoots();
@@ -218,6 +232,8 @@ namespace Euclid
 
         }
 
+        /// <summary>Returns a string representing the polynomial</summary>
+        /// <returns>a <c>string</c></returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(_terms[0].ToString());
@@ -234,6 +250,12 @@ namespace Euclid
             }
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Returns a string representing the polynomial
+        /// </summary>
+        /// <param name="format">the format for all coefficients</param>
+        /// <returns>a <c>String</c></returns>
         public string ToString(string format)
         {
             StringBuilder sb = new StringBuilder(_terms[0].ToString(format));
@@ -264,7 +286,10 @@ namespace Euclid
         #region Operators
 
         #region Multiplications
-
+        /// <summary>Multiplies a polynomial by a scalar</summary>
+        /// <param name="p">the <c>Polynomial</c></param>
+        /// <param name="f">the scalar</param>
+        /// <returns>a <c>Polynomial</c></returns>
         public static Polynomial operator *(Polynomial p, double f)
         {
             Polynomial tmp = p.Clone;
@@ -272,6 +297,11 @@ namespace Euclid
                 tmp._terms[i] *= f;
             return tmp;
         }
+
+        /// <summary>Multiplies a polynomial by a scalar</summary>
+        /// <param name="f">the scalar</param>
+        /// <param name="p">the <c>Polynomial</c></param>
+        /// <returns>a <c>Polynomial</c></returns>
         public static Polynomial operator *(double f, Polynomial p)
         {
             return p * f;
@@ -338,15 +368,28 @@ namespace Euclid
         {
             return p + c;
         }
+
+        /// <summary>Substracts a scalar to a <c>Polynomial</c></summary>
+        /// <param name="p">the <c>Polynomial</c></param>
+        /// <param name="c">the scalar</param>
+        /// <returns>a <c>Polynomial</c></returns>
         public static Polynomial operator -(Polynomial p, double c)
         {
             return p + (-c);
         }
+
+        /// <summary>Substracts a <c>Polynomial to a scalar</c></summary>
+        /// <param name="c">the scalar left hand side</param>
+        /// <param name="p">the <c>Polynomial</c> right hand side</param>
+        /// <returns>a <c>Polynomial</c></returns>
         public static Polynomial operator -(double c, Polynomial p)
         {
             return (-1) * p + c;
         }
 
+        /// <summary>Returns the opposite of the <c>Polynomial</c></summary>
+        /// <param name="p">the <c>Polynomial</c></param>
+        /// <returns>a <c>Polynomial</c></returns>
         public static Polynomial operator -(Polynomial p)
         {
             return p * -1;
@@ -363,7 +406,7 @@ namespace Euclid
             return Polynomial.Add(p1, p2);
         }
 
-         /// <summary>
+        /// <summary>
         /// Substracts one polynomial to another
         /// </summary>
         /// <param name="p1">the left hand side</param>

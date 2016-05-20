@@ -4,12 +4,28 @@ using System.Linq;
 
 namespace Euclid.Numerics
 {
+    /// <summary>
+    /// Numeric differentiation class
+    /// </summary>
     public static class Differentiator
     {
+        /// <summary>
+        /// First degree numerical differentiation
+        /// </summary>
+        /// <param name="function">the function to differentiate</param>
+        /// <returns>the derivative</returns>
         public static Func<double, double> Differentiate(this Func<double, double> function)
         {
             return Differentiate(function, DifferenceForm.Central, 1e-9);
         }
+
+        /// <summary>
+        /// First degree numerical differentiation
+        /// </summary>
+        /// <param name="function">the function to differentiate</param>
+        /// <param name="form">the differentiation form</param>
+        /// <param name="step">the differentiation step</param>
+        /// <returns>the derivative</returns>
         public static Func<double, double> Differentiate(this Func<double, double> function, DifferenceForm form, double step)
         {
             if (function == null) throw new ArgumentNullException("The function should not be null");
@@ -22,13 +38,21 @@ namespace Euclid.Numerics
             }
         }
 
+        /// <summary>
+        /// High degree numerical differentiation
+        /// </summary>
+        /// <param name="function">the function to differentiate</param>
+        /// <param name="n">the degree</param>
+        /// <param name="form">the differentiation form</param>
+        /// <param name="step">the differentiation degree</param>
+        /// <returns>the n-degree derivative</returns>
         public static Func<double, double> Differentiate(this Func<double, double> function, int n, DifferenceForm form, double step)
         {
             if (function == null) throw new ArgumentNullException("The function should not be null");
             if (step <= 0) throw new ArgumentException("the step should be stricly positive");
             if (n < 1) throw new ArgumentException("the degree should be strictly positive");
 
-            PascalTriangle pt = new PascalTriangle(n);
+            BinomialCoefficients pt = new BinomialCoefficients(n);
             int[] indexes = new int[1 + n];
             for (int i = 0; i <= n; i++) indexes[i] = i;
 
