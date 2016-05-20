@@ -4,38 +4,80 @@ using System;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>
-    /// Log Normal distribution class
+    /// Weibull distribution class
     /// </summary>
-    public class LogNormalDistribution : ContinousDistribution
+    public class WeibullDistribution : ContinousDistribution
     {
         #region Declarations
-        private double _mu, _sigma, _sigma2;
+        private double _lambda, _k, _mu, _sigma2, _sigma;
         #endregion
 
-        #region Constructors
-        private LogNormalDistribution(double mu, double sigma, Random randomSource)
+        private WeibullDistribution(double lambda, double k, Random randomSource)
         {
-            if (sigma <= 0) throw new ArgumentException("sigma has to be positive");
-            _sigma = sigma;
-            _sigma2 = _sigma * _sigma;
-            _mu = mu;
+            if (lambda <= 0) throw new ArgumentException("The scale can not be negative");
+            if (k <= 0) throw new ArgumentException("The shape can not be negative");
+            _lambda = lambda;
+            _k = k;
+
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
-            _support = new Interval(0, double.PositiveInfinity, false, false);
+
+            _support = new Interval(0, double.PositiveInfinity, true, false);
+
+            _mu = _lambda * Fn.Gamma(1 + 1 / _k);
+            _sigma2 = _lambda * _lambda * Fn.Gamma(1 + 2 / _k) - _mu * _mu;
+            _sigma = Math.Sqrt(_sigma2);
         }
-        /// <summary>Builds a log normal distribution</summary>
-        /// <param name="mu">the average</param>
-        /// <param name="sigma">the standard deviation</param>
-        public LogNormalDistribution(double mu, double sigma)
-            : this(mu, sigma, new Random(DateTime.Now.Millisecond))
+
+        /// <summary>
+        /// Builds a Weibull distribution
+        /// </summary>
+        /// <param name="lambda">the scale</param>
+        /// <param name="k">the shape</param>
+        public WeibullDistribution(double lambda, double k)
+            : this(lambda, k, new Random(DateTime.Now.Millisecond))
         { }
-        #endregion
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy
         {
-            get { return Math.Log(_sigma * Math.Exp(_mu + 0.5) * Math.Sqrt(2 * Math.PI)); }
+            get { return Fn.EulerGamma * (1 - 1 / _k) + Math.Log(_lambda / _k) + 1; }
+        }
+
+        /// <summary>Gets the distribution's mean</summary>
+        public override double Mean
+        {
+            get { return _mu; }
+        }
+
+        /// <summary>Gets the distribution's median</summary>
+        public override double Median
+        {
+            get { return _lambda * Math.Pow(Math.Log(2), 1 / _k); }
+        }
+
+        /// <summary>Gets the distribution's mode</summary>
+        public override double Mode
+        {
+            get
+            {
+                if (_k < 1) return double.NaN;
+                else if (_k == 1) return 0;
+                return _lambda * Math.Pow((_k - 1) / _k, 1 / _k);
+            }
+        }
+
+        /// <summary>Gets the distribution's skewness</summary>
+        public override double Skewness
+        {
+            get { return Fn.Gamma(1 + 3 / _k) * Math.Pow(_lambda / _sigma, 3) - 3 * _mu / _sigma - Math.Pow(_mu / _sigma, 3); }
+        }
+
+        /// <summary>Gets the distribution's standard deviation</summary>
+        public override double StandardDeviation
+        {
+            get { return _sigma; }
         }
 
         /// <summary>Gets the distribution's support</summary>
@@ -44,40 +86,10 @@ namespace Euclid.Distributions.Continuous
             get { return _support; }
         }
 
-        /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return Math.Exp(_mu + 0.5 * _sigma2); }
-        }
-
-        /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return Math.Exp(_mu); }
-        }
-
-        /// <summary>Gets the distribution's mode</summary>
-        public override double Mode
-        {
-            get { return Math.Exp(_mu - _sigma2); }
-        }
-
-        /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness
-        {
-            get { return (Math.Exp(_sigma2) + 2) * Math.Sqrt(Math.Exp(_sigma2) - 1); }
-        }
-
-        /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return Math.Sqrt(Variance); }
-        }
-
-        /// <summary>Gets the distributions's variance</summary>
+        /// <summary>Gets the distribution's variance</summary>
         public override double Variance
         {
-            get { return (Math.Exp(_sigma2) - 1) * Math.Exp(2 * _mu + _sigma2); }
+            get { return _sigma2; }
         }
         #endregion
 
@@ -89,8 +101,8 @@ namespace Euclid.Distributions.Continuous
         /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
         {
-            if (x <= 0) return 0;
-            else return Fn.Phi((Math.Log(x) - _mu) / _sigma);
+            if (x < 0) return 0;
+            return 1 - Math.Exp(-Math.Pow(x / _lambda, _k));
         }
 
         /// <summary>
@@ -100,7 +112,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            return Math.Exp(_mu + _sigma * Fn.InvPhi(p));
+            return _lambda * Math.Pow(-Math.Log(1 - p), 1 / _k);
         }
 
         /// <summary>
@@ -110,21 +122,8 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            if (x <= 0) return 0;
-            else return Math.Exp(-0.5 * Math.Pow(Math.Log(x) - _mu, 2) / _sigma2) / (x * _sigma * Math.Sqrt(2 * Math.PI));
-        }
-
-        /// <summary>
-        /// Generates a sequence of samples from the log normal distribution
-        /// </summary>
-        /// <param name="numberOfPoints">the sample's size</param>
-        /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints)
-        {
-            double[] result = new double[numberOfPoints];
-            for (int i = 0; i < numberOfPoints; i++)
-                result[i] = Math.Exp(_mu + _sigma * Fn.InvPhi(Math.Log(_randomSource.NextDouble())));
-            return result;
+            if (x < 0) return 0;
+            return (_k / _lambda) * Math.Pow(x / _lambda, _k - 1) * Math.Exp(-Math.Pow(x / _lambda, _k));
         }
         #endregion
     }

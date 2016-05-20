@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Histograms;
+using System;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -36,6 +37,7 @@ namespace Euclid.Distributions.Continuous
             _Z = _phiBeta - _phiAlpha;
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
+            _support = new Interval(_a, _b, true, true);
         }
 
         /// <summary>
@@ -57,10 +59,10 @@ namespace Euclid.Distributions.Continuous
             get { return Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + (_alpha * _gbAlpha - _beta * _gbBeta) / (2 * _Z); }
         }
 
-        /// <summary>Gets the distribution's support's upper bound</summary>
-        public override double Maximum
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support
         {
-            get { return _b; }
+            get { return _support; }
         }
 
         /// <summary>Gets the distribution's mean</summary>
@@ -73,12 +75,6 @@ namespace Euclid.Distributions.Continuous
         public override double Median
         {
             get { return _mu + _sigma * Fn.InvPhi(0.5 * (_phiBeta + _phiAlpha)); }
-        }
-
-        /// <summary>Gets the distribution's support's lower bound</summary>
-        public override double Minimum
-        {
-            get { return _a; }
         }
 
         /// <summary>Gets the distribution's mode</summary>
@@ -109,9 +105,7 @@ namespace Euclid.Distributions.Continuous
             }
         }
 
-        /// <summary>
-        /// Gets the distribution's standard deviation
-        /// </summary>
+        /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation
         {
             get { return Math.Sqrt(Variance); }
@@ -131,6 +125,8 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
+            if (x < _support.LowerBound) return 0;
+            else if (x > _support.UpperBound) return 1;
             return (Fn.Phi((x - _mu) / _sigma) - Fn.Phi(_alpha)) / _Z;
         }
 
@@ -151,6 +147,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
+            if (!_support.Contains(x)) return 0;
             return Fn.GaussBell((x - _mu) / _sigma) / (_sigma * _Z);
         }
 

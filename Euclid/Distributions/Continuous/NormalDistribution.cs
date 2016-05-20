@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Histograms;
+using System;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -17,8 +18,11 @@ namespace Euclid.Distributions.Continuous
             _mean = mean;
             if (standardDeviation < 0) throw new ArgumentException("The standard deviation can not be negative");
             _standardDeviation = standardDeviation;
+
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
+
+            _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
 
         /// <summary>
@@ -110,12 +114,10 @@ namespace Euclid.Distributions.Continuous
             get { return Math.Log(_standardDeviation * Math.Sqrt(2 * Math.PI * Math.E)); }
         }
 
-        /// <summary>
-        /// Gets the maximum of the normal distribution
-        /// </summary>
-        public override double Maximum
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support
         {
-            get { return double.MaxValue; }
+            get { return _support; }
         }
 
         /// <summary>
@@ -132,14 +134,6 @@ namespace Euclid.Distributions.Continuous
         public override double Median
         {
             get { return _mean; }
-        }
-
-        /// <summary>
-        /// Gets the minimum of the normal distribution
-        /// </summary>
-        public override double Minimum
-        {
-            get { return double.MinValue; }
         }
 
         /// <summary>

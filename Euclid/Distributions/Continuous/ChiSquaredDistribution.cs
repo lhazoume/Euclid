@@ -1,4 +1,5 @@
-﻿using Euclid.Solvers;
+﻿using Euclid.Histograms;
+using Euclid.Solvers;
 using System;
 
 namespace Euclid.Distributions.Continuous
@@ -19,6 +20,8 @@ namespace Euclid.Distributions.Continuous
             _k = k;
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
+
+            _support = new Interval(0, double.PositiveInfinity, true, false);
         }
 
         /// <summary>
@@ -45,11 +48,11 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>
-        /// Gets the distribution's support's upper bound
+        /// Gets the distribution's support
         /// </summary>
-        public override double Maximum
+        public override Interval Support
         {
-            get { return double.PositiveInfinity; }
+            get { return _support; }
         }
 
         /// <summary>
@@ -66,14 +69,6 @@ namespace Euclid.Distributions.Continuous
         public override double Median
         {
             get { return _k * Math.Pow(1 - 2 / (9 * _k), 3); }
-        }
-
-        /// <summary>
-        /// Gets the distribution's support's lower bound
-        /// </summary>
-        public override double Minimum
-        {
-            get { return 0; }
         }
 
         /// <summary>
@@ -141,6 +136,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
+            if (x < 0) return 0;
             return Math.Pow(0.5 * x, 0.5 * _k - 1) * Math.Exp(-0.5 * x) / (x * Fn.Gamma(0.5 * _k));
         }
 

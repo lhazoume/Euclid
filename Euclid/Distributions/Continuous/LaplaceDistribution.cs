@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Histograms;
+using System;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -7,7 +8,9 @@ namespace Euclid.Distributions.Continuous
     /// </summary>
     public class LaplaceDistribution : ContinousDistribution
     {
+        #region Declarations
         private double _mu, _b;
+        #endregion
 
         #region Constructors
         private LaplaceDistribution(double mu, double b, Random randomSource)
@@ -17,6 +20,8 @@ namespace Euclid.Distributions.Continuous
             _b = b;
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
+
+            _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
 
         /// <summary>
@@ -36,10 +41,10 @@ namespace Euclid.Distributions.Continuous
             get { return Math.Log(2 * _b * Math.E); }
         }
 
-        /// <summary>Gets the distribution's support's upper bound</summary>
-        public override double Maximum
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support
         {
-            get { return double.MaxValue; }
+            get { return _support; }
         }
 
         /// <summary>Gets the distribution's mean</summary>
@@ -52,12 +57,6 @@ namespace Euclid.Distributions.Continuous
         public override double Median
         {
             get { return _mu; }
-        }
-
-        /// <summary>Gets the distribution's support's lower bound</summary>
-        public override double Minimum
-        {
-            get { return double.MinValue; }
         }
 
         /// <summary>Gets the distribution's mode</summary>
@@ -129,7 +128,7 @@ namespace Euclid.Distributions.Continuous
         {
             return -Math.Abs(x - _mu) / _b - Math.Log(2 * _b);
         }
-        
+
         #endregion
     }
 }

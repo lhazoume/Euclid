@@ -195,17 +195,14 @@
         <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Maximum">
-            <summary>Gets the distribution's support's upper bound</summary>
+        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Support">
+            <summary>Gets the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Median">
             <summary>Gets the distribution's median</summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Minimum">
-            <summary>Gets the distribution's support's lower bound</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.CauchyDistribution.Mode">
             <summary>Gets the distribution's mode</summary>
@@ -254,9 +251,9 @@
             Gets the distribution's entropy
             </summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Maximum">
+        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Support">
             <summary>
-            Gets the distribution's support's upper bound
+            Gets the distribution's support
             </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Mean">
@@ -267,11 +264,6 @@
         <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Median">
             <summary>
             Gets the distribution's median
-            </summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Minimum">
-            <summary>
-            Gets the distribution's support's lower bound
             </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ChiSquaredDistribution.Mode">
@@ -322,6 +314,70 @@
             <param name="numberOfPoints">the sample's size</param>
             <returns>an array of double</returns>
         </member>
+        <member name="T:Euclid.Distributions.Continuous.GammaDistribution">
+            <summary>
+            Gamma distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.GammaDistribution.#ctor(System.Double,System.Double)">
+            <summary>
+            Builds a Gamma distribution
+            </summary>
+            <param name="k">the shapee</param>
+            <param name="theta">the scale</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.GammaDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.GammaDistribution.Support">
+            <summary>Gets the distribution's support </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.GammaDistribution.Mean">
+            <summary>Gets the distribution's mean </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.GammaDistribution.Median">
+            <summary>Gets the distribution's median </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.GammaDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.GammaDistribution.Skewness">
+            <summary>Gets the distribution's skewness </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.GammaDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation </summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.GammaDistribution.Variance">
+            <summary>Gets the distribution's variance </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.GammaDistribution.CumulativeDistribution(System.Double)">
+            <summary>
+            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
+            </summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>the cumulative distribution at location x</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.GammaDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+            </summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.GammaDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.GammaDistribution.Sample(System.Int32)">
+            <summary>
+            Generates a sequence of samples using the Ahrens-Dieter algorithm
+            </summary>
+            <param name="numberOfPoints">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
         <member name="T:Euclid.Distributions.Continuous.LaplaceDistribution">
             <summary>
             Laplace distribution class
@@ -337,17 +393,14 @@
         <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Maximum">
-            <summary>Gets the distribution's support's upper bound</summary>
+        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Support">
+            <summary>Gets the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Median">
             <summary>Gets the distribution's median</summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Minimum">
-            <summary>Gets the distribution's support's lower bound</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.LaplaceDistribution.Mode">
             <summary>Gets the distribution's mode</summary>
@@ -398,17 +451,14 @@
         <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Maximum">
-            <summary>Gets the distribution's domain's upper bound</summary>
+        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Support">
+            <summary>Gets the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Median">
             <summary>Gets the distribution's median</summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Minimum">
-            <summary>Gets the distribution's domain's lower bound</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.LogNormalDistribution.Mode">
             <summary>Gets the distribution's mode</summary>
@@ -465,17 +515,14 @@
         <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Maximum">
-            <summary>Gets the distribution's domain's upper bound</summary>
+        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Support">
+            <summary>Gets the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Median">
             <summary>Gets the distribution's median</summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Minimum">
-            <summary> Gets the distribution's domain's lower bound</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ParetoDistribution.Mode">
             <summary>Gets the distribution's mode</summary>
@@ -567,10 +614,8 @@
             Gets the entropy of the normal distribution
             </summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Maximum">
-            <summary>
-            Gets the maximum of the normal distribution
-            </summary>
+        <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Support">
+            <summary>Gets the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Mean">
             <summary>
@@ -580,11 +625,6 @@
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Median">
             <summary>
             Gets the median of the normal distribution
-            </summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Minimum">
-            <summary>
-            Gets the minimum of the normal distribution
             </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.NormalDistribution.Mode">
@@ -646,19 +686,14 @@
             <param name="numberOfPoints">the sample's size</param>
             <returns>an array of double</returns>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Minimum">
+        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Support">
             <summary>
-            Gets the distribution's support's lower bound
+            Gets the distribution's support
             </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Entropy">
             <summary>
             Gets the distribution's entropy
-            </summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Maximum">
-            <summary>
-            Gets the distribution's support's upper bound
             </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Mean">
@@ -697,20 +732,20 @@
         <member name="F:Euclid.Distributions.Continuous.ContinousDistribution._randomSource">
             <summary>The random number generator</summary>
         </member>
+        <member name="F:Euclid.Distributions.Continuous.ContinousDistribution._support">
+            <summary>The distribution's support </summary>
+        </member>
         <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Maximum">
-            <summary>Gets the distribution's support's upper bound</summary>
+        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Support">
+            <summary>Gets the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Median">
             <summary>Gets the distribution's median</summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Minimum">
-            <summary>Gets the distribution's support's lower bound</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Mode">
             <summary>Gets the distribution's mode</summary>
@@ -777,17 +812,14 @@
         <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Maximum">
-            <summary>Gets the distribution's support's upper bound</summary>
+        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Support">
+            <summary>Gets the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Median">
             <summary>Gets the distribution's median</summary>
-        </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Minimum">
-            <summary>Gets the distribution's support's lower bound</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Mode">
             <summary>Gets the distribution's mode</summary>
@@ -799,9 +831,7 @@
             <remarks>using Shah and Jaiswal (1966)</remarks>
         </member>
         <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.StandardDeviation">
-            <summary>
-            Gets the distribution's standard deviation
-            </summary>
+            <summary>Gets the distribution's standard deviation</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Variance">
             <summary>Gets the distribution's variance</summary>
@@ -819,6 +849,127 @@
             <returns>a double</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.UniformDistribution">
+            <summary>
+            Uniform distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.#ctor(System.Double,System.Double)">
+            <summary>
+            Builds a Uniform distribution
+            </summary>
+            <param name="a">the support's lower bound</param>
+            <param name="b">the support's upper bound</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.UniformDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.UniformDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.UniformDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.UniformDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.UniformDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.UniformDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.UniformDistribution.Support">
+            <summary>Gets the distribution's support</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.UniformDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.CumulativeDistribution(System.Double)">
+            <summary>
+            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
+            </summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>the cumulative distribution at location x</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+            </summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Sample(System.Int32)">
+            <summary>
+            Generates a sequence of samples from the normal distribution using the algorithm
+            </summary>
+            <param name="numberOfPoints">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.WeibullDistribution">
+            <summary>
+            Weibull distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.WeibullDistribution.#ctor(System.Double,System.Double)">
+            <summary>
+            Builds a Weibull distribution
+            </summary>
+            <param name="lambda">the scale</param>
+            <param name="k">the shape</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.WeibullDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.WeibullDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.WeibullDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.WeibullDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.WeibullDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.WeibullDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.WeibullDistribution.Support">
+            <summary>Gets the distribution's support</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.WeibullDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.WeibullDistribution.CumulativeDistribution(System.Double)">
+            <summary>
+            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
+            </summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>the cumulative distribution at location x</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.WeibullDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+            </summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.WeibullDistribution.ProbabilityDensity(System.Double)">
             <summary>
             Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
             </summary>
@@ -857,8 +1008,8 @@
             Returns the distribution's entropy
             </summary>
         </member>
-        <member name="P:Euclid.Distributions.IDistribution.Maximum">
-            <summary>Returns the distribution's domain's upper bound</summary>
+        <member name="P:Euclid.Distributions.IDistribution.Support">
+            <summary>Returns the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.IDistribution.Mean">
             <summary>
@@ -869,9 +1020,6 @@
             <summary>
             Returns the distribution's median
             </summary>
-        </member>
-        <member name="P:Euclid.Distributions.IDistribution.Minimum">
-            <summary>Returns the distribution's domain's upper bound</summary>
         </member>
         <member name="P:Euclid.Distributions.IDistribution.Mode">
             <summary>Returns the distribution's mode</summary>

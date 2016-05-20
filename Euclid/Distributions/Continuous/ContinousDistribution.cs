@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Histograms;
+using System;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -8,21 +9,21 @@ namespace Euclid.Distributions.Continuous
         /// <summary>The random number generator</summary>
         protected Random _randomSource;
 
+        /// <summary>The distribution's support </summary>
+        protected Interval _support;
+
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
         public abstract double Entropy { get; }
 
-        /// <summary>Gets the distribution's support's upper bound</summary>
-        public abstract double Maximum { get; }
+        /// <summary>Gets the distribution's support</summary>
+        public abstract Interval Support { get; }
 
         /// <summary>Gets the distribution's mean</summary>
         public abstract double Mean { get; }
 
         /// <summary>Gets the distribution's median</summary>
         public abstract double Median { get; }
-
-        /// <summary>Gets the distribution's support's lower bound</summary>
-        public abstract double Minimum { get; }
 
         /// <summary>Gets the distribution's mode</summary>
         public abstract double Mode { get; }

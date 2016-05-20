@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Histograms;
+using System;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -19,6 +20,7 @@ namespace Euclid.Distributions.Continuous
             _beta = 1 / _lambda;
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
+            _support = new Interval(0, double.PositiveInfinity, true, false);
         }
 
         /// <summary>
@@ -80,11 +82,11 @@ namespace Euclid.Distributions.Continuous
         #region Accessors
 
         /// <summary>
-        /// Gets the distribution's support's lower bound
+        /// Gets the distribution's support
         /// </summary>
-        public override double Minimum
+        public override Interval Support
         {
-            get { return 0; }
+            get { return _support; }
         }
 
         /// <summary>
@@ -93,14 +95,6 @@ namespace Euclid.Distributions.Continuous
         public override double Entropy
         {
             get { return Math.Log(Math.E * _beta); }
-        }
-
-        /// <summary>
-        /// Gets the distribution's support's upper bound
-        /// </summary>
-        public override double Maximum
-        {
-            get { return double.MaxValue; }
         }
 
         /// <summary>

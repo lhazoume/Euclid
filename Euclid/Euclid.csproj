@@ -46,6 +46,7 @@
     <Compile Include="Complex.cs" />
     <Compile Include="Distributions\Continuous\CauchyDistribution.cs" />
     <Compile Include="Distributions\Continuous\ChiSquaredDistribution.cs" />
+    <Compile Include="Distributions\Continuous\GammaDistribution.cs" />
     <Compile Include="Distributions\Continuous\LaplaceDistribution.cs" />
     <Compile Include="Distributions\Continuous\LogNormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\ParetoDistribution.cs" />
@@ -53,6 +54,8 @@
     <Compile Include="Distributions\Continuous\ExponentialDistribution.cs" />
     <Compile Include="Distributions\Continuous\ContinousDistribution.cs" />
     <Compile Include="Distributions\Continuous\TruncatedNormalDistribution.cs" />
+    <Compile Include="Distributions\Continuous\UniformDistribution.cs" />
+    <Compile Include="Distributions\Continuous\WeibullDistribution.cs" />
     <Compile Include="Distributions\Empiric1DDistribution.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
     <Compile Include="Helpers\Arrays.cs" />

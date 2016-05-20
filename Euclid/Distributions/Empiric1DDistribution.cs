@@ -1,4 +1,5 @@
 ﻿using System;
+using Euclid.Histograms;
 
 namespace Euclid.Distributions
 {
@@ -61,6 +62,14 @@ namespace Euclid.Distributions
         }
 
         public double StandardDeviation
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Interval Support
         {
             get
             {

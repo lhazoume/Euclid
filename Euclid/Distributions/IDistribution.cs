@@ -1,4 +1,6 @@
-﻿namespace Euclid.Distributions
+﻿using Euclid.Histograms;
+
+namespace Euclid.Distributions
 {
     /// <summary>Interface for all continuous distributions</summary>
     public interface IDistribution
@@ -32,8 +34,8 @@
         /// </summary>
         double Entropy { get; }
 
-        /// <summary>Returns the distribution's domain's upper bound</summary>
-        double Maximum { get; }
+        /// <summary>Returns the distribution's support</summary>
+        Interval Support { get; }
 
         /// <summary>
         /// Returns the distribution's mean
@@ -45,8 +47,6 @@
         /// </summary>
         double Median { get; }
 
-        /// <summary>Returns the distribution's domain's upper bound</summary>
-        double Minimum { get; }
 
         /// <summary>Returns the distribution's mode</summary>
         double Mode { get; }

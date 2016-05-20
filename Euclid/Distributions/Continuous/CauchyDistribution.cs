@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Histograms;
+using System;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -8,16 +9,21 @@ namespace Euclid.Distributions.Continuous
     public class CauchyDistribution : ContinousDistribution
     {
         #region Declarations
-        private double _x0, _gamma;
+        private readonly double _x0, _gamma;
         #endregion
 
         #region Constructors
         private CauchyDistribution(double x0, double gamma, Random randomSource)
         {
             _x0 = x0;
+
+            if (gamma <= 0) throw new ArgumentException("gamma has to be positive");
             _gamma = gamma;
+
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
+
+            _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
 
         /// <summary>
@@ -37,10 +43,10 @@ namespace Euclid.Distributions.Continuous
             get { return Math.Log(_gamma) - Math.Log(4 * Math.PI); }
         }
 
-        /// <summary>Gets the distribution's support's upper bound</summary>
-        public override double Maximum
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support
         {
-            get { return double.MaxValue; }
+            get { return _support; }
         }
 
         /// <summary>Gets the distribution's mean</summary>
@@ -53,12 +59,6 @@ namespace Euclid.Distributions.Continuous
         public override double Median
         {
             get { return _x0; }
-        }
-
-        /// <summary>Gets the distribution's support's lower bound</summary>
-        public override double Minimum
-        {
-            get { return double.MinValue; }
         }
 
         /// <summary>Gets the distribution's mode</summary>
