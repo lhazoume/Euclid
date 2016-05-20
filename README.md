@@ -25,8 +25,8 @@ Methods :
 
 Distributions :
 ===============
-- Continuous : Cauchy, ChiSquared, Exponential, Laplace, LogNormal, Normal, Pareto, TruncatedNormal
-- **coming** : other continuous distributions (Weibull, Student, uniform, gamma), discrete distributions, random number generators
+- Continuous : Cauchy, ChiSquared, Exponential, Gamma, Laplace, LogNormal, Normal, Pareto, TruncatedNormal, Uniform, Weibull
+- **coming** : other continuous distributions (F, Student), discrete distributions, random number generators
 
 Computations :
 ==============
