@@ -90,10 +90,10 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
 
             #region Load data
             int n = _y.Rows, p = _x.Columns;
-            Matrix X = new Matrix(n, p + (_withConstant ? 1 : 0)), Y = new Matrix(n, 1);
+            Matrix X = Matrix.Create(n, p + (_withConstant ? 1 : 0));
+            Vector Y = Vector.Create(_y.Data);
             for (int i = 0; i < n; i++)
             {
-                Y[i] = _y[i];
                 if (_withConstant)
                 {
                     X[i * (p + 1)] = 1;
@@ -123,8 +123,8 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
                 return;
             }
 
-            Matrix radix = intm ^ tX,
-                A = radix ^ Y;
+            Matrix radix = intm ^ tX;
+            Vector A = radix * Y;
             #endregion
 
             double sse = 0;
@@ -132,9 +132,9 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             if (_computeErr)
             {
                 Matrix H = X ^ radix,
-                    I = Matrix.IdentityMatrix(H.Rows, H.Columns),
-                    e = Y.FastTranspose ^ (I - H) ^ Y,
-                    cov = tX ^ Y;
+                    I = Matrix.CreateIdentityMatrix(H.Rows, H.Columns);
+                sse = Vector.Scalar(Y, (I - H) * Y);
+                Vector cov = tX * Y;
 
                 #region Correlations
                 for (int i = 0; i < p; i++)
@@ -145,15 +145,13 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
                     correls[i] = cXY / Math.Sqrt(sX * sst);
                 }
                 #endregion
-
-                sse = e[0];
             }
             #endregion
 
             #region Output
             List<double> beta = new List<double>();
             double beta0 = _withConstant ? A[0] : 0;
-            for (int i = (_withConstant ? 1 : 0); i < A.Rows; i++) beta.Add(A[i * A.Columns]);
+            for (int i = (_withConstant ? 1 : 0); i < A.Size; i++) beta.Add(A[i]);
             #endregion
 
             _linearModel = new LinearModel(beta0, beta.ToArray(), correls, n, sse, sst - sse);

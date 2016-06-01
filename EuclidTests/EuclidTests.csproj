@@ -59,12 +59,17 @@
     <Compile Include="Histograms\BucketTests.cs" />
     <Compile Include="Histograms\HistogramTests.cs" />
     <Compile Include="IndexedSeries\Analytics\LinearModelTests.cs" />
+    <Compile Include="IndexedSeries\Analytics\Regressions\OrdinaryLeastSquaresLinearRegressionTests.cs" />
+    <Compile Include="IndexedSeries\Analytics\Regressions\RIDGERegressionTests.cs" />
     <Compile Include="IndexedSeries\DataFrameTests.cs" />
     <Compile Include="IndexedSeries\SeriesTests.cs" />
     <Compile Include="LinearAlgebra\EigenDecompositionTests.cs" />
     <Compile Include="MatrixTests.cs" />
     <Compile Include="PolynomialTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Solvers\GradientDescentTests.cs" />
+    <Compile Include="Solvers\NewtonRaphsonTests.cs" />
+    <Compile Include="Solvers\RootBracketingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Euclid\Euclid.csproj">

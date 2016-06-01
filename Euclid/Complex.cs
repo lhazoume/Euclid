@@ -82,10 +82,8 @@ namespace Euclid
         /// <returns>the argument of the <c>Complex</c></returns>
         public double Argument()
         {
-            if (_re == 0)
-                return 0.5 * Math.Sign(_im) * Math.PI;
-            if (_im == 0)
-                return Math.Sign(_re) * Math.PI;
+            if (_re == 0) return 0.5 * Math.Sign(_im) * Math.PI;
+            if (_im == 0) return _re > 0 ? 0 : Math.PI;
 
             if (_re > 0)
                 return Math.Atan(_im / _re);
@@ -100,7 +98,7 @@ namespace Euclid
         public override string ToString()
         {
             if (_im == 0) return _re.ToString();
-            return string.Format("{0}{1}i{2}", _re, (_im > 0 ? "+" : "-"), Math.Abs(_im));
+            return string.Format("{0}{1}i{2}", _re, (_im > 0 ? "+" : "-"), (Math.Abs(_im) == 1 ? "" : Math.Abs(_im).ToString()));
         }
 
         /// <summary>
@@ -111,7 +109,7 @@ namespace Euclid
         public string ToString(string format)
         {
             if (_im == 0) return _re.ToString(format);
-            return string.Format("{0}{1}i{2}", _re.ToString(format), (_im > 0 ? "+" : "-"), Math.Abs(_im).ToString(format));
+            return string.Format("{0}{1}i{2}", _re.ToString(format), (_im > 0 ? "+" : "-"), (Math.Abs(_im) == 1 ? "" : Math.Abs(_im).ToString(format)));
         }
         #endregion
 
@@ -131,7 +129,7 @@ namespace Euclid
         {
             get { return new Complex(1, 0); }
         }
-        
+
         /// <summary>
         /// Returns a complex with both imaginary and real parts equal to zero
         /// </summary>
@@ -240,6 +238,16 @@ namespace Euclid
         public static Complex operator /(Complex x, Complex y)
         {
             return x * y.Conjugate * (1.0 / y.SquareModulus());
+        }
+
+        public static Complex operator /(Complex x, double d)
+        {
+            return x * (1.0 / d);
+        }
+
+        public static Complex operator -(Complex x)
+        {
+            return new Complex(-x._re, -x._im);
         }
         #endregion
     }

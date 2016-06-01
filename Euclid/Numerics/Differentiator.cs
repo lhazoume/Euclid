@@ -1,4 +1,5 @@
 ﻿using Euclid.Arithmetics;
+using Euclid.Solvers;
 using System;
 using System.Linq;
 
@@ -16,7 +17,7 @@ namespace Euclid.Numerics
         /// <returns>the derivative</returns>
         public static Func<double, double> Differentiate(this Func<double, double> function)
         {
-            return Differentiate(function, DifferenceForm.Central, 1e-9);
+            return Differentiate(function, DifferenceForm.Central, Descents.STEP_EPSILON);
         }
 
         /// <summary>

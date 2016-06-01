@@ -89,6 +89,12 @@ namespace Euclid.IndexedSeries
         {
             get { return _legends.Length; }
         }
+
+        /// <summary>Gets the data</summary>
+        public U[,] Data
+        {
+            get { return _data; }
+        }
         #endregion
 
         #region Methods

@@ -118,7 +118,7 @@ namespace Euclid
 
             for (int i = 0; i < z.Count; i++)
             {
-                double n = p.Evaluate(z[i]).Modulus();
+                double n = p.Evaluate(z[i]).SquareModulus();
                 if (n > buf) buf = n;
             }
 
@@ -141,10 +141,10 @@ namespace Euclid
         /// Computes the roots of polynomial p via Weierstrass iteration.
         /// </summary>
         /// <returns>the complex roots of the <c>Polynomial</c></returns>
-        public List<Complex> ComplexRoots()
+        public List<Tuple<Complex, int>> ComplexRoots()
         {
-            double tolerance = 1e-12;
-            int max_iterations = 30;
+            double tolerance = 1e-30;
+            int max_iterations = 300;
 
             Polynomial q = this.Clone;
             q.Normalize();
@@ -155,7 +155,6 @@ namespace Euclid
 
             // init z
             for (int k = 0; k < q.Degree; k++)
-                //z[k] = (new Complex(.4, .9)) ^ k;
                 z.Add(Complex.Exp((2 * Math.PI * k / q.Degree) * Complex.I));
 
 
@@ -172,11 +171,19 @@ namespace Euclid
             // clean...
             for (int k = 0; k < q.Degree; k++)
             {
-                z[k].Re = Math.Round(z[k].Re, 12);
-                z[k].Im = Math.Round(z[k].Im, 12);
+                z[k].Re = Math.Round(z[k].Re, 5);
+                z[k].Im = Math.Round(z[k].Im, 5);
             }
 
-            return z;
+            List<Tuple<Complex, int>> roots = new List<Tuple<Complex, int>>();
+            while (z.Count > 0)
+            {
+                Complex cRef = z[0];
+                Tuple<Complex, int> root = new Tuple<Complex, int>(cRef, z.Count(c => (c - cRef).SquareModulus() <= tolerance));
+                z.RemoveAll(c => (c - cRef).SquareModulus() <= tolerance);
+                roots.Add(root);
+            }
+            return roots;
         }
 
         #endregion
@@ -185,10 +192,10 @@ namespace Euclid
         /// Computes the real roots of the <c>Polynomial</c>
         /// </summary>
         /// <returns>a list of double</returns>
-        public List<double> Roots()
+        public List<Tuple<double, int>> Roots()
         {
-            List<Complex> cRoots = ComplexRoots();
-            List<double> result = cRoots.FindAll(c => c.Im == 0).Select(c => c.Re).ToList();
+            List<Tuple<Complex, int>> cRoots = ComplexRoots();
+            List<Tuple<double, int>> result = cRoots.FindAll(c => Math.Abs(c.Item1.Im) < 1e-8).Select(c => new Tuple<double, int>(c.Item1.Re, c.Item2)).ToList();
             result.Sort();
             return result;
         }
@@ -315,8 +322,7 @@ namespace Euclid
         {
             int degree = p1.Degree + p2.Degree;
 
-            Polynomial r = new Polynomial(0);
-
+            Polynomial r = new Polynomial(0.0);
 
             for (int i = 0; i <= p1.Degree; i++)
                 for (int j = 0; j <= p2.Degree; j++)
@@ -325,6 +331,10 @@ namespace Euclid
             return r;
         }
 
+        public static Polynomial operator ^(Polynomial p, int n)
+        {
+            return Polynomial.Power(p, n);
+        }
         #endregion
 
         #region Additions / substractions

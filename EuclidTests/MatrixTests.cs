@@ -1,4 +1,5 @@
 ﻿using Euclid;
+using Euclid.Distributions.Continuous;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -8,93 +9,50 @@ namespace Euclid.Tests
     [TestClass()]
     public class MatrixTests
     {
+        #region Constructors
+
         [TestMethod()]
-        public void MatrixTest()
+        public void MatrixCreateTest()
         {
-            Matrix m = new Matrix();
+            Matrix m = Matrix.Create();
             Assert.AreEqual(m.Size, 4, "Failed on the argument less matrix creation");
         }
 
         [TestMethod()]
-        public void MatrixTest1()
+        public void MatrixCreateSquareTest()
         {
             int n = 10;
-            Matrix m = new Matrix(n);
+            Matrix m = Matrix.CreateSquare(n);
             Assert.IsTrue(m.Rows == m.Columns && m.Rows == n, "Failed to build a square matrix");
         }
 
         [TestMethod()]
-        public void MatrixTest2()
+        public void MatrixCreateRectangularTest()
         {
             int r = 5, c = 7;
-            Matrix m = new Matrix(r, c);
+            Matrix m = Matrix.Create(r, c);
             Assert.IsTrue(m.Rows == r && m.Columns == c, "Failed to build a rectangular matrix");
         }
 
         [TestMethod()]
-        public void MatrixTest3()
+        public void MatrixCreateRectangularFullTest()
         {
             int r = 5, c = 7;
             double d = Math.PI;
-            Matrix m = new Matrix(r, c, d);
+            Matrix m = Matrix.Create(r, c, d);
             Assert.IsTrue(m.Rows == r && m.Columns == c && m.Data.All(v => v == d), "Failed to build a rectangular full matrix");
         }
 
         [TestMethod()]
-        public void SetColTest()
+        public void MatrixCreateCopy()
         {
-            int targetColumn = 3,
-                dimension = 5;
-            Matrix m = new Matrix(dimension),
-                newCol = new Matrix(dimension, 1);
-
-            for (int i = 0; i < dimension; i++)
-                newCol[i] = i;
-            m.SetCol(newCol, targetColumn);
-
-            bool fit = true;
-            for (int i = 0; i < dimension; i++)
-                if (newCol[i] != m[i, targetColumn])
-                    fit = false;
-            Assert.IsTrue(fit, "The method 'SetCol' failed : the values do not match");
-        }
-
-        [TestMethod()]
-        public void SolveWithTest()
-        {
-            int dimension = 5;
-            Matrix a = new Matrix(dimension);
-            for (int i = 0; i < dimension; i++)
-                for (int j = 0; j <= i; j++)
-                    a[i, j] = 1;
-            Matrix b = Matrix.RandomMatrix(dimension, 1);
-            Matrix x = a.SolveWith(b);
-            Assert.AreEqual((a * x - b).Norm1, 0, 1e-9, "The Solve with does not match the expected result");
-        }
-
-        [TestMethod()]
-        public void ColumnTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void RowTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void PowerTest()
-        {
-            int n = 5,
-                dimension = 6;
-            Matrix x = Matrix.RandomMatrix(dimension, dimension);
-            Matrix y = Matrix.Power(x, n);
-            Matrix control = x.Clone;
-            for (int i = 1; i < n; i++)
-                control *= x;
-            Assert.AreEqual((control - y).Norm1, 0, 1e-9, "The power does not behave as expected");
+            double[,] data = new double[2, 2];
+            data[0, 0] = 1;
+            data[1, 1] = 3;
+            data[0, 1] = 2;
+            data[1, 0] = 2;
+            Matrix m = Matrix.Create(data);
+            Assert.AreEqual(data[1, 1], m.Data[3]);
         }
 
         [TestMethod()]
@@ -102,7 +60,7 @@ namespace Euclid.Tests
         {
             int rows = 5,
                 cols = 8;
-            Matrix z = Matrix.ZeroMatrix(rows, cols);
+            Matrix z = Matrix.CreateZeroMatrix(rows, cols);
 
             bool succeeded = true;
             for (int i = 0; i < rows; i++)
@@ -117,29 +75,120 @@ namespace Euclid.Tests
         {
             int rows = 4,
                 cols = rows + 1;
-            Matrix m = Matrix.IdentityMatrix(rows, cols),
-                control = new Matrix(rows, cols);
+            Matrix m = Matrix.CreateIdentityMatrix(rows, cols),
+                control = Matrix.Create(rows, cols);
             for (int i = 0; i < rows; i++)
                 control[i, i] = 1;
             Assert.AreEqual((control - m).Norm1, 0, "The IdentityMatrix does not match the expected");
         }
 
         [TestMethod()]
-        public void BandMatrixTest()
+        public void RandomMatrix()
         {
-            Assert.Fail();
+            Matrix testRnd = Matrix.CreateRandom(10, 5);
+            Assert.IsTrue(testRnd.Data.All(d => d >= 0 && d <= 1));
         }
 
         [TestMethod()]
-        public void RandomMatrixTest()
+        public void RandomSquareMatrix()
         {
-            Assert.Fail();
+            Matrix testRnd = Matrix.CreateSquareRandom(10);
+            Assert.IsTrue(testRnd.Data.All(d => d >= 0 && d <= 1));
         }
 
         [TestMethod()]
-        public void RandomMatrixTest1()
+        public void CreateBandMatrixTest()
         {
-            Assert.Fail();
+            int size = 10;
+            Matrix m = Matrix.CreateBandMatrix(size, 1, 2, 3, 4),
+                mRef = Matrix.CreateSquare(size);
+            for (int i = 0; i < size; i++)
+            {
+                mRef[i, i] = 1;
+                for (int j = i + 1; j < size; j++)
+                {
+                    mRef[i, j] = Math.Abs(i - j) <= 3 ? Math.Abs(i - j) + 1 : 0;
+                    mRef[j, i] = mRef[i, j];
+                }
+            }
+            Assert.AreEqual(0, (mRef - m).Norm2, 1e-10);
+        }
+
+        #endregion
+
+        [TestMethod()]
+        public void SolveWithTest()
+        {
+            int dimension = 5;
+            Matrix a = Matrix.CreateSquare(dimension);
+            for (int i = 0; i < dimension; i++)
+                for (int j = 0; j <= i; j++)
+                    a[i, j] = 1;
+            Vector b = Vector.CreateRandom(dimension, new UniformDistribution(0, 1));
+            Vector x = a.SolveWith(b);
+            Assert.AreEqual((a * x - b).Norm1, 0, 1e-9, "The Solve with does not match the expected result");
+        }
+
+        #region Rows and columns
+
+        [TestMethod()]
+        public void SetColTest()
+        {
+            int targetColumn = 3,
+                dimension = 5;
+            Matrix m = Matrix.CreateSquare(dimension);
+            Vector newCol = Vector.Create(dimension);
+
+            for (int i = 0; i < dimension; i++)
+                newCol[i] = i;
+            m.SetCol(newCol, targetColumn);
+
+            bool fit = true;
+            for (int i = 0; i < dimension; i++)
+                if (newCol[i] != m[i, targetColumn])
+                    fit = false;
+            Assert.IsTrue(fit, "The method 'SetCol' failed : the values do not match");
+        }
+
+        [TestMethod()]
+        public void ColumnTest()
+        {
+            int size = 3;
+            Matrix m = Matrix.Create(size, size, 0);
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                    m[i, j] = i * j;
+            Vector v = m.Column(2),
+                v2 = Vector.Create(new double[] { 0, 2, 4 });
+            Assert.AreEqual(0, (v - v2).NormSup, 1e-5);
+        }
+
+        [TestMethod()]
+        public void RowTest()
+        {
+            int size = 3;
+            Matrix m = Matrix.Create(size, size, 0);
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                    m[i, j] = i * j;
+            Vector v = m.Row(2),
+                v2 = Vector.Create(new double[] { 0, 2, 4 });
+            Assert.AreEqual(0, (v - v2).NormSup, 1e-5);
+        }
+
+        #endregion
+
+        [TestMethod()]
+        public void PowerTest()
+        {
+            int n = 5,
+                dimension = 6;
+            Matrix x = Matrix.CreateRandom(dimension, dimension);
+            Matrix y = Matrix.Power(x, n);
+            Matrix control = x.Clone;
+            for (int i = 1; i < n; i++)
+                control *= x;
+            Assert.AreEqual((control - y).Norm1, 0, 1e-9, "The power does not behave as expected");
         }
 
         [TestMethod()]
@@ -154,13 +203,15 @@ namespace Euclid.Tests
             Assert.Fail();
         }
 
+        #region Apply
+
         [TestMethod()]
         public void ApplyTest()
         {
             int rows = 5,
                 cols = 7;
             Func<double, double> function = Math.Sin;
-            Matrix m = new Matrix(rows, cols);
+            Matrix m = Matrix.Create(rows, cols);
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < cols; j++)
                     m[i, j] = i + 2 * j;
@@ -182,11 +233,13 @@ namespace Euclid.Tests
             int rows = 5,
                 cols = 7;
             Func<double, double> function = Math.Sin;
-            Matrix m = new Matrix(rows, cols),
+            Matrix m = Matrix.Create(rows, cols),
                 result = Matrix.Apply(m, function);
 
             Assert.IsTrue(result.Rows == m.Rows && result.Columns == m.Columns, "The output of Apply does not match the expected size");
         }
+
+        #endregion
 
         [TestMethod()]
         public void ScalarTest()
@@ -194,8 +247,8 @@ namespace Euclid.Tests
             int rows = 5,
                 cols = 7,
                 control = 0;
-            Matrix m1 = new Matrix(rows, cols),
-                m2 = new Matrix(rows, cols);
+            Matrix m1 = Matrix.Create(rows, cols),
+                m2 = Matrix.Create(rows, cols);
 
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < cols; j++)
@@ -210,14 +263,18 @@ namespace Euclid.Tests
         [TestMethod()]
         public void EqualsTest()
         {
-            Assert.Fail();
+            Matrix m1 = Matrix.Create(2, 3, 5),
+                m2 = Matrix.Create(2, 3);
+            for (int i = 0; i < m2.Size; i++)
+                m2[i] = 5;
+            Assert.AreEqual(0, (m1 - m2).Norm2, 1e-10);
         }
 
         [TestMethod()]
         public void ToStringTest()
         {
             int dimension = 2;
-            Matrix m = new Matrix(dimension);
+            Matrix m = Matrix.CreateSquare(dimension);
             for (int i = 0; i < m.Size; i++)
                 m[i] = i + 1;
 
@@ -226,6 +283,19 @@ namespace Euclid.Tests
             Assert.IsTrue(toString == control, "The ToString method does not behave as expected");
         }
 
+        [TestMethod()]
+        public void LinearCombinationTest()
+        {
+            Matrix m1 = Matrix.Create(10, 10, 1),
+                m2 = Matrix.Create(10, 10, 2),
+                m3 = Matrix.LinearCombination(Math.PI, m1, Math.E, m2);
+            Assert.AreEqual(Math.PI + 2 * Math.E, m3.NormSup, 1e-10);
+        }
 
+        [TestMethod()]
+        public void CreateFromColumnsTest()
+        {
+            Assert.Fail();
+        }
     }
 }

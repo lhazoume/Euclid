@@ -21,14 +21,14 @@ namespace Euclid.LinearAlgebra.Tests
         public void SolveTest()
         {
             int n = 10;
-            Matrix rand = Matrix.RandomMatrix(n).SymmetricPart;
+            Matrix rand = Matrix.CreateSquareRandom(n).SymmetricPart;
             EigenDecomposition decomp = new EigenDecomposition(rand);
             Complex[] eig = decomp.EigenValues;
-            Matrix eigenVectors = decomp.EigenVectors;
+            Vector[] eigenVectors = decomp.EigenVectors;
             double cumulatedNorm = 0;
             for (int i = 0; i < eig.Length; i++)
             {
-                Matrix diff = (rand * eigenVectors.Column(i)) - (eig[i].Re * eigenVectors.Column(i));
+                Vector diff = (rand * eigenVectors[i]) - (eig[i].Re * eigenVectors[i]);
                 cumulatedNorm += diff.Norm2;
             }
             Assert.AreEqual(cumulatedNorm/(n* n), 0 , 1e-9,"The EigenDecomposition does not behave as expected");

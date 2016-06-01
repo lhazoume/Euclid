@@ -65,9 +65,12 @@
     <Compile Include="Histograms\Histogram.cs" />
     <Compile Include="IndexedSeries\Analytics\LinearModel.cs" />
     <Compile Include="IndexedSeries\Analytics\IPredictor.cs" />
+    <Compile Include="IndexedSeries\Analytics\Regressions\LASSORegression.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\LazyPartialLeastSquaresLinearRegression.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\RegressionStatus.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\OrdinaryLeastSquaresLinearRegression.cs" />
+    <Compile Include="IndexedSeries\Analytics\Regressions\RIDGERegression.cs" />
+    <Compile Include="IndexedSeries\Analytics\Regressions\Scaling.cs" />
     <Compile Include="IndexedSeries\Slice.cs" />
     <Compile Include="LinearAlgebra\EigenDecomposition.cs" />
     <Compile Include="Matrix.cs" />
@@ -84,12 +87,15 @@
     <Compile Include="IndexedSeries\DataFrame.cs" />
     <Compile Include="IndexedSeries\IIndexedSeries.cs" />
     <Compile Include="Solvers\Descents.cs" />
+    <Compile Include="Solvers\GradientDescent.cs" />
     <Compile Include="Solvers\ISingleVariableSolver.cs" />
+    <Compile Include="Solvers\LineSearch.cs" />
     <Compile Include="Solvers\NewtonRaphson.cs" />
     <Compile Include="Solvers\RootBracketing.cs" />
     <Compile Include="Solvers\RootBracketingMethod.cs" />
     <Compile Include="Solvers\SolverStatus.cs" />
     <Compile Include="SpecialFn.cs" />
+    <Compile Include="Vector.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

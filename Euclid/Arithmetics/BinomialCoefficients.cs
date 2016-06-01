@@ -37,5 +37,10 @@
         {
             get { return _coefficients[index]; }
         }
+
+        public int[] Coefficients
+        {
+            get { return _coefficients; }
+        }
     }
 }
