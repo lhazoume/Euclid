@@ -15,25 +15,40 @@ namespace Euclid.Tests
         [TestMethod()]
         public void PolynomialTest()
         {
-            Assert.Fail();
+            Polynomial p1 = new Polynomial(10);
+            Assert.IsTrue(p1.Degree == 10 && p1[10] == 1);
         }
 
         [TestMethod()]
         public void PolynomialTest1()
         {
-            Assert.Fail();
+            Polynomial p1 = new Polynomial(1, 2, 3);
+            Assert.IsTrue(p1[0] == 1 && p1[1] == 2 && p1[2] == 3);
         }
 
         [TestMethod()]
         public void PolynomialTest2()
         {
-            Assert.Fail();
+            Polynomial p1 = new Polynomial(new double[] { 1, 2, 3 });
+            Assert.IsTrue(p1[0] == 1 && p1[1] == 2 && p1[2] == 3);
+        }
+
+        [TestMethod()]
+        public void PolynomialDerivativeTest()
+        {
+            Polynomial p = new Polynomial(1, 1, 1),
+                d = p.Derivative;
+            Assert.IsTrue(d.Equals(new Polynomial(1, 2)));
         }
 
         [TestMethod()]
         public void NormalizeTest()
         {
-            Assert.Fail();
+            Polynomial p = new Polynomial(1, 2, 3, 4, 5),
+                n = p.Clone;
+            n.Normalize();
+            n = n * 5;
+            Assert.IsTrue(p.Equals(n));
         }
 
         [TestMethod()]
@@ -75,13 +90,15 @@ namespace Euclid.Tests
         [TestMethod()]
         public void ToStringTest()
         {
-            Assert.Fail();
+            Polynomial p = new Polynomial(1, 1, 1);
+            Assert.AreEqual("1+x+x^2", p.ToString());
         }
 
         [TestMethod()]
         public void ToStringTest1()
         {
-            Assert.Fail();
+            Polynomial p = new Polynomial(1, 2, 3);
+            Assert.AreEqual("1.00+2.00x+3.00x^2", p.ToString("0.00"));
         }
 
         [TestMethod()]
@@ -94,6 +111,14 @@ namespace Euclid.Tests
             Polynomial t = new Polynomial(bc.Coefficients.Select(i => (1.0) * i).ToArray());
 
             Assert.AreEqual(0, (t - rn).Degree);
+        }
+
+        [TestMethod()]
+        public void EqualsTest()
+        {
+            Polynomial p1 = new Polynomial(1, 2, 3, 4, 5, 6),
+                p2 = new Polynomial(1, 2, 3, 4, 5, 6);
+            Assert.IsTrue(p1.Equals(p2));
         }
     }
 }

@@ -14,13 +14,21 @@ namespace Euclid.Solvers.Tests
         [TestMethod()]
         public void SolveTest()
         {
-            Assert.Fail();
+            Vector initialGuess = Vector.Create(1.0, 1.0),
+                target = Vector.Create(3.0, 3.0);
+            GradientDescent gd = new GradientDescent(initialGuess, LineSearch.Armijo, v => (v - target).SumOfSquares, 100, 100);
+            gd.Minimize();
+            Assert.AreEqual(0, (gd.Result - target).SumOfSquares, 1e-10);
         }
 
         [TestMethod()]
         public void SolveBFGSTest()
         {
-            Assert.Fail();
+            Vector initialGuess = Vector.Create(1.0, 1.0),
+                target = Vector.Create(3.0, 3.0);
+            GradientDescent gd = new GradientDescent(initialGuess, LineSearch.Armijo, v => (v - target).SumOfSquares, 100, 100);
+            gd.MinimizeBFGS();
+            Assert.AreEqual(0, (gd.Result - target).SumOfSquares, 1e-10);
         }
     }
 }

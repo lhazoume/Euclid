@@ -14,31 +14,24 @@ namespace Euclid.Solvers.Tests
         [TestMethod()]
         public void NewtonRaphsonTest()
         {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void NewtonRaphsonTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void NewtonRaphsonTest2()
-        {
-            Assert.Fail();
+            NewtonRaphson nr = new NewtonRaphson(0, x => (x - 2) * (x - 2), 100);
+            Assert.IsTrue(nr.Status == SolverStatus.NotRan && nr.MaxIterations == 100 && nr.InitialGuess == 0);
         }
 
         [TestMethod()]
         public void SolveTest()
         {
-            Assert.Fail();
+            NewtonRaphson nr = new NewtonRaphson(0, x => (x - 2) * (x - 2) - 1, 1000);
+            nr.Solve();
+            Assert.AreEqual(1, nr.Result, nr.AbsoluteTolerance);
         }
 
         [TestMethod()]
         public void SolveTest1()
         {
-            Assert.Fail();
+            NewtonRaphson nr = new NewtonRaphson(0, x => (x - 2) * (x - 2), 1000);
+            nr.Solve(1);
+            Assert.AreEqual(1, nr.Result, nr.AbsoluteTolerance);
         }
     }
 }

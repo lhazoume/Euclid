@@ -21,7 +21,10 @@ namespace Euclid.Histograms
         public Bound(double value, bool isIncluded = true)
         {
             _value = value;
-            _isIncluded = (value == double.PositiveInfinity || value == double.NegativeInfinity) ? false : isIncluded;
+            if (double.IsPositiveInfinity(_value) || double.IsNegativeInfinity(_value))
+                _isIncluded = false;
+            else
+                _isIncluded = (value == double.PositiveInfinity || value == double.NegativeInfinity) ? false : isIncluded;
         }
         #endregion
 

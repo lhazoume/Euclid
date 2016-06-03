@@ -38,7 +38,7 @@
         /// Duplicates an <c>Interval</c>
         /// </summary>
         /// <param name="interval">the <c>Interval</c> to copy</param>
-        public Interval(Interval interval)
+        private Interval(Interval interval)
             : this(interval.LowerBound, interval.UpperBound)
         { }
         #endregion
@@ -54,6 +54,11 @@
         public Bound UpperBound
         {
             get { return _upperBound; }
+        }
+
+        public Interval Clone
+        {
+            get { return new Interval(this); }
         }
         #endregion
 
@@ -80,5 +85,27 @@
                 (_upperBound.IsIncluded ? "]" : "["));
         }
         #endregion
+
+        private static Interval Inter(Interval i1, Interval i2)
+        {
+            if (i1._upperBound < i2._lowerBound || i2._upperBound < i1._lowerBound)
+                return null;
+            return new Interval(i1._lowerBound > i2._lowerBound ? i1._lowerBound : i2._lowerBound,
+                i1._upperBound > i2._upperBound ? i2._upperBound : i1._upperBound);
+        }
+
+        public static Interval Intersection(params Interval[] intervals)
+        {
+            if (intervals.Length == 0) return null;
+            if (intervals.Length == 1) return intervals[0].Clone;
+
+            Interval intm = intervals[0].Clone;
+            for (int i = 1; i < intervals.Length; i++)
+            {
+                intm = Inter(intm, intervals[i]);
+                if (intm == null) return null;
+            }
+            return intm;
+        }
     }
 }

@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -52,12 +53,13 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Arithmetics\BinomialCoefficientsTests.cs" />
+    <Compile Include="Arithmetics\SubsetsTests.cs" />
     <Compile Include="ComplexTests.cs" />
     <Compile Include="Helpers\ArraysTests.cs" />
     <Compile Include="Helpers\ParserTests.cs" />
     <Compile Include="Histograms\BoundTests.cs" />
-    <Compile Include="Histograms\BucketTests.cs" />
     <Compile Include="Histograms\HistogramTests.cs" />
+    <Compile Include="Histograms\IntervalTests.cs" />
     <Compile Include="IndexedSeries\Analytics\LinearModelTests.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\OrdinaryLeastSquaresLinearRegressionTests.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\RIDGERegressionTests.cs" />

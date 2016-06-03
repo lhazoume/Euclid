@@ -14,25 +14,47 @@ namespace Euclid.Histograms.Tests
         [TestMethod()]
         public void BoundTest()
         {
-            Assert.Fail();
+            Bound bound = new Bound(Math.PI, false);
+            Assert.IsTrue((bound.Value == Math.PI) && bound.IsIncluded == false);
         }
 
         [TestMethod()]
         public void EqualsTest()
         {
-            Assert.Fail();
+            Bound b1 = new Bound(Math.PI, false),
+                b2 = new Bound(Math.PI, false);
+            Assert.IsTrue(b1.Equals(b2));
         }
 
         [TestMethod()]
         public void EqualsTest1()
         {
-            Assert.Fail();
+            Bound b1 = new Bound(Math.PI, false), b2 = new Bound(Math.PI, false);
+            Assert.IsTrue(b1.Equals((object)b2));
         }
 
         [TestMethod()]
-        public void GetHashCodeTest()
+        public void CompareToFiniteFiniteTest()
         {
-            Assert.Fail();
+            Bound zeroInc = new Bound(0),
+                oneInc = new Bound(1);
+            Assert.AreEqual(zeroInc.CompareTo(oneInc), -1);
+        }
+
+        [TestMethod()]
+        public void CompareToAlmostEqualTest()
+        {
+            Bound zeroInc = new Bound(0),
+                zeroExc = new Bound(0, false);
+            Assert.AreEqual(zeroInc.CompareTo(zeroExc), 0);
+        }
+
+        [TestMethod()]
+        public void CompareToFiniteInfinityTest()
+        {
+            Bound infty = new Bound(double.PositiveInfinity),
+                zeroInc = new Bound(0);
+            Assert.AreEqual(zeroInc.CompareTo(infty), -1);
         }
     }
 }

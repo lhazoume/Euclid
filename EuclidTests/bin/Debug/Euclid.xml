@@ -2863,7 +2863,7 @@
             Class used to perform a gradient descent on any multivariate function
             </summary>
         </member>
-        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Int32,System.Int32)">
+        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Int32,System.Int32)">
             <summary>
             Builds a GradientDescent helper
             </summary>
@@ -3735,7 +3735,7 @@
         <member name="P:Euclid.Vector.Clone">
             <summary>Returns a deep copy of the Vector</summary>
         </member>
-        <member name="M:Euclid.Vector.Create(System.Collections.Generic.IEnumerable{System.Double})">
+        <member name="M:Euclid.Vector.Create(System.Double[])">
             <summary>Creates a Vector from a set of data</summary>
             <param name="data">the data set</param>
             <returns>a Vector</returns>

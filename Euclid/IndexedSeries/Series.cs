@@ -7,6 +7,8 @@ using System.Xml;
 
 namespace Euclid.IndexedSeries
 {
+    //TODO : put up an index wherever it is possible
+
     /// <summary>Class representing a Series of data</summary>
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="U">the data type</typeparam>

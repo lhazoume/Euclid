@@ -12,9 +12,31 @@ namespace Euclid.Helpers.Tests
     public class ParserTests
     {
         [TestMethod()]
-        public void ParseTest()
+        public void ParseDecimalTest()
         {
-            Assert.Fail();
+            decimal d = 0.5m;
+            Assert.AreEqual(d, d.ToString().Parse<decimal>());
+        }
+
+        [TestMethod()]
+        public void ParseIntTest()
+        {
+            int d = 25;
+            Assert.AreEqual(d, d.ToString().Parse<int>());
+        }
+
+        [TestMethod()]
+        public void ParseDoubleTest()
+        {
+            double d = 25.02548;
+            Assert.AreEqual(d, d.ToString().Parse<double>());
+        }
+
+        [TestMethod()]
+        public void ParseDateTimeTest()
+        {
+            DateTime d = new DateTime(2015, 8,9);
+            Assert.AreEqual<DateTime>(d, d.ToString().Parse<DateTime>());
         }
     }
 }

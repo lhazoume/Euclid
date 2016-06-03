@@ -200,6 +200,25 @@ namespace Euclid
             return result;
         }
 
+        public bool Equals(Polynomial other)
+        {
+            // Reject equality when the argument is null or has a different shape.
+            if (other == null)
+                return false;
+            if (_degree != other._degree)
+                return false;
+
+            // Accept if the argument is the same object as this.
+            if (ReferenceEquals(this, other))
+                return true;
+
+            // If all else fails, perform elementwise comparison.
+            for (int i = 0; i < _terms.Length; i++)
+                if (_terms[i] != other._terms[i])
+                    return false;
+
+            return true;
+        }
         #endregion
 
         #region Accessors
@@ -229,7 +248,7 @@ namespace Euclid
         {
             get
             {
-                if (_terms.Length == 0)
+                if (_terms.Length <= 1)
                     return new Polynomial(0);
                 List<double> newTerms = new List<double>();
                 for (int i = 1; i < _terms.Length; i++)

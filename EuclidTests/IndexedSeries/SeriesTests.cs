@@ -14,29 +14,45 @@ namespace Euclid.IndexedSeries.Tests
         [TestMethod()]
         public void SeriesTest()
         {
-            Assert.Fail();
+            int size = 15;
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>(size);
+            Assert.AreEqual(size, series.Rows);
         }
 
         [TestMethod()]
         public void SeriesTest1()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre",
+                new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) },
+                new double[] { 5, 6, 7, 8 });
+            Assert.IsTrue(series.Label == "Titre" &&
+                series.Legends.Length == 4 &&
+                series.Data.Length == 4 &&
+                series[0] == 5 && series[3] == 8);
         }
 
         [TestMethod()]
         public void CloneTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 }),
+                series2 = series.Clone();
+
+            double diff = 0;
+            for (int i = 0; i < series.Rows; i++)
+                diff += Math.Abs(series[i] - series2[i]) + Math.Abs((series.GetLegend(i) - series2.GetLegend(i)).TotalMilliseconds);
+            Assert.IsTrue(series.Label == series2.Label &&
+                series.Legends.Length == series2.Legends.Length &&
+                diff == 0);
         }
 
         [TestMethod()]
-        public void GetValueTest()
+        public void RemoveRowAtTest()
         {
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void RemoveRowAtTest()
+        public void AddTest()
         {
             Assert.Fail();
         }
@@ -62,13 +78,15 @@ namespace Euclid.IndexedSeries.Tests
         [TestMethod()]
         public void SumTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
+            Assert.AreEqual(26, series.Sum(x => x));
         }
 
         [TestMethod()]
         public void GetLegendTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
+            Assert.AreEqual(2007, series.GetLegend(2).Year);
         }
 
         [TestMethod()]

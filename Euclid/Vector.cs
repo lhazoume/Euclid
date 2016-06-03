@@ -394,7 +394,7 @@ namespace Euclid
         /// <summary>Creates a Vector from a set of data</summary>
         /// <param name="data">the data set</param>
         /// <returns>a Vector</returns>
-        public static Vector Create(IEnumerable<double> data)
+        public static Vector Create(params double[] data)
         {
             return new Vector(data);
         }
