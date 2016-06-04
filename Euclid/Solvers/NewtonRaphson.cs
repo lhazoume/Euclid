@@ -67,7 +67,7 @@ namespace Euclid.Solvers
             get { return _f; }
             set { _f = value; }
         }
-        
+
         /// <summary>
         /// Gets and sets the initial guess
         /// </summary>
@@ -76,14 +76,18 @@ namespace Euclid.Solvers
             get { return _initialGuess; }
             set { _initialGuess = value; }
         }
-        
+
         /// <summary>
         /// Gets and sets the maximum number of iterations
         /// </summary>
         public int MaxIterations
         {
             get { return _maxIterations; }
-            set { _maxIterations = value; }
+            set
+            {
+                if (value <= 0) throw new ArgumentOutOfRangeException("The maximum number of iterations should be positive");
+                _maxIterations = value;
+            }
         }
 
         /// <summary>
@@ -94,7 +98,7 @@ namespace Euclid.Solvers
             get { return _absoluteTolerance; }
             set { _absoluteTolerance = value; }
         }
-        
+
         /// <summary>
         /// Gets and sets the tolerance for the slope (threshold for stationarity)
         /// </summary>

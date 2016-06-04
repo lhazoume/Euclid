@@ -78,7 +78,11 @@ namespace Euclid.Solvers
         public int MaxIterations
         {
             get { return _maxIterations; }
-            set { _maxIterations = value; }
+            set
+            {
+                if (value <= 0) throw new ArgumentOutOfRangeException("The maximum number of iterations should be positive");
+                _maxIterations = value;
+            }
         }
 
         /// <summary>

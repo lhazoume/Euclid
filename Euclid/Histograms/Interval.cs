@@ -56,6 +56,7 @@
             get { return _upperBound; }
         }
 
+        /// <summary>Gets a deep copy of the interval</summary>
         public Interval Clone
         {
             get { return new Interval(this); }
@@ -94,6 +95,9 @@
                 i1._upperBound > i2._upperBound ? i2._upperBound : i1._upperBound);
         }
 
+        /// <summary>Returns the intersection of a group of intervals</summary>
+        /// <param name="intervals">the Intervals to intersect</param>
+        /// <returns>an Interval</returns>
         public static Interval Intersection(params Interval[] intervals)
         {
             if (intervals.Length == 0) return null;

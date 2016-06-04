@@ -10,10 +10,8 @@ namespace Euclid.IndexedSeries.Analytics
     public class LinearModel : IPredictor<double, double>
     {
         #region Declarations
-        private readonly double _constant;
-        private readonly double[] _factors;
-        private readonly double[] _correlations;
-        private readonly double _sse, _ssr, _sst;
+        private readonly double _constant, _sse, _ssr, _sst;
+        private readonly double[] _factors, _correlations;
         private readonly int _n, _p;
         private readonly bool _succeeded;
         #endregion

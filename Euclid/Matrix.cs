@@ -713,6 +713,13 @@ namespace Euclid
                 r[k] = m1[k] + m2[k];
             return r;
         }
+
+        /// <summary>Builds a Matrix as a linear combination of two matrices</summary>
+        /// <param name="f1">the first Matrix' factor</param>
+        /// <param name="m1">the first Matrix</param>
+        /// <param name="f2">the second Matrix' factor</param>
+        /// <param name="m2">the second Matrix</param>
+        /// <returns>the Matrix result of f1*m1 + f2*m2</returns>
         public static Matrix LinearCombination(double f1, Matrix m1, double f2, Matrix m2)
         {
             if (m1.Rows != m2.Rows || m1.Columns != m2.Columns) throw new ArgumentException("Matrices must have the same dimensions!");
@@ -969,6 +976,9 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>Returns a Matrix made of the given Vectors</summary>
+        /// <param name="vectors">the Vectors</param>
+        /// <returns>a Matrix</returns>
         public static Matrix CreateFromColumns(IEnumerable<Vector> vectors)
         {
             #region Verifications

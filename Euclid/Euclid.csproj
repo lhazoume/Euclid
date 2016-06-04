@@ -78,6 +78,8 @@
     <Compile Include="Numerics\Differentiator.cs" />
     <Compile Include="Numerics\IntegrationForm.cs" />
     <Compile Include="Numerics\Integrator.cs" />
+    <Compile Include="Numerics\NumericalSeriesCumulator.cs" />
+    <Compile Include="Numerics\NumericalSeriesStatus.cs" />
     <Compile Include="Polynomial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\CSVHelper.cs" />

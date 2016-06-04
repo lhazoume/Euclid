@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Euclid.Helpers;
+using System;
 using System.Collections.Generic;
 
 namespace Euclid.IndexedSeries.Analytics.Regressions
 {
+    /// <summary>Performs a RIDGE regression for a given regularization factor</summary>
+    /// <typeparam name="T">the legends</typeparam>
+    /// <typeparam name="V">the labels</typeparam>
     public class RIDGERegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
     {
         #region Declarations
@@ -19,6 +23,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         /// <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
         /// <param name="x">the <c>DataFrame</c></param>
         /// <param name="y">the <c>Series</c></param>
+        /// <param name="regularization">the regularization factor</param>
         public RIDGERegression(DataFrame<T, double, V> x, Series<T, double, V> y, double regularization)
         {
             if (x == null || y == null) throw new ArgumentNullException("the x and y should not be null");
@@ -58,6 +63,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             set { _computeErr = value; }
         }
 
+        /// <summary>Gets and sets the regularization factor</summary>
         public double Regularization
         {
             get { return _regularization; }
@@ -139,12 +145,13 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             double[] correls = new double[p];
             if (_computeErr)
             {
-                Matrix H = X ^ radix,
-                    I = Matrix.CreateIdentityMatrix(H.Rows, H.Columns);
-                sse = Vector.Scalar(Y, (I - H) * Y);
-                Vector cov = tX * Y;
+                #region Error
+                Vector residual = Y - (X * A);
+                sse = residual.SumOfSquares;
+                #endregion
 
                 #region Correlations
+                Vector cov = tX * Y;
                 for (int i = 0; i < p; i++)
                 {
                     double xb = X.Column(1 + i).Sum / n,
@@ -157,12 +164,11 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             #endregion
 
             #region Output
-            List<double> beta = new List<double>();
             double beta0 = _withConstant ? A[0] : 0;
-            for (int i = (_withConstant ? 1 : 0); i < A.Size; i++) beta.Add(A[i]);
+            double[] beta = _withConstant ? A.Data.SubArray(1, A.Size - 1) : A.Data;
             #endregion
 
-            _linearModel = new LinearModel(beta0, beta.ToArray(), correls, n, sse, sst - sse);
+            _linearModel = new LinearModel(beta0, beta, correls, n, sse, sst - sse);
             _status = RegressionStatus.Normal;
         }
     }

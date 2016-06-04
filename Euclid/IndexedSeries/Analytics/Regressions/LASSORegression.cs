@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Solvers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,15 @@ using System.Threading.Tasks;
 
 namespace Euclid.IndexedSeries.Analytics.Regressions
 {
+    /// <summary>
+    /// Performs a LASSO regression for a given regularization factor
+    /// </summary>
+    /// <typeparam name="T">the legends</typeparam>
+    /// <typeparam name="V">the labels</typeparam>
     public class LASSORegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
     {
         #region Declarations
-        private bool _returnAverageIfFailed, _withConstant, _computeErr;
+        private bool _computeErr;
         private double _regularization;
         private RegressionStatus _status;
         private LinearModel _linearModel = null;
@@ -17,6 +23,10 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         private Series<T, double, V> _y;
         #endregion
 
+        /// <summary>Buils a LASSO to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+        /// <param name="x">the <c>DataFrame</c></param>
+        /// <param name="y">the <c>Series</c></param>
+        /// <param name="regularization">the regularization factor</param>
         public LASSORegression(DataFrame<T, double, V> x, Series<T, double, V> y, double regularization)
         {
             if (x == null || y == null) throw new ArgumentNullException("the x and y should not be null");
@@ -25,8 +35,6 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
 
             _x = x.Clone();
             _y = y.Clone();
-            _returnAverageIfFailed = false;
-            _withConstant = true;
             _computeErr = true;
             _regularization = regularization;
             _status = RegressionStatus.NotRan;
@@ -35,20 +43,6 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         #region  Accessors
 
         #region Settables
-        /// <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
-        public bool ReturnAverageIfFailed
-        {
-            get { return _returnAverageIfFailed; }
-            set { _returnAverageIfFailed = value; }
-        }
-
-        /// <summary>Gets and sets whether the regression should involve a constant term</summary>
-        public bool WithConstant
-        {
-            get { return _withConstant; }
-            set { _withConstant = value; }
-        }
-
         /// <summary>Gets and sets whether the errors should be computed after the regression</summary>
         public bool ComputeError
         {
@@ -56,6 +50,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             set { _computeErr = value; }
         }
 
+        /// <summary>Gets and sets the regularization factor</summary>
         public double Regularization
         {
             get { return _regularization; }
@@ -106,7 +101,6 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
 
             return Matrix.CreateFromColumns(vectors);
         }
-
         private Vector IntermediateStepShootingLASSO(Vector tXY, Matrix tXX, Vector W)
         {
             Vector result = Vector.Create(W.Size);
@@ -124,69 +118,63 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             });
             return result;
         }
-
         private Vector LASSOGradientDescent(Vector tXY, Matrix tXX, Vector Wi)
         {
             Vector W = Wi.Clone;
 
             # region Performs the shrink and shoot gradient descent
             Vector WOld = Vector.Create(W.Size);
-            double precision = 10e-3;
-            while ((W - WOld).NormSup > precision)
+            while ((W - WOld).NormSup > Descents.ERR_EPSILON)
             {
                 WOld = W;
                 W = IntermediateStepShootingLASSO(tXY, tXX, W);
             }
             # endregion
 
-            Parallel.For(0, W.Size, i => { if (Math.Abs(W[i]) < 10e-3) W[i] = 0; });
+            Parallel.For(0, W.Size, i => { if (Math.Abs(W[i]) < Descents.ERR_EPSILON) W[i] = 0; });
 
             return W;
         }
 
-        private LinearModel LinearLASSORegs(DataFrame<T, double, V> x, Series<T, double, V> y)
+        /// <summary>Performs the regression</summary>
+        public void Regress()
         {
-            LinearModel result = new LinearModel();
-            if (x.Rows <= 1) return result;
-            if (x.Rows < x.Columns) return result;
+            _linearModel = new LinearModel();
 
-            int n = x.Rows, p = x.Columns;
-            Matrix X = Matrix.Create(x.Data);
+            int n = _x.Rows, p = _x.Columns;
 
-            #region X Scaling
-
+            #region Read and Reduce the data
+            Matrix X = Matrix.Create(_x.Data);
             Scaling[] scalings = MatrixColumnWiseScaler(X);
             Matrix Xr = MatrixColumnWiseReducer(X, scalings);
 
+            Vector Y = Vector.Create(_y.Data);
+            Scaling Yscaler = Scaling.CreateZScore(_y.Data);
+            if (Yscaler == null)
+            {
+                _status = RegressionStatus.BadData;
+                return;
+            }
+            Vector Yr = Vector.Create(Yscaler.Reduce(_y.Data));
+            double yb = Y.Sum / n,
+                sst = _computeErr ? Y.SumOfSquares - n * yb * yb : 0;
             #endregion
 
-            #region Inversion
+            #region Perform the LASSO
             Matrix tXr = Xr.FastTranspose,
                 tXrXr = Matrix.FastTransposeBySelf(Xr),
                 initializeW = Matrix.LinearCombination(1, tXrXr, _regularization, Matrix.CreateIdentityMatrix(tXrXr.Rows, tXrXr.Columns)).FastInverse;
 
-            if (initializeW == null) return result;
-            #endregion
-
-            #region Reduce the Y
-            Vector Y = Vector.Create(y.Data);
-            Scaling Yscaler = Scaling.CreateZScore(y.Data);
-
-            if (Yscaler == null) return result;
-
-            Vector Yr = Vector.Create(Yscaler.Reduce(y.Data));
-
-            #endregion
-
-            #region Y Matrix Operations
+            if (initializeW == null)
+            {
+                _status = RegressionStatus.BadData;
+                return;
+            }
             Vector tXY = tXr * Yr,
                 W0 = initializeW * tXY;
 
-            #endregion
-
-            #region Calculate
-
             Vector W = LASSOGradientDescent(tXY, tXrXr, W0);
+            #endregion
 
             #region Rescales the coefficients and the data
             W = W * Yscaler.ScalingCoefficient;
@@ -199,33 +187,32 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             double b = Yscaler.Intercept - tXavgW;
             #endregion
 
-            #region Quality & result
-            double r2 = 0, adjR2 = 0, SSres = 0;
-
+            #region Output
+            double sse = 0;
+            double[] correls = new double[p];
             if (_computeErr)
             {
-                #region Evaluates the error quality indicators
-                Vector residuals = Y - (X * W) - b,
-                    deviation = Y - Yscaler.Intercept;
+                #region Error
+                Vector residuals = Y - (X * W) - b;
+                sse = residuals.SumOfSquares;
+                #endregion
 
-                SSres = residuals.SumOfSquares;
-                double SStot = deviation.SumOfSquares;
-
-                int nonZeroCoefficients = 0;
-                for (int k = 0; k < W.Size; k++) if (W[k] != 0) nonZeroCoefficients++;
-
-                int boundCols = X.Rows - nonZeroCoefficients - 1;
-                r2 = SStot == 0 ? 0 : 1 - SSres / SStot;
-                adjR2 = SStot == 0 ? 0 : (boundCols == 0 ? 0 : r2 - (1 - r2) * nonZeroCoefficients / boundCols);
+                #region Correlations
+                Vector cov = X.Transpose * Y;
+                Matrix tXX = Matrix.FastTransposeBySelf(X);
+                for (int i = 0; i < p; i++)
+                {
+                    double xb = X.Column(1 + i).Sum / n,
+                        sX = tXX[1 + i, 1 + i] / n - xb * xb,
+                        cXY = cov[1 + i] / n - yb * xb;
+                    correls[i] = cXY / Math.Sqrt(sX * sst);
+                }
                 #endregion
             }
-            result = new LinearModel(b, W.Data, new double[W.Size], n, SSres, SSres);
             #endregion
 
-
-            #endregion
-
-            return result;
+            _linearModel = new LinearModel(b, W.Data, correls, n, sse, sst);
+            _status = RegressionStatus.Normal;
         }
     }
 }

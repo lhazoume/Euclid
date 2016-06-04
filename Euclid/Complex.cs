@@ -240,15 +240,23 @@ namespace Euclid
             return x * y.Conjugate * (1.0 / y.SquareModulus());
         }
 
+        /// <summary>Allows to divide a complex by a double</summary>
+        /// <param name="x">the numerator</param>
+        /// <param name="d">the denominator</param>
+        /// <returns>the <c>Complex</c> result of the division</returns>
         public static Complex operator /(Complex x, double d)
         {
             return x * (1.0 / d);
         }
 
+        /// <summary>Returns the opposite of the complex</summary>
+        /// <param name="x">the <c>Complex</c></param>
+        /// <returns>the opposite complex</returns>
         public static Complex operator -(Complex x)
         {
             return new Complex(-x._re, -x._im);
         }
+
         #endregion
     }
 }

@@ -24,6 +24,7 @@ namespace Euclid.Solvers
         /// </summary>
         /// <param name="initialGuess">the initial guess Vector</param>
         /// <param name="lineSearch">the line search method</param>
+        /// <param name="function">the function to minimize</param>
         /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
         /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
         public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, int maxIterations, int maxLineSearchIterations)

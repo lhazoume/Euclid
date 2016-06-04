@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Euclid.IndexedSeries.Analytics.Regressions
 {
+    /// <summary>Scaling class</summary>
     public sealed class Scaling
     {
         #region Private Variables
@@ -19,10 +20,13 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         # endregion
 
         #region Accessors
+        /// <summary>Gets the intercept of the Scaling</summary>
         public double Intercept
         {
             get { return _intercept; }
         }
+
+        /// <summary>Gets the scaling coefficient of the Scaling</summary>
         public double ScalingCoefficient
         {
             get { return _scalingCoefficient; }
@@ -31,6 +35,9 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
 
         #region Methods
 
+        /// <summary>Scales "up" a series of data</summary>
+        /// <param name="data">the data to scale "up" : intercept + x * scalingCoefficient</param>
+        /// <returns>an array of double</returns>
         public double[] Scale(IEnumerable<double> data)
         {
             double[] result = new double[data.Count()];
@@ -41,6 +48,9 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             return result;
         }
 
+        /// <summary>Scales "down" a series of data</summary>
+        /// <param name="data">the data to scale "down" (x-intercept)/scalingCoefficient</param>
+        /// <returns>an array of double</returns>
         public double[] Reduce(IEnumerable<double> data)
         {
             double[] result = new double[data.Count()];
@@ -55,6 +65,9 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
 
         #region Creators
 
+        /// <summary>Creates a Scaling based on the average and the standard deviation</summary>
+        /// <param name="data">the data to scale</param>
+        /// <returns>a <c>Scaling</c> class</returns>
         public static Scaling CreateZScore(IEnumerable<double> data)
         {
             int n = data.Count();
@@ -75,6 +88,9 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             return result;
         }
 
+        /// <summary>Creates a Scaling based on the minimum and maximum</summary>
+        /// <param name="data">the data to scale</param>
+        /// <returns>a <c>Scaling</c> class</returns>
         public static Scaling CreateMinMax(IEnumerable<double> data)
         {
             int n = data.Count();
@@ -95,7 +111,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             Scaling result = new Scaling(min, sd);
             return result;
         }
-        
+
         #endregion
     }
 }

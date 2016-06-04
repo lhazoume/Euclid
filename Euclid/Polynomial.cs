@@ -200,6 +200,9 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>Verifies the equality between two Polynomials</summary>
+        /// <param name="other">the other Polynomial</param>
+        /// <returns><c>true</c> if they are equal, <c>false</c> otherwise</returns>
         public bool Equals(Polynomial other)
         {
             // Reject equality when the argument is null or has a different shape.
@@ -350,10 +353,15 @@ namespace Euclid
             return r;
         }
 
+        /// <summary>Raises a Polynomial to an integer power</summary>
+        /// <param name="p">the Polynomial</param>
+        /// <param name="n">the power</param>
+        /// <returns>a <c>Polynomial</c></returns>
         public static Polynomial operator ^(Polynomial p, int n)
         {
             return Polynomial.Power(p, n);
         }
+
         #endregion
 
         #region Additions / substractions

@@ -16,11 +16,12 @@
             <param name="n">the degree</param>
         </member>
         <member name="P:Euclid.Arithmetics.BinomialCoefficients.Item(System.Int32)">
-            <summary>
-            Returns the binomial coefficient for a given index
-            </summary>
+            <summary>Returns the binomial coefficient for a given index</summary>
             <param name="index">the index</param>
             <returns>an <c>int</c></returns>
+        </member>
+        <member name="P:Euclid.Arithmetics.BinomialCoefficients.Coefficients">
+            <summary>Gets all the binomial coefficients</summary>
         </member>
         <member name="T:Euclid.Arithmetics.Subsets">
             <summary>
@@ -179,6 +180,17 @@
             <param name="x">the numerator</param>
             <param name="y">the denominator</param>
             <returns>the <c>Complex</c> result of the division</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Division(Euclid.Complex,System.Double)">
+            <summary>Allows to divide a complex by a double</summary>
+            <param name="x">the numerator</param>
+            <param name="d">the denominator</param>
+            <returns>the <c>Complex</c> result of the division</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_UnaryNegation(Euclid.Complex)">
+            <summary>Returns the opposite of the complex</summary>
+            <param name="x">the <c>Complex</c></param>
+            <returns>the opposite complex</returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.CauchyDistribution">
             <summary>
@@ -1310,6 +1322,9 @@
         <member name="P:Euclid.Histograms.Interval.UpperBound">
             <summary>Gets the interval's upper bound</summary>
         </member>
+        <member name="P:Euclid.Histograms.Interval.Clone">
+            <summary>Gets a deep copy of the interval</summary>
+        </member>
         <member name="M:Euclid.Histograms.Interval.Contains(System.Double)">
             <summary>
             Checks if the double is inside the interval
@@ -1322,6 +1337,11 @@
             Gives a string representation of the Interval
             </summary>
             <returns>a string</returns>
+        </member>
+        <member name="M:Euclid.Histograms.Interval.Intersection(Euclid.Histograms.Interval[])">
+            <summary>Returns the intersection of a group of intervals</summary>
+            <param name="intervals">the Intervals to intersect</param>
+            <returns>an Interval</returns>
         </member>
         <member name="T:Euclid.Histograms.Histogram">
             <summary>
@@ -1474,14 +1494,24 @@
             <param name="x">the predictors</param>
             <returns>the prediction</returns>
         </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.ReturnAverageIfFailed">
-            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
+        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2">
+            <summary>
+            Performs a LASSO regression for a given regularization factor
+            </summary>
+            <typeparam name="T">the legends</typeparam>
+            <typeparam name="V">the labels</typeparam>
         </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.WithConstant">
-            <summary>Gets and sets whether the regression should involve a constant term</summary>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1},System.Double)">
+            <summary>Buils a LASSO to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+            <param name="x">the <c>DataFrame</c></param>
+            <param name="y">the <c>Series</c></param>
+            <param name="regularization">the regularization factor</param>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.ComputeError">
             <summary>Gets and sets whether the errors should be computed after the regression</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.Regularization">
+            <summary>Gets and sets the regularization factor</summary>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.LinearModel">
             <summary>
@@ -1492,6 +1522,9 @@
             <summary>
             Gets the regression's final status
             </summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.Regress">
+            <summary>Performs the regression</summary>
         </member>
         <member name="T:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2">
             <summary>
@@ -1581,10 +1614,16 @@
             Performs the regression
             </summary>
         </member>
+        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2">
+            <summary>Performs a RIDGE regression for a given regularization factor</summary>
+            <typeparam name="T">the legends</typeparam>
+            <typeparam name="V">the labels</typeparam>
+        </member>
         <member name="M:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1},System.Double)">
             <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
             <param name="x">the <c>DataFrame</c></param>
             <param name="y">the <c>Series</c></param>
+            <param name="regularization">the regularization factor</param>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.ReturnAverageIfFailed">
             <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
@@ -1594,6 +1633,9 @@
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.ComputeError">
             <summary>Gets and sets whether the errors should be computed after the regression</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.Regularization">
+            <summary>Gets and sets the regularization factor</summary>
         </member>
         <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.LinearModel">
             <summary>
@@ -1609,6 +1651,35 @@
             <summary>
             Performs the regression
             </summary>
+        </member>
+        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.Scaling">
+            <summary>Scaling class</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.Scaling.Intercept">
+            <summary>Gets the intercept of the Scaling</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.Scaling.ScalingCoefficient">
+            <summary>Gets the scaling coefficient of the Scaling</summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.Scaling.Scale(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Scales "up" a series of data</summary>
+            <param name="data">the data to scale "up" : intercept + x * scalingCoefficient</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.Scaling.Reduce(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Scales "down" a series of data</summary>
+            <param name="data">the data to scale "down" (x-intercept)/scalingCoefficient</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.Scaling.CreateZScore(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Creates a Scaling based on the average and the standard deviation</summary>
+            <param name="data">the data to scale</param>
+            <returns>a <c>Scaling</c> class</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.Scaling.CreateMinMax(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Creates a Scaling based on the minimum and maximum</summary>
+            <param name="data">the data to scale</param>
+            <returns>a <c>Scaling</c> class</returns>
         </member>
         <member name="T:Euclid.IndexedSeries.Slice`3">
             <summary>Class representing a Slice of synchronized data</summary>
@@ -2322,6 +2393,14 @@
             <param name="m2">Second matrix</param>
             <returns>The sum of m1 and m2</returns>
         </member>
+        <member name="M:Euclid.Matrix.LinearCombination(System.Double,Euclid.Matrix,System.Double,Euclid.Matrix)">
+            <summary>Builds a Matrix as a linear combination of two matrices</summary>
+            <param name="f1">the first Matrix' factor</param>
+            <param name="m1">the first Matrix</param>
+            <param name="f2">the second Matrix' factor</param>
+            <param name="m2">the second Matrix</param>
+            <returns>the Matrix result of f1*m1 + f2*m2</returns>
+        </member>
         <member name="M:Euclid.Matrix.op_Addition(Euclid.Matrix,System.Double)">
             <summary>
             Adds a scalar to all the coefficients of a <c>Matrix</c>
@@ -2453,6 +2532,11 @@
             <param name="rows">the number of rows</param>
             <param name="columns">the number of columns</param>
             <returns>a rectangular matrix</returns>
+        </member>
+        <member name="M:Euclid.Matrix.CreateFromColumns(System.Collections.Generic.IEnumerable{Euclid.Vector})">
+            <summary>Returns a Matrix made of the given Vectors</summary>
+            <param name="vectors">the Vectors</param>
+            <returns>a Matrix</returns>
         </member>
         <member name="M:Euclid.Matrix.TransposeBySelf(Euclid.Matrix)">
             <summary>
@@ -2640,6 +2724,59 @@
             Performs the iterative integration of the function
             </summary>
         </member>
+        <member name="T:Euclid.Numerics.NumericalSeriesCumulator">
+            <summary>Calculates the sum of the numerical series</summary>
+        </member>
+        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.#ctor(System.Int64,System.Func{System.Int64,System.Double},System.Int32)">
+            <summary>Builds a cumulative calculator of numerical series</summary>
+            <param name="initialIndex">the initial index of the sum</param>
+            <param name="series">the series function</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.InitialIndex">
+            <summary>Gets and sets the initial index of the sum</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.MaxIterations">
+            <summary>Gets and sets the maximum number of iterations</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Tolerance">
+            <summary>
+            Gets and sets the tolerance for the target (threshold for target reached)
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Iterations">
+            <summary>Gets the number of interations of the cumulator</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Sum">
+            <summary>Gets the cumulated sum of the series</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Status">
+            <summary>Gets the final status of the cumulator</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Convergence">
+            <summary>Gets the details of the convergence (value)</summary>
+        </member>
+        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.Calculate">
+            <summary>Sums the series until convergence or exhaustion of the iterations</summary>
+        </member>
+        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.CalculateAitken">
+            <summary>Sums the series until convergence or exhaustion of the iterations (using the Aitken Delta Squared method)</summary>
+        </member>
+        <member name="T:Euclid.Numerics.NumericalSeriesStatus">
+            <summary>The status of the numerical series status</summary>
+        </member>
+        <member name="F:Euclid.Numerics.NumericalSeriesStatus.NotRan">
+            <summary>The cumulator did not run</summary>
+        </member>
+        <member name="F:Euclid.Numerics.NumericalSeriesStatus.Diverged">
+            <summary>The cumulator diverged</summary>
+        </member>
+        <member name="F:Euclid.Numerics.NumericalSeriesStatus.Normal">
+            <summary>The cumulator ran as expected</summary>
+        </member>
+        <member name="F:Euclid.Numerics.NumericalSeriesStatus.IterationExceeded">
+            <summary>The cumulator exceeded its maximum number of iterations</summary>
+        </member>
         <member name="T:Euclid.Polynomial">
             <summary>
             Standard polynomial
@@ -2692,6 +2829,11 @@
             </summary>
             <returns>a list of double</returns>
         </member>
+        <member name="M:Euclid.Polynomial.Equals(Euclid.Polynomial)">
+            <summary>Verifies the equality between two Polynomials</summary>
+            <param name="other">the other Polynomial</param>
+            <returns><c>true</c> if they are equal, <c>false</c> otherwise</returns>
+        </member>
         <member name="P:Euclid.Polynomial.Item(System.Int32)">
             <summary>
             Accesses the terms of the polynomial
@@ -2742,6 +2884,12 @@
             <param name="p1">the left hand side</param>
             <param name="p2">the right hand side</param>
             <returns>the <c>Polynomial</c> result of the polynomial</returns>
+        </member>
+        <member name="M:Euclid.Polynomial.op_ExclusiveOr(Euclid.Polynomial,System.Int32)">
+            <summary>Raises a Polynomial to an integer power</summary>
+            <param name="p">the Polynomial</param>
+            <param name="n">the power</param>
+            <returns>a <c>Polynomial</c></returns>
         </member>
         <member name="M:Euclid.Polynomial.Add(Euclid.Polynomial,Euclid.Polynomial)">
             <summary>
@@ -2869,6 +3017,7 @@
             </summary>
             <param name="initialGuess">the initial guess Vector</param>
             <param name="lineSearch">the line search method</param>
+            <param name="function">the function to minimize</param>
             <param name="maxIterations">the maximum number of iterations in the gradient</param>
             <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
         </member>
