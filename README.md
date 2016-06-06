@@ -9,28 +9,32 @@ Coming :
 
 Classes :
 =========
-- *Matrix* : all matrix operators, inversion, det, LU decomposition
-- *Vector* : all vectors operations and relationship with matrices
+- *Matrix*, *Vector* : complete matrix and vector classes
 - *Complex* : basic operations
-- *Polynomial* : evaluation for real and complex values, real and complex roots (Weierstrasss algorithm, coming soon : RPOLY)
+- *Polynomial* : evaluation for real and complex values, real and complex roots (Weierstrasss algorithm, coming soon : **RPOLY**)
+
+Data / Statistics :
+===================
 - *DataFrame*, *Series*, *Slice* : generic content, legends and label, allows extraction, modification, lines and columns removal, XML and CSV serialization
+- **Regressions** : OLS, LASSO, RIDGE
+- **coming** :  Partial LS, Percentage LS, Elastic NET
+
+Probabilities / Statistics :
+============================
+- **Distributions** : *Cauchy*, *ChiSquared*, *Exponential*, *ExponentialPower*, *Gamma*, *Laplace*, *Logistic*, *LogNormal*, *Normal*, *Pareto*, *TruncatedNormal*, *Uniform*, *Weibull* (average, variance, support, skewness, mode, entropy, samples, CDF, Inverse CDF, PDF, Log PDF, etc...)
 - *Histogram* : basic histograms
+- **coming** : other continuous distributions (F, Student), discrete distributions, random number generators
 
 Methods :
 =========
-- 1D Solvers : NewtonRaphson and RootBracketing (Dichotomy and False Position)
-- Numerical integration and differentiation : Left / Right / Middle / Trapeze / Simpson integration and Forward / Backward / Central high degree differentiation
-- Regressions : OLS Linear Regression, LASSO, RIDGE
+- **Root finding** : *RootBracketing*, *NewtonRaphson* univariate solvers (comming soon **Ridder**)
+- *GradientDescent* : with or without momentum, line search (Naïve, Armijo, Goldstein, Wolfe), and BFGS
+- **Derivation & Integration** : simple and multiple order numerical differentiation(Forward / Backward / Central), numerical integration (Left / Right / Middle / Trapeze / Simpson)
+- **coming** : QGPI, neural networks
+
+Useful :
+========
+- *Ellipsoid*, *Coordinates* : geodesic distances on Earth
 - Linear Algebra : symmetric matrix eigen-decomposition 
-- Gradient Descent : classic and BFGS with multiple line search methods
-- **coming** : Other regressions (Percentage Least Squares, Elastic NET, etc), QGPI
-
-Distributions :
-===============
-- Continuous : Cauchy, ChiSquared, Exponential, Gamma, Laplace, LogNormal, Normal, Pareto, TruncatedNormal, Uniform, Weibull
-- **coming** : other continuous distributions (F, Student), discrete distributions, random number generators
-
-Computations :
-==============
 - Binomial coefficients
 - **coming** : Combinations and arrangements
