@@ -48,31 +48,56 @@ namespace Euclid.IndexedSeries.Tests
         [TestMethod()]
         public void RemoveRowAtTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre",
+                new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) },
+                new double[] { 5, 6, 7, 8 });
+            DateTime d = new DateTime(2006, 6, 1);
+            bool containsBefore = series.Legends.Contains(d);
+            series.RemoveRowAt(d);
+            bool containsAfter = series.Legends.Contains(d);
+            Assert.IsTrue(containsBefore && !containsAfter && series[2] == 8);
         }
 
         [TestMethod()]
         public void AddTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre",
+                new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) },
+                new double[] { 5, 6, 7, 8 });
+            DateTime d = new DateTime(2009, 6, 1);
+            bool containsBefore = series.Legends.Contains(d);
+            series.Add(d, 9);
+            bool containsAfter = series.Legends.Contains(d);
+            Assert.IsTrue(!containsBefore && containsAfter && series[4] == 9);
         }
 
         [TestMethod()]
         public void RemoveTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre",
+                new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) },
+                new double[] { 5, 6, 7, 8 });
+            DateTime d = new DateTime(2006, 6, 1);
+            bool containsBefore = series.Legends.Contains(d);
+            series.Remove((x, y) => x == d);
+            bool containsAfter = series.Legends.Contains(d);
+            Assert.IsTrue(containsBefore && !containsAfter && series[2] == 8);
         }
 
         [TestMethod()]
         public void ApplyOnDataTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
+            series.ApplyOnData(d => d - 1);
+            Assert.AreEqual(4, series[0]);
         }
 
         [TestMethod()]
         public void ApplyOnLegendsTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
+            series.ApplyOnLegends(d => d.AddMonths(1));
+            Assert.AreEqual(7, series.GetLegend(0).Month);
         }
 
         [TestMethod()]
@@ -92,7 +117,9 @@ namespace Euclid.IndexedSeries.Tests
         [TestMethod()]
         public void SetLegendTest()
         {
-            Assert.Fail();
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
+            series.SetLegend(2, new DateTime(2012, 6, 1));
+            Assert.AreEqual(2012, series.GetLegend(2).Year);
         }
 
         [TestMethod()]

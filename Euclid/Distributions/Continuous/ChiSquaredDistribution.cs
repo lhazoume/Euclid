@@ -114,7 +114,7 @@ namespace Euclid.Distributions.Continuous
         public override double CumulativeDistribution(double x)
         {
             if (x <= 0) return 0;
-            return Fn.igam(0.5 * _k, 0.5 * x) / Fn.Gamma(0.5 * _k);
+            return Fn.IncompleteLowerGamma(0.5 * _k, 0.5 * x) / Fn.Gamma(0.5 * _k);
         }
 
         /// <summary>

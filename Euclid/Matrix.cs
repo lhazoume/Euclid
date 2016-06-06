@@ -102,6 +102,19 @@ namespace Euclid
             get { return _data; }
         }
 
+        /// <summary>Gets the matrix' data as a 2d-array</summary>
+        public double[,] Array
+        {
+            get
+            {
+                double[,] result = new double[_rows, _cols];
+                for (int i = 0; i < _rows; i++)
+                    for (int j = 0; j < _cols; j++)
+                        result[i, j] = _data[i * _cols + j];
+                return result;
+            }
+        }
+
         /// <summary>
         /// Allows reading and modifying the coefficients of the <c>Matrix</c>
         /// </summary>
@@ -979,7 +992,7 @@ namespace Euclid
         /// <summary>Returns a Matrix made of the given Vectors</summary>
         /// <param name="vectors">the Vectors</param>
         /// <returns>a Matrix</returns>
-        public static Matrix CreateFromColumns(IEnumerable<Vector> vectors)
+        public static Matrix CreateFromColumns(params Vector[] vectors)
         {
             #region Verifications
             Vector reference = vectors.ElementAt(0);

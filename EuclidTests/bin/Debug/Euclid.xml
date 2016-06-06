@@ -198,9 +198,7 @@
             </summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.#ctor(System.Double,System.Double)">
-            <summary>
-            Builds a Cauchy distribution
-            </summary>
+            <summary>Builds a Cauchy distribution</summary>
             <param name="x0">the location</param>
             <param name="gamma">the scale</param>
         </member>
@@ -326,6 +324,49 @@
             <param name="numberOfPoints">the sample's size</param>
             <returns>an array of double</returns>
         </member>
+        <member name="T:Euclid.Distributions.Continuous.ExponentialPowerDistribution">
+            <summary>Exponential power distribution class</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialPowerDistribution.#ctor(System.Double,System.Double,System.Double)">
+            <summary> Builds a Exponential power distribution</summary>
+            <param name="mu">the location</param>
+            <param name="alpha">the scale</param>
+            <param name="beta">the shape</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialPowerDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialPowerDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialPowerDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialPowerDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialPowerDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialPowerDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialPowerDistribution.Support">
+            <summary>Gets the distribution's support</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.ExponentialPowerDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialPowerDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
+            <param name="x">the location at which to compute the function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialPowerDistribution.ProbabilityDensity(System.Double)">
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
         <member name="T:Euclid.Distributions.Continuous.GammaDistribution">
             <summary>
             Gamma distribution class
@@ -449,6 +490,55 @@
             <summary>Computes the probability density function's logarithm at x</summary>
             <param name="x">the location at which to compute the density</param>
             <returns>a double</returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.LogisticDistribution">
+            <summary>Logistic distribution class</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogisticDistribution.#ctor(System.Double,System.Double)">
+            <summary>Builds a Logistic distribution</summary>
+            <param name="mu">the location</param>
+            <param name="s">the scale</param>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogisticDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogisticDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogisticDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogisticDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogisticDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogisticDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogisticDistribution.Support">
+            <summary>Gets the distribution's support</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.LogisticDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogisticDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
+            <param name="x">the location at which to compute the function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogisticDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
+            </summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogisticDistribution.ProbabilityDensity(System.Double)">
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.LogNormalDistribution">
             <summary>
@@ -1085,6 +1175,66 @@
             <param name="function">the function to apply to the values</param>
             <returns>an array with the transformed data</returns>
         </member>
+        <member name="T:Euclid.Helpers.Geodesic.Coordinates">
+            <summary>
+            Coordinates class, used to carry GPS coordinates and altitude in meters
+            </summary>
+        </member>
+        <member name="M:Euclid.Helpers.Geodesic.Coordinates.#ctor(System.Double,System.Double,System.Double)">
+            <summary>Builds a <c>Coordinates</c></summary>
+            <param name="latitude">the latitude</param>
+            <param name="longitude">the longitude</param>
+            <param name="altitude">the altitude</param>
+        </member>
+        <member name="P:Euclid.Helpers.Geodesic.Coordinates.Latitude">
+            <summary>Gets he geodesic latitude (negative in the southern hemisphere)</summary>
+        </member>
+        <member name="P:Euclid.Helpers.Geodesic.Coordinates.Longitude">
+            <summary>Gets the geodesic longitude</summary>
+        </member>
+        <member name="P:Euclid.Helpers.Geodesic.Coordinates.Altitude">
+            <summary>Gets the altitude in meters</summary>
+        </member>
+        <member name="T:Euclid.Helpers.Geodesic.Ellipsoid">
+            <summary>Ellipsoid class, used for distance calculations</summary>
+        </member>
+        <member name="F:Euclid.Helpers.Geodesic.Ellipsoid.WorldGeodeticSystem84">
+            <summary>The World Geodetic System 1984</summary>
+        </member>
+        <member name="F:Euclid.Helpers.Geodesic.Ellipsoid.GeodeticReferenceSystem80">
+            <summary>The Geodesic Reference System 1980</summary>
+        </member>
+        <member name="F:Euclid.Helpers.Geodesic.Ellipsoid.GeodeticReferenceSystem67">
+            <summary>The Geodesic Reference System 1967</summary>
+        </member>
+        <member name="F:Euclid.Helpers.Geodesic.Ellipsoid.Clarke1880">
+            <summary>The Clarke1880 ellipsoid parameters</summary>
+        </member>
+        <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.SemiMajorAxis">
+            <summary>Gets the semi-major axis of the ellipsoid</summary>
+        </member>
+        <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.SemiMinorAxis">
+            <summary>Gets the semi-minor axis of the ellipsoid</summary>
+        </member>
+        <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.Flattening">
+            <summary>Gets the flattening of the ellipsoid</summary>
+        </member>
+        <member name="T:Euclid.Helpers.Geodesic.Helper">
+            <summary>Used to calculate distances on the surface of earth</summary>
+        </member>
+        <member name="M:Euclid.Helpers.Geodesic.Helper.SphericalDistance(Euclid.Helpers.Geodesic.Coordinates,Euclid.Helpers.Geodesic.Coordinates)">
+            <summary>Calculates the distance (in meters) between two Coordinates</summary>
+            <param name="point1">The first point</param>
+            <param name="point2">The second point</param>
+            <returns>the distance between the points (expressed in meters)</returns>
+        </member>
+        <member name="M:Euclid.Helpers.Geodesic.Helper.EllipsoidDistance(Euclid.Helpers.Geodesic.Ellipsoid,Euclid.Helpers.Geodesic.Coordinates,Euclid.Helpers.Geodesic.Coordinates)">
+            <summary>Calculates the distance (in meters) between two Coordinates</summary>
+            <param name="ellipsoid">The ellipsoid representation of the Earth</param>
+            <param name="point1">The first point</param>
+            <param name="point2">The second point</param>
+            <returns>the distance between the points (expressed in meters)</returns>
+        </member>
         <member name="T:Euclid.Helpers.Parser">
             <summary>
             Parser helper class
@@ -1561,6 +1711,19 @@
             Performs the regression
             </summary>
         </member>
+        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.RegressionHelper">
+            <summary>A helper for the regression</summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.RegressionHelper.Text``2(Euclid.IndexedSeries.DataFrame{``0,System.Double,``1},Euclid.IndexedSeries.Series{``0,System.Double,``1},Euclid.IndexedSeries.Analytics.LinearModel,System.String)">
+            <summary>Displays the regression result as a string</summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="V"></typeparam>
+            <param name="dataFrame">the dataframe</param>
+            <param name="series">the series</param>
+            <param name="linearModel">the linear model</param>
+            <param name="format">the format for the coefficients</param>
+            <returns>a string</returns>
+        </member>
         <member name="T:Euclid.IndexedSeries.Analytics.Regressions.RegressionStatus">
             <summary>
             Returns the status of the regression
@@ -1620,7 +1783,7 @@
             <typeparam name="V">the labels</typeparam>
         </member>
         <member name="M:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1},System.Double)">
-            <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+            <summary>Builds a RIDGE to regress a <c>Series</c> on a <c>DataFrame</c></summary>
             <param name="x">the <c>DataFrame</c></param>
             <param name="y">the <c>Series</c></param>
             <param name="regularization">the regularization factor</param>
@@ -2029,6 +2192,11 @@
             </summary>
             <returns>an array of <c>Series</c></returns>
         </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetColumn(System.Int32)">
+            <summary>Gets the i-th column of the dataframe</summary>
+            <param name="column">the target column</param>
+            <returns>a <c>Series</c></returns>
+        </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.Add(`2,`1[])">
             <summary>
             Adds a column to the <c>DataFrame</c>
@@ -2203,6 +2371,9 @@
             <summary>
             Returns the data of the matrix as a array of double with the rows one after the other
             </summary>
+        </member>
+        <member name="P:Euclid.Matrix.Array">
+            <summary>Gets the matrix' data as a 2d-array</summary>
         </member>
         <member name="P:Euclid.Matrix.Item(System.Int32,System.Int32)">
             <summary>
@@ -2533,7 +2704,7 @@
             <param name="columns">the number of columns</param>
             <returns>a rectangular matrix</returns>
         </member>
-        <member name="M:Euclid.Matrix.CreateFromColumns(System.Collections.Generic.IEnumerable{Euclid.Vector})">
+        <member name="M:Euclid.Matrix.CreateFromColumns(Euclid.Vector[])">
             <summary>Returns a Matrix made of the given Vectors</summary>
             <param name="vectors">the Vectors</param>
             <returns>a Matrix</returns>
@@ -3059,8 +3230,9 @@
         <member name="P:Euclid.Solvers.GradientDescent.Evaluations">
             <summary>Gets the number of times the function was evaluated </summary>
         </member>
-        <member name="M:Euclid.Solvers.GradientDescent.Minimize">
+        <member name="M:Euclid.Solvers.GradientDescent.Minimize(System.Double)">
             <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
+            <param name="momentum">the momentum of the descent</param>
         </member>
         <member name="M:Euclid.Solvers.GradientDescent.MinimizeBFGS">
             <summary>Minimizes the function using the BFGS gradient descent</summary>
@@ -3541,7 +3713,7 @@
             <param name="x"></param>
             <returns></returns>
         </member>
-        <member name="M:Euclid.Fn.igamc(System.Double,System.Double)">
+        <member name="M:Euclid.Fn.IncompleteUpperGamma(System.Double,System.Double)">
             <summary>
             Returns the complemented incomplete gamma function.
             </summary>
@@ -3549,7 +3721,7 @@
             <param name="x"></param>
             <returns></returns>
         </member>
-        <member name="M:Euclid.Fn.igam(System.Double,System.Double)">
+        <member name="M:Euclid.Fn.IncompleteLowerGamma(System.Double,System.Double)">
             <summary>
             Returns the incomplete gamma function.
             </summary>

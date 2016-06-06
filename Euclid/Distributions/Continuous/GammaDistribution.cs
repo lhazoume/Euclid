@@ -107,7 +107,7 @@ namespace Euclid.Distributions.Continuous
         public override double CumulativeDistribution(double x)
         {
             if (x <= 0) return 0;
-            return _cdfFactor * Fn.igam(_k, x / _theta);
+            return _cdfFactor * Fn.IncompleteLowerGamma(_k, x / _theta);
         }
 
         /// <summary>

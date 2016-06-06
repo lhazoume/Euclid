@@ -282,6 +282,20 @@ namespace Euclid.IndexedSeries
             return result;
         }
 
+        /// <summary>Gets the i-th column of the dataframe</summary>
+        /// <param name="column">the target column</param>
+        /// <returns>a <c>Series</c></returns>
+        public Series<T, U, V> GetColumn(int column)
+        {
+            Series<T, U, V> result = new Series<T, U, V>(_legends.Length);
+
+            U[] data = new U[_legends.Length];
+            for (int i = 0; i < _legends.Length; i++)
+                data[i] = _data[i, column];
+
+            return new Series<T, U, V>(_labels[column], _legends, data);
+        }
+
         /// <summary>
         /// Adds a column to the <c>DataFrame</c>
         /// </summary>
@@ -289,7 +303,7 @@ namespace Euclid.IndexedSeries
         /// <param name="column">the new column's data</param>
         public void Add(V label, U[] column)
         {
-            U[,] newData = new U[_legends.Length, _data.Length + 1];
+            U[,] newData = new U[_legends.Length, _labels.Length + 1];
             V[] newLabels = new V[_labels.Length + 1];
             for (int j = 0; j < _labels.Length; j++)
             {

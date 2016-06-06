@@ -240,7 +240,8 @@ namespace Euclid.Solvers
         #endregion
 
         /// <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
-        public void Minimize()
+        /// <param name="momentum">the momentum of the descent</param>
+        public void Minimize(double momentum = 0)
         {
             _evaluations = 0;
             if (_function == null) throw new NullReferenceException("function should not be null");
@@ -268,7 +269,7 @@ namespace Euclid.Solvers
                 _error = _function(_result);
                 _evaluations++;
                 gradient = NumericalGradient(_result, _increments);
-                direction = -gradient;
+                direction = (momentum * direction) - gradient;
 
                 _descentDirections.Add(direction.Clone);
                 _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));

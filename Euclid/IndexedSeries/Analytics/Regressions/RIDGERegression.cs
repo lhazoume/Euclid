@@ -20,7 +20,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
         private Series<T, double, V> _y;
         #endregion
 
-        /// <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+        /// <summary>Builds a RIDGE to regress a <c>Series</c> on a <c>DataFrame</c></summary>
         /// <param name="x">the <c>DataFrame</c></param>
         /// <param name="y">the <c>Series</c></param>
         /// <param name="regularization">the regularization factor</param>
@@ -119,7 +119,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions
             #endregion
 
             double yb = Y.Sum / n,
-                sst = _computeErr ? Y.SumOfSquares - n * yb * yb : 0;
+                sst = _computeErr ? (Y - yb).SumOfSquares : 0;
 
             #region Perform calculations
             Matrix tX = X.FastTranspose,

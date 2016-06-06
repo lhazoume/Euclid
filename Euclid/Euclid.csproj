@@ -46,8 +46,10 @@
     <Compile Include="Complex.cs" />
     <Compile Include="Distributions\Continuous\CauchyDistribution.cs" />
     <Compile Include="Distributions\Continuous\ChiSquaredDistribution.cs" />
+    <Compile Include="Distributions\Continuous\ExponentialPowerDistribution.cs" />
     <Compile Include="Distributions\Continuous\GammaDistribution.cs" />
     <Compile Include="Distributions\Continuous\LaplaceDistribution.cs" />
+    <Compile Include="Distributions\Continuous\LogisticDistribution.cs" />
     <Compile Include="Distributions\Continuous\LogNormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\ParetoDistribution.cs" />
     <Compile Include="Distributions\Continuous\NormalDistribution.cs" />
@@ -59,6 +61,9 @@
     <Compile Include="Distributions\Empiric1DDistribution.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
     <Compile Include="Helpers\Arrays.cs" />
+    <Compile Include="Helpers\Geodesic\Coordinates.cs" />
+    <Compile Include="Helpers\Geodesic\Ellipsoid.cs" />
+    <Compile Include="Helpers\Geodesic\Helper.cs" />
     <Compile Include="Helpers\Parser.cs" />
     <Compile Include="Histograms\Bound.cs" />
     <Compile Include="Histograms\Interval.cs" />
@@ -67,6 +72,7 @@
     <Compile Include="IndexedSeries\Analytics\IPredictor.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\LASSORegression.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\LazyPartialLeastSquaresLinearRegression.cs" />
+    <Compile Include="IndexedSeries\Analytics\Regressions\RegressionHelper.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\RegressionStatus.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\OrdinaryLeastSquaresLinearRegression.cs" />
     <Compile Include="IndexedSeries\Analytics\Regressions\RIDGERegression.cs" />

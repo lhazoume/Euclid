@@ -713,7 +713,7 @@ namespace Euclid
         /// <param name="a"></param>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static double igamc(double a, double x)
+        public static double IncompleteUpperGamma(double a, double x)
         {
             double big = 4.503599627370496e15;
             double biginv = 2.22044604925031308085e-16;
@@ -722,7 +722,7 @@ namespace Euclid
 
             if (x <= 0 || a <= 0) return 1.0;
 
-            if (x < 1.0 || x < a) return 1.0 - igam(a, x);
+            if (x < 1.0 || x < a) return 1.0 - IncompleteLowerGamma(a, x);
 
             ax = a * Math.Log(x) - x - lgamma(a);
             if (ax < -MAXLOG) return 0.0;
@@ -779,13 +779,13 @@ namespace Euclid
         /// <param name="a"></param>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static double igam(double a, double x)
+        public static double IncompleteLowerGamma(double a, double x)
         {
             double ans, ax, c, r;
 
             if (x <= 0 || a <= 0) return 0.0;
 
-            if (x > 1.0 && x > a) return 1.0 - igamc(a, x);
+            if (x > 1.0 && x > a) return 1.0 - IncompleteUpperGamma(a, x);
 
             /* Compute  x**a * exp(-x) / gamma(a)  */
             ax = a * Math.Log(x) - x - lgamma(a);
@@ -809,7 +809,6 @@ namespace Euclid
 
         }
 
-
         /**
              * Returns the area under the left hand tail (from 0 to x)
              * of the Chi square probability density function with
@@ -826,7 +825,7 @@ namespace Euclid
         {
             if (x < 0.0 || df < 1.0) return 0.0;
 
-            return igam(df / 2.0, x / 2.0);
+            return IncompleteLowerGamma(df / 2.0, x / 2.0);
 
         }
 
@@ -847,7 +846,7 @@ namespace Euclid
         {
             if (x < 0.0 || df < 1.0) return 0.0;
 
-            return igamc(df / 2.0, x / 2.0);
+            return IncompleteUpperGamma(df / 2.0, x / 2.0);
 
         }
 
@@ -862,7 +861,7 @@ namespace Euclid
         {
             if (k < 0 || x < 0) return 0.0;
 
-            return igamc((double)(k + 1), x);
+            return IncompleteUpperGamma((double)(k + 1), x);
         }
 
 
@@ -876,7 +875,7 @@ namespace Euclid
         {
             if (k < 0 || x < 0) return 0.0;
 
-            return igam((double)(k + 1), x);
+            return IncompleteLowerGamma((double)(k + 1), x);
         }
 
 

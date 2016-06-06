@@ -194,13 +194,20 @@ namespace Euclid.Tests
         [TestMethod()]
         public void TransposeBySelfTest()
         {
-            Assert.Fail();
+            int n = 100;
+            Matrix m = Matrix.CreateFromColumns(Vector.Create(n, 1.0), Vector.Create(n, 2.0)),
+                tmm = Matrix.TransposeBySelf(m);
+            Assert.IsTrue(tmm.Rows == 2 && tmm.Columns == 2 && tmm[0, 0] == n && tmm[0, 1] == tmm[1, 0] && tmm[1, 1] == 4 * n);
         }
 
         [TestMethod()]
         public void FastTransposeBySelfTest()
         {
-            Assert.Fail();
+            int n = 100;
+            Matrix m = Matrix.CreateFromColumns(Vector.Create(n, 1.0), Vector.Create(n, 2.0)),
+                tmm1 = Matrix.TransposeBySelf(m),
+                tmm2 = Matrix.FastTransposeBySelf(m);
+            Assert.IsTrue((tmm1 - tmm2).SumOfSquares == 0);
         }
 
         #region Apply
@@ -295,7 +302,12 @@ namespace Euclid.Tests
         [TestMethod()]
         public void CreateFromColumnsTest()
         {
-            Assert.Fail();
+            Vector v1 = Vector.Create(10, 1.0),
+                v2 = Vector.Create(10, 2.0),
+                v3 = Vector.Create(10, 3.0),
+                v4 = Vector.Create(10, 4.0);
+            Matrix m = Matrix.CreateFromColumns(new Vector[] { v1, v2, v3, v4 });
+            Assert.IsTrue(m.Rows == 10 && m.Columns == 4 && m[2, 1] == 2.0);
         }
     }
 }
