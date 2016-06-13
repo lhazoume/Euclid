@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Euclid.IndexedSeries;
+using System;
 using System.Text;
 
-namespace Euclid.IndexedSeries.Analytics.Regressions
+namespace Euclid.Analytics.Regressions
 {
     /// <summary>A helper for the regression</summary>
     public static class RegressionHelper

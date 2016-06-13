@@ -1,10 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Euclid.IndexedSeries.Analytics.Regressions;
+﻿using Euclid.Analytics;
+using Euclid.Analytics.Regressions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace Euclid.IndexedSeries.Analytics.Regressions.Tests

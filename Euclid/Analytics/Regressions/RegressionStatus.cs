@@ -1,4 +1,4 @@
-﻿namespace Euclid.IndexedSeries.Analytics.Regressions
+﻿namespace Euclid.Analytics.Regressions
 {
     /// <summary>
     /// Returns the status of the regression

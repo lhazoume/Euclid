@@ -4,6 +4,313 @@
         <name>Euclid</name>
     </assembly>
     <members>
+        <member name="T:Euclid.Analytics.LinearModel">
+            <summary>
+            Stores the metrics of a linear regression and allows prediction
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.LinearModel.#ctor(System.Double,System.Double[],System.Double[],System.Int32,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Default constructor for a linear model
+            </summary>
+            <param name="constant">the constant term</param>
+            <param name="factors">the regression coefficients</param>
+            <param name="correlations">the zero-degree correlations</param>
+            <param name="sampleSize">the sample size</param>
+            <param name="SSE">the sum of squared due to error</param>
+            <param name="SSR">the sum of squared due to the regression</param>
+            <param name="succeeded">the status of the regression</param>
+        </member>
+        <member name="M:Euclid.Analytics.LinearModel.#ctor">
+            <summary>
+            Builds a linear model for a failed regression
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.LinearModel.#ctor(System.Double,System.Int32,System.Double)">
+            <summary>
+            Builds a constant linear model
+            </summary>
+            <param name="constant">the constant</param>
+            <param name="sampleSize">the sample size</param>
+            <param name="SSE">the sum of squares due to error</param>
+        </member>
+        <member name="M:Euclid.Analytics.LinearModel.#ctor(System.Double,System.Double[],System.Double[],System.Int32,System.Double,System.Double)">
+            <summary> Builds a linear model for a succesful regression </summary>
+            <param name="constant">the regression constant term</param>
+            <param name="factors">the regression linear coefficients</param>
+            <param name="correlations">the zero-degree correlations</param>
+            <param name="sampleSize">the sample size</param>
+            <param name="SSE">the sum of squares due to the error</param>
+            <param name="SSR">the sum of squares due to the regression</param>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.Constant">
+            <summary>
+            Gets the constant term
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.Factors">
+            <summary>
+            Gets the linear terms
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.Correlations">
+            <summary>
+            Gets the correlations between the explanatory variables and the regressand
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.R2">
+            <summary>
+            Gets the R² on the sample data
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.AdjustedR2">
+            <summary>
+            Gets the adjusted R² on the sample data
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.Succeeded">
+            <summary>
+            specifies whether the regression succeeds
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.SSE">
+            <summary>
+            Gets the sum of squares due to error
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.SSR">
+            <summary>
+            Gets the sum of squares due to the regression
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.LinearModel.SST">
+            <summary>
+            Gets the total sum of squares
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.LinearModel.ToString">
+            <summary>
+            Returns a string that represents the linear model
+            </summary>
+            <returns>a string that represents the linear model</returns>
+        </member>
+        <member name="M:Euclid.Analytics.LinearModel.Predict(System.Collections.Generic.IList{System.Double})">
+            <summary>
+            Returns the estimator for the given set of data
+            </summary>
+            <param name="x">the set of regressors</param>
+            <returns>the estimator of the regressed data</returns>
+        </member>
+        <member name="T:Euclid.Analytics.IPredictor`2">
+            <summary>
+            Interface for predictors
+            </summary>
+            <typeparam name="T">the predicted type</typeparam>
+            <typeparam name="U">the predictors type</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.IPredictor`2.Predict(System.Collections.Generic.IList{`1})">
+            <summary>Prediction method</summary>
+            <param name="x">the predictors</param>
+            <returns>the prediction</returns>
+        </member>
+        <member name="T:Euclid.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2">
+            <summary>
+            LazyPartialLeastSquaresLinearRegression class (performs all 2^n possible regressions)
+            </summary>
+            <typeparam name="T">the legends' type</typeparam>
+            <typeparam name="V">the labels' type</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1})">
+            <summary>
+            Builds a LazyPartialLeastSquaresLinearRegression to regress a <c>Series</c> on a <c>DataFrame</c>
+            </summary>
+            <param name="x">the <c>DataFrame</c></param>
+            <param name="y">the <c>Series</c></param>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.ReturnAverageIfFailed">
+            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.WithConstant">
+            <summary>Gets and sets whether the regression should involve a constant term</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.LinearModel">
+            <summary>
+            Gets the result <c>LinearModel</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.Status">
+            <summary>
+            Gets the regression's final status
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.Regress">
+            <summary>
+            Performs the regression
+            </summary>
+        </member>
+        <member name="T:Euclid.Analytics.Regressions.LASSORegression`2">
+            <summary>
+            Performs a LASSO regression for a given regularization factor
+            </summary>
+            <typeparam name="T">the legends</typeparam>
+            <typeparam name="V">the labels</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.LASSORegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1},System.Double)">
+            <summary>Buils a LASSO to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+            <param name="x">the <c>DataFrame</c></param>
+            <param name="y">the <c>Series</c></param>
+            <param name="regularization">the regularization factor</param>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LASSORegression`2.ComputeError">
+            <summary>Gets and sets whether the errors should be computed after the regression</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LASSORegression`2.Regularization">
+            <summary>Gets and sets the regularization factor</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LASSORegression`2.LinearModel">
+            <summary>
+            Gets the result <c>LinearModel</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LASSORegression`2.Status">
+            <summary>
+            Gets the regression's final status
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.LASSORegression`2.Regress">
+            <summary>Performs the regression</summary>
+        </member>
+        <member name="T:Euclid.Analytics.Regressions.RIDGERegression`2">
+            <summary>Performs a RIDGE regression for a given regularization factor</summary>
+            <typeparam name="T">the legends</typeparam>
+            <typeparam name="V">the labels</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.RIDGERegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1},System.Double)">
+            <summary>Builds a RIDGE to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+            <param name="x">the <c>DataFrame</c></param>
+            <param name="y">the <c>Series</c></param>
+            <param name="regularization">the regularization factor</param>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.RIDGERegression`2.ReturnAverageIfFailed">
+            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.RIDGERegression`2.WithConstant">
+            <summary>Gets and sets whether the regression should involve a constant term</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.RIDGERegression`2.ComputeError">
+            <summary>Gets and sets whether the errors should be computed after the regression</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.RIDGERegression`2.Regularization">
+            <summary>Gets and sets the regularization factor</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.RIDGERegression`2.LinearModel">
+            <summary>
+            Gets the result <c>LinearModel</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.RIDGERegression`2.Status">
+            <summary>
+            Gets the regression's final status
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.RIDGERegression`2.Regress">
+            <summary>
+            Performs the regression
+            </summary>
+        </member>
+        <member name="T:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2">
+            <summary>OrdinaryLeastSquaresLinearRegression class</summary>
+            <typeparam name="T">the legends' type</typeparam>
+            <typeparam name="V">the labels' type</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1})">
+            <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+            <param name="x">the <c>DataFrame</c></param>
+            <param name="y">the <c>Series</c></param>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.ReturnAverageIfFailed">
+            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.WithConstant">
+            <summary>Gets and sets whether the regression should involve a constant term</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.ComputeError">
+            <summary>Gets and sets whether the errors should be computed after the regression</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.LinearModel">
+            <summary>
+            Gets the result <c>LinearModel</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.Status">
+            <summary>
+            Gets the regression's final status
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.Regress">
+            <summary>
+            Performs the regression
+            </summary>
+        </member>
+        <member name="T:Euclid.Analytics.Regressions.RegressionStatus">
+            <summary>
+            Returns the status of the regression
+            </summary>
+        </member>
+        <member name="F:Euclid.Analytics.Regressions.RegressionStatus.NotRan">
+            <summary> the regression did not run </summary>
+        </member>
+        <member name="F:Euclid.Analytics.Regressions.RegressionStatus.Normal">
+            <summary> the regression ran as expected </summary>
+        </member>
+        <member name="F:Euclid.Analytics.Regressions.RegressionStatus.IterationExceeded">
+            <summary> the regression exceeded its max iterations </summary>
+        </member>
+        <member name="F:Euclid.Analytics.Regressions.RegressionStatus.BadData">
+            <summary> the regression failed </summary>
+        </member>
+        <member name="T:Euclid.Analytics.Regressions.RegressionHelper">
+            <summary>A helper for the regression</summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.RegressionHelper.Text``2(Euclid.IndexedSeries.DataFrame{``0,System.Double,``1},Euclid.IndexedSeries.Series{``0,System.Double,``1},Euclid.Analytics.LinearModel,System.String)">
+            <summary>Displays the regression result as a string</summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="V"></typeparam>
+            <param name="dataFrame">the dataframe</param>
+            <param name="series">the series</param>
+            <param name="linearModel">the linear model</param>
+            <param name="format">the format for the coefficients</param>
+            <returns>a string</returns>
+        </member>
+        <member name="T:Euclid.Analytics.Regressions.Scaling">
+            <summary>Scaling class</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.Scaling.Intercept">
+            <summary>Gets the intercept of the Scaling</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.Scaling.ScalingCoefficient">
+            <summary>Gets the scaling coefficient of the Scaling</summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.Scaling.Scale(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Scales "up" a series of data</summary>
+            <param name="data">the data to scale "up" : intercept + x * scalingCoefficient</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.Scaling.Reduce(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Scales "down" a series of data</summary>
+            <param name="data">the data to scale "down" (x-intercept)/scalingCoefficient</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.Scaling.CreateZScore(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Creates a Scaling based on the average and the standard deviation</summary>
+            <param name="data">the data to scale</param>
+            <returns>a <c>Scaling</c> class</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.Scaling.CreateMinMax(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Creates a Scaling based on the minimum and maximum</summary>
+            <param name="data">the data to scale</param>
+            <returns>a <c>Scaling</c> class</returns>
+        </member>
         <member name="T:Euclid.Arithmetics.BinomialCoefficients">
             <summary>
             Binomial coefficients class
@@ -1210,10 +1517,10 @@
         <member name="F:Euclid.Helpers.Geodesic.Ellipsoid.Clarke1880">
             <summary>The Clarke1880 ellipsoid parameters</summary>
         </member>
-        <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.SemiMajorAxis">
+        <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.EquatorialRadius">
             <summary>Gets the semi-major axis of the ellipsoid</summary>
         </member>
-        <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.SemiMinorAxis">
+        <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.PolarRadius">
             <summary>Gets the semi-minor axis of the ellipsoid</summary>
         </member>
         <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.Flattening">
@@ -1535,324 +1842,11 @@
             <param name="numberOfIntervals">the number of intervals</param>
             <returns>an <c>Histogram</c></returns>
         </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.LinearModel">
-            <summary>
-            Stores the metrics of a linear regression and allows prediction
-            </summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.#ctor(System.Double,System.Double[],System.Double[],System.Int32,System.Double,System.Double,System.Boolean)">
-            <summary>
-            Default constructor for a linear model
-            </summary>
-            <param name="constant">the constant term</param>
-            <param name="factors">the regression coefficients</param>
-            <param name="correlations">the zero-degree correlations</param>
-            <param name="sampleSize">the sample size</param>
-            <param name="SSE">the sum of squared due to error</param>
-            <param name="SSR">the sum of squared due to the regression</param>
-            <param name="succeeded">the status of the regression</param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.#ctor">
-            <summary>
-            Builds a linear model for a failed regression
-            </summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.#ctor(System.Double,System.Int32,System.Double)">
-            <summary>
-            Builds a constant linear model
-            </summary>
-            <param name="constant">the constant</param>
-            <param name="sampleSize">the sample size</param>
-            <param name="SSE">the sum of squares due to error</param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.#ctor(System.Double,System.Double[],System.Double[],System.Int32,System.Double,System.Double)">
-            <summary> Builds a linear model for a succesful regression </summary>
-            <param name="constant">the regression constant term</param>
-            <param name="factors">the regression linear coefficients</param>
-            <param name="correlations">the zero-degree correlations</param>
-            <param name="sampleSize">the sample size</param>
-            <param name="SSE">the sum of squares due to the error</param>
-            <param name="SSR">the sum of squares due to the regression</param>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.Constant">
-            <summary>
-            Gets the constant term
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.Factors">
-            <summary>
-            Gets the linear terms
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.Correlations">
-            <summary>
-            Gets the correlations between the explanatory variables and the regressand
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.R2">
-            <summary>
-            Gets the R² on the sample data
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.AdjustedR2">
-            <summary>
-            Gets the adjusted R² on the sample data
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.Succeeded">
-            <summary>
-            specifies whether the regression succeeds
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.SSE">
-            <summary>
-            Gets the sum of squares due to error
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.SSR">
-            <summary>
-            Gets the sum of squares due to the regression
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.LinearModel.SST">
-            <summary>
-            Gets the total sum of squares
-            </summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.ToString">
-            <summary>
-            Returns a string that represents the linear model
-            </summary>
-            <returns>a string that represents the linear model</returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.LinearModel.Predict(System.Collections.Generic.IList{System.Double})">
-            <summary>
-            Returns the estimator for the given set of data
-            </summary>
-            <param name="x">the set of regressors</param>
-            <returns>the estimator of the regressed data</returns>
-        </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.IPredictor`2">
-            <summary>
-            Interface for predictors
-            </summary>
-            <typeparam name="T">the predicted type</typeparam>
-            <typeparam name="U">the predictors type</typeparam>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.IPredictor`2.Predict(System.Collections.Generic.IList{`1})">
-            <summary>Prediction method</summary>
-            <param name="x">the predictors</param>
-            <returns>the prediction</returns>
-        </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2">
-            <summary>
-            Performs a LASSO regression for a given regularization factor
-            </summary>
-            <typeparam name="T">the legends</typeparam>
-            <typeparam name="V">the labels</typeparam>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1},System.Double)">
-            <summary>Buils a LASSO to regress a <c>Series</c> on a <c>DataFrame</c></summary>
-            <param name="x">the <c>DataFrame</c></param>
-            <param name="y">the <c>Series</c></param>
-            <param name="regularization">the regularization factor</param>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.ComputeError">
-            <summary>Gets and sets whether the errors should be computed after the regression</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.Regularization">
-            <summary>Gets and sets the regularization factor</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.LinearModel">
-            <summary>
-            Gets the result <c>LinearModel</c>
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.Status">
-            <summary>
-            Gets the regression's final status
-            </summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.LASSORegression`2.Regress">
-            <summary>Performs the regression</summary>
-        </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2">
-            <summary>
-            LazyPartialLeastSquaresLinearRegression class (performs all 2^n possible regressions)
-            </summary>
-            <typeparam name="T">the legends' type</typeparam>
-            <typeparam name="V">the labels' type</typeparam>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1})">
-            <summary>
-            Builds a LazyPartialLeastSquaresLinearRegression to regress a <c>Series</c> on a <c>DataFrame</c>
-            </summary>
-            <param name="x">the <c>DataFrame</c></param>
-            <param name="y">the <c>Series</c></param>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.ReturnAverageIfFailed">
-            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.WithConstant">
-            <summary>Gets and sets whether the regression should involve a constant term</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.LinearModel">
-            <summary>
-            Gets the result <c>LinearModel</c>
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.Status">
-            <summary>
-            Gets the regression's final status
-            </summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2.Regress">
-            <summary>
-            Performs the regression
-            </summary>
-        </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.RegressionHelper">
-            <summary>A helper for the regression</summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.RegressionHelper.Text``2(Euclid.IndexedSeries.DataFrame{``0,System.Double,``1},Euclid.IndexedSeries.Series{``0,System.Double,``1},Euclid.IndexedSeries.Analytics.LinearModel,System.String)">
-            <summary>Displays the regression result as a string</summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="V"></typeparam>
-            <param name="dataFrame">the dataframe</param>
-            <param name="series">the series</param>
-            <param name="linearModel">the linear model</param>
-            <param name="format">the format for the coefficients</param>
-            <returns>a string</returns>
-        </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.RegressionStatus">
-            <summary>
-            Returns the status of the regression
-            </summary>
-        </member>
-        <member name="F:Euclid.IndexedSeries.Analytics.Regressions.RegressionStatus.NotRan">
-            <summary> the regression did not run </summary>
-        </member>
-        <member name="F:Euclid.IndexedSeries.Analytics.Regressions.RegressionStatus.Normal">
-            <summary> the regression ran as expected </summary>
-        </member>
-        <member name="F:Euclid.IndexedSeries.Analytics.Regressions.RegressionStatus.IterationExceeded">
-            <summary> the regression exceeded its max iterations </summary>
-        </member>
-        <member name="F:Euclid.IndexedSeries.Analytics.Regressions.RegressionStatus.BadData">
-            <summary> the regression failed </summary>
-        </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2">
-            <summary>
-            OrdinaryLeastSquaresLinearRegression class
-            </summary>
-            <typeparam name="T">the legends' type</typeparam>
-            <typeparam name="V">the labels' type</typeparam>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1})">
-            <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
-            <param name="x">the <c>DataFrame</c></param>
-            <param name="y">the <c>Series</c></param>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.ReturnAverageIfFailed">
-            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.WithConstant">
-            <summary>Gets and sets whether the regression should involve a constant term</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.ComputeError">
-            <summary>Gets and sets whether the errors should be computed after the regression</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.LinearModel">
-            <summary>
-            Gets the result <c>LinearModel</c>
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.Status">
-            <summary>
-            Gets the regression's final status
-            </summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.Regress">
-            <summary>
-            Performs the regression
-            </summary>
-        </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2">
-            <summary>Performs a RIDGE regression for a given regularization factor</summary>
-            <typeparam name="T">the legends</typeparam>
-            <typeparam name="V">the labels</typeparam>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1},System.Double)">
-            <summary>Builds a RIDGE to regress a <c>Series</c> on a <c>DataFrame</c></summary>
-            <param name="x">the <c>DataFrame</c></param>
-            <param name="y">the <c>Series</c></param>
-            <param name="regularization">the regularization factor</param>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.ReturnAverageIfFailed">
-            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.WithConstant">
-            <summary>Gets and sets whether the regression should involve a constant term</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.ComputeError">
-            <summary>Gets and sets whether the errors should be computed after the regression</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.Regularization">
-            <summary>Gets and sets the regularization factor</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.LinearModel">
-            <summary>
-            Gets the result <c>LinearModel</c>
-            </summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.Status">
-            <summary>
-            Gets the regression's final status
-            </summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.RIDGERegression`2.Regress">
-            <summary>
-            Performs the regression
-            </summary>
-        </member>
-        <member name="T:Euclid.IndexedSeries.Analytics.Regressions.Scaling">
-            <summary>Scaling class</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.Scaling.Intercept">
-            <summary>Gets the intercept of the Scaling</summary>
-        </member>
-        <member name="P:Euclid.IndexedSeries.Analytics.Regressions.Scaling.ScalingCoefficient">
-            <summary>Gets the scaling coefficient of the Scaling</summary>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.Scaling.Scale(System.Collections.Generic.IEnumerable{System.Double})">
-            <summary>Scales "up" a series of data</summary>
-            <param name="data">the data to scale "up" : intercept + x * scalingCoefficient</param>
-            <returns>an array of double</returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.Scaling.Reduce(System.Collections.Generic.IEnumerable{System.Double})">
-            <summary>Scales "down" a series of data</summary>
-            <param name="data">the data to scale "down" (x-intercept)/scalingCoefficient</param>
-            <returns>an array of double</returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.Scaling.CreateZScore(System.Collections.Generic.IEnumerable{System.Double})">
-            <summary>Creates a Scaling based on the average and the standard deviation</summary>
-            <param name="data">the data to scale</param>
-            <returns>a <c>Scaling</c> class</returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Analytics.Regressions.Scaling.CreateMinMax(System.Collections.Generic.IEnumerable{System.Double})">
-            <summary>Creates a Scaling based on the minimum and maximum</summary>
-            <param name="data">the data to scale</param>
-            <returns>a <c>Scaling</c> class</returns>
-        </member>
         <member name="T:Euclid.IndexedSeries.Slice`3">
             <summary>Class representing a Slice of synchronized data</summary>
             <typeparam name="T">the legend type</typeparam>
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Slice`3.#ctor(System.Int32)">
-            <summary>Builds an empty <c>Slice</c></summary>
-            <param name="columns">the size of the Slice</param>
         </member>
         <member name="M:Euclid.IndexedSeries.Slice`3.#ctor(System.Collections.Generic.IEnumerable{`2},`0,System.Collections.Generic.IEnumerable{`1})">
             <summary>Builds a <c>Slice</c></summary>
@@ -1878,6 +1872,9 @@
         </member>
         <member name="P:Euclid.IndexedSeries.Slice`3.Rows">
             <summary>Returns the number of rows</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Slice`3.Data">
+            <summary> Gets a deep copy of the data</summary>
         </member>
         <member name="M:Euclid.IndexedSeries.Slice`3.Clone">
             <summary>Clones the slice</summary>
@@ -2947,6 +2944,70 @@
         </member>
         <member name="F:Euclid.Numerics.NumericalSeriesStatus.IterationExceeded">
             <summary>The cumulator exceeded its maximum number of iterations</summary>
+        </member>
+        <member name="T:Euclid.Objects.Map`2">
+            <summary>A two ways dictionary class</summary>
+            <typeparam name="T1">the left hand side type</typeparam>
+            <typeparam name="T2">the right hand side type</typeparam>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.#ctor">
+            <summary>Builds an empty map</summary>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.#ctor(System.Collections.Generic.IEnumerable{System.Tuple{`0,`1}})">
+            <summary>Builds a Map of </summary>
+            <param name="values"></param>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.Add(`0,`1)">
+            <summary>Adds a pair to the map</summary>
+            <param name="t1">the left hand side key</param>
+            <param name="t2">the right hand side key</param>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.Remove(`0,`1)">
+            <summary>Removes a pair from the map</summary>
+            <param name="t1">the left hand side key</param>
+            <param name="t2">the right hand side key</param>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.SetForward(`0,`1)">
+            <summary>Sets the right hand side value for a given left hand side value</summary>
+            <param name="key">the left hand side key</param>
+            <param name="newValue">the new right hand side value</param>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.SetBackward(`1,`0)">
+            <summary>Sets the left hand side value for a given right hand side value</summary>
+            <param name="key">the right hand side key</param>
+            <param name="newValue">the new left right hand side value</param>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.ContainsKey(`0)">
+            <summary>Checks if the left hand side contains a key</summary>
+            <param name="t1">the left hand side key</param>
+            <returns><c>True</c> if this is a left hand side key, <c>False</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.ContainsValue(`1)">
+            <summary>Checks if the right hand side contains a key</summary>
+            <param name="t2">the right hand side key</param>
+            <returns><c>True</c> if this a right hand side key, <c>False</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.Forward(`0)">
+            <summary>Gets the right hand side value associated to a left hand side key</summary>
+            <param name="t1">The left hand side key</param>
+            <returns>a right hand side key</returns>
+        </member>
+        <member name="M:Euclid.Objects.Map`2.Backward(`1)">
+            <summary>Gets the left hand side value associated to a right hand side key</summary>
+            <param name="t2">The right hand side key</param>
+            <returns>a left hand side key</returns>
+        </member>
+        <member name="P:Euclid.Objects.Map`2.Lefts">
+            <summary>Gets the left hand side keys</summary>
+        </member>
+        <member name="P:Euclid.Objects.Map`2.Rights">
+            <summary>Gets the right hand side keys</summary>
+        </member>
+        <member name="P:Euclid.Objects.Map`2.Count">
+            <summary>Gets the number of pairs in the map</summary>
+        </member>
+        <member name="P:Euclid.Objects.Map`2.Clone">
+            <summary>Gets a deep copy of the map</summary>
         </member>
         <member name="T:Euclid.Polynomial">
             <summary>

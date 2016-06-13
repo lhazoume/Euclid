@@ -1,4 +1,5 @@
 ﻿using Euclid.Helpers;
+using Euclid.Objects;
 using Euclid.Serialization;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Euclid.IndexedSeries
         private V _label;
         private U[] _data;
         private T[] _legends;
+        //private Map<T, int> _legends;
         #endregion
 
         /// <summary>Builds an empty <c>Series</c></summary>
@@ -27,6 +29,7 @@ namespace Euclid.IndexedSeries
         {
             _label = default(V);
             _legends = new T[rows];
+            //_legends = new Map<T, int>(Enumerable.Range(0, rows).Select(i => new Tuple<T, int>(default(T), i)));
             _data = new U[rows];
         }
 
@@ -38,6 +41,7 @@ namespace Euclid.IndexedSeries
         {
             _data = data.ToArray();
             _label = label;
+            //_legends = new Map<T, int>(Enumerable.Range(0, legends.Count()).Select(i => new Tuple<T, int>(legends.ElementAt(i), i)));
             _legends = legends.ToArray();
         }
 

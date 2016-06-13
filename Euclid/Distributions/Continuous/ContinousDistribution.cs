@@ -3,6 +3,8 @@ using System;
 
 namespace Euclid.Distributions.Continuous
 {
+    //TODO : arcsine, Kumaraswamy, log-logistic : and other : watch https://en.wikipedia.org/wiki/Logistic_distribution
+
     /// <summary>Abstract class base for continuous distributions</summary>
     public abstract class ContinousDistribution : IDistribution
     {

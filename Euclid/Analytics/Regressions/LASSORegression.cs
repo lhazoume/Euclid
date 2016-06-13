@@ -1,11 +1,9 @@
-﻿using Euclid.Solvers;
+﻿using Euclid.IndexedSeries;
+using Euclid.Solvers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Euclid.IndexedSeries.Analytics.Regressions
+namespace Euclid.Analytics.Regressions
 {
     /// <summary>
     /// Performs a LASSO regression for a given regularization factor

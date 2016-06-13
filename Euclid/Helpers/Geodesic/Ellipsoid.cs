@@ -3,13 +3,13 @@
     /// <summary>Ellipsoid class, used for distance calculations</summary>
     public class Ellipsoid
     {
-        private readonly double _semiMajorAxis, _semiMinorAxis, _flattening;
+        private readonly double _equatorialRadius, _polarRadius, _flattening;
 
-        private Ellipsoid(double radius, double flattening)
+        private Ellipsoid(double equatorialRadius, double flattening)
         {
-            _semiMajorAxis = radius;
+            _equatorialRadius = equatorialRadius;
             _flattening = flattening;
-            _semiMinorAxis = (1 - flattening) * radius;
+            _polarRadius = (1 - flattening) * equatorialRadius;
         }
 
         /// <summary>The World Geodetic System 1984</summary>
@@ -25,22 +25,22 @@
         static public readonly Ellipsoid Clarke1880 = Create(6378249.145, 293.465);
 
         #region Create
-        static private Ellipsoid Create(double semiMajor, double inverseFlattening)
+        static private Ellipsoid Create(double equatorialRadius, double inverseFlattening)
         {
-            return new Ellipsoid(semiMajor, 1.0 / inverseFlattening);
+            return new Ellipsoid(equatorialRadius, 1.0 / inverseFlattening);
         }
         #endregion
 
         /// <summary>Gets the semi-major axis of the ellipsoid</summary>
-        public double SemiMajorAxis
+        public double EquatorialRadius
         {
-            get { return _semiMajorAxis; }
+            get { return _equatorialRadius; }
         }
 
         /// <summary>Gets the semi-minor axis of the ellipsoid</summary>
-        public double SemiMinorAxis
+        public double PolarRadius
         {
-            get { return _semiMinorAxis; }
+            get { return _polarRadius; }
         }
 
         /// <summary>Gets the flattening of the ellipsoid</summary>

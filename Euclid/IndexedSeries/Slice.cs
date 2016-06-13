@@ -1,4 +1,5 @@
 ﻿using Euclid.Helpers;
+using Euclid.Objects;
 using Euclid.Serialization;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,16 @@ namespace Euclid.IndexedSeries
     public class Slice<T, U, V> : IIndexedSeries<T, U, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IConvertible
     {
         #region Declarations
-        private V[] _labels;
+        private Map<V, int> _labels;
         private U[] _data;
         private T _legend;
         #endregion
 
         #region Constructors
-        /// <summary>Builds an empty <c>Slice</c></summary>
-        /// <param name="columns">the size of the Slice</param>
-        public Slice(int columns)
+        private Slice(Map<V, int> labels, T legend, IEnumerable<U> data)
         {
-            _data = new U[columns];
-            _labels = new V[columns];
-            _legend = default(T);
+            _data = data.ToArray();
+            _labels = labels.Clone;
         }
 
         /// <summary>Builds a <c>Slice</c></summary>
@@ -36,7 +34,7 @@ namespace Euclid.IndexedSeries
         public Slice(IEnumerable<V> labels, T legend, IEnumerable<U> data)
         {
             _data = data.ToArray();
-            _labels = labels.ToArray();
+            _labels = new Map<V, int>(Enumerable.Range(0, labels.Count()).Select(i => new Tuple<V, int>(labels.ElementAt(i), i)));
             _legend = legend;
         }
 
@@ -49,7 +47,6 @@ namespace Euclid.IndexedSeries
         #endregion
 
         #region Accessors
-
         /// <summary>Gets the legends. Inherited (in this case, the legend is packaged into an array)</summary>
         public T[] Legends
         {
@@ -66,13 +63,13 @@ namespace Euclid.IndexedSeries
         /// <summary>Returns the labels</summary>
         public V[] Labels
         {
-            get { return _labels; }
+            get { return _labels.Lefts; }
         }
 
         /// <summary>Returns the number of columns</summary>
         public int Columns
         {
-            get { return _labels.Length; }
+            get { return _labels.Count; }
         }
 
         /// <summary>Returns the number of rows</summary>
@@ -80,6 +77,9 @@ namespace Euclid.IndexedSeries
         {
             get { return 1; }
         }
+
+        /// <summary> Gets a deep copy of the data</summary>
+        public U[] Data { get { return Arrays.Clone<U>(_data); } }
         #endregion
 
         #region Methods
@@ -87,25 +87,27 @@ namespace Euclid.IndexedSeries
         /// <returns>a <c>Slice</c></returns>
         public Slice<T, U, V> Clone()
         {
-            return new Slice<T, U, V>(Arrays.Clone(_labels), _legend, Arrays.Clone(_data));
+            return new Slice<T, U, V>(_labels.Clone, _legend, Arrays.Clone(_data));
         }
 
         /// <summary>Remove the data for a given label</summary>
         /// <param name="label">the label</param>
         public void RemoveColumnAt(V label)
         {
-            int indexToRemove = Array.IndexOf<V>(_labels, label);
-            if (indexToRemove == -1 || _labels.Length == 1) return;
+            int indexToRemove = _labels.Forward(label);
+            if (indexToRemove == -1 || _labels.Count == 1) return;
             U[] newData = new U[_data.Length - 1];
-            V[] newLabels = new V[_labels.Length - 1];
-            for (int j = 0; j < _labels.Length; j++)
+            //V[] newLabels = new V[_labels.Count - 1];
+            List<Tuple<V, int>> tuples = new List<Tuple<V, int>>();
+            for (int j = 0; j < _labels.Count; j++)
             {
                 if (j == indexToRemove) continue;
                 int k = j - (j < indexToRemove ? 0 : 1);
-                newLabels[k] = _labels[j];
+                tuples.Add(new Tuple<V, int>(_labels.Backward(j), k));
+                //newLabels[k] = _labels[j];
                 newData[k] = _data[j];
             }
-            _labels = newLabels;
+            _labels = new Map<V, int>(tuples); // newLabels;
             _data = newData;
         }
 
@@ -125,15 +127,17 @@ namespace Euclid.IndexedSeries
         {
             get
             {
-                int j = Array.IndexOf<V>(_labels, v);
+                return _data[_labels.Forward(v)];
+                /*int j = Array.IndexOf<V>(_labels, v);
                 if (j == -1) throw new ArgumentException(string.Format("Point [{0}] was not found", v.ToString()));
-                return _data[j];
+                return _data[j];*/
             }
             set
             {
-                int j = Array.IndexOf<V>(_labels, v);
+                _data[_labels.Forward(v)] = value;
+                /*int j = Array.IndexOf<V>(_labels, v);
                 if (j == -1) throw new ArgumentException(string.Format("Point [{0}] was not found", v.ToString()));
-                _data[j] = value;
+                _data[j] = value;*/
             }
         }
 
@@ -142,20 +146,21 @@ namespace Euclid.IndexedSeries
         /// <param name="value">the new value</param>
         public void Add(V label, U value)
         {
-            if (_labels.Contains(label))
-                throw new ArgumentException("The label is already in the slice");
+            if (_labels.ContainsKey(label)) throw new ArgumentException("The label is already in the slice");
+
             U[] newData = new U[_data.Length + 1];
-            V[] newLabels = new V[_labels.Length + 1];
-            for (int j = 0; j < _labels.Length; j++)
+            _labels.Add(label, _data.Length);
+            //V[] newLabels = new V[_labels.Count + 1];
+            for (int j = 0; j < _labels.Count; j++)
             {
-                newLabels[j] = _labels[j];
+                //newLabels[j] = _labels[j];
                 newData[j] = _data[j];
             }
 
-            newLabels[_labels.Length] = label;
-            newData[_labels.Length] = value;
+            //newLabels[_labels.Count] = label;
+            newData[_data.Length] = value;
 
-            _labels = newLabels;
+            //_labels = newLabels;
             _data = newData;
         }
 
@@ -163,7 +168,7 @@ namespace Euclid.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnData(Func<U, U> function)
         {
-            for (int j = 0; j < _labels.Length; j++)
+            for (int j = 0; j < _labels.Count; j++)
                 _data[j] = function(_data[j]);
         }
 
@@ -172,7 +177,7 @@ namespace Euclid.IndexedSeries
         /// <returns>a label</returns>
         public V GetLabel(int i)
         {
-            return _labels[i];
+            return _labels.Backward(i);
         }
 
         /// <summary>Sets the i-th label's value</summary>
@@ -180,7 +185,7 @@ namespace Euclid.IndexedSeries
         /// <param name="value">the new value</param>
         public void SetLabel(int i, V value)
         {
-            _labels[i] = value;
+            _labels.SetBackward(i, value);
         }
         #endregion
 
@@ -198,10 +203,10 @@ namespace Euclid.IndexedSeries
             #endregion
 
             #region Data
-            for (int j = 0; j < _labels.Length; j++)
+            for (int j = 0; j < _labels.Count; j++)
             {
                 writer.WriteStartElement("point");
-                writer.WriteAttributeString("label", _labels[j].ToString());
+                writer.WriteAttributeString("label", _labels.Backward(j).ToString());
                 writer.WriteAttributeString("value", _data[j].ToString());
                 writer.WriteEndElement();
             }
@@ -214,24 +219,23 @@ namespace Euclid.IndexedSeries
         /// <param name="node">the <c>XmlNode</c></param>
         public void FromXml(XmlNode node)
         {
+            XmlNodeList dataNodes = node.SelectNodes("point");
+            XmlNode legendNode = node.SelectSingleNode("legend");
+
+            _legend = legendNode.Attributes["value"].Value.Parse<T>();
+
+            #region Data
+            _data = new U[dataNodes.Count];
+            _labels = new Map<V, int>();
+            for (int i = 0; i < dataNodes.Count; i++)
             {
-                XmlNodeList dataNodes = node.SelectNodes("point");
-                XmlNode legendNode = node.SelectSingleNode("legend");
-
-                _legend = legendNode.Attributes["value"].Value.Parse<T>();
-
-                #region Data
-                _data = new U[dataNodes.Count];
-                _labels = new V[dataNodes.Count];
-                for (int i = 0; i < dataNodes.Count; i++)
-                {
-                    V label = dataNodes[i].Attributes["label"].Value.Parse<V>();
-                    U value = dataNodes[i].Attributes["value"].Value.Parse<U>();
-                    _data[i] = value;
-                    _labels[i] = label;
-                }
-                #endregion
+                V label = dataNodes[i].Attributes["label"].Value.Parse<V>();
+                U value = dataNodes[i].Attributes["value"].Value.Parse<U>();
+                _data[i] = value;
+                _labels.Add(label, i);
             }
+            #endregion
+
         }
         #endregion
 
@@ -258,12 +262,12 @@ namespace Euclid.IndexedSeries
             int count = header.Length - 1;
 
             _data = new U[count];
-            _labels = new V[count];
+            _labels = new Map<V, int>();
             _legend = data[0].Parse<T>();
 
             for (int i = 0; i < count; i++)
             {
-                _labels[i] = header[1 + i].Parse<V>();
+                _labels.Add(header[1 + i].Parse<V>(), i);
                 _data[i] = data[1 + i].Parse<U>();
             }
         }

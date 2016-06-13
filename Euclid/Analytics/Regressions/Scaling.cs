@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Euclid.IndexedSeries.Analytics.Regressions
+namespace Euclid.Analytics.Regressions
 {
     /// <summary>Scaling class</summary>
     public sealed class Scaling

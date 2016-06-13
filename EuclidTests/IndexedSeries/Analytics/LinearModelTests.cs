@@ -1,10 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Euclid.IndexedSeries.Analytics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Euclid.Analytics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Euclid.IndexedSeries.Analytics.Tests
 {

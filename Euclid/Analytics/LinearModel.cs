@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.IndexedSeries.Analytics
+namespace Euclid.Analytics
 {
     /// <summary>
     /// Stores the metrics of a linear regression and allows prediction

@@ -29,8 +29,8 @@ namespace Euclid.Helpers.Geodesic
         {
             double factor = Math.PI / 180.0;
             // get constants
-            double a = ellipsoid.SemiMajorAxis;
-            double b = ellipsoid.SemiMinorAxis;
+            double a = ellipsoid.EquatorialRadius;
+            double b = ellipsoid.PolarRadius;
             double f = ellipsoid.Flattening;
             // get parameters as radians
             double phi1 = point1.Latitude * factor,

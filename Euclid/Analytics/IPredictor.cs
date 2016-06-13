@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Euclid.IndexedSeries.Analytics
+namespace Euclid.Analytics
 {
     /// <summary>
     /// Interface for predictors
