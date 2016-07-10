@@ -228,7 +228,7 @@ namespace Euclid.IndexedSeries
             U[] result = new U[_labels.Length];
             for (int j = 0; j < _labels.Length; j++)
                 result[j] = _data[index, j];
-            return new Slice<T, U, V>(_labels, t, result);
+            return Slice<T, U, V>.Create(_labels, t, result);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Euclid.IndexedSeries
             U[] result = new U[_legends.Length];
             for (int i = 0; i < _legends.Length; i++)
                 result[i] = _data[i, index];
-            return new Series<T, U, V>(v, _legends, result);
+            return Series<T, U, V>.Create(v, _legends, result);
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace Euclid.IndexedSeries
                 for (int j = 0; j < _labels.Length; j++)
                     data[j] = _data[i, j];
 
-                result[i] = new Slice<T, U, V>(_labels, _legends[i], data);
+                result[i] = Slice<T, U, V>.Create(_labels, _legends[i], data);
             }
             return result;
         }
@@ -277,7 +277,7 @@ namespace Euclid.IndexedSeries
                 for (int i = 0; i < _legends.Length; i++)
                     data[i] = _data[i, j];
 
-                result[j] = new Series<T, U, V>(_labels[j], _legends, data);
+                result[j] = Series<T, U, V>.Create(_labels[j], _legends, data);
             }
             return result;
         }
@@ -287,13 +287,11 @@ namespace Euclid.IndexedSeries
         /// <returns>a <c>Series</c></returns>
         public Series<T, U, V> GetColumn(int column)
         {
-            Series<T, U, V> result = new Series<T, U, V>(_legends.Length);
-
             U[] data = new U[_legends.Length];
             for (int i = 0; i < _legends.Length; i++)
                 data[i] = _data[i, column];
 
-            return new Series<T, U, V>(_labels[column], _legends, data);
+            return Series<T, U, V>.Create(_labels[column], _legends, data);
         }
 
         /// <summary>
@@ -501,5 +499,6 @@ namespace Euclid.IndexedSeries
             throw new NotImplementedException();
         }
         #endregion
+        
     }
 }

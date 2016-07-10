@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Normal distribution class
     /// </summary>
-    public class NormalDistribution : ContinousDistribution
+    public class NormalDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _mean, _standardDeviation;

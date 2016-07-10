@@ -829,6 +829,23 @@ namespace Euclid
 
         }
 
+        public static double SupBrownianBridgeCDF(double x)
+        {
+            if (x <= 0) return 0; // the probability that the sup of an absolute value of a brownian bridge is zero is null. 
+            double sum = 0;
+            double numberOfStep = Math.Min(1000, (3 / x));
+            double u = -1, v = 1, c1 = Math.Exp(-2 * x * x), c2 = Math.Exp(-4 * x * x);
+
+            for (int i = 0; i < numberOfStep; i++)
+            {
+                u = (-1) * u * c1 * v;
+                sum += u;
+                v = v * c2;
+
+            }
+
+            return 2 * sum;
+        }
 
         /**
              * Returns the area under the right hand tail (from x to

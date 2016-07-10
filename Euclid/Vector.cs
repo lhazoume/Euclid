@@ -12,9 +12,23 @@ namespace Euclid
     /// </summary>
     public class Vector
     {
+        #region Declarations
         private int _size;
         private double[] _data;
+        #endregion
 
+        /// <summary>Applies a function to transform the data of the vector</summary>
+        /// <param name="v">the vector to transform</param>
+        /// <param name="func">the transforming function</param>
+        /// <returns>a <c>Vector</c></returns>
+        public static Vector Apply(Vector v, Func<double, double> func)
+        {
+            Vector result = Vector.Create(v._size);
+            Parallel.For(0, result.Size, k => { result[k] = func(v._data[k]); });
+            return result;
+        }
+
+        #region Constructors
         private Vector(IEnumerable<double> data)
         {
             _data = data.ToArray();
@@ -34,18 +48,16 @@ namespace Euclid
             for (int i = 0; i < _size; i++)
                 _data[i] = value;
         }
+        #endregion
 
-        /// <summary>
-        /// Returns the Vector's size
-        /// </summary>
+        #region Accessors
+        /// <summary>Returns the Vector's size</summary>
         public int Size
         {
             get { return _size; }
         }
 
-        /// <summary>
-        /// Gets the Vector's components
-        /// </summary>
+        /// <summary>Gets the Vector's components</summary>
         public double[] Data
         {
             get { return _data; }
@@ -62,6 +74,12 @@ namespace Euclid
             set { _data[i] = value; }
         }
 
+        /// <summary>Returns a deep copy of the Vector</summary>
+        public Vector Clone
+        {
+            get { return new Vector(_data); }
+        }
+        #endregion
 
         #region Norms and sums
 
@@ -370,7 +388,7 @@ namespace Euclid
         /// <param name="v1">the left hand side</param>
         /// <param name="v2">the right hand side</param>
         /// <returns>a <c>Vector</c> containing the Hadamard product</returns>
-        private static Vector Hadamard(Vector v1, Vector v2)
+        public static Vector Hadamard(Vector v1, Vector v2)
         {
             if (v1.Size == v2.Size)
             {
@@ -381,13 +399,16 @@ namespace Euclid
             }
             throw new ArgumentException("The Hadamard product of two Vectors can only be performed if they are the same size");
         }
-        #endregion
 
-        /// <summary>Returns a deep copy of the Vector</summary>
-        public Vector Clone
+        public static Vector LinearCombination(double f1, Vector v1, double f2, Vector v2)
         {
-            get { return new Vector(_data); }
+            if (v1.Size != v2.Size) throw new ArgumentException("Vectors must have the same dimensions!");
+            Vector r = Vector.Create(v1.Size);
+            for (int k = 0; k < r.Size; k++)
+                r[k] = f1 * v1[k] + f2 * v2[k];
+            return r;
         }
+        #endregion
 
         #region Create
 
@@ -420,7 +441,7 @@ namespace Euclid
         /// <param name="size">the vector's size</param>
         /// <param name="distribution">the distribution</param>
         /// <returns></returns>
-        public static Vector CreateRandom(int size, ContinousDistribution distribution)
+        public static Vector CreateRandom(int size, ContinuousDistribution distribution)
         {
             return new Vector(distribution.Sample(size));
         }

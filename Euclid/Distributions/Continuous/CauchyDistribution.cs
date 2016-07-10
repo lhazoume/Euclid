@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Cauchy distribution class
     /// </summary>
-    public class CauchyDistribution : ContinousDistribution
+    public class CauchyDistribution : ContinuousDistribution
     {
         #region Declarations
         private readonly double _x0, _gamma;

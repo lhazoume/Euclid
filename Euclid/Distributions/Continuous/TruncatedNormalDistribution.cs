@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Truncated normal distribution class
     /// </summary>
-    public class TruncatedNormalDistribution : ContinousDistribution
+    public class TruncatedNormalDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _mu,
