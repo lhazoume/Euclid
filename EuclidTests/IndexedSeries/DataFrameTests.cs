@@ -5,16 +5,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Euclid.IndexedSeries.Tests
 {
     [TestClass()]
     public class DataFrameTests
     {
+        #region vars
+        DataFrame<DateTime, double, string> _df;
+        #endregion
+        [TestInitialize()]
+        public void Initialize()
+        {
+            _df = new DataFrame<DateTime, double, string>(
+                new string[] { "A", "B" }, new DateTime[] { new DateTime(2016, 1, 1), new DateTime(2016, 1, 2), new DateTime(2016, 1, 3) }, new double[3, 2]
+                { { 100, 200 }, { 101, 201 }, { 100, 200 } });
+        }
+
         [TestMethod()]
         public void DataFrameTest()
         {
-            Assert.Fail();
+            int nbRows = 3, nbColumns = 2;
+            Assert.AreEqual(nbColumns, _df.Columns);
+            Assert.AreEqual(nbRows, _df.Rows);
         }
 
         [TestMethod()]
@@ -26,25 +40,30 @@ namespace Euclid.IndexedSeries.Tests
         [TestMethod()]
         public void CloneTest()
         {
-            Assert.Fail();
+            DataFrame<DateTime, double, string> clone = _df.Clone();
+            Assert.AreEqual(clone.Rows, _df.Rows);
+            Assert.AreEqual(clone.Columns, _df.Columns);
         }
 
         [TestMethod()]
         public void RemoveColumnAtTest()
         {
-            Assert.Fail();
+            string labelOfTheColumnToRemove = "A";
+            _df.RemoveColumnAt(labelOfTheColumnToRemove);
+            Assert.IsFalse(_df.Labels.Contains(labelOfTheColumnToRemove));
         }
 
         [TestMethod()]
         public void RemoveRowAtTest()
         {
-            Assert.Fail();
+            DateTime LegentOfTheRowToRemove = new DateTime(2016, 1, 1);
+            _df.RemoveRowAt(LegentOfTheRowToRemove);
+            Assert.IsFalse(_df.Legends.Contains(LegentOfTheRowToRemove));
         }
 
         [TestMethod()]
         public void RemoveTest()
         {
-            Assert.Fail();
         }
 
         [TestMethod()]
@@ -128,7 +147,8 @@ namespace Euclid.IndexedSeries.Tests
         [TestMethod()]
         public void ToCSVTest()
         {
-            Assert.Fail();
+            string content = _df.ToCSV();
+            File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "dataframe.csc"), content);
         }
 
         [TestMethod()]
