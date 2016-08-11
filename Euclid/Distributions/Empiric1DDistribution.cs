@@ -12,7 +12,7 @@ namespace Euclid.Distributions
         #region Declarations
         private readonly double[] _weights, _values;
         private readonly double[,] _buckets;
-        private readonly double _h, _sumWeights, _average, _min, _max;
+        private readonly double _h, _sumWeights, _average;
         private readonly int _n;
         private readonly IDensityKernel _kernel;
         #endregion

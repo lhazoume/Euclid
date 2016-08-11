@@ -420,6 +420,12 @@ namespace Euclid
             return new Vector(data);
         }
 
+
+        public static Vector Create(IEnumerable<double> data)
+        {
+            return new Vector(data);
+        }
+
         /// <summary>Creates an Vector full of zeros </summary>
         /// <param name="size">the Vector's size</param>
         /// <returns>a Vector</returns>

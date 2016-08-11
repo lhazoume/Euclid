@@ -101,6 +101,13 @@
             <param name="x">the set of regressors</param>
             <returns>the estimator of the regressed data</returns>
         </member>
+        <member name="M:Euclid.Analytics.LinearModel.Predict(Euclid.Vector)">
+            <summary>
+            Returns the estimator for the given set of data
+            </summary>
+            <param name="x">the set of regressors</param>
+            <returns>the estimator of the regressed data</returns>
+        </member>
         <member name="T:Euclid.Analytics.IPredictor`2">
             <summary>
             Interface for predictors
@@ -2093,14 +2100,13 @@
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Int32,System.Int32)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Xml.XmlNode)">
             <summary>
-            Builds an empty <c>DataFrame</c>
+            Builds a <c>DataFrame</c> from its serialized form
             </summary>
-            <param name="rows">the number of rows</param>
-            <param name="columns">the number of columns</param>
+            <param name="dataFrameNode">the <c>XmlNode</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Collections.Generic.IEnumerable{`2},System.Collections.Generic.IEnumerable{`0},`1[0:,0:])">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{`2},System.Collections.Generic.IEnumerable{`0},`1[0:,0:])">
             <summary>
             Builds a <c>DataFrame</c>
             </summary>
@@ -2108,11 +2114,18 @@
             <param name="legends">the legends</param>
             <param name="data">the data</param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Xml.XmlNode)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{Euclid.IndexedSeries.Slice{`0,`1,`2}})">
             <summary>
-            Builds a <c>DataFrame</c> from its serialized form
+            Builds a <c>DataFrame</c>
             </summary>
-            <param name="dataFrameNode">the <c>XmlNode</c></param>
+            <param name="slices">the slices</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Int32,System.Int32)">
+            <summary>
+            Builds an empty <c>DataFrame</c>
+            </summary>
+            <param name="rows">the number of rows</param>
+            <param name="columns">the number of columns</param>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Legends">
             <summary>
@@ -2242,10 +2255,6 @@
         <member name="M:Euclid.IndexedSeries.DataFrame`3.ToXml(System.Xml.XmlWriter)">
             <summary>Serializes the <c>DataFrame</c> to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.FromXml(System.Xml.XmlNode)">
-            <summary>De-serializes the <c>DataFrame</c> from a Xml node</summary>
-            <param name="node">the <c>XmlNode</c></param>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.ToCSV">
             <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
@@ -3897,7 +3906,7 @@
             <param name="x"></param>
             <returns></returns>
         </member>
-        <member name="M:Euclid.Fn.ibeta(System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Fn.IncompleteBeta(System.Double,System.Double,System.Double)">
             <summary>
             Returns the incomplete beta function evaluated from zero to xx.
             </summary>

@@ -33,14 +33,6 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             _a = Vector.Apply(_z, _activation.Function);
             return _a.Clone;
         }
-        /*        public Matrix Process(Matrix inputs)
-        {
-            if (inputs.Rows != _inputSize) throw new ArgumentOutOfRangeException("the inputs' size does not match the layer's characteristics");
-            Matrix product = (_weights ^ inputs) - Matrix.CreateFromColumns(Enumerable.Repeat(_biases, inputs.Columns).ToArray()),
-                output = Matrix.Apply(product, _activation.Function);
-
-            return output;
-        }*/
         public List<Vector> Process(List<Vector> inputs)
         {
             _z = Vector.Create(_layerSize);
@@ -82,6 +74,10 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         public double Bias(int neuronIndex)
         {
             return _biases[neuronIndex];
+        }
+        public Vector Biases
+        {
+            get { return _biases; }
         }
         public Matrix Weights
         {

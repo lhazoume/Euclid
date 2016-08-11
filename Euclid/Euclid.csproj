@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analytics\Clustering\ClusteringContext.cs" />
+    <Compile Include="Analytics\Clustering\RandomForest.cs" />
+    <Compile Include="Analytics\DecisionTreePredictor.cs" />
+    <Compile Include="Analytics\Clustering\DecisionTree.cs" />
     <Compile Include="Analytics\Clustering\Hierarchical.cs" />
     <Compile Include="Analytics\LinearModel.cs" />
     <Compile Include="Analytics\IPredictor.cs" />
@@ -69,6 +73,7 @@
     <Compile Include="Distributions\Continuous\CauchyDistribution.cs" />
     <Compile Include="Distributions\Continuous\ChiSquaredDistribution.cs" />
     <Compile Include="Distributions\Continuous\ExponentialPowerDistribution.cs" />
+    <Compile Include="Distributions\Continuous\FisherDistribution.cs" />
     <Compile Include="Distributions\Continuous\GammaDistribution.cs" />
     <Compile Include="Distributions\Continuous\Kernels\CosineKernel.cs" />
     <Compile Include="Distributions\Continuous\Kernels\EpanechnikovKernel.cs" />
@@ -90,6 +95,7 @@
     <Compile Include="Helpers\Geodesic\Ellipsoid.cs" />
     <Compile Include="Helpers\Geodesic\Helper.cs" />
     <Compile Include="Helpers\Parser.cs" />
+    <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Histograms\Bound.cs" />
     <Compile Include="Histograms\Interval.cs" />
     <Compile Include="Histograms\Histogram.cs" />

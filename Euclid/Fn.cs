@@ -591,6 +591,16 @@ namespace Euclid
 
         }
 
+        public static double Beta(double x, double y)
+        {
+            return Gamma(x) * Gamma(y) / Gamma(x + y);
+        }
+
+        public static double IncompleteRegularizedBeta(double t, double x, double y)
+        {
+            return IncompleteBeta(x, y, t) / Beta(x, y);
+        }
+
         /// <summary>
         /// Returns the digamma (psi) function of real values (except at 0, -1, -2, ...).
         /// Digamma is the logarithmic derivative of the <see cref="Gamma"/> function.
@@ -867,7 +877,6 @@ namespace Euclid
 
         }
 
-
         /// <summary>
         /// Returns the sum of the first k terms of the Poisson distribution.
         /// </summary>
@@ -881,7 +890,6 @@ namespace Euclid
             return IncompleteUpperGamma((double)(k + 1), x);
         }
 
-
         /// <summary>
         /// Returns the sum of the terms k+1 to infinity of the Poisson distribution.
         /// </summary>
@@ -894,7 +902,6 @@ namespace Euclid
 
             return IncompleteLowerGamma((double)(k + 1), x);
         }
-
 
         /// <summary>
         /// Returns the area under the Gaussian probability density function, integrated from minus infinity to a.
@@ -917,7 +924,6 @@ namespace Euclid
 
             return y;
         }
-
 
         /// <summary>
         /// Returns the complementary error function of the specified number.
@@ -1007,7 +1013,6 @@ namespace Euclid
 
             return y;
         }
-
 
         /// <summary>
         /// Returns the error function of the specified number.
@@ -1208,7 +1213,6 @@ namespace Euclid
             return result;
         }
 
-
         /// <summary>
         /// Computes the Gauss-bell function
         /// </summary>
@@ -1358,7 +1362,7 @@ namespace Euclid
         /// <param name="bb"></param>
         /// <param name="xx"></param>
         /// <returns></returns>
-        public static double ibeta(double aa, double bb, double xx)
+        public static double IncompleteBeta(double aa, double bb, double xx)
         {
             double a, b, t, x, xc, w, y;
             bool flag;
