@@ -22,25 +22,7 @@ namespace Euclid.IndexedSeries
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Builds an empty <c>DataFrame</c>
-        /// </summary>
-        /// <param name="rows">the number of rows</param>
-        /// <param name="columns">the number of columns</param>
-        public DataFrame(int rows, int columns)
-        {
-            _data = new U[rows, columns];
-            _labels = new V[columns];
-            _legends = new T[rows];
-        }
-
-        /// <summary>
-        /// Builds a <c>DataFrame</c>
-        /// </summary>
-        /// <param name="labels">the labels</param>
-        /// <param name="legends">the legends</param>
-        /// <param name="data">the data</param>
-        public DataFrame(IEnumerable<V> labels, IEnumerable<T> legends, U[,] data)
+        private DataFrame(IEnumerable<V> labels, IEnumerable<T> legends, U[,] data)
         {
             _data = Arrays.Clone(data);
             _labels = labels.ToArray();
@@ -51,10 +33,79 @@ namespace Euclid.IndexedSeries
         /// Builds a <c>DataFrame</c> from its serialized form
         /// </summary>
         /// <param name="dataFrameNode">the <c>XmlNode</c></param>
-        public DataFrame(XmlNode dataFrameNode)
+        public static DataFrame<T, U, V> Create(XmlNode node)
         {
-            FromXml(dataFrameNode);
+
+            XmlNodeList labelNodes = node.SelectNodes("timeDataFrame/label"),
+                legendNodes = node.SelectNodes("timeDataFrame/legend"),
+                dataNodes = node.SelectNodes("timeDataFrame/point");
+
+            #region Labels
+            V[] labels = new V[labelNodes.Count];
+            foreach (XmlNode label in labelNodes)
+            {
+                int index = int.Parse(label.Attributes["index"].Value);
+                labels[index] = label.Attributes["value"].Value.Parse<V>();
+            }
+            #endregion
+
+            #region Legends
+            T[] legends = new T[legendNodes.Count];
+            foreach (XmlNode legend in legendNodes)
+            {
+                int index = int.Parse(legend.Attributes["index"].Value);
+                legends[index] = legend.Attributes["value"].Value.Parse<T>();
+            }
+            #endregion
+
+            #region Data
+            U[,] data = new U[legends.Length, labels.Length];
+            foreach (XmlNode point in dataNodes)
+            {
+                int row = int.Parse(point.Attributes["row"].Value),
+                    col = int.Parse(point.Attributes["col"].Value);
+                U value = point.Attributes["value"].Value.Parse<U>();
+                data[row, col] = value;
+            }
+            #endregion
+
+            return new DataFrame<T, U, V>(labels, legends, data);
         }
+
+        /// <summary>
+        /// Builds a <c>DataFrame</c>
+        /// </summary>
+        /// <param name="labels">the labels</param>
+        /// <param name="legends">the legends</param>
+        /// <param name="data">the data</param>
+        public static DataFrame<T, U, V> Create(IEnumerable<V> labels, IEnumerable<T> legends, U[,] data)
+        {
+            return new DataFrame<T, U, V>(labels, legends, data);
+        }
+
+        /// <summary>
+        /// Builds a <c>DataFrame</c>
+        /// </summary>
+        /// <param name="slices">the slices</param>
+        public static DataFrame<T, U, V> Create(IEnumerable<Slice<T, U, V>> slices)
+        {
+            U[,] data = new U[slices.Count(), slices.ElementAt(0).Columns];
+            for (int i = 0; i < data.GetLength(0); i++)
+                for (int j = 0; j < data.GetLength(1); j++)
+                    data[i, j] = slices.ElementAt(i)[j];
+            return new DataFrame<T, U, V>(slices.ElementAt(0).Labels, slices.Select(s => s.Legend), data);
+        }
+
+        /// <summary>
+        /// Builds an empty <c>DataFrame</c>
+        /// </summary>
+        /// <param name="rows">the number of rows</param>
+        /// <param name="columns">the number of columns</param>
+        public static DataFrame<T, U, V> Create(int rows, int columns)
+        {
+            return new DataFrame<T, U, V>(new V[columns], new T[rows], new U[rows, columns]);
+        }
+
         #endregion
 
         #region Accessors
@@ -124,6 +175,33 @@ namespace Euclid.IndexedSeries
             }
             _labels = newLabels;
             _data = newData;
+        }
+
+        public Series<T, U, V> TakeSeries(V label)
+        {
+            int indexToRemove = Array.IndexOf(_labels, label);
+            if (indexToRemove == -1 || _labels.Length == 1) return null;
+
+            U[] takenData = new U[_legends.Length];
+            U[,] newData = new U[_legends.Length, _data.Length - 1];
+            V[] newLabels = new V[_labels.Length - 1];
+            for (int j = 0; j < _labels.Length; j++)
+            {
+                if (j == indexToRemove)
+                    for (int i = 0; i < _legends.Length; i++)
+                        takenData[i] = _data[i, j];
+                else
+                {
+                    int k = j - (j < indexToRemove ? 0 : 1);
+                    newLabels[k] = _labels[j];
+                    for (int i = 0; i < _legends.Length; i++)
+                        newData[i, k] = _data[i, j];
+                }
+            }
+            _labels = newLabels;
+            _data = newData;
+
+            return Series<T, U, V>.Create(label, _legends, takenData);
         }
 
         /// <summary>Removes the row for a given legend</summary>
@@ -228,7 +306,7 @@ namespace Euclid.IndexedSeries
             U[] result = new U[_labels.Length];
             for (int j = 0; j < _labels.Length; j++)
                 result[j] = _data[index, j];
-            return new Slice<T, U, V>(_labels, t, result);
+            return Slice<T, U, V>.Create(_labels, t, result);
         }
 
         /// <summary>
@@ -243,7 +321,7 @@ namespace Euclid.IndexedSeries
             U[] result = new U[_legends.Length];
             for (int i = 0; i < _legends.Length; i++)
                 result[i] = _data[i, index];
-            return new Series<T, U, V>(v, _legends, result);
+            return Series<T, U, V>.Create(v, _legends, result);
         }
 
         /// <summary>
@@ -259,7 +337,7 @@ namespace Euclid.IndexedSeries
                 for (int j = 0; j < _labels.Length; j++)
                     data[j] = _data[i, j];
 
-                result[i] = new Slice<T, U, V>(_labels, _legends[i], data);
+                result[i] = Slice<T, U, V>.Create(_labels, _legends[i], data);
             }
             return result;
         }
@@ -277,7 +355,7 @@ namespace Euclid.IndexedSeries
                 for (int i = 0; i < _legends.Length; i++)
                     data[i] = _data[i, j];
 
-                result[j] = new Series<T, U, V>(_labels[j], _legends, data);
+                result[j] = Series<T, U, V>.Create(_labels[j], _legends, data);
             }
             return result;
         }
@@ -287,13 +365,11 @@ namespace Euclid.IndexedSeries
         /// <returns>a <c>Series</c></returns>
         public Series<T, U, V> GetColumn(int column)
         {
-            Series<T, U, V> result = new Series<T, U, V>(_legends.Length);
-
             U[] data = new U[_legends.Length];
             for (int i = 0; i < _legends.Length; i++)
                 data[i] = _data[i, column];
 
-            return new Series<T, U, V>(_labels[column], _legends, data);
+            return Series<T, U, V>.Create(_labels[column], _legends, data);
         }
 
         /// <summary>
@@ -434,46 +510,6 @@ namespace Euclid.IndexedSeries
 
             writer.WriteEndElement();
         }
-
-        /// <summary>De-serializes the <c>DataFrame</c> from a Xml node</summary>
-        /// <param name="node">the <c>XmlNode</c></param>
-        public void FromXml(XmlNode node)
-        {
-            {
-                XmlNodeList labelNodes = node.SelectNodes("timeDataFrame/label"),
-                    legendNodes = node.SelectNodes("timeDataFrame/legend"),
-                    dataNodes = node.SelectNodes("timeDataFrame/point");
-
-                #region Labels
-                _labels = new V[labelNodes.Count];
-                foreach (XmlNode label in labelNodes)
-                {
-                    int index = int.Parse(label.Attributes["index"].Value);
-                    _labels[index] = label.Attributes["value"].Value.Parse<V>();
-                }
-                #endregion
-
-                #region Legends
-                _legends = new T[legendNodes.Count];
-                foreach (XmlNode legend in legendNodes)
-                {
-                    int index = int.Parse(legend.Attributes["index"].Value);
-                    _legends[index] = legend.Attributes["value"].Value.Parse<T>();
-                }
-                #endregion
-
-                #region Data
-                _data = new U[_legends.Length, _labels.Length];
-                foreach (XmlNode point in dataNodes)
-                {
-                    int row = int.Parse(point.Attributes["row"].Value),
-                        col = int.Parse(point.Attributes["col"].Value);
-                    U value = point.Attributes["value"].Value.Parse<U>();
-                    _data[row, col] = value;
-                }
-                #endregion
-            }
-        }
         #endregion
 
         #region ICSVable
@@ -501,5 +537,6 @@ namespace Euclid.IndexedSeries
             throw new NotImplementedException();
         }
         #endregion
+
     }
 }

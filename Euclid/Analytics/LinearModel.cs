@@ -11,7 +11,7 @@ namespace Euclid.Analytics
     {
         #region Declarations
         private readonly double _constant, _sse, _ssr, _sst;
-        private readonly double[] _factors, _correlations;
+        private readonly Vector _factors, _correlations;
         private readonly int _n, _p;
         private readonly bool _succeeded;
         #endregion
@@ -40,8 +40,8 @@ namespace Euclid.Analytics
             _sst = _ssr + _sse;
 
             _constant = constant;
-            _factors = new double[_p];
-            _correlations = new double[_p];
+            _factors = Vector.Create(_p);
+            _correlations = Vector.Create(_p);
             for (int i = 0; i < _p; i++)
             {
                 _factors[i] = factors[i];
@@ -91,17 +91,17 @@ namespace Euclid.Analytics
         /// <summary>
         /// Gets the linear terms
         /// </summary>
-        public double[] Factors
+        public Vector Factors
         {
-            get { return _succeeded ? _factors : new double[] { 0 }; }
+            get { return _succeeded ? _factors : Vector.Create(0.0); }
         }
 
         /// <summary>
         /// Gets the correlations between the explanatory variables and the regressand
         /// </summary>
-        public double[] Correlations
+        public Vector Correlations
         {
-            get { return _succeeded ? _correlations : new double[] { 0 }; }
+            get { return _succeeded ? _correlations : Vector.Create(0.0); }
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Euclid.Analytics
             get
             {
                 if (_succeeded)
-                    return _sst == 0 ? 0 : 1 - _sse * (_n - 1) / (_sst * (_n - _factors.Count(f => f != 0) - 1));
+                    return _sst == 0 ? 0 : 1 - _sse * (_n - 1) / (_sst * (_n - _factors.Data.Count(f => f != 0) - 1));
                 return 0;
             }
         }
@@ -179,9 +179,19 @@ namespace Euclid.Analytics
         {
             double y = _constant;
             if (_succeeded)
-                for (int i = 0; i < Math.Min(_factors.Length, x.Count); i++)
+                for (int i = 0; i < Math.Min(_factors.Size, x.Count); i++)
                     y += _factors[i] * x[i];
             return y;
+        }
+
+        /// <summary>
+        /// Returns the estimator for the given set of data
+        /// </summary>
+        /// <param name="x">the set of regressors</param>
+        /// <returns>the estimator of the regressed data</returns>
+        public double Predict(Vector x)
+        {
+            return _constant + (_succeeded ? Vector.Scalar(x, _factors) : 0);
         }
         #endregion
     }

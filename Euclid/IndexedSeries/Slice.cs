@@ -26,24 +26,6 @@ namespace Euclid.IndexedSeries
             _data = data.ToArray();
             _labels = labels.Clone;
         }
-
-        /// <summary>Builds a <c>Slice</c></summary>
-        /// <param name="labels">the labels</param>
-        /// <param name="legend">the legend</param>
-        /// <param name="data">the data</param>
-        public Slice(IEnumerable<V> labels, T legend, IEnumerable<U> data)
-        {
-            _data = data.ToArray();
-            _labels = new Map<V, int>(Enumerable.Range(0, labels.Count()).Select(i => new Tuple<V, int>(labels.ElementAt(i), i)));
-            _legend = legend;
-        }
-
-        /// <summary>Builds a <c>Slice</c> from its serialized form</summary>
-        /// <param name="dataFrameNode">the <c>XmlNode</c></param>
-        public Slice(XmlNode dataFrameNode)
-        {
-            FromXml(dataFrameNode);
-        }
         #endregion
 
         #region Accessors
@@ -214,29 +196,6 @@ namespace Euclid.IndexedSeries
 
             writer.WriteEndElement();
         }
-
-        /// <summary>De-serializes the slice from a Xml node</summary>
-        /// <param name="node">the <c>XmlNode</c></param>
-        public void FromXml(XmlNode node)
-        {
-            XmlNodeList dataNodes = node.SelectNodes("point");
-            XmlNode legendNode = node.SelectSingleNode("legend");
-
-            _legend = legendNode.Attributes["value"].Value.Parse<T>();
-
-            #region Data
-            _data = new U[dataNodes.Count];
-            _labels = new Map<V, int>();
-            for (int i = 0; i < dataNodes.Count; i++)
-            {
-                V label = dataNodes[i].Attributes["label"].Value.Parse<V>();
-                U value = dataNodes[i].Attributes["value"].Value.Parse<U>();
-                _data[i] = value;
-                _labels.Add(label, i);
-            }
-            #endregion
-
-        }
         #endregion
 
         #region ICSVable
@@ -273,6 +232,37 @@ namespace Euclid.IndexedSeries
         }
         #endregion
 
+        #region Creators
+        /// <summary>De-serializes the slice from a Xml node</summary>
+        /// <param name="node">the <c>XmlNode</c></param>
+        public static Slice<T, U, V> Create(XmlNode node)
+        {
+            XmlNodeList dataNodes = node.SelectNodes("point");
+            XmlNode legendNode = node.SelectSingleNode("legend");
+
+            T legend = legendNode.Attributes["value"].Value.Parse<T>();
+
+            #region Data
+            U[] data = new U[dataNodes.Count];
+            Map<V, int> labels = new Map<V, int>();
+            for (int i = 0; i < dataNodes.Count; i++)
+            {
+                V label = dataNodes[i].Attributes["label"].Value.Parse<V>();
+                U value = dataNodes[i].Attributes["value"].Value.Parse<U>();
+                data[i] = value;
+                labels.Add(label, i);
+            }
+            #endregion
+
+            return new Slice<T, U, V>(labels, legend, data);
+
+        }
+
+        public static Slice<T, U, V> Create(IEnumerable<V> labels, T legend, IEnumerable<U> data)
+        {
+            return new Slice<T, U, V>(new Map<V, int>(Enumerable.Range(0, labels.Count()).Select(i => new Tuple<V, int>(labels.ElementAt(i), i))), legend, data);
+        }
+        #endregion
         //TODO : operators
     }
 }

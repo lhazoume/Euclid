@@ -4,7 +4,7 @@ using System;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Exponential power distribution class</summary>
-    public class ExponentialPowerDistribution : ContinousDistribution
+    public class ExponentialPowerDistribution : ContinuousDistribution
     {
         #region Declarations
         private readonly double _mu, _alpha,

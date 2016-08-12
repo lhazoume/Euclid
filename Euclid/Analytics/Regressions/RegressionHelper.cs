@@ -21,7 +21,7 @@ namespace Euclid.Analytics.Regressions
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(string.Format("{0}={1}", series.Label.ToString(), string.Format(format, linearModel.Constant)));
-            for (int i = 0; i < linearModel.Factors.Length; i++)
+            for (int i = 0; i < linearModel.Factors.Size; i++)
                 sb.AppendFormat(string.Format("{0}*{1}", string.Format(format, linearModel.Factors[i]), dataFrame.GetLabel(i).ToString()));
             sb.Append(Environment.NewLine);
             sb.Append(string.Format("R²={0} Adj={1}", linearModel.R2, linearModel.AdjustedR2));

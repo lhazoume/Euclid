@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     ///¨Pareto distribution class
     /// </summary>
-    public class ParetoDistribution : ContinousDistribution
+    public class ParetoDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _xm, _alpha;

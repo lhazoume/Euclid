@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Exponential distribution class
     /// </summary>
-    public class ExponentialDistribution : ContinousDistribution
+    public class ExponentialDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _lambda, _beta;
