@@ -1,0 +1,9 @@
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\EuclidTests.dll
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\EuclidTests.pdb
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\Euclid.dll
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\Euclid.pdb
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\fr\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\obj\Release\EuclidTests.csprojResolveAssemblyReference.cache
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\obj\Release\EuclidTests.dll
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\obj\Release\EuclidTests.pdb

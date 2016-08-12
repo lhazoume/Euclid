@@ -246,7 +246,7 @@ namespace Euclid.Solvers
             _evaluations = 0;
             if (_function == null) throw new NullReferenceException("function should not be null");
             _increments = Vector.Create(_initialGuess.Size, Descents.STEP_EPSILON);
-
+            _descentDirections.Clear();
             _convergence.Clear();
 
             _result = _initialGuess.Clone;

@@ -101,6 +101,13 @@
             <param name="x">the set of regressors</param>
             <returns>the estimator of the regressed data</returns>
         </member>
+        <member name="M:Euclid.Analytics.LinearModel.Predict(Euclid.Vector)">
+            <summary>
+            Returns the estimator for the given set of data
+            </summary>
+            <param name="x">the set of regressors</param>
+            <returns>the estimator of the regressed data</returns>
+        </member>
         <member name="T:Euclid.Analytics.IPredictor`2">
             <summary>
             Interface for predictors
@@ -112,6 +119,15 @@
             <summary>Prediction method</summary>
             <param name="x">the predictors</param>
             <returns>the prediction</returns>
+        </member>
+        <member name="T:Euclid.Analytics.NeuralNetworks.FeedForward.Layer">
+            <summary>A Layer class for feed forward perceptrons</summary>
+        </member>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Clone">
+            <summary>Gets a deep copy of the Layer</summary>
+        </member>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Parameters">
+            <summary>Gets the number of parameters of the Layer</summary>
         </member>
         <member name="T:Euclid.Analytics.Regressions.LazyPartialLeastSquaresLinearRegression`2">
             <summary>
@@ -310,6 +326,15 @@
             <summary>Creates a Scaling based on the minimum and maximum</summary>
             <param name="data">the data to scale</param>
             <returns>a <c>Scaling</c> class</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Tests.KolmogorovSmirnovTest.IsSameDistribution(System.Double[],System.Double[],System.Double)">
+            <summary>
+            Performs the Kolmogorov Smirnov test.
+            </summary>
+            <param name="series1">The first sample.</param>
+            <param name="series2">The second sample.</param>
+            <param name="alpha">The confidence level of the test.</param>
+            <returns>True if the series appear to be drawn from the same distribution, false otherwise.</returns>
         </member>
         <member name="T:Euclid.Arithmetics.BinomialCoefficients">
             <summary>
@@ -1135,69 +1160,69 @@
             Gets the distribution's standard deviation
             </summary>
         </member>
-        <member name="T:Euclid.Distributions.Continuous.ContinousDistribution">
+        <member name="T:Euclid.Distributions.Continuous.ContinuousDistribution">
             <summary>Abstract class base for continuous distributions</summary>
         </member>
-        <member name="F:Euclid.Distributions.Continuous.ContinousDistribution._randomSource">
+        <member name="F:Euclid.Distributions.Continuous.ContinuousDistribution._randomSource">
             <summary>The random number generator</summary>
         </member>
-        <member name="F:Euclid.Distributions.Continuous.ContinousDistribution._support">
+        <member name="F:Euclid.Distributions.Continuous.ContinuousDistribution._support">
             <summary>The distribution's support </summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Entropy">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Support">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.Support">
             <summary>Gets the distribution's support</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Mean">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Median">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.Median">
             <summary>Gets the distribution's median</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Mode">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.Mode">
             <summary>Gets the distribution's mode</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Skewness">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.Skewness">
             <summary>Gets the distribution's skewness</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.StandardDeviation">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.StandardDeviation">
             <summary>Gets the distribution's standard deviation</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.Variance">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.Variance">
             <summary>Gets the distribution's variance</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.ContinousDistribution.RandomSource">
+        <member name="P:Euclid.Distributions.Continuous.ContinuousDistribution.RandomSource">
             <summary>
             Gets or sets the random number generator which is used to draw random samples
             </summary>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.CumulativeDistribution(System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.CumulativeDistribution(System.Double)">
             <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
             <param name="x">the location at which to compute the function</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.InverseCumulativeDistribution(System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.InverseCumulativeDistribution(System.Double)">
             <summary>
             Computes the inverse of the cumulative distribution function
             </summary>
             <param name="p">the target probablity</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.ProbabilityDensity(System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.ProbabilityDensity(System.Double)">
             <summary>
             Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
             </summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.ProbabilityLnDensity(System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.ProbabilityLnDensity(System.Double)">
             <summary>Computes the probability density function's logarithm at x</summary>
             <param name="x">the location at which to compute the density</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.ContinousDistribution.Sample(System.Int32)">
+        <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.Sample(System.Int32)">
             <summary>
             Generates a sequence of samples from the normal distribution using th algorithm
             </summary>
@@ -1848,16 +1873,6 @@
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
         </member>
-        <member name="M:Euclid.IndexedSeries.Slice`3.#ctor(System.Collections.Generic.IEnumerable{`2},`0,System.Collections.Generic.IEnumerable{`1})">
-            <summary>Builds a <c>Slice</c></summary>
-            <param name="labels">the labels</param>
-            <param name="legend">the legend</param>
-            <param name="data">the data</param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Slice`3.#ctor(System.Xml.XmlNode)">
-            <summary>Builds a <c>Slice</c> from its serialized form</summary>
-            <param name="dataFrameNode">the <c>XmlNode</c></param>
-        </member>
         <member name="P:Euclid.IndexedSeries.Slice`3.Legends">
             <summary>Gets the legends. Inherited (in this case, the legend is packaged into an array)</summary>
         </member>
@@ -1917,10 +1932,6 @@
             <summary>Serializes the slice to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.Slice`3.FromXml(System.Xml.XmlNode)">
-            <summary>De-serializes the slice from a Xml node</summary>
-            <param name="node">the <c>XmlNode</c></param>
-        </member>
         <member name="M:Euclid.IndexedSeries.Slice`3.ToCSV">
             <summary>Builds a string representation the content of the slice </summary>
             <returns>a <c>String</c></returns>
@@ -1929,25 +1940,21 @@
             <summary>Fills a <c>Slice</c> from a string</summary>
             <param name="text">the <c>String</c> content</param>
         </member>
+        <member name="M:Euclid.IndexedSeries.Slice`3.Create(System.Xml.XmlNode)">
+            <summary>De-serializes the slice from a Xml node</summary>
+            <param name="node">the <c>XmlNode</c></param>
+        </member>
         <member name="T:Euclid.IndexedSeries.Series`3">
             <summary>Class representing a Series of data</summary>
             <typeparam name="T">the legend type</typeparam>
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
         </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(System.Int32)">
-            <summary>Builds an empty <c>Series</c></summary>
-            <param name="rows">the size of the <c>Series</c></param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(`2,System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1})">
+        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(`2,`0[],`1[])">
             <summary>Builds a <c>Series</c></summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>
             <param name="data">the data</param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(System.Xml.XmlNode)">
-            <summary>Builds a <c>Series</c> from its serialized form</summary>
-            <param name="seriesNode">the <c>XmlNode</c></param>
         </member>
         <member name="P:Euclid.IndexedSeries.Series`3.Legends">
             <summary>Returns the legends of the <c>Series</c></summary>
@@ -2021,10 +2028,6 @@
             <summary>Serializes the <c>Series</c> to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.FromXml(System.Xml.XmlNode)">
-            <summary>De-serializes the <c>Series</c> from a Xml node</summary>
-            <param name="node">the <c>XmlNode</c></param>
-        </member>
         <member name="M:Euclid.IndexedSeries.Series`3.ToCSV">
             <summary>Builds a string representing the content of the <c>Series</c></summary>
             <returns>a <c>String</c></returns>
@@ -2081,6 +2084,14 @@
             <param name="amount">the scalar</param>
             <returns>a <c>Series</c></returns>
         </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.Create(System.Int32)">
+            <summary>Builds an empty <c>Series</c></summary>
+            <param name="rows">the size of the <c>Series</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.Create(System.Xml.XmlNode)">
+            <summary>Builds a <c>Series</c> from its serialized form</summary>
+            <param name="node">the <c>XmlNode</c></param>
+        </member>
         <member name="T:Euclid.IndexedSeries.DataFrame`3">
             <summary>
             Class representing a DataFrame of synchronized data
@@ -2089,14 +2100,13 @@
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Int32,System.Int32)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Xml.XmlNode)">
             <summary>
-            Builds an empty <c>DataFrame</c>
+            Builds a <c>DataFrame</c> from its serialized form
             </summary>
-            <param name="rows">the number of rows</param>
-            <param name="columns">the number of columns</param>
+            <param name="dataFrameNode">the <c>XmlNode</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Collections.Generic.IEnumerable{`2},System.Collections.Generic.IEnumerable{`0},`1[0:,0:])">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{`2},System.Collections.Generic.IEnumerable{`0},`1[0:,0:])">
             <summary>
             Builds a <c>DataFrame</c>
             </summary>
@@ -2104,11 +2114,18 @@
             <param name="legends">the legends</param>
             <param name="data">the data</param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Xml.XmlNode)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{Euclid.IndexedSeries.Slice{`0,`1,`2}})">
             <summary>
-            Builds a <c>DataFrame</c> from its serialized form
+            Builds a <c>DataFrame</c>
             </summary>
-            <param name="dataFrameNode">the <c>XmlNode</c></param>
+            <param name="slices">the slices</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Int32,System.Int32)">
+            <summary>
+            Builds an empty <c>DataFrame</c>
+            </summary>
+            <param name="rows">the number of rows</param>
+            <param name="columns">the number of columns</param>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Legends">
             <summary>
@@ -2238,10 +2255,6 @@
         <member name="M:Euclid.IndexedSeries.DataFrame`3.ToXml(System.Xml.XmlWriter)">
             <summary>Serializes the <c>DataFrame</c> to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.FromXml(System.Xml.XmlNode)">
-            <summary>De-serializes the <c>DataFrame</c> from a Xml node</summary>
-            <param name="node">the <c>XmlNode</c></param>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.ToCSV">
             <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
@@ -3200,16 +3213,12 @@
         </member>
         <member name="T:Euclid.Serialization.IXmlable">
             <summary>
-            Interface allowing serialization and de-serialization from/to XML files
+            Interface allowing serialization to an XML files
             </summary>
         </member>
         <member name="M:Euclid.Serialization.IXmlable.ToXml(System.Xml.XmlWriter)">
             <summary>Serializes a class to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
-        </member>
-        <member name="M:Euclid.Serialization.IXmlable.FromXml(System.Xml.XmlNode)">
-            <summary>De-serializes an Xml node to fill the class</summary>
-            <param name="node">the <c>XmlNode</c></param>
         </member>
         <member name="T:Euclid.Serialization.ICSVable">
             <summary>
@@ -3897,7 +3906,7 @@
             <param name="x"></param>
             <returns></returns>
         </member>
-        <member name="M:Euclid.Fn.ibeta(System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Fn.IncompleteBeta(System.Double,System.Double,System.Double)">
             <summary>
             Returns the incomplete beta function evaluated from zero to xx.
             </summary>
@@ -3938,15 +3947,17 @@
             Vector of double class
             </summary>
         </member>
+        <member name="M:Euclid.Vector.Apply(Euclid.Vector,System.Func{System.Double,System.Double})">
+            <summary>Applies a function to transform the data of the vector</summary>
+            <param name="v">the vector to transform</param>
+            <param name="func">the transforming function</param>
+            <returns>a <c>Vector</c></returns>
+        </member>
         <member name="P:Euclid.Vector.Size">
-            <summary>
-            Returns the Vector's size
-            </summary>
+            <summary>Returns the Vector's size</summary>
         </member>
         <member name="P:Euclid.Vector.Data">
-            <summary>
-            Gets the Vector's components
-            </summary>
+            <summary>Gets the Vector's components</summary>
         </member>
         <member name="P:Euclid.Vector.Item(System.Int32)">
             <summary>
@@ -3954,6 +3965,9 @@
             </summary>
             <param name="i">the index</param>
             <returns>a double</returns>
+        </member>
+        <member name="P:Euclid.Vector.Clone">
+            <summary>Returns a deep copy of the Vector</summary>
         </member>
         <member name="P:Euclid.Vector.Norm1">
             <summary>
@@ -4114,9 +4128,6 @@
             <param name="v2">the right hand side</param>
             <returns>a <c>Vector</c> containing the Hadamard product</returns>
         </member>
-        <member name="P:Euclid.Vector.Clone">
-            <summary>Returns a deep copy of the Vector</summary>
-        </member>
         <member name="M:Euclid.Vector.Create(System.Double[])">
             <summary>Creates a Vector from a set of data</summary>
             <param name="data">the data set</param>
@@ -4133,7 +4144,7 @@
             <param name="value">the value for all components</param>
             <returns>a Vector</returns>
         </member>
-        <member name="M:Euclid.Vector.CreateRandom(System.Int32,Euclid.Distributions.Continuous.ContinousDistribution)">
+        <member name="M:Euclid.Vector.CreateRandom(System.Int32,Euclid.Distributions.Continuous.ContinuousDistribution)">
             <summary>Creates a Vector full of random variables  </summary>
             <param name="size">the vector's size</param>
             <param name="distribution">the distribution</param>

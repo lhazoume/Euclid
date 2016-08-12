@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Log Normal distribution class
     /// </summary>
-    public class LogNormalDistribution : ContinousDistribution
+    public class LogNormalDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _mu, _sigma, _sigma2;

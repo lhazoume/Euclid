@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Laplace distribution class
     /// </summary>
-    public class LaplaceDistribution : ContinousDistribution
+    public class LaplaceDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _mu, _b;
