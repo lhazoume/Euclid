@@ -4,6 +4,35 @@
         <name>Euclid</name>
     </assembly>
     <members>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.#ctor(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{Euclid.Analytics.Clustering.VarType},System.Collections.Generic.Dictionary{System.Int32,System.Double[]})">
+            <summary>
+            Generates the clustering context from the header, the types of the variables and 
+            </summary>
+            <param name="headers">Names of the predictors (variables).</param>
+            <param name="types">Types of the predictors (variables)</param>
+            <param name="dictionaries">Dictionaries associated to the enum. Unused so far. May contain weights or counts.</param>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Type(System.Int32)">
+            <summary>
+            Returns the VarType of the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The VarType of the predictor (variable) with the specified index.</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Labels(System.Int32)">
+            <summary>
+            Returns the name (specified by the header) of the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The name of the predictor with the specified index.</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Dictionary(System.Int32)">
+            <summary>
+            Returns the pair associated to the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The Pair associated to the predictor (variable) with the specified index.</returns>
+        </member>
         <member name="T:Euclid.Analytics.LinearModel">
             <summary>
             Stores the metrics of a linear regression and allows prediction
@@ -95,6 +124,13 @@
             <returns>a string that represents the linear model</returns>
         </member>
         <member name="M:Euclid.Analytics.LinearModel.Predict(System.Collections.Generic.IList{System.Double})">
+            <summary>
+            Returns the estimator for the given set of data
+            </summary>
+            <param name="x">the set of regressors</param>
+            <returns>the estimator of the regressed data</returns>
+        </member>
+        <member name="M:Euclid.Analytics.LinearModel.Predict(Euclid.Vector)">
             <summary>
             Returns the estimator for the given set of data
             </summary>
@@ -319,6 +355,15 @@
             <summary>Creates a Scaling based on the minimum and maximum</summary>
             <param name="data">the data to scale</param>
             <returns>a <c>Scaling</c> class</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Tests.KolmogorovSmirnovTest.IsSameDistribution(System.Double[],System.Double[],System.Double)">
+            <summary>
+            Performs the Kolmogorov Smirnov test.
+            </summary>
+            <param name="series1">The first sample.</param>
+            <param name="series2">The second sample.</param>
+            <param name="alpha">The confidence level of the test.</param>
+            <returns>True if the series appear to be drawn from the same distribution, false otherwise.</returns>
         </member>
         <member name="T:Euclid.Arithmetics.BinomialCoefficients">
             <summary>
@@ -2084,14 +2129,13 @@
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Int32,System.Int32)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Xml.XmlNode)">
             <summary>
-            Builds an empty <c>DataFrame</c>
+            Builds a <c>DataFrame</c> from its serialized form
             </summary>
-            <param name="rows">the number of rows</param>
-            <param name="columns">the number of columns</param>
+            <param name="dataFrameNode">the <c>XmlNode</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Collections.Generic.IEnumerable{`2},System.Collections.Generic.IEnumerable{`0},`1[0:,0:])">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{`2},System.Collections.Generic.IEnumerable{`0},`1[0:,0:])">
             <summary>
             Builds a <c>DataFrame</c>
             </summary>
@@ -2099,11 +2143,18 @@
             <param name="legends">the legends</param>
             <param name="data">the data</param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.#ctor(System.Xml.XmlNode)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{Euclid.IndexedSeries.Slice{`0,`1,`2}})">
             <summary>
-            Builds a <c>DataFrame</c> from its serialized form
+            Builds a <c>DataFrame</c>
             </summary>
-            <param name="dataFrameNode">the <c>XmlNode</c></param>
+            <param name="slices">the slices</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Int32,System.Int32)">
+            <summary>
+            Builds an empty <c>DataFrame</c>
+            </summary>
+            <param name="rows">the number of rows</param>
+            <param name="columns">the number of columns</param>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Legends">
             <summary>
@@ -2234,10 +2285,6 @@
             <summary>Serializes the <c>DataFrame</c> to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.FromXml(System.Xml.XmlNode)">
-            <summary>De-serializes the <c>DataFrame</c> from a Xml node</summary>
-            <param name="node">the <c>XmlNode</c></param>
-        </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.ToCSV">
             <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
             <returns>a <c>String</c></returns>
@@ -2245,6 +2292,23 @@
         <member name="M:Euclid.IndexedSeries.DataFrame`3.FromCSV(System.String)">
             <summary>Fills a <c>DataFrame</c> from a string</summary>
             <param name="text">the <c>String</c> content</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ReadCSV(System.String,System.Boolean,System.String,System.String)">
+            <summary>Fills a <c>DataFrame</c> from a CSV file path</summary>
+            <param name="filePath">the path of the csv file</param>
+            <param name="header">File contains an header</param>
+            <param name="format">Format of the date</param>
+            <param name="sep">Field separator</param>
+            <returns>a <c>DataFrame</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ReadCSV(System.String,System.Func{System.String,System.Boolean,System.String,System.String,Euclid.IndexedSeries.DataFrame{`0,`1,`2}},System.Boolean,System.String,System.String)">
+            <summary>Fills a <c>DataFrame</c> from a CSV file path</summary>
+            <param name="filePath">the path of the csv file</param>
+            <param name="reader">Use a particular reader function to build the dataframe</param>
+            <param name="header">File contains an header</param>
+            <param name="format">Format of the date</param>
+            <param name="sep">Field separator</param>
+            <returns>a <c>DataFrame</c></returns>
         </member>
         <member name="T:Euclid.IndexedSeries.IIndexedSeries`3">
             <summary>
@@ -3888,7 +3952,7 @@
             <param name="x"></param>
             <returns></returns>
         </member>
-        <member name="M:Euclid.Fn.ibeta(System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Fn.IncompleteBeta(System.Double,System.Double,System.Double)">
             <summary>
             Returns the incomplete beta function evaluated from zero to xx.
             </summary>

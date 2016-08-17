@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Euclid.IndexedSeries
 {
@@ -533,8 +536,60 @@ namespace Euclid.IndexedSeries
         /// <param name="text">the <c>String</c> content</param>
         public void FromCSV(string text)
         {
-            //TODO
+            #warning have to complete FromCSV
             throw new NotImplementedException();
+        }
+
+        /// <summary>Fills a <c>DataFrame</c> from a CSV file path</summary>
+        /// <param name="filePath">the path of the csv file</param>
+        /// <param name="header">File contains an header</param>
+        /// <param name="format">Format of the date</param>
+        /// <param name="sep">Field separator</param>
+        /// <returns>a <c>DataFrame</c></returns>
+        public static DataFrame<T, U, V> ReadCSV(string filePath, bool header = false, string format = "yyyy-MM-dd HH:mm:ss", string sep = ";")
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException();
+
+            StreamReader reader = new StreamReader(filePath);
+            IEnumerable<V> labels = header ? Regex.Split(reader.ReadLine(), sep).Select(label => label.Parse<V>()) : null;
+
+            int nbRows = 0, nbCols = labels != null ? labels.Count() - 1 : 0;
+            string line = string.Empty;
+            List<T> legends = new List<T>();
+            List<U[]> values = new List<U[]>();
+
+            while(!string.IsNullOrEmpty(line = reader.ReadLine()))
+            {
+                string[] columns = Regex.Split(line, sep);
+                legends.Add(columns[0].Parse<T>());
+                U[] dataArray = new U[columns.Length - 1];
+                for (int i = 1; i < columns.Length; i++)
+                    dataArray[i - 1] = columns[i].Parse<U>();
+                values.Add(dataArray);
+            }
+
+            nbRows = values.Count;
+            U[,] data = new U[nbRows, nbCols];
+            for (int i = 0; i < nbRows; i++)
+                for (int j = 0; j < nbCols; j++)
+                    data[i, j] = values[i][j];
+
+            return new DataFrame<T, U, V>(labels, legends, data);
+        }
+
+        /// <summary>Fills a <c>DataFrame</c> from a CSV file path</summary>
+        /// <param name="filePath">the path of the csv file</param>
+        /// <param name="reader">Use a particular reader function to build the dataframe</param>
+        /// <param name="header">File contains an header</param>
+        /// <param name="format">Format of the date</param>
+        /// <param name="sep">Field separator</param>
+        /// <returns>a <c>DataFrame</c></returns>
+        public static DataFrame<T, U, V> ReadCSV(string filePath, Func<string, bool, string, string, DataFrame<T, U, V>> reader, bool header = false, string format = "yyyy-MM-dd HH:mm:ss", string sep = ";")
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException();
+            return reader(filePath, header, format, sep);
         }
         #endregion
 

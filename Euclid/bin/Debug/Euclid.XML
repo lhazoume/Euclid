@@ -4,6 +4,35 @@
         <name>Euclid</name>
     </assembly>
     <members>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.#ctor(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{Euclid.Analytics.Clustering.VarType},System.Collections.Generic.Dictionary{System.Int32,System.Double[]})">
+            <summary>
+            Generates the clustering context from the header, the types of the variables and 
+            </summary>
+            <param name="headers">Names of the predictors (variables).</param>
+            <param name="types">Types of the predictors (variables)</param>
+            <param name="dictionaries">Dictionaries associated to the enum. Unused so far. May contain weights or counts.</param>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Type(System.Int32)">
+            <summary>
+            Returns the VarType of the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The VarType of the predictor (variable) with the specified index.</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Labels(System.Int32)">
+            <summary>
+            Returns the name (specified by the header) of the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The name of the predictor with the specified index.</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Dictionary(System.Int32)">
+            <summary>
+            Returns the pair associated to the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The Pair associated to the predictor (variable) with the specified index.</returns>
+        </member>
         <member name="T:Euclid.Analytics.LinearModel">
             <summary>
             Stores the metrics of a linear regression and allows prediction
@@ -2263,6 +2292,23 @@
         <member name="M:Euclid.IndexedSeries.DataFrame`3.FromCSV(System.String)">
             <summary>Fills a <c>DataFrame</c> from a string</summary>
             <param name="text">the <c>String</c> content</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ReadCSV(System.String,System.Boolean,System.String,System.String)">
+            <summary>Fills a <c>DataFrame</c> from a CSV file path</summary>
+            <param name="filePath">the path of the csv file</param>
+            <param name="header">File contains an header</param>
+            <param name="format">Format of the date</param>
+            <param name="sep">Field separator</param>
+            <returns>a <c>DataFrame</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ReadCSV(System.String,System.Func{System.String,System.Boolean,System.String,System.String,Euclid.IndexedSeries.DataFrame{`0,`1,`2}},System.Boolean,System.String,System.String)">
+            <summary>Fills a <c>DataFrame</c> from a CSV file path</summary>
+            <param name="filePath">the path of the csv file</param>
+            <param name="reader">Use a particular reader function to build the dataframe</param>
+            <param name="header">File contains an header</param>
+            <param name="format">Format of the date</param>
+            <param name="sep">Field separator</param>
+            <returns>a <c>DataFrame</c></returns>
         </member>
         <member name="T:Euclid.IndexedSeries.IIndexedSeries`3">
             <summary>

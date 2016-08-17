@@ -18,9 +18,10 @@ namespace Euclid.IndexedSeries.Tests
         [TestInitialize()]
         public void Initialize()
         {
-            _df = new DataFrame<DateTime, double, string>(
-                new string[] { "A", "B" }, new DateTime[] { new DateTime(2016, 1, 1), new DateTime(2016, 1, 2), new DateTime(2016, 1, 3) }, new double[3, 2]
-                { { 100, 200 }, { 101, 201 }, { 100, 200 } });
+            _df = DataFrame<DateTime, double, string>.Create(
+                new string[] { "A", "B" }, 
+                new DateTime[] { new DateTime(2016, 1, 1), new DateTime(2016, 1, 2), new DateTime(2016, 1, 3) }, 
+                new double[3, 2] { { 100, 200 }, { 101, 201 }, { 100, 200 } });
         }
 
         [TestMethod()]
@@ -148,13 +149,23 @@ namespace Euclid.IndexedSeries.Tests
         public void ToCSVTest()
         {
             string content = _df.ToCSV();
-            File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "dataframe.csc"), content);
+            File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "dataframe.csv"), content);
         }
 
         [TestMethod()]
         public void FromCSVTest()
         {
             Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ReadCSVTest()
+        {
+            string path = "C:\\Users\\Seven\\Desktop\\VSTOXX.csv";
+            int nbExpectedRows = 529052, nbExpectCols = 5;
+            DataFrame<DateTime, double, string> df = DataFrame<DateTime, double, string>.ReadCSV(path, true);
+            Assert.AreEqual(nbExpectedRows, df.Rows);
+            Assert.AreEqual(nbExpectCols, df.Columns);
         }
     }
 }
