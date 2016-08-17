@@ -591,6 +591,16 @@ namespace Euclid
 
         }
 
+        public static double Beta(double x, double y)
+        {
+            return Gamma(x) * Gamma(y) / Gamma(x + y);
+        }
+
+        public static double IncompleteRegularizedBeta(double t, double x, double y)
+        {
+            return IncompleteBeta(x, y, t) / Beta(x, y);
+        }
+
         /// <summary>
         /// Returns the digamma (psi) function of real values (except at 0, -1, -2, ...).
         /// Digamma is the logarithmic derivative of the <see cref="Gamma"/> function.
@@ -829,6 +839,23 @@ namespace Euclid
 
         }
 
+        public static double SupBrownianBridgeCDF(double x)
+        {
+            if (x <= 0) return 0; // the probability that the sup of an absolute value of a brownian bridge is zero is null. 
+            double sum = 0;
+            double numberOfStep = Math.Min(1000, (3 / x));
+            double u = -1, v = 1, c1 = Math.Exp(-2 * x * x), c2 = Math.Exp(-4 * x * x);
+
+            for (int i = 0; i < numberOfStep; i++)
+            {
+                u = (-1) * u * c1 * v;
+                sum += u;
+                v = v * c2;
+
+            }
+
+            return 2 * sum;
+        }
 
         /**
              * Returns the area under the right hand tail (from x to
@@ -850,7 +877,6 @@ namespace Euclid
 
         }
 
-
         /// <summary>
         /// Returns the sum of the first k terms of the Poisson distribution.
         /// </summary>
@@ -864,7 +890,6 @@ namespace Euclid
             return IncompleteUpperGamma((double)(k + 1), x);
         }
 
-
         /// <summary>
         /// Returns the sum of the terms k+1 to infinity of the Poisson distribution.
         /// </summary>
@@ -877,7 +902,6 @@ namespace Euclid
 
             return IncompleteLowerGamma((double)(k + 1), x);
         }
-
 
         /// <summary>
         /// Returns the area under the Gaussian probability density function, integrated from minus infinity to a.
@@ -900,7 +924,6 @@ namespace Euclid
 
             return y;
         }
-
 
         /// <summary>
         /// Returns the complementary error function of the specified number.
@@ -990,7 +1013,6 @@ namespace Euclid
 
             return y;
         }
-
 
         /// <summary>
         /// Returns the error function of the specified number.
@@ -1191,7 +1213,6 @@ namespace Euclid
             return result;
         }
 
-
         /// <summary>
         /// Computes the Gauss-bell function
         /// </summary>
@@ -1341,7 +1362,7 @@ namespace Euclid
         /// <param name="bb"></param>
         /// <param name="xx"></param>
         /// <returns></returns>
-        public static double ibeta(double aa, double bb, double xx)
+        public static double IncompleteBeta(double aa, double bb, double xx)
         {
             double a, b, t, x, xc, w, y;
             bool flag;

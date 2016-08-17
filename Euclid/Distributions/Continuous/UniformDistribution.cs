@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Uniform distribution class
     /// </summary>
-    public class UniformDistribution : ContinousDistribution
+    public class UniformDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _a, _b, _d, _m;

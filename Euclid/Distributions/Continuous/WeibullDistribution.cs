@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Weibull distribution class
     /// </summary>
-    public class WeibullDistribution : ContinousDistribution
+    public class WeibullDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _lambda, _k, _mu, _sigma2, _sigma;

@@ -4,7 +4,7 @@ using System;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Logistic distribution class</summary>
-    public class LogisticDistribution : ContinousDistribution
+    public class LogisticDistribution : ContinuousDistribution
     {
         #region Declarations
         private readonly double _mu, _s;

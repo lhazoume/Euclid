@@ -11,7 +11,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Gamma distribution class
     /// </summary>
-    public class GammaDistribution : ContinousDistribution
+    public class GammaDistribution : ContinuousDistribution
     {
         private double _k, _theta, _cdfFactor, _pdfFactor, _median;
 

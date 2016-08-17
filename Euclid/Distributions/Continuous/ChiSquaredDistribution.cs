@@ -7,7 +7,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Chi squared distribution
     /// </summary>
-    public class ChiSquaredDistribution : ContinousDistribution
+    public class ChiSquaredDistribution : ContinuousDistribution
     {
         #region Declarations
         private int _k;

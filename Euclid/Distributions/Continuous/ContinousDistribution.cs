@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     //TODO : arcsine, Kumaraswamy, log-logistic : and other : watch https://en.wikipedia.org/wiki/Logistic_distribution
 
     /// <summary>Abstract class base for continuous distributions</summary>
-    public abstract class ContinousDistribution : IDistribution
+    public abstract class ContinuousDistribution : IDistribution
     {
         /// <summary>The random number generator</summary>
         protected Random _randomSource;

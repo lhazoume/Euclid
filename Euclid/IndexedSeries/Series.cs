@@ -23,33 +23,16 @@ namespace Euclid.IndexedSeries
         //private Map<T, int> _legends;
         #endregion
 
-        /// <summary>Builds an empty <c>Series</c></summary>
-        /// <param name="rows">the size of the <c>Series</c></param>
-        public Series(int rows)
-        {
-            _label = default(V);
-            _legends = new T[rows];
-            //_legends = new Map<T, int>(Enumerable.Range(0, rows).Select(i => new Tuple<T, int>(default(T), i)));
-            _data = new U[rows];
-        }
-
         /// <summary>Builds a <c>Series</c></summary>
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
-        public Series(V label, IEnumerable<T> legends, IEnumerable<U> data)
+        private Series(V label, T[] legends, U[] data)
         {
-            _data = data.ToArray();
+            _data = Arrays.Clone(data);
             _label = label;
             //_legends = new Map<T, int>(Enumerable.Range(0, legends.Count()).Select(i => new Tuple<T, int>(legends.ElementAt(i), i)));
-            _legends = legends.ToArray();
-        }
-
-        /// <summary>Builds a <c>Series</c> from its serialized form</summary>
-        /// <param name="seriesNode">the <c>XmlNode</c></param>
-        public Series(XmlNode seriesNode)
-        {
-            FromXml(seriesNode);
+            _legends = Arrays.Clone(legends);
         }
 
         #region Accessors
@@ -257,27 +240,6 @@ namespace Euclid.IndexedSeries
             }
             writer.WriteEndElement();
         }
-
-        /// <summary>De-serializes the <c>Series</c> from a Xml node</summary>
-        /// <param name="node">the <c>XmlNode</c></param>
-        public void FromXml(XmlNode node)
-        {
-            _label = node.SelectSingleNode("label").Attributes["value"].Value.Parse<V>();
-            List<T> legends = new List<T>();
-            List<U> data = new List<U>();
-
-            XmlNodeList points = node.SelectNodes("point");
-            foreach (XmlNode pointNode in points)
-            {
-                U value = pointNode.Attributes["value"].Value.Parse<U>();
-                T legend = pointNode.Attributes["legend"].Value.Parse<T>();
-                legends.Add(legend);
-                data.Add(value);
-            }
-
-            _legends = legends.ToArray();
-            _data = data.ToArray();
-        }
         #endregion
 
         #region ICSVable
@@ -415,6 +377,39 @@ namespace Euclid.IndexedSeries
             for (int i = 0; i < ts._data.Length; i++)
                 data[i] = (dynamic)ts._data[i] - amount;
             return new Series<T, U, V>(ts._label, ts._legends, data);
+        }
+        #endregion
+
+        #region Creators
+        /// <summary>Builds an empty <c>Series</c></summary>
+        /// <param name="rows">the size of the <c>Series</c></param>
+        public static Series<T, U, V> Create(int rows)
+        {
+            return new Series<T, U, V>(default(V), new T[rows], new U[rows]);
+        }
+
+        public static Series<T, U, V> Create(V label, IEnumerable<T> legends, IEnumerable<U> data)
+        {
+            return new Series<T, U, V>(label, legends.ToArray(), data.ToArray());
+        }
+        /// <summary>Builds a <c>Series</c> from its serialized form</summary>
+        /// <param name="node">the <c>XmlNode</c></param>
+        public static Series<T, U, V> Create(XmlNode node)
+        {
+            V label = node.SelectSingleNode("label").Attributes["value"].Value.Parse<V>();
+            List<T> legends = new List<T>();
+            List<U> data = new List<U>();
+
+            XmlNodeList points = node.SelectNodes("point");
+            foreach (XmlNode pointNode in points)
+            {
+                U value = pointNode.Attributes["value"].Value.Parse<U>();
+                T legend = pointNode.Attributes["legend"].Value.Parse<T>();
+                legends.Add(legend);
+                data.Add(value);
+            }
+
+            return new Series<T, U, V>(label, legends.ToArray(), data.ToArray());
         }
         #endregion
     }
