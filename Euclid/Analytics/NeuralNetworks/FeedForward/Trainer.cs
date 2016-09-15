@@ -258,7 +258,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         {
             Tuple<Matrix, Vector>[] direction = new Tuple<Matrix, Vector>[gradient.Length];
             for (int i = 0; i < gradient.Length; i++)
-                direction[i] = new Tuple<Matrix, Vector>(Matrix.LinearCombination(-factor, gradient[i].Item1, momentum, previousDirection[i].Item1), Vector.LinearCombination(-factor, gradient[i].Item2, momentum, previousDirection[i].Item2));
+                direction[i] = new Tuple<Matrix, Vector>(Matrix.LinearCombination(-factor, gradient[i].Item1, momentum, previousDirection[i].Item1), Vector.Create(-factor, gradient[i].Item2, momentum, previousDirection[i].Item2));
             return direction;
         }
 

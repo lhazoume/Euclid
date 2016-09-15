@@ -31,7 +31,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="xm">the scale</param>
         /// <param name="alpha">the shape</param>
         public ParetoDistribution(double xm, double alpha)
-            : this(xm, alpha, new Random(DateTime.Now.Millisecond))
+            : this(xm, alpha, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 

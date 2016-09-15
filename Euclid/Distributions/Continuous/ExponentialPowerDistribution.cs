@@ -1,4 +1,5 @@
 ﻿using Euclid.Histograms;
+using Euclid.Solvers;
 using System;
 
 namespace Euclid.Distributions.Continuous
@@ -35,7 +36,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="alpha">the scale</param>
         /// <param name="beta">the shape</param>
         public ExponentialPowerDistribution(double mu, double alpha, double beta)
-            : this(mu, alpha, beta, new Random(DateTime.Now.Millisecond))
+            : this(mu, alpha, beta, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 
@@ -101,10 +102,16 @@ namespace Euclid.Distributions.Continuous
             return 0.5 + Math.Sign(x - _mu) * Fn.IncompleteLowerGamma(_1Beta, Math.Pow(Math.Abs(x - _mu) / _alpha, _beta)) / (2 * Fn.Gamma(_1Beta));
         }
 
-#warning Not implemented
+        /// <summary>
+        /// Computes the inverse of the cumulative distribution function
+        /// </summary>
+        /// <param name="p">the target probablity</param>
+        /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            throw new NotImplementedException();
+            NewtonRaphson solver = new NewtonRaphson(_mu, CumulativeDistribution, 10);
+            solver.Solve(p);
+            return solver.Result;
         }
 
         /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>

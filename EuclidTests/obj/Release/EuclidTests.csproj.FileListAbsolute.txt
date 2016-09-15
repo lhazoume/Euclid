@@ -7,3 +7,5 @@ C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\fr\Microsoft.Visual
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\obj\Release\EuclidTests.csprojResolveAssemblyReference.cache
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\obj\Release\EuclidTests.dll
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\obj\Release\EuclidTests.pdb
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\EuclidTests.dll.CodeAnalysisLog.xml
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidTests\bin\Release\EuclidTests.dll.lastcodeanalysissucceeded

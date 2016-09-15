@@ -967,7 +967,7 @@ namespace Euclid
         /// <returns>a square <c>Matrix</c></returns>
         public static Matrix CreateSquareRandom(int size)
         {
-            Random rnd = new Random(DateTime.Now.Millisecond);
+            Random rnd = new Random(Guid.NewGuid().GetHashCode());
             Matrix result = Matrix.CreateSquare(size);
             for (int i = 0; i < result.Size; i++)
                 result[i] = rnd.NextDouble();
@@ -982,7 +982,7 @@ namespace Euclid
         /// <returns>a rectangular matrix</returns>
         public static Matrix CreateRandom(int rows, int columns)
         {
-            Random rnd = new Random(DateTime.Now.Millisecond);
+            Random rnd = new Random(Guid.NewGuid().GetHashCode());
             Matrix result = Matrix.Create(rows, columns);
             for (int i = 0; i < result.Size; i++)
                 result[i] = rnd.NextDouble();

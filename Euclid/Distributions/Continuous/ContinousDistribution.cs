@@ -59,6 +59,11 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public abstract double CumulativeDistribution(double x);
 
+        public double CumulativeDistributionBetween(double x, double y)
+        {
+            return CumulativeDistribution(x > y ? x : y) - CumulativeDistribution(x > y ? y : x);
+        }
+
         /// <summary>
         /// Computes the inverse of the cumulative distribution function
         /// </summary>

@@ -4,6 +4,35 @@
         <name>Euclid</name>
     </assembly>
     <members>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.#ctor(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{Euclid.Analytics.Clustering.VarType},System.Collections.Generic.Dictionary{System.Int32,System.Double[]})">
+            <summary>
+            Generates the clustering context from the header, the types of the variables and 
+            </summary>
+            <param name="headers">Names of the predictors (variables).</param>
+            <param name="types">Types of the predictors (variables)</param>
+            <param name="dictionaries">Dictionaries associated to the enum. Unused so far. May contain weights or counts.</param>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Type(System.Int32)">
+            <summary>
+            Returns the VarType of the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The VarType of the predictor (variable) with the specified index.</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Labels(System.Int32)">
+            <summary>
+            Returns the name (specified by the header) of the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The name of the predictor with the specified index.</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.Dictionary(System.Int32)">
+            <summary>
+            Returns the pair associated to the variable specified by the index.
+            </summary>
+            <param name="index">Index of the variable.</param>
+            <returns>The Pair associated to the predictor (variable) with the specified index.</returns>
+        </member>
         <member name="T:Euclid.Analytics.LinearModel">
             <summary>
             Stores the metrics of a linear regression and allows prediction
@@ -694,8 +723,71 @@
             <param name="x">the location at which to compute the function</param>
             <returns>a double</returns>
         </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialPowerDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function
+            </summary>
+            <param name="p">the target probablity</param>
+            <returns>a double</returns>
+        </member>
         <member name="M:Euclid.Distributions.Continuous.ExponentialPowerDistribution.ProbabilityDensity(System.Double)">
             <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.FisherDistribution">
+            <summary>
+            Fisher distribution class
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.FisherDistribution.Create(System.Double,System.Double)">
+            <summary>
+            Creates a new Fisher distribution
+            </summary>
+            <param name="d1">the first number of freedom degrees</param>
+            <param name="d2">the second number of freedom degrees</param>
+            <returns>a <c>FisherDistribution</c></returns>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.FisherDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.FisherDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.FisherDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.FisherDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.FisherDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.FisherDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.FisherDistribution.Support">
+            <summary>Gets the distribution's support</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Continuous.FisherDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.FisherDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
+            <param name="x">the location at which to compute the function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.FisherDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function
+            </summary>
+            <param name="p">the target probablity</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.FisherDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
@@ -762,6 +854,25 @@
             </summary>
             <param name="numberOfPoints">the sample's size</param>
             <returns>an array of double</returns>
+        </member>
+        <member name="T:Euclid.Distributions.Continuous.Kernels.IDensityKernel">
+            <summary>
+            Interface for all density kernels
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.Kernels.IDensityKernel.K(System.Double)">
+            <summary>
+            the kernel function
+            </summary>
+            <param name="x"></param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.Kernels.IDensityKernel.IntegralK(System.Double)">
+            <summary>
+            the left hand side integral of the kernel function
+            </summary>
+            <param name="x"></param>
+            <returns>a double</returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.LaplaceDistribution">
             <summary>
@@ -1404,6 +1515,64 @@
             <returns>the inverse cumulative density at p</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.WeibullDistribution.ProbabilityDensity(System.Double)">
+            <summary>
+            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
+            </summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="T:Euclid.Distributions.EmpiricUnivariateDistribution">
+            <summary>
+            Empiric univariate distribution based on kernel functions
+            </summary>
+        </member>
+        <member name="M:Euclid.Distributions.EmpiricUnivariateDistribution.Create(System.Double[],System.Double[],System.Double,Euclid.Distributions.Continuous.Kernels.IDensityKernel)">
+            <summary>
+            Creates a new empiric univariate distribution
+            </summary>
+            <param name="weights">the weights</param>
+            <param name="values">the values</param>
+            <param name="h">the bandwidth</param>
+            <param name="kernel">the kernel function</param>
+            <returns>a <c>EmpiricUnivariateDistribution</c></returns>
+        </member>
+        <member name="P:Euclid.Distributions.EmpiricUnivariateDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.EmpiricUnivariateDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.EmpiricUnivariateDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.EmpiricUnivariateDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.EmpiricUnivariateDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="P:Euclid.Distributions.EmpiricUnivariateDistribution.Support">
+            <summary>Gets the distribution's support</summary>
+        </member>
+        <member name="P:Euclid.Distributions.EmpiricUnivariateDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.EmpiricUnivariateDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="M:Euclid.Distributions.EmpiricUnivariateDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
+            <param name="x">the location at which to compute the function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.EmpiricUnivariateDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>
+            Computes the inverse of the cumulative distribution function
+            </summary>
+            <param name="p">the target probablity</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.EmpiricUnivariateDistribution.ProbabilityDensity(System.Double)">
             <summary>
             Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
             </summary>
@@ -3770,6 +3939,23 @@
             <param name="x"></param>
             <returns></returns>
         </member>
+        <member name="M:Euclid.Fn.Beta(System.Double,System.Double)">
+            <summary>
+            Returns the beta function
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Euclid.Fn.IncompleteRegularizedBeta(System.Double,System.Double,System.Double)">
+            <summary>
+            Return the incomplete regularized beta function
+            </summary>
+            <param name="t">the integral's upper bound</param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
         <member name="M:Euclid.Fn.DiGamma(System.Double)">
             <summary>
             Returns the digamma (psi) function of real values (except at 0, -1, -2, ...).
@@ -4128,8 +4314,23 @@
             <param name="v2">the right hand side</param>
             <returns>a <c>Vector</c> containing the Hadamard product</returns>
         </member>
+        <member name="M:Euclid.Vector.LinearCombination(System.Double,Euclid.Vector,System.Double,Euclid.Vector)">
+            <summary>
+            Returns the Hadamard product
+            </summary>
+            <param name="f1">the left hand side factor</param>
+            <param name="v1">the left hand side vector</param>
+            <param name="f2">the right hand side factor</param>
+            <param name="v2">the right hand side vector</param>
+            <returns>a <c>Vector</c> containing the linear combination of the input</returns>
+        </member>
         <member name="M:Euclid.Vector.Create(System.Double[])">
             <summary>Creates a Vector from a set of data</summary>
+            <param name="data">the data set</param>
+            <returns>a Vector</returns>
+        </member>
+        <member name="M:Euclid.Vector.Create(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Creates a Vector from a list of data</summary>
             <param name="data">the data set</param>
             <returns>a Vector</returns>
         </member>

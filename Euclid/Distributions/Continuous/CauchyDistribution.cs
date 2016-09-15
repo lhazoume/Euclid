@@ -30,7 +30,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="x0">the location</param>
         /// <param name="gamma">the scale</param>
         public CauchyDistribution(double x0, double gamma)
-            : this(x0, gamma, new Random(DateTime.Now.Millisecond))
+            : this(x0, gamma, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 

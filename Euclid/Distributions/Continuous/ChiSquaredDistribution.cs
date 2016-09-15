@@ -29,7 +29,7 @@ namespace Euclid.Distributions.Continuous
         /// </summary>
         /// <param name="k">the number of freedom degrees</param>
         public ChiSquaredDistribution(int k)
-            : this(k, new Random(DateTime.Now.Millisecond))
+            : this(k, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 

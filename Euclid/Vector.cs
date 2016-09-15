@@ -400,7 +400,15 @@ namespace Euclid
             throw new ArgumentException("The Hadamard product of two Vectors can only be performed if they are the same size");
         }
 
-        public static Vector LinearCombination(double f1, Vector v1, double f2, Vector v2)
+        /// <summary>
+        /// Creates a Vector made from the linear combination of two vectors
+        /// </summary>
+        /// <param name="f1">the left hand side factor</param>
+        /// <param name="v1">the left hand side vector</param>
+        /// <param name="f2">the right hand side factor</param>
+        /// <param name="v2">the right hand side vector</param>
+        /// <returns>a <c>Vector</c> containing the linear combination of the input</returns>
+        public static Vector Create(double f1, Vector v1, double f2, Vector v2)
         {
             if (v1.Size != v2.Size) throw new ArgumentException("Vectors must have the same dimensions!");
             Vector r = Vector.Create(v1.Size);
@@ -420,7 +428,9 @@ namespace Euclid
             return new Vector(data);
         }
 
-
+        /// <summary>Creates a Vector from a list of data</summary>
+        /// <param name="data">the data set</param>
+        /// <returns>a Vector</returns>
         public static Vector Create(IEnumerable<double> data)
         {
             return new Vector(data);

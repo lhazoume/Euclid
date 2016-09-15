@@ -35,7 +35,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="lambda">the scale</param>
         /// <param name="k">the shape</param>
         public WeibullDistribution(double lambda, double k)
-            : this(lambda, k, new Random(DateTime.Now.Millisecond))
+            : this(lambda, k, new Random(Guid.NewGuid().GetHashCode()))
         { }
 
         #region Accessors

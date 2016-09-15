@@ -38,7 +38,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="mean">the average</param>
         /// <param name="standardDeviation">the standard deviation</param>
         public NormalDistribution(double mean, double standardDeviation)
-            : this(mean, standardDeviation, new Random(DateTime.Now.Millisecond))
+            : this(mean, standardDeviation, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 

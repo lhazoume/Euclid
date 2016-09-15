@@ -148,7 +148,7 @@ namespace Euclid.Analytics.Clustering
                 v2 = X.Rows - 2 * k;
 
             double F = (eC - e1 - e2) * v2 / (v1 * (e1 + e2));
-            FisherDistribution fd = new FisherDistribution(v1, v2);
+            FisherDistribution fd = FisherDistribution.Create(v1, v2);
             double cd = fd.CumulativeDistribution(F);
             return cd <= 0.95;
         }

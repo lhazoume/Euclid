@@ -591,11 +591,24 @@ namespace Euclid
 
         }
 
+        /// <summary>
+        /// Returns the beta function
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public static double Beta(double x, double y)
         {
             return Gamma(x) * Gamma(y) / Gamma(x + y);
         }
 
+        /// <summary>
+        /// Return the incomplete regularized beta function
+        /// </summary>
+        /// <param name="t">the integral's upper bound</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public static double IncompleteRegularizedBeta(double t, double x, double y)
         {
             return IncompleteBeta(x, y, t) / Beta(x, y);
@@ -781,7 +794,6 @@ namespace Euclid
 
             return ans * ax;
         }
-
 
         /// <summary>
         /// Returns the incomplete gamma function.

@@ -27,7 +27,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="mu">the average</param>
         /// <param name="sigma">the standard deviation</param>
         public LogNormalDistribution(double mu, double sigma)
-            : this(mu, sigma, new Random(DateTime.Now.Millisecond))
+            : this(mu, sigma, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 

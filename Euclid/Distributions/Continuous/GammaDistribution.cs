@@ -39,7 +39,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="k">the shapee</param>
         /// <param name="theta">the scale</param>
         public GammaDistribution(double k, double theta)
-            : this(k, theta, new Random(DateTime.Now.Millisecond))
+            : this(k, theta, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 

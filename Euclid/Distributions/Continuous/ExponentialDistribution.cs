@@ -28,7 +28,7 @@ namespace Euclid.Distributions.Continuous
         /// </summary>
         /// <param name="lambda">the rate</param>
         public ExponentialDistribution(double lambda)
-            : this(lambda, new Random(DateTime.Now.Millisecond))
+            : this(lambda, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 

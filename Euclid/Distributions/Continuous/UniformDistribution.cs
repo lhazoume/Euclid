@@ -33,7 +33,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="a">the support's lower bound</param>
         /// <param name="b">the support's upper bound</param>
         public UniformDistribution(double a, double b)
-            : this(a, b, new Random(DateTime.Now.Millisecond))
+            : this(a, b, new Random(Guid.NewGuid().GetHashCode()))
         { }
 
         #endregion

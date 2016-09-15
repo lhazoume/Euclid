@@ -48,7 +48,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="a">the interval's lower bound</param>
         /// <param name="b">the interval's upper bound</param>
         public TruncatedNormalDistribution(double mu, double sigma, double a, double b)
-            : this(mu, sigma, a, b, new Random(DateTime.Now.Millisecond))
+            : this(mu, sigma, a, b, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 

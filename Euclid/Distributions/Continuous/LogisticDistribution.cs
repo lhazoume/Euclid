@@ -28,7 +28,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="mu">the location</param>
         /// <param name="s">the scale</param>
         public LogisticDistribution(double mu, double s)
-            : this(mu, s, new Random(DateTime.Now.Millisecond))
+            : this(mu, s, new Random(Guid.NewGuid().GetHashCode()))
         { }
 
         #endregion

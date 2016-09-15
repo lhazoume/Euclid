@@ -30,7 +30,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="mu">the location</param>
         /// <param name="b">the scale</param>
         public LaplaceDistribution(double mu, double b)
-            : this(mu, b, new Random(DateTime.Now.Millisecond))
+            : this(mu, b, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 
