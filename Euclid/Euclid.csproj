@@ -78,6 +78,8 @@
     <Compile Include="Distributions\Continuous\Kernels\CosineKernel.cs" />
     <Compile Include="Distributions\Continuous\Kernels\EpanechnikovKernel.cs" />
     <Compile Include="Distributions\Continuous\Kernels\IDensityKernel.cs" />
+    <Compile Include="Distributions\Continuous\Kernels\TriangularKernel.cs" />
+    <Compile Include="Distributions\Continuous\Kernels\UniformKernel.cs" />
     <Compile Include="Distributions\Continuous\LaplaceDistribution.cs" />
     <Compile Include="Distributions\Continuous\LogisticDistribution.cs" />
     <Compile Include="Distributions\Continuous\LogNormalDistribution.cs" />

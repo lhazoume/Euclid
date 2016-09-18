@@ -3,9 +3,9 @@
 namespace Euclid.Distributions.Continuous.Kernels
 {
     /// <summary>
-    /// Epanechnikov kernel
+    /// Triangular kernel
     /// </summary>
-    public class EpanechnikovKernel : IDensityKernel
+    public class TriangularKernel : IDensityKernel
     {
         /// <summary>
         /// the kernel function
@@ -15,7 +15,7 @@ namespace Euclid.Distributions.Continuous.Kernels
         public double K(double x)
         {
             if (Math.Abs(x) >= 1) return 0;
-            return 0.75 * (1 - x * x);
+            return 1 - Math.Abs(x);
         }
 
         /// <summary>
@@ -27,7 +27,8 @@ namespace Euclid.Distributions.Continuous.Kernels
         {
             if (x <= -1) return 0;
             if (x >= 1) return 1;
-            return 0.75 * x * (1 - x * x / 3) + 0.5;
+            if (x < 0) return x + 0.5 * (x * x + 1);
+            return 0.5 + x - 0.5 * x * x;
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Euclid.Distributions.Continuous.Kernels
         /// </summary>
         public double Variance
         {
-            get { return 1.0 / 5.0; }
+            get { return 1.0 / 6.0; }
         }
     }
 }

@@ -11,6 +11,7 @@
         /// <param name="x"></param>
         /// <returns>a double</returns>
         double K(double x);
+
         /// <summary>
         /// the left hand side integral of the kernel function
         /// </summary>
