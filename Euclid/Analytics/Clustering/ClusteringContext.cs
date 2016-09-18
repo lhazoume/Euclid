@@ -51,7 +51,7 @@ namespace Euclid.Analytics.Clustering
             _enumValues = new Dictionary<int, double[]>();
             for (int i = 0; i < n; i++)
             {
-                double[] values = data.GetColumn(i).Data.Distinct().OrderBy(d => d).ToArray();
+                double[] values = data.GetSeriesAt(i).Data.Distinct().OrderBy(d => d).ToArray();
                 if (values.Length > 10)
                     _types[i] = VarType.Continuous;
                 else

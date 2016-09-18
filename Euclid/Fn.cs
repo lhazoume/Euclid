@@ -176,24 +176,25 @@ namespace Euclid
             return Math.Log(x) / 2.30258509299404568401;
         }
 
+        #region Hyperbolic arc functions
+
         /// <summary>
         /// Returns the hyperbolic arc cosine of the specified number.
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static double acosh(double x)
+        public static double Acosh(double x)
         {
             if (x < 1.0) throw new ArithmeticException("range exception");
             return Math.Log(x + Math.Sqrt(x * x - 1));
         }
-
 
         /// <summary>
         /// Returns the hyperbolic arc sine of the specified number.
         /// </summary>
         /// <param name="xx"></param>
         /// <returns></returns>
-        public static double asinh(double xx)
+        public static double Asinh(double xx)
         {
             double x;
             int sign;
@@ -211,13 +212,12 @@ namespace Euclid
             return sign * Math.Log(x + Math.Sqrt(x * x + 1));
         }
 
-
         /// <summary>
         /// Returns the hyperbolic arc tangent of the specified number.
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static double atanh(double x)
+        public static double Atanh(double x)
         {
             if (x > 1.0 || x < -1.0)
                 throw
@@ -225,6 +225,9 @@ namespace Euclid
             return 0.5 * Math.Log((1.0 + x) / (1.0 - x));
         }
 
+        #endregion
+
+        #region Bessel functions
 
         /// <summary>
         /// Returns the Bessel function of order 0 of the specified number.
@@ -261,7 +264,6 @@ namespace Euclid
                     (Math.Cos(xx) * ans1 - z * Math.Sin(xx) * ans2);
             }
         }
-
 
         /// <summary>
         /// Returns the Bessel function of order 1 of the specified number.
@@ -300,7 +302,6 @@ namespace Euclid
                 return ans;
             }
         }
-
 
         /// <summary>
         /// Returns the Bessel function of order n of the specified number.
@@ -365,7 +366,6 @@ namespace Euclid
             return x < 0.0 && n % 2 == 1 ? -ans : ans;
         }
 
-
         /// <summary>
         /// Returns the Bessel function of the second kind, of order 0 of the specified number.
         /// </summary>
@@ -400,7 +400,6 @@ namespace Euclid
             }
         }
 
-
         /// <summary>
         /// Returns the Bessel function of the second kind, of order 1 of the specified number.
         /// </summary>
@@ -434,7 +433,6 @@ namespace Euclid
             }
         }
 
-
         /// <summary>
         /// Returns the Bessel function of the second kind, of order n of the specified number.
         /// </summary>
@@ -460,35 +458,9 @@ namespace Euclid
             return by;
         }
 
+        #endregion
 
-        /// <summary>
-        /// Returns the factorial of the specified number.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static double fac(double x)
-        {
-            double d = Math.Abs(x);
-            if (Math.Floor(d) == d) return (double)Factorial((int)x);
-            else return Gamma(x + 1.0);
-        }
-
-
-        /// <summary>
-        /// Returns the factorial of the specified number.
-        /// </summary>
-        /// <param name="j"></param>
-        /// <returns></returns>
-        public static int Factorial(int j)
-        {
-            int i = j;
-            int d = 1;
-            if (j < 0) i = Math.Abs(j);
-            while (i > 1)
-                d *= i--;
-            return j < 0 ? -d : d;
-        }
-
+        #region Gamma functions
 
         /// <summary>
         /// Returns the gamma function of the specified number.
@@ -592,145 +564,6 @@ namespace Euclid
         }
 
         /// <summary>
-        /// Returns the beta function
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public static double Beta(double x, double y)
-        {
-            return Gamma(x) * Gamma(y) / Gamma(x + y);
-        }
-
-        /// <summary>
-        /// Return the incomplete regularized beta function
-        /// </summary>
-        /// <param name="t">the integral's upper bound</param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public static double IncompleteRegularizedBeta(double t, double x, double y)
-        {
-            return IncompleteBeta(x, y, t) / Beta(x, y);
-        }
-
-        /// <summary>
-        /// Returns the digamma (psi) function of real values (except at 0, -1, -2, ...).
-        /// Digamma is the logarithmic derivative of the <see cref="Gamma"/> function.
-        /// </summary>
-        public static double DiGamma(double x)
-        {
-            double y = 0;
-            double nz = 0.0;
-            bool negative = (x <= 0);
-
-            if (negative)
-            {
-                double q = x;
-                double p = Math.Floor(q);
-                negative = true;
-
-                if (Math.Abs(p - q) < 1E-9)
-                    return double.NaN; // singularity, undefined
-
-                nz = q - p;
-
-                if (nz != 0.5)
-                {
-                    if (nz > 0.5)
-                    {
-                        p = p + 1.0;
-                        nz = q - p;
-                    }
-
-                    nz = Math.PI / Math.Tan(Math.PI * nz);
-                }
-                else
-                    nz = 0.0;
-
-                x = 1.0 - x;
-            }
-
-            if ((x <= 10.0) && (x == Math.Floor(x)))
-            {
-                y = 0.0;
-                int n = (int)Math.Floor(x);
-                for (int i = 1; i <= n - 1; i++)
-                    y = y + 1.0 / i;
-
-                y = y - EulerGamma;
-            }
-            else
-            {
-                double s = x;
-                double w = 0.0;
-
-                while (s < 10.0)
-                {
-                    w = w + 1.0 / s;
-                    s = s + 1.0;
-                }
-
-                if (s < 1.0e17)
-                {
-                    double z = 1.0 / (s * s);
-                    double polv = 8.33333333333333333333e-2;
-                    polv = polv * z - 2.10927960927960927961e-2;
-                    polv = polv * z + 7.57575757575757575758e-3;
-                    polv = polv * z - 4.16666666666666666667e-3;
-                    polv = polv * z + 3.96825396825396825397e-3;
-                    polv = polv * z - 8.33333333333333333333e-3;
-                    polv = polv * z + 8.33333333333333333333e-2;
-                    y = z * polv;
-                }
-                else
-                    y = 0.0;
-
-                y = Math.Log(s) - 0.5 / s - y - w;
-            }
-
-            if (negative) return y - nz;
-
-            return y;
-        }
-
-        /// <summary>
-        /// Return the gamma function computed by Stirling's formula.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        private static double stirf(double x)
-        {
-            double[] STIR = {
-                            7.87311395793093628397E-4,
-                            -2.29549961613378126380E-4,
-                            -2.68132617805781232825E-3,
-                            3.47222221605458667310E-3,
-                            8.33333333333482257126E-2,
-        };
-            double MAXSTIR = 143.01608;
-
-            double w = 1.0 / x;
-            double y = Math.Exp(x);
-
-            w = 1.0 + w * polevl(w, STIR, 4);
-
-            if (x > MAXSTIR)
-            {
-                /* Avoid overflow in Math.Pow() */
-                double v = Math.Pow(x, 0.5 * x - 0.25);
-                y = v * (v / y);
-            }
-            else
-            {
-                y = Math.Pow(x, x - 0.5) / y;
-            }
-            y = SQTPI * y * w;
-            return y;
-        }
-
-
-        /// <summary>
         /// Returns the complemented incomplete gamma function.
         /// </summary>
         /// <param name="a"></param>
@@ -831,11 +664,277 @@ namespace Euclid
 
         }
 
-        /**
-             * Returns the area under the left hand tail (from 0 to x)
-             * of the Chi square probability density function with
-             * v degrees of freedom.
-             **/
+        /// <summary>
+        /// Returns the digamma (psi) function of real values (except at 0, -1, -2, ...).
+        /// Digamma is the logarithmic derivative of the <see cref="Gamma"/> function.
+        /// </summary>
+        public static double DiGamma(double x)
+        {
+            double y = 0;
+            double nz = 0.0;
+            bool negative = (x <= 0);
+
+            if (negative)
+            {
+                double q = x;
+                double p = Math.Floor(q);
+                negative = true;
+
+                if (Math.Abs(p - q) < 1E-9)
+                    return double.NaN; // singularity, undefined
+
+                nz = q - p;
+
+                if (nz != 0.5)
+                {
+                    if (nz > 0.5)
+                    {
+                        p = p + 1.0;
+                        nz = q - p;
+                    }
+
+                    nz = Math.PI / Math.Tan(Math.PI * nz);
+                }
+                else
+                    nz = 0.0;
+
+                x = 1.0 - x;
+            }
+
+            if ((x <= 10.0) && (x == Math.Floor(x)))
+            {
+                y = 0.0;
+                int n = (int)Math.Floor(x);
+                for (int i = 1; i <= n - 1; i++)
+                    y = y + 1.0 / i;
+
+                y = y - EulerGamma;
+            }
+            else
+            {
+                double s = x;
+                double w = 0.0;
+
+                while (s < 10.0)
+                {
+                    w = w + 1.0 / s;
+                    s = s + 1.0;
+                }
+
+                if (s < 1.0e17)
+                {
+                    double z = 1.0 / (s * s);
+                    double polv = 8.33333333333333333333e-2;
+                    polv = polv * z - 2.10927960927960927961e-2;
+                    polv = polv * z + 7.57575757575757575758e-3;
+                    polv = polv * z - 4.16666666666666666667e-3;
+                    polv = polv * z + 3.96825396825396825397e-3;
+                    polv = polv * z - 8.33333333333333333333e-3;
+                    polv = polv * z + 8.33333333333333333333e-2;
+                    y = z * polv;
+                }
+                else
+                    y = 0.0;
+
+                y = Math.Log(s) - 0.5 / s - y - w;
+            }
+
+            if (negative) return y - nz;
+
+            return y;
+        }
+
+        #endregion
+
+        #region Beta functions
+
+        /// <summary>
+        /// Returns the beta function
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static double Beta(double x, double y)
+        {
+            return Gamma(x) * Gamma(y) / Gamma(x + y);
+        }
+
+        /// <summary>
+        /// Return the incomplete regularized beta function
+        /// </summary>
+        /// <param name="t">the integral's upper bound</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static double IncompleteRegularizedBeta(double t, double x, double y)
+        {
+            return IncompleteBeta(x, y, t) / Beta(x, y);
+        }
+
+        /// <summary>
+        /// Returns the incomplete beta function evaluated from zero to T.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static double IncompleteBeta(double x, double y, double t)
+        {
+            double a_, b_, t_, x_, xc, w, y_;
+            bool flag;
+
+            if (x <= 0.0 || y <= 0.0)
+                throw new
+                    ArithmeticException("ibeta: Domain error!");
+
+            if ((t <= 0.0) || (t >= 1.0))
+            {
+                if (t == 0.0) return 0.0;
+                if (t == 1.0) return 1.0;
+                throw new ArithmeticException("ibeta: Domain error!");
+            }
+
+            flag = false;
+            if ((y * t) <= 1.0 && t <= 0.95)
+            {
+                t_ = pseries(x, y, t);
+                return t_;
+            }
+
+            w = 1.0 - t;
+
+            /* Reverse a and b if x is greater than the mean. */
+            if (t > (x / (x + y)))
+            {
+                flag = true;
+                a_ = y;
+                b_ = x;
+                xc = t;
+                x_ = w;
+            }
+            else
+            {
+                a_ = x;
+                b_ = y;
+                xc = w;
+                x_ = t;
+            }
+
+            if (flag && (b_ * x_) <= 1.0 && x_ <= 0.95)
+            {
+                t_ = pseries(a_, b_, x_);
+                if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
+                else t_ = 1.0 - t_;
+                return t_;
+            }
+
+            /* Choose expansion for better convergence. */
+            y_ = x_ * (a_ + b_ - 2.0) - (a_ - 1.0);
+            if (y_ < 0.0)
+                w = incbcf(a_, b_, x_);
+            else
+                w = incbd(a_, b_, x_) / xc;
+
+            /* Multiply w by the factor
+                   a      b   _             _     _
+                  x  (1-x)   | (a+b) / ( a | (a) | (b) ) .   */
+
+            y_ = a_ * Math.Log(x_);
+            t_ = b_ * Math.Log(xc);
+            if ((a_ + b_) < MAXGAM && Math.Abs(y_) < MAXLOG && Math.Abs(t_) < MAXLOG)
+            {
+                t_ = Math.Pow(xc, b_);
+                t_ *= Math.Pow(x_, a_);
+                t_ /= a_;
+                t_ *= w;
+                t_ *= Gamma(a_ + b_) / (Gamma(a_) * Gamma(b_));
+                if (flag)
+                {
+                    if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
+                    else t_ = 1.0 - t_;
+                }
+                return t_;
+            }
+            /* Resort to logarithms.  */
+            y_ += t_ + lgamma(a_ + b_) - lgamma(a_) - lgamma(b_);
+            y_ += Math.Log(w / a_);
+            if (y_ < MINLOG)
+                t_ = 0.0;
+            else
+                t_ = Math.Exp(y_);
+
+            if (flag)
+            {
+                if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
+                else t_ = 1.0 - t_;
+            }
+            return t_;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Returns the factorial of the specified number.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static double fac(double x)
+        {
+            double d = Math.Abs(x);
+            if (Math.Floor(d) == d) return (double)Factorial((int)x);
+            else return Gamma(x + 1.0);
+        }
+
+        /// <summary>
+        /// Returns the factorial of the specified number.
+        /// </summary>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        public static int Factorial(int j)
+        {
+            int i = j;
+            int d = 1;
+            if (j < 0) i = Math.Abs(j);
+            while (i > 1)
+                d *= i--;
+            return j < 0 ? -d : d;
+        }
+
+        /// <summary>
+        /// Return the gamma function computed by Stirling's formula.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        private static double stirf(double x)
+        {
+            double[] STIR = {
+                            7.87311395793093628397E-4,
+                            -2.29549961613378126380E-4,
+                            -2.68132617805781232825E-3,
+                            3.47222221605458667310E-3,
+                            8.33333333333482257126E-2,
+        };
+            double MAXSTIR = 143.01608;
+
+            double w = 1.0 / x;
+            double y = Math.Exp(x);
+
+            w = 1.0 + w * polevl(w, STIR, 4);
+
+            if (x > MAXSTIR)
+            {
+                /* Avoid overflow in Math.Pow() */
+                double v = Math.Pow(x, 0.5 * x - 0.25);
+                y = v * (v / y);
+            }
+            else
+                y = Math.Pow(x, x - 0.5) / y;
+
+            y = SQTPI * y * w;
+            return y;
+        }
+
+        #region Chi Square
 
         /// <summary>
         /// Returns the chi-square function (left hand tail).
@@ -851,6 +950,23 @@ namespace Euclid
 
         }
 
+        /// <summary>
+        /// Returns the chi-square function (right hand tail).
+        /// </summary>
+        /// <param name="df">degrees of freedom</param>
+        /// <param name="x">double value</param>
+        /// <returns></returns>
+        public static double chisqc(double df, double x)
+        {
+            if (x < 0.0 || df < 1.0) return 0.0;
+
+            return IncompleteUpperGamma(df / 2.0, x / 2.0);
+        }
+        #endregion
+
+        /// <summary>Computes the cumulative distribution(CDF) of the sup brownian bridge distribution at x, i.e.P(X ≤ x)</summary>
+        /// <param name="x">the location at which to compute the function</param>
+        /// <returns>a double</returns>
         public static double SupBrownianBridgeCDF(double x)
         {
             if (x <= 0) return 0; // the probability that the sup of an absolute value of a brownian bridge is zero is null. 
@@ -863,30 +979,9 @@ namespace Euclid
                 u = (-1) * u * c1 * v;
                 sum += u;
                 v = v * c2;
-
             }
 
             return 2 * sum;
-        }
-
-        /**
-             * Returns the area under the right hand tail (from x to
-             * infinity) of the Chi square probability density function
-             * with v degrees of freedom:
-             **/
-
-        /// <summary>
-        /// Returns the chi-square function (right hand tail).
-        /// </summary>
-        /// <param name="df">degrees of freedom</param>
-        /// <param name="x">double value</param>
-        /// <returns></returns>
-        public static double chisqc(double df, double x)
-        {
-            if (x < 0.0 || df < 1.0) return 0.0;
-
-            return IncompleteUpperGamma(df / 2.0, x / 2.0);
-
         }
 
         /// <summary>
@@ -1253,7 +1348,6 @@ namespace Euclid
             return ans;
         }
 
-
         /// <summary>
         /// Evaluates polynomial of degree N with assumtion that coef[N] = 1.0
         /// </summary>
@@ -1270,7 +1364,6 @@ namespace Euclid
 
             return ans;
         }
-
 
         /// <summary>
         /// Returns the natural logarithm of gamma function.
@@ -1366,108 +1459,6 @@ namespace Euclid
             return q;
         }
 
-
-        /// <summary>
-        /// Returns the incomplete beta function evaluated from zero to xx.
-        /// </summary>
-        /// <param name="aa"></param>
-        /// <param name="bb"></param>
-        /// <param name="xx"></param>
-        /// <returns></returns>
-        public static double IncompleteBeta(double aa, double bb, double xx)
-        {
-            double a, b, t, x, xc, w, y;
-            bool flag;
-
-            if (aa <= 0.0 || bb <= 0.0)
-                throw new
-                    ArithmeticException("ibeta: Domain error!");
-
-            if ((xx <= 0.0) || (xx >= 1.0))
-            {
-                if (xx == 0.0) return 0.0;
-                if (xx == 1.0) return 1.0;
-                throw new ArithmeticException("ibeta: Domain error!");
-            }
-
-            flag = false;
-            if ((bb * xx) <= 1.0 && xx <= 0.95)
-            {
-                t = pseries(aa, bb, xx);
-                return t;
-            }
-
-            w = 1.0 - xx;
-
-            /* Reverse a and b if x is greater than the mean. */
-            if (xx > (aa / (aa + bb)))
-            {
-                flag = true;
-                a = bb;
-                b = aa;
-                xc = xx;
-                x = w;
-            }
-            else
-            {
-                a = aa;
-                b = bb;
-                xc = w;
-                x = xx;
-            }
-
-            if (flag && (b * x) <= 1.0 && x <= 0.95)
-            {
-                t = pseries(a, b, x);
-                if (t <= MACHEP) t = 1.0 - MACHEP;
-                else t = 1.0 - t;
-                return t;
-            }
-
-            /* Choose expansion for better convergence. */
-            y = x * (a + b - 2.0) - (a - 1.0);
-            if (y < 0.0)
-                w = incbcf(a, b, x);
-            else
-                w = incbd(a, b, x) / xc;
-
-            /* Multiply w by the factor
-                   a      b   _             _     _
-                  x  (1-x)   | (a+b) / ( a | (a) | (b) ) .   */
-
-            y = a * Math.Log(x);
-            t = b * Math.Log(xc);
-            if ((a + b) < MAXGAM && Math.Abs(y) < MAXLOG && Math.Abs(t) < MAXLOG)
-            {
-                t = Math.Pow(xc, b);
-                t *= Math.Pow(x, a);
-                t /= a;
-                t *= w;
-                t *= Gamma(a + b) / (Gamma(a) * Gamma(b));
-                if (flag)
-                {
-                    if (t <= MACHEP) t = 1.0 - MACHEP;
-                    else t = 1.0 - t;
-                }
-                return t;
-            }
-            /* Resort to logarithms.  */
-            y += t + lgamma(a + b) - lgamma(a) - lgamma(b);
-            y += Math.Log(w / a);
-            if (y < MINLOG)
-                t = 0.0;
-            else
-                t = Math.Exp(y);
-
-            if (flag)
-            {
-                if (t <= MACHEP) t = 1.0 - MACHEP;
-                else t = 1.0 - t;
-            }
-            return t;
-        }
-
-
         /// <summary>
         /// Returns the continued fraction expansion #1 for incomplete beta integral.
         /// </summary>
@@ -1557,7 +1548,6 @@ namespace Euclid
 
             return ans;
         }
-
 
         /// <summary>
         /// Returns the continued fraction expansion #2 for incomplete beta integral.
@@ -1650,7 +1640,6 @@ namespace Euclid
 
             return ans;
         }
-
 
         /// <summary>
         /// Returns the power series for incomplete beta integral. Use when b*x is small and x not too close to 1.

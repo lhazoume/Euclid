@@ -29,10 +29,8 @@ namespace Euclid.IndexedSeries
             _legends = legends.ToArray();
         }
 
-        /// <summary>
-        /// Builds a <c>DataFrame</c> from its serialized form
-        /// </summary>
-        /// <param name="dataFrameNode">the <c>XmlNode</c></param>
+        /// <summary>Builds a <c>DataFrame</c> from its serialized form</summary>
+        /// <param name="node">the <c>XmlNode</c></param>
         public static DataFrame<T, U, V> Create(XmlNode node)
         {
 
@@ -106,6 +104,13 @@ namespace Euclid.IndexedSeries
             return new DataFrame<T, U, V>(new V[columns], new T[rows], new U[rows, columns]);
         }
 
+        /// <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
+        /// <param name="text">the <c>String</c> content</param>
+        public static DataFrame<T, U, V> Create(string text)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Accessors
@@ -146,119 +151,6 @@ namespace Euclid.IndexedSeries
         {
             get { return _data; }
         }
-        #endregion
-
-        #region Methods
-        /// <summary>Clones the <c>DataFrame</c></summary>
-        /// <returns>a <c>DataFrame</c></returns>
-        public DataFrame<T, U, V> Clone()
-        {
-            return new DataFrame<T, U, V>(Arrays.Clone(_labels), Arrays.Clone(_legends), Arrays.Clone(_data));
-        }
-
-        /// <summary>Remove the data for a given label</summary>
-        /// <param name="label">the label</param>
-        public void RemoveColumnAt(V label)
-        {
-            int indexToRemove = Array.IndexOf<V>(_labels, label);
-            if (indexToRemove == -1 || _labels.Length == 1) return;
-            U[,] newData = new U[_legends.Length, _data.Length - 1];
-            V[] newLabels = new V[_labels.Length - 1];
-            for (int j = 0; j < _labels.Length; j++)
-            {
-                if (j == indexToRemove) continue;
-                int k = j - (j < indexToRemove ? 0 : 1);
-                newLabels[k] = _labels[j];
-
-                for (int i = 0; i < _legends.Length; i++)
-                    newData[i, k] = _data[i, j];
-            }
-            _labels = newLabels;
-            _data = newData;
-        }
-
-        public Series<T, U, V> TakeSeries(V label)
-        {
-            int indexToRemove = Array.IndexOf(_labels, label);
-            if (indexToRemove == -1 || _labels.Length == 1) return null;
-
-            U[] takenData = new U[_legends.Length];
-            U[,] newData = new U[_legends.Length, _data.Length - 1];
-            V[] newLabels = new V[_labels.Length - 1];
-            for (int j = 0; j < _labels.Length; j++)
-            {
-                if (j == indexToRemove)
-                    for (int i = 0; i < _legends.Length; i++)
-                        takenData[i] = _data[i, j];
-                else
-                {
-                    int k = j - (j < indexToRemove ? 0 : 1);
-                    newLabels[k] = _labels[j];
-                    for (int i = 0; i < _legends.Length; i++)
-                        newData[i, k] = _data[i, j];
-                }
-            }
-            _labels = newLabels;
-            _data = newData;
-
-            return Series<T, U, V>.Create(label, _legends, takenData);
-        }
-
-        /// <summary>Removes the row for a given legend</summary>
-        /// <param name="t">the legend</param>
-        public void RemoveRowAt(T t)
-        {
-            int indexToRemove = Array.IndexOf<T>(_legends, t);
-            if (indexToRemove == -1 || _legends.Length == 1) return;
-            U[,] newData = new U[_legends.Length - 1, _labels.Length];
-            T[] newLegends = new T[_legends.Length - 1];
-            for (int i = 0; i < _legends.Length; i++)
-            {
-                if (i == indexToRemove) continue;
-                int k = i - (i < indexToRemove ? 0 : 1);
-                newLegends[k] = _legends[i];
-
-                for (int j = 0; j < _labels.Length; j++)
-                    newData[k, j] = _data[i, j];
-            }
-            _legends = newLegends;
-            _data = newData;
-        }
-
-        /// <summary>Removes all the rows containing a data-point that fits a predicate</summary>
-        /// <param name="predicate">the predicate</param>
-        public void Remove(Func<T, U, V, bool> predicate)
-        {
-            #region Kept Indices
-            List<int> keptIndices = new List<int>();
-            for (int i = 0; i < _legends.Length; i++)
-            {
-                bool lineShouldBeRemoved = false;
-                for (int j = 0; j < _labels.Length; j++)
-                    if (predicate(_legends[i], _data[i, j], _labels[j]))
-                    {
-                        lineShouldBeRemoved = true;
-                        break;
-                    }
-                if (!lineShouldBeRemoved)
-                    keptIndices.Add(i);
-            }
-            #endregion
-
-            #region Extraction
-            U[,] newData = new U[keptIndices.Count, _labels.Length];
-            T[] newLegends = new T[keptIndices.Count];
-            for (int i = 0; i < keptIndices.Count; i++)
-            {
-                newLegends[i] = _legends[keptIndices[i]];
-
-                for (int j = 0; j < _labels.Length; j++)
-                    newData[i, j] = _data[keptIndices[i], j];
-            }
-            _legends = newLegends;
-            _data = newData;
-            #endregion
-        }
 
         /// <summary>Gets and sets the data for the i-th row and j-th column of the <c>DataFrame</c></summary>
         /// <param name="i">the row index</param>
@@ -293,6 +185,171 @@ namespace Euclid.IndexedSeries
                 _data[i, j] = value;
             }
         }
+        #endregion
+
+        #region Methods
+        /// <summary>Clones the <c>DataFrame</c></summary>
+        /// <returns>a <c>DataFrame</c></returns>
+        public DataFrame<T, U, V> Clone()
+        {
+            return new DataFrame<T, U, V>(Arrays.Clone(_labels), Arrays.Clone(_legends), Arrays.Clone(_data));
+        }
+
+        #region Remove
+
+        /// <summary>Remove the data for a given label</summary>
+        /// <param name="label">the label</param>
+        public bool RemoveColumnAt(V label)
+        {
+            int indexToRemove = Array.IndexOf<V>(_labels, label);
+            if (indexToRemove == -1 || _labels.Length == 1) return false;
+            U[,] newData = new U[_legends.Length, _data.Length - 1];
+            V[] newLabels = new V[_labels.Length - 1];
+            for (int j = 0; j < _labels.Length; j++)
+            {
+                if (j == indexToRemove) continue;
+                int k = j - (j < indexToRemove ? 0 : 1);
+                newLabels[k] = _labels[j];
+
+                for (int i = 0; i < _legends.Length; i++)
+                    newData[i, k] = _data[i, j];
+            }
+            _labels = newLabels;
+            _data = newData;
+            return true;
+        }
+
+        /// <summary>Removes the row for a given legend</summary>
+        /// <param name="t">the legend</param>
+        public bool RemoveRowAt(T t)
+        {
+            int indexToRemove = Array.IndexOf<T>(_legends, t);
+            if (indexToRemove == -1 || _legends.Length == 1) return false;
+            U[,] newData = new U[_legends.Length - 1, _labels.Length];
+            T[] newLegends = new T[_legends.Length - 1];
+            for (int i = 0; i < _legends.Length; i++)
+            {
+                if (i == indexToRemove) continue;
+                int k = i - (i < indexToRemove ? 0 : 1);
+                newLegends[k] = _legends[i];
+
+                for (int j = 0; j < _labels.Length; j++)
+                    newData[k, j] = _data[i, j];
+            }
+            _legends = newLegends;
+            _data = newData;
+            return true;
+        }
+
+        /// <summary>Removes all the rows containing a data-point that fits a predicate</summary>
+        /// <param name="predicate">the predicate</param>
+        public int Remove(Func<T, U, V, bool> predicate)
+        {
+            #region Kept Indices
+            List<int> keptIndices = new List<int>();
+            for (int i = 0; i < _legends.Length; i++)
+            {
+                bool lineShouldBeRemoved = false;
+                for (int j = 0; j < _labels.Length; j++)
+                    if (predicate(_legends[i], _data[i, j], _labels[j]))
+                    {
+                        lineShouldBeRemoved = true;
+                        break;
+                    }
+                if (!lineShouldBeRemoved)
+                    keptIndices.Add(i);
+            }
+            int removed = _legends.Length - keptIndices.Count;
+            #endregion
+
+            #region Extraction
+            U[,] newData = new U[keptIndices.Count, _labels.Length];
+            T[] newLegends = new T[keptIndices.Count];
+            for (int i = 0; i < keptIndices.Count; i++)
+            {
+                newLegends[i] = _legends[keptIndices[i]];
+
+                for (int j = 0; j < _labels.Length; j++)
+                    newData[i, j] = _data[keptIndices[i], j];
+            }
+            _legends = newLegends;
+            _data = newData;
+            #endregion
+
+            return removed;
+        }
+
+        #endregion
+
+        #region Take
+
+        /// <summary>
+        /// Takes a <c>Series</c> from the DataFrame thereby removing it from the DataFrame
+        /// </summary>
+        /// <param name="label">the label of the <c>Series</c> to take</param>
+        /// <returns> a <c>Series</c></returns>
+        public Series<T, U, V> TakeSeries(V label)
+        {
+            int indexToRemove = Array.IndexOf(_labels, label);
+            if (indexToRemove == -1 || _labels.Length == 1) return null;
+
+            U[] takenData = new U[_legends.Length];
+            U[,] newData = new U[_legends.Length, _data.Length - 1];
+            V[] newLabels = new V[_labels.Length - 1];
+            for (int j = 0; j < _labels.Length; j++)
+            {
+                if (j == indexToRemove)
+                    for (int i = 0; i < _legends.Length; i++)
+                        takenData[i] = _data[i, j];
+                else
+                {
+                    int k = j - (j < indexToRemove ? 0 : 1);
+                    newLabels[k] = _labels[j];
+                    for (int i = 0; i < _legends.Length; i++)
+                        newData[i, k] = _data[i, j];
+                }
+            }
+            _labels = newLabels;
+            _data = newData;
+
+            return Series<T, U, V>.Create(label, _legends, takenData);
+        }
+
+        /// <summary>
+        /// Takes a <c>Slice</c> from the DataFrame thereby removing it from the DataFrame
+        /// </summary>
+        /// <param name="legend">the legend of the <c>Slice</c> to take</param>
+        /// <returns> a <c>Slice</c></returns>
+        public Slice<T, U, V> TakeSlice(T legend)
+        {
+            int indexToRemove = Array.IndexOf<T>(_legends, legend);
+            if (indexToRemove == -1 || _legends.Length == 1) return null;
+
+            U[] takenData = new U[_labels.Length];
+            U[,] newData = new U[_legends.Length - 1, _labels.Length];
+            T[] newLegends = new T[_legends.Length - 1];
+
+            for (int i = 0; i < _legends.Length; i++)
+            {
+                if (i == indexToRemove)
+                    for (int j = 0; j < _labels.Length; j++)
+                        takenData[j] = _data[i, j];
+                else
+                {
+                    int k = i - (i < indexToRemove ? 0 : 1);
+                    newLegends[k] = _legends[i];
+                    for (int j = 0; j < _labels.Length; j++)
+                        newData[k, j] = _data[i, j];
+                }
+            }
+            _legends = newLegends;
+            _data = newData;
+            return Slice<T, U, V>.Create(_labels, legend, takenData);
+        }
+        
+        #endregion
+
+        #region Get
 
         /// <summary>
         /// Gets the data-point row of the given legend
@@ -324,11 +381,23 @@ namespace Euclid.IndexedSeries
             return Series<T, U, V>.Create(v, _legends, result);
         }
 
+        /// <summary>Gets the k-th column of the dataframe</summary>
+        /// <param name="k">the target column</param>
+        /// <returns>a <c>Series</c></returns>
+        public Series<T, U, V> GetSeriesAt(int k)
+        {
+            U[] data = new U[_legends.Length];
+            for (int i = 0; i < _legends.Length; i++)
+                data[i] = _data[i, k];
+
+            return Series<T, U, V>.Create(_labels[k], _legends, data);
+        }
+
         /// <summary>
         /// Gets all the data as an array of <c>Slice</c>
         /// </summary>
         /// <returns>an array of <c>Slice</c></returns>
-        public Slice<T, U, V>[] GetRows()
+        public Slice<T, U, V>[] GetSlices()
         {
             Slice<T, U, V>[] result = new Slice<T, U, V>[_legends.Length];
             for (int i = 0; i < _legends.Length; i++)
@@ -346,7 +415,7 @@ namespace Euclid.IndexedSeries
         /// Gets all the data as an array of <c>Series</c>
         /// </summary>
         /// <returns>an array of <c>Series</c></returns>
-        public Series<T, U, V>[] GetColumns()
+        public Series<T, U, V>[] GetSeries()
         {
             Series<T, U, V>[] result = new Series<T, U, V>[_labels.Length];
             for (int j = 0; j < _labels.Length; j++)
@@ -360,17 +429,9 @@ namespace Euclid.IndexedSeries
             return result;
         }
 
-        /// <summary>Gets the i-th column of the dataframe</summary>
-        /// <param name="column">the target column</param>
-        /// <returns>a <c>Series</c></returns>
-        public Series<T, U, V> GetColumn(int column)
-        {
-            U[] data = new U[_legends.Length];
-            for (int i = 0; i < _legends.Length; i++)
-                data[i] = _data[i, column];
+        #endregion
 
-            return Series<T, U, V>.Create(_labels[column], _legends, data);
-        }
+        #region Add
 
         /// <summary>
         /// Adds a column to the <c>DataFrame</c>
@@ -419,6 +480,10 @@ namespace Euclid.IndexedSeries
             _data = newData;
         }
 
+        #endregion
+
+        #region Apply
+
         /// <summary>Applies a function to all the data</summary>
         /// <param name="function">the function</param>
         public void ApplyOnData(Func<U, U> function)
@@ -435,6 +500,10 @@ namespace Euclid.IndexedSeries
             for (int i = 0; i < _legends.Length; i++)
                 _legends[i] = function(_legends[i]);
         }
+
+        #endregion
+
+        #region Access the legends and labels
 
         /// <summary>Gets the i-th legend value</summary>
         /// <param name="index">the index</param>
@@ -453,20 +522,23 @@ namespace Euclid.IndexedSeries
         }
 
         /// <summary>Gets the i-th label's value</summary>
-        /// <param name="i">the index</param>
+        /// <param name="index">the index</param>
         /// <returns>a label</returns>
-        public V GetLabel(int i)
+        public V GetLabel(int index)
         {
-            return _labels[i];
+            return _labels[index];
         }
 
         /// <summary>Sets the i-th label's value</summary>
-        /// <param name="i">the index</param>
+        /// <param name="index">the index</param>
         /// <param name="value">the new value</param>
-        public void SetLabel(int i, V value)
+        public void SetLabel(int index, V value)
         {
-            _labels[i] = value;
+            _labels[index] = value;
         }
+
+        #endregion
+
         #endregion
 
         #region IXmlable

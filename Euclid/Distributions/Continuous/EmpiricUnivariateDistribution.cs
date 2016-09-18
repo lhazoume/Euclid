@@ -1,12 +1,12 @@
-﻿using Euclid.Distributions.Continuous;
-using Euclid.Distributions.Continuous.Kernels;
+﻿using Euclid.Distributions.Continuous.Kernels;
 using Euclid.Histograms;
 using Euclid.Solvers;
 using System;
 using System.Linq;
 
-namespace Euclid.Distributions
+namespace Euclid.Distributions.Continuous
 {
+
     /// <summary>
     /// Empiric univariate distribution based on kernel functions
     /// </summary>

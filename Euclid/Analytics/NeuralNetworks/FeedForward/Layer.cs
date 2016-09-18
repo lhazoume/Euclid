@@ -1,12 +1,11 @@
-﻿using Euclid.Serialization;
+﻿using Euclid.Analytics.NeuralNetworks.ActivationFunctions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
 
 namespace Euclid.Analytics.NeuralNetworks.FeedForward
 {
-    /// <summary>A Layer class for feed forward perceptrons</summary>
+    /// <summary>A Layer class for feed-forward perceptron</summary>
     public class Layer
     {
         #region Declarations
@@ -17,6 +16,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         private readonly IActivationFunction _activation;
         #endregion
 
+        #region Constructors
         private Layer(int layerSize, int inputSize, IActivationFunction function)
         {
             _layerSize = layerSize;
@@ -25,7 +25,15 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             _biases = Vector.Create(_layerSize);
             _activation = function;
         }
+        #endregion
 
+        #region Methods
+
+        #region Process inputs
+
+        /// <summary>Returns the output of a layer for a given input set</summary>
+        /// <param name="input">the input vector</param>
+        /// <returns>a <c>Vector</c></returns>
         public Vector Process(Vector input)
         {
             if (input.Size != _inputSize) throw new ArgumentOutOfRangeException("the inputs' size does not match the layer's characteristics");
@@ -33,6 +41,10 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             _a = Vector.Apply(_z, _activation.Function);
             return _a.Clone;
         }
+
+        /// <summary>Returns the list of the outputs of a layer for a given list of input sets</summary>
+        /// <param name="inputs">the list of input vectors</param>
+        /// <returns>a list of <c>Vector</c></returns>
         public List<Vector> Process(List<Vector> inputs)
         {
             _z = Vector.Create(_layerSize);
@@ -49,41 +61,63 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             }
             return outputs;
         }
+
+        #endregion
+
+        #region Get and set weights and biases
+
+        /// <summary>Increments the weights and biases of the layer</summary>
+        /// <param name="weightIncrements">the values to be added to the weights</param>
+        /// <param name="biasIncrements">the values to be added to the biases</param>
         public void Increment(Matrix weightIncrements, Vector biasIncrements)
         {
             for (int i = 0; i < _weights.Size; i++) _weights[i] += weightIncrements[i];
             for (int i = 0; i < _biases.Size; i++) _biases[i] += biasIncrements[i];
         }
+
+        /// <summary>Sets the weights and biases of the layer</summary>
+        /// <param name="weights">the new values of the weights</param>
+        /// <param name="biases">the new values of the biases</param>
         public void Set(Matrix weights, Vector biases)
         {
             for (int i = 0; i < _weights.Size; i++) _weights[i] = weights[i];
             for (int i = 0; i < _biases.Size; i++) _biases[i] = biases[i];
         }
+
+        /// <summary>Sets the biases of the layer</summary>
+        /// <param name="biases">the new values of the biases</param>
         public void SetBiases(Vector biases)
         {
             for (int i = 0; i < _biases.Size; i++) _biases[i] = biases[i];
         }
+
+        /// <summary>Sets the weights of the layer</summary>
+        /// <param name="weights">the new values of the weights</param>
         public void SetWeights(Matrix weights)
         {
             for (int i = 0; i < _weights.Size; i++) _weights[i] = weights[i];
         }
+
+        /// <summary>Gets the weight of a given neuron for a given input</summary>
+        /// <param name="neuronIndex">the index of the neuron</param>
+        /// <param name="inputIndex">the index of the input</param>
+        /// <returns>a double</returns>
         public double Weight(int neuronIndex, int inputIndex)
         {
             return _weights[neuronIndex, inputIndex];
         }
+
+        /// <summary>Gets the bias of a given neuron</summary>
+        /// <param name="neuronIndex">the index of the neuron</param>
+        /// <returns>a double</returns>
         public double Bias(int neuronIndex)
         {
             return _biases[neuronIndex];
         }
-        public Vector Biases
-        {
-            get { return _biases; }
-        }
-        public Matrix Weights
-        {
-            get { return _weights; }
-        }
 
+        #endregion
+
+        #endregion
 
         #region Accessors
         /// <summary>Gets a deep copy of the Layer</summary>
@@ -104,31 +138,52 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             get { return _layerSize * (_inputSize + 1); }
         }
 
+        /// <summary>Gets the number of neurons in the Layer</summary>
         public int LayerSize
         {
             get { return _layerSize; }
         }
 
+        /// <summary>Gets the input size of the Layer</summary>
         public int InputSize
         {
             get { return _inputSize; }
         }
 
+        /// <summary>Gets the activation function of the Layer</summary>
         public IActivationFunction Function
         {
             get { return _activation; }
         }
 
+        /// <summary>Gets the biases of the layer's neurons</summary>
+        public Vector Biases
+        {
+            get { return _biases; }
+        }
+
+        /// <summary>Gets the weights of the layer's neurons</summary>
+        public Matrix Weights
+        {
+            get { return _weights; }
+        }
+
+        /// <summary>Gets the linear output of the layer before activation</summary>
         public Vector A
         {
             get { return _a; }
         }
+
+        /// <summary>Gets the outputs of the layer's processing</summary>
         public Vector Z
         {
             get { return _z; }
         }
         #endregion
 
+        #region IXmlable
+        /// <summary>Serializes the <c>Layer</c> to a XML </summary>
+        /// <param name="writer">the XMlWriter</param>
         public void ToXml(XmlWriter writer)
         {
             writer.WriteElementString("layerSize", _layerSize.ToString());
@@ -152,8 +207,15 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
                 writer.WriteEndElement();
             }
         }
+        #endregion
 
         #region Creators
+
+        /// <summary>Builds a <c>Layer</c></summary>
+        /// <param name="weights">the weghts of the layer</param>
+        /// <param name="biases">the biases of the layer</param>
+        /// <param name="function">the activation function</param>
+        /// <returns>a <c>Layer</c></returns>
         public static Layer Create(Matrix weights, Vector biases, IActivationFunction function)
         {
             if (weights.Rows != biases.Size) throw new ArgumentException("the matrix and biases' sizes do not match");
@@ -164,11 +226,21 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
 
             return layer;
         }
+
+        /// <summary>Builds an empty <c>Layer</c></summary>
+        /// <param name="layerSize">the number of neurons in the layer</param>
+        /// <param name="inputSize">the number of inputs of the layer</param>
+        /// <param name="function">the activation function</param>
+        /// <returns>a <c>Layer</c></returns>
         public static Layer Create(int layerSize, int inputSize, IActivationFunction function)
         {
             Layer layer = new Layer(layerSize, inputSize, function);
             return layer;
         }
+
+        /// <summary>Builds a <c>Layer</c> from a XML node</summary>
+        /// <param name="node">the node</param>
+        /// <returns>a <c>Layer</c></returns>
         public static Layer Create(XmlNode node)
         {
             int layerSize = int.Parse(node.SelectSingleNode("layerSize").InnerText),

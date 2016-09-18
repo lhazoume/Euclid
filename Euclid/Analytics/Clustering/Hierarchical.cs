@@ -35,7 +35,7 @@ namespace Euclid.Analytics.Clustering
 
         public Hierarchical(DataFrame<T, double, V> data, Series<T, double, V> output)
         {
-            Slice<T, double, V>[] rows = data.GetRows();
+            Slice<T, double, V>[] rows = data.GetSlices();
             for (int i = 0; i < rows.Length; i++)
                 _predictors.Add(Vector.Create(rows[i].Data));
             _predicted = Vector.Create(output.Data);

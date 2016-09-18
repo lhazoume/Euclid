@@ -388,10 +388,16 @@ namespace Euclid.IndexedSeries
             return new Series<T, U, V>(default(V), new T[rows], new U[rows]);
         }
 
+        /// <summary>Builds a <c>Series</c> from generic enumerables of legends and data</summary>
+        /// <param name="label">the label</param>
+        /// <param name="legends">the legends</param>
+        /// <param name="data">the series</param>
+        /// <returns></returns>
         public static Series<T, U, V> Create(V label, IEnumerable<T> legends, IEnumerable<U> data)
         {
             return new Series<T, U, V>(label, legends.ToArray(), data.ToArray());
         }
+        
         /// <summary>Builds a <c>Series</c> from its serialized form</summary>
         /// <param name="node">the <c>XmlNode</c></param>
         public static Series<T, U, V> Create(XmlNode node)

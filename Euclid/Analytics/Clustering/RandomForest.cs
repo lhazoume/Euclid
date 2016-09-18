@@ -27,7 +27,7 @@ namespace Euclid.Analytics.Clustering
         }
         private static Series<T, double, string> PredictedSeries(DataFrame<T, double, string> data, IPredictor<double, double> predictor)
         {
-            return Series<T, double, string>.Create("predicted_Ŷ_true", data.Legends, data.GetRows().Select(s => predictor.Predict(s.Data)));
+            return Series<T, double, string>.Create("predicted_Ŷ_true", data.Legends, data.GetSlices().Select(s => predictor.Predict(s.Data)));
         }
         private static Tuple<DataFrame<T, double, string>[], Series<T, double, string>[]> SplitData(DataFrame<T, double, string> X, Series<T, double, string> Y, Predicate<Vector> predicate)
         {
@@ -36,7 +36,7 @@ namespace Euclid.Analytics.Clustering
             List<double> a1 = new List<double>(),
                 a2 = new List<double>();
 
-            Slice<T, double, string>[] slices = X.GetRows();
+            Slice<T, double, string>[] slices = X.GetSlices();
             for (int i = 0; i < slices.Length; i++)
                 if (predicate(Vector.Create(slices[i].Data)))
                 {
@@ -64,7 +64,7 @@ namespace Euclid.Analytics.Clustering
             int minSize,
             ClusteringContext<T> context)
         {
-            Series<T, double, string> variableSeries = X.GetColumn(varIndex);
+            Series<T, double, string> variableSeries = X.GetSeriesAt(varIndex);
 
             #region Check whether the data are the relevant sizes
             if (X.Rows < 2 * minSize)

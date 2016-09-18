@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Analytics.NeuralNetworks.ActivationFunctions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;

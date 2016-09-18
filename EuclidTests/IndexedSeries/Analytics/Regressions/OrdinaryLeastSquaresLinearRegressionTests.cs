@@ -24,7 +24,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
 
             double[] factors = new double[] { Math.PI, Math.E, Math.Log(2) };
 
-            Series<int, double, string> y = (factors[0] * x.GetColumn(0)) + (factors[1] * x.GetColumn(1)) + (factors[2] * x.GetColumn(2));
+            Series<int, double, string> y = (factors[0] * x.GetSeriesAt(0)) + (factors[1] * x.GetSeriesAt(1)) + (factors[2] * x.GetSeriesAt(2));
             y.Label = "Y";
 
             OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);
@@ -49,7 +49,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
 
             double[] factors = new double[] { Math.PI, Math.E, Math.Log(2) };
 
-            Series<int, double, string> y = (factors[0] * x.GetColumn(0)) + (factors[1] * x.GetColumn(1)) + (factors[2] * x.GetColumn(2));
+            Series<int, double, string> y = (factors[0] * x.GetSeriesAt(0)) + (factors[1] * x.GetSeriesAt(1)) + (factors[2] * x.GetSeriesAt(2));
             y.Label = "Y";
 
             OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);
@@ -81,7 +81,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
 
             double[] factors = new double[] { Math.PI, Math.E, Math.Log(2) };
 
-            Series<int, double, string> y = (factors[0] * x.GetColumn(0)) + (factors[1] * x.GetColumn(1)) + (factors[2] * x.GetColumn(2));
+            Series<int, double, string> y = (factors[0] * x.GetSeriesAt(0)) + (factors[1] * x.GetSeriesAt(1)) + (factors[2] * x.GetSeriesAt(2));
             y.Label = "Y";
 
             OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);

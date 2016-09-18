@@ -59,21 +59,21 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public abstract double CumulativeDistribution(double x);
 
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution between x and y, i.e. P(x ≤ X ≤ y) </summary>
+        /// <param name="x">the lower bound of the interval</param>
+        /// <param name="y">the upper bound of the interval</param>
+        /// <returns>a double</returns>
         public double CumulativeDistributionBetween(double x, double y)
         {
             return CumulativeDistribution(x > y ? x : y) - CumulativeDistribution(x > y ? y : x);
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function</summary>
         /// <param name="p">the target probablity</param>
         /// <returns>a double</returns>
         public abstract double InverseCumulativeDistribution(double p);
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public abstract double ProbabilityDensity(double x);
@@ -87,9 +87,7 @@ namespace Euclid.Distributions.Continuous
         }
         #endregion
 
-        /// <summary>
-        /// Generates a sequence of samples from the normal distribution using th algorithm
-        /// </summary>
+        /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
         public virtual double[] Sample(int size)

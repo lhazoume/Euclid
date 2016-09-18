@@ -25,7 +25,9 @@ namespace Euclid.IndexedSeries
         {
             _data = data.ToArray();
             _labels = labels.Clone;
+            _legend = legend;
         }
+
         #endregion
 
         #region Accessors
@@ -208,28 +210,6 @@ namespace Euclid.IndexedSeries
             lines[1] = _legend.ToString() + CSVHelper.Separator + string.Join(CSVHelper.Separator.ToString(), _data);
             return string.Join(Environment.NewLine, lines);
         }
-
-        /// <summary>Fills a <c>Slice</c> from a string</summary>
-        /// <param name="text">the <c>String</c> content</param>
-        public void FromCSV(string text)
-        {
-            string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            if (lines.Length != 2) return;
-            string[] header = lines[0].Split(new string[] { CSVHelper.Separator }, StringSplitOptions.RemoveEmptyEntries),
-                data = lines[1].Split(new string[] { CSVHelper.Separator }, StringSplitOptions.RemoveEmptyEntries);
-            if ((header.Length != data.Length) || (header.Length <= 1)) return;
-            int count = header.Length - 1;
-
-            _data = new U[count];
-            _labels = new Map<V, int>();
-            _legend = data[0].Parse<T>();
-
-            for (int i = 0; i < count; i++)
-            {
-                _labels.Add(header[1 + i].Parse<V>(), i);
-                _data[i] = data[1 + i].Parse<U>();
-            }
-        }
         #endregion
 
         #region Creators
@@ -258,11 +238,39 @@ namespace Euclid.IndexedSeries
 
         }
 
+        /// <summary>Builds a slice from generic enumerable labels and data</summary>
+        /// <param name="labels">the labels</param>
+        /// <param name="legend">the legend</param>
+        /// <param name="data">the data</param>
+        /// <returns>a <c>Slice</c></returns>
         public static Slice<T, U, V> Create(IEnumerable<V> labels, T legend, IEnumerable<U> data)
         {
             return new Slice<T, U, V>(new Map<V, int>(Enumerable.Range(0, labels.Count()).Select(i => new Tuple<V, int>(labels.ElementAt(i), i))), legend, data);
         }
+
+        /// <summary>Builds a <c>Slice</c> from its CSV string</summary>
+        /// <param name="text">the <c>String</c> content</param>
+        public static Slice<T,U,V> Create(string text)
+        {
+            string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            if (lines.Length != 2) return null;
+            string[] header = lines[0].Split(new string[] { CSVHelper.Separator }, StringSplitOptions.RemoveEmptyEntries),
+                content = lines[1].Split(new string[] { CSVHelper.Separator }, StringSplitOptions.RemoveEmptyEntries);
+            if ((header.Length != content.Length) || (header.Length <= 1)) return null;
+            int count = header.Length - 1;
+
+            U[] data = new U[count];
+            Map<V, int> labels = new Map<V, int>();
+            T legend = content[0].Parse<T>();
+
+            for (int i = 0; i < count; i++)
+            {
+                labels.Add(header[1 + i].Parse<V>(), i);
+                data[i] = content[1 + i].Parse<U>();
+            }
+
+            return new Slice<T, U, V>(labels, legend, data);
+        }
         #endregion
-        //TODO : operators
     }
 }

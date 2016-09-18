@@ -140,19 +140,6 @@ namespace Euclid.Distributions.Continuous
             return Math.Pow(0.5 * x, 0.5 * _k - 1) * Math.Exp(-0.5 * x) / (x * Fn.Gamma(0.5 * _k));
         }
 
-        /// <summary>
-        /// Generates a sequence of samples from the normal distribution using the algorithm
-        /// </summary>
-        /// <param name="numberOfPoints">the sample's size</param>
-        /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints)
-        {
-            double[] result = new double[numberOfPoints];
-            for (int i = 0; i < numberOfPoints; i++)
-                result[i] = InverseCumulativeDistribution(_randomSource.NextDouble());
-            return result;
-        }
-
         #endregion
     }
 }
