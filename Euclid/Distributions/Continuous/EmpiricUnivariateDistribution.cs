@@ -2,6 +2,7 @@
 using Euclid.Histograms;
 using Euclid.Solvers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Euclid.Distributions.Continuous
@@ -20,13 +21,13 @@ namespace Euclid.Distributions.Continuous
         private readonly IDensityKernel _kernel;
         #endregion
 
-        private EmpiricUnivariateDistribution(double[] weights, double[] values, double h, IDensityKernel kernel, Random randomSource)
+        private EmpiricUnivariateDistribution(IList<double> weights, IList<double> values, double h, IDensityKernel kernel, Random randomSource)
         {
             if (weights == null || values == null ||
-                weights.Length == 0 || values.Length == 0 ||
-                weights.Length != values.Length)
+                weights.Count == 0 || values.Count == 0 ||
+                weights.Count != values.Count)
                 throw new ArgumentException("The weights and values are not right");
-            _n = weights.Length;
+            _n = weights.Count;
             _weights = new double[_n];
 
             _values = new double[_n];
@@ -68,7 +69,7 @@ namespace Euclid.Distributions.Continuous
             _buckets[orderedValues.Length + 1, 1] = 1;
             #endregion
 
-            _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
+            _support = new Interval(_values.Min() - _h, _values.Max() + _h);
         }
 
         #region Creators
@@ -80,7 +81,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="h">the bandwidth</param>
         /// <param name="kernel">the kernel function</param>
         /// <returns>a <c>EmpiricUnivariateDistribution</c></returns>
-        public static EmpiricUnivariateDistribution Create(double[] weights, double[] values, double h, IDensityKernel kernel)
+        public static EmpiricUnivariateDistribution Create(IList<double> weights, IList<double> values, double h, IDensityKernel kernel)
         {
             return new EmpiricUnivariateDistribution(weights, values, h, kernel, new Random(Guid.NewGuid().GetHashCode()));
         }

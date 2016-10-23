@@ -21,8 +21,9 @@ namespace Euclid.Analytics.NeuralNetworks.ActivationFunctions
         /// <returns>a double</returns>
         public double Derivative(double x)
         {
-            double e = Math.Exp(-2 * x);
-            return 4 * e / Math.Pow(1 + e, 2);
+            double e = Math.Exp(-2 * x),
+                r = 4 * e / Math.Pow(1 + e, 2);
+            return r;
         }
 
         /// <summary>The maximum value of the activation function</summary>

@@ -658,13 +658,23 @@
             Subsets class
             </summary>
         </member>
-        <member name="M:Euclid.Arithmetics.Subsets.SubSets``1(System.Collections.Generic.List{``0})">
+        <member name="M:Euclid.Arithmetics.Subsets.AllSubsets``1(System.Collections.Generic.List{``0})">
             <summary>
-            Returns all possibles subsets of a List
+            Returns all possible subsets from a List
             </summary>
             <typeparam name="T">the template type</typeparam>
             <param name="data">the original data</param>
             <returns>the List of subsets</returns>
+        </member>
+        <member name="M:Euclid.Arithmetics.Subsets.SubsetsOfSize``1(System.Collections.Generic.List{``0},System.Int32,System.Int32)">
+            <summary>
+            Returns all possible subsets of a given size from a list
+            </summary>
+            <typeparam name="T">the template type</typeparam>
+            <param name="data">the original data</param>
+            <param name="subsetSize">the subset size</param>
+            <param name="startingIndex">the starting index</param>
+            <returns>the list of subsets</returns>
         </member>
         <member name="T:Euclid.Complex">
             <summary>
@@ -952,7 +962,7 @@
             Empiric univariate distribution based on kernel functions
             </summary>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.EmpiricUnivariateDistribution.Create(System.Double[],System.Double[],System.Double,Euclid.Distributions.Continuous.Kernels.IDensityKernel)">
+        <member name="M:Euclid.Distributions.Continuous.EmpiricUnivariateDistribution.Create(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},System.Double,Euclid.Distributions.Continuous.Kernels.IDensityKernel)">
             <summary>
             Creates a new empiric univariate distribution
             </summary>
@@ -3808,6 +3818,13 @@
         <member name="M:Euclid.Serialization.ICSVable.ToCSV">
             <summary>Builds a string representation of the content of the class </summary>
             <returns>a <c>String</c></returns>
+        </member>
+        <member name="M:Euclid.Serialization.XmlHelper.SaveXml(Euclid.Serialization.IXmlable,System.String)">
+            <summary>
+            Saves the class' XML representation
+            </summary>
+            <param name="xmlable">the IXmlable class</param>
+            <param name="filePath">the target file path</param>
         </member>
         <member name="T:Euclid.Solvers.Descents">
             <summary>

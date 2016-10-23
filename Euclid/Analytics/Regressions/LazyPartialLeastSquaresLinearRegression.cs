@@ -143,7 +143,7 @@ namespace Euclid.Analytics.Regressions
             List<int> indices = new List<int>();
             for (int i = 0; i < p; i++)
                 indices.Add(i);
-            IEnumerable<IEnumerable<int>> subsets = Subsets.SubSets(indices);
+            IEnumerable<IEnumerable<int>> subsets = Subsets.AllSubsets(indices);
             List<double> adjR2 = new List<double>();
             for (int i = 0; i < subsets.Count(); i++)
             {

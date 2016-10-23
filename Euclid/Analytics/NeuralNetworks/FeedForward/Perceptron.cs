@@ -1,4 +1,5 @@
 ﻿using Euclid.Analytics.NeuralNetworks.ActivationFunctions;
+using Euclid.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Xml;
 
 namespace Euclid.Analytics.NeuralNetworks.FeedForward
 {
-    public class Perceptron
+    public class Perceptron : IXmlable
     {
         private readonly Layer[] _layers;
 

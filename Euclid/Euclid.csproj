@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Euclid.XML</DocumentationFile>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analytics\Entropy.cs" />
     <Compile Include="Analytics\Clustering\ClusteringContext.cs" />
     <Compile Include="Analytics\Clustering\RandomForest.cs" />
     <Compile Include="Analytics\DecisionTreePredictor.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="Analytics\ErrorFunctions\ManhattanError.cs" />
     <Compile Include="Analytics\ErrorFunctions\SumOfSquares.cs" />
     <Compile Include="Analytics\ErrorFunctions\IErrorFunction.cs" />
+    <Compile Include="Analytics\InterRelations.cs" />
     <Compile Include="Analytics\LinearModel.cs" />
     <Compile Include="Analytics\IPredictor.cs" />
     <Compile Include="Analytics\NeuralNetworks\ActivationFunctions\ActivationFunctionHelper.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="IndexedSeries\Series.cs" />
     <Compile Include="IndexedSeries\DataFrame.cs" />
     <Compile Include="IndexedSeries\IIndexedSeries.cs" />
+    <Compile Include="Serialization\XmlHelper.cs" />
     <Compile Include="Solvers\Descents.cs" />
     <Compile Include="Solvers\GradientDescent.cs" />
     <Compile Include="Solvers\ISingleVariableSolver.cs" />

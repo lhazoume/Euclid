@@ -521,6 +521,12 @@ namespace Euclid.IndexedSeries
             _legends[index] = value;
         }
 
+        public void SetLegends(IEnumerable<T> values)
+        {
+            for (int i = 0; i < values.Count(); i++)
+                _legends[i] = values.ElementAt(i);
+        }
+
         /// <summary>Gets the i-th label's value</summary>
         /// <param name="index">the index</param>
         /// <returns>a label</returns>
@@ -535,6 +541,13 @@ namespace Euclid.IndexedSeries
         public void SetLabel(int index, V value)
         {
             _labels[index] = value;
+        }
+
+        public void SetLabels(IEnumerable<V> values)
+        {
+            for (int i = 0; i < values.Count(); i++)
+                _labels[i] = values.ElementAt(i);
+
         }
 
         #endregion
