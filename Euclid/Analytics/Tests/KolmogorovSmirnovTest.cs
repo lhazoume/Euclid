@@ -46,6 +46,5 @@ namespace Euclid.Analytics.Tests
 
             return  pValue <cap;
         }
-
     }
 }

@@ -4,6 +4,9 @@ using System.Xml;
 
 namespace Euclid.Serialization
 {
+    /// <summary>
+    /// Helper class for IXmlable classes
+    /// </summary>
     public static class XmlHelper
     {
         /// <summary>

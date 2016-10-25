@@ -8,7 +8,7 @@ namespace Euclid.Helpers.Tests
     public class ArraysTests
     {
         [TestMethod()]
-        public void CloneTest()
+        public void Clone1DArrayTest()
         {
             double[] data = new double[] { 1.2, 3.4, 5.6, 7.8, 9.0 },
                 clone = data.Clone<double>();
@@ -20,7 +20,7 @@ namespace Euclid.Helpers.Tests
         }
 
         [TestMethod()]
-        public void CloneTest1()
+        public void Clone2DArrayTest()
         {
             double[,] data = new double[,] { { 1.2, 3.4 }, { 5.6, 7.8 } },
                 clone = data.Clone<double>();

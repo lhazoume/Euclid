@@ -521,6 +521,8 @@ namespace Euclid.IndexedSeries
             _legends[index] = value;
         }
 
+        /// <summary>Sets all the legends</summary>
+        /// <param name="values">the new legends</param>
         public void SetLegends(IEnumerable<T> values)
         {
             for (int i = 0; i < values.Count(); i++)
@@ -543,6 +545,8 @@ namespace Euclid.IndexedSeries
             _labels[index] = value;
         }
 
+        /// <summary>Sets all the label's values</summary>
+        /// <param name="values">the new values</param>
         public void SetLabels(IEnumerable<V> values)
         {
             for (int i = 0; i < values.Count(); i++)

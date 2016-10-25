@@ -4,6 +4,40 @@
         <name>Euclid</name>
     </assembly>
     <members>
+        <member name="T:Euclid.Analytics.Entropy">
+            <summary>
+            Helper class for entropy calculations
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.EntropyMetric(System.Int32[])">
+            <summary>
+            Entropy is a measure of unpredictability of information content. Here is used Shannon's entropy expressed in nat (base e)
+            </summary>
+            <param name="occurences">the occurences in each bucket</param>
+            <returns>the entropy in natural bits of information</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.Redundancy(System.Int32[0:,0:])">
+            <summary>
+            Redundancy of information in the pair of variables
+            </summary>
+            <param name="occurences">the occurences in each bucket</param>
+            <returns> 0 when the variables are independent and 1 when they are totally redundant</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.Uncertainty(System.Int32[0:,0:],System.Int32[])">
+            <summary>
+            The uncertainty coefficient measures the validity of a classification
+            </summary>
+            <param name="occurences">the occurences in each cross bucket</param>
+            <param name="normalizerOccurences">the normalizing variable occurence</param>
+            <returns>the fraction of additional information</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.MutualInformation(System.Int32[0:,0:])">
+            <summary>
+            Mutual information measures the amount of information that can be obtained about one random variable by observing another
+            </summary>
+            <param name="occurences">the occurences in each bucket</param>
+            <returns>the mutual information in natural bits of information</returns>
+        </member>
         <member name="M:Euclid.Analytics.Clustering.ClusteringContext`1.#ctor(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{Euclid.Analytics.Clustering.VarType},System.Collections.Generic.Dictionary{System.Int32,System.Double[]})">
             <summary>
             Generates the clustering context from the header, the types of the variables and 
@@ -2122,6 +2156,15 @@
             <param name="text"></param>
             <returns>a T</returns>
         </member>
+        <member name="M:Euclid.Helpers.RandomHelper.NextDouble(System.Random,System.Double,System.Double)">
+            <summary>
+            Generates random numbers in an Interval
+            </summary>
+            <param name="random">the random number generator</param>
+            <param name="min">the lower bound of the interval</param>
+            <param name="max">the upper bound of the interval</param>
+            <returns>a double</returns>
+        </member>
         <member name="T:Euclid.Histograms.Bound">
             <summary>
             Bound class : mainly used in intervals
@@ -2814,6 +2857,10 @@
             <param name="index">the index</param>
             <param name="value">the new legend value</param>
         </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLegends(System.Collections.Generic.IEnumerable{`0})">
+            <summary>Sets all the legends</summary>
+            <param name="values">the new legends</param>
+        </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.GetLabel(System.Int32)">
             <summary>Gets the i-th label's value</summary>
             <param name="index">the index</param>
@@ -2823,6 +2870,10 @@
             <summary>Sets the i-th label's value</summary>
             <param name="index">the index</param>
             <param name="value">the new value</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLabels(System.Collections.Generic.IEnumerable{`2})">
+            <summary>Sets all the label's values</summary>
+            <param name="values">the new values</param>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.ToXml(System.Xml.XmlWriter)">
             <summary>Serializes the <c>DataFrame</c> to Xml </summary>
@@ -2876,6 +2927,11 @@
             Returns the <c>Complex</c> eigen values of the matrix
             </summary>
         </member>
+        <member name="P:Euclid.LinearAlgebra.EigenDecomposition.RealEigenValues">
+            <summary>
+            Returns the real eigen values of the matrix
+            </summary>
+        </member>
         <member name="P:Euclid.LinearAlgebra.EigenDecomposition.DiagonalMatrix">
             <summary>
             Returns the diagonal <c>Matrix</c> which is the diagonalized form of the initial matrix
@@ -2883,7 +2939,17 @@
         </member>
         <member name="P:Euclid.LinearAlgebra.EigenDecomposition.EigenVectors">
             <summary>
-            Returns a <c>Matrix</c> whose columns are the eigen vectors of the matrix
+            Returns an array of all the eigen vectors of the matrix
+            </summary>
+        </member>
+        <member name="P:Euclid.LinearAlgebra.EigenDecomposition.RealEigenVectors">
+            <summary>
+            Returns an array of the eigen vectors attached to the real eigen values of the matrix
+            </summary>
+        </member>
+        <member name="P:Euclid.LinearAlgebra.EigenDecomposition.RealEigenPairs">
+            <summary>
+            Returns an array of pairs of eigen values and eigen vectors
             </summary>
         </member>
         <member name="M:Euclid.LinearAlgebra.EigenDecomposition.Solve">
@@ -3818,6 +3884,11 @@
         <member name="M:Euclid.Serialization.ICSVable.ToCSV">
             <summary>Builds a string representation of the content of the class </summary>
             <returns>a <c>String</c></returns>
+        </member>
+        <member name="T:Euclid.Serialization.XmlHelper">
+            <summary>
+            Helper class for IXmlable classes
+            </summary>
         </member>
         <member name="M:Euclid.Serialization.XmlHelper.SaveXml(Euclid.Serialization.IXmlable,System.String)">
             <summary>

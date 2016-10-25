@@ -12,13 +12,7 @@ namespace Euclid.LinearAlgebra.Tests
     public class EigenDecompositionTests
     {
         [TestMethod()]
-        public void EigenDecompositionTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void SolveTest()
+        public void DiagonalizeSymmetricMatrixTest()
         {
             int n = 10;
             Matrix rand = Matrix.CreateSquareRandom(n).SymmetricPart;
@@ -32,6 +26,24 @@ namespace Euclid.LinearAlgebra.Tests
                 cumulatedNorm += diff.Norm2;
             }
             Assert.AreEqual(cumulatedNorm/(n* n), 0 , 1e-9,"The EigenDecomposition does not behave as expected");
+        }
+
+        [TestMethod()]
+        public void DiagonalizeNonSymmetricMatrixTest()
+        {
+            int n = 10;
+            Matrix rand = Matrix.CreateSquareRandom(n);
+            EigenDecomposition decomp = new EigenDecomposition(rand);
+            double[] eig = decomp.RealEigenValues;
+            Vector[] eigenVectors = decomp.RealEigenVectors;
+
+            double cumulatedNorm = 0;
+            for (int i = 0; i < eig.Length; i++)
+            {
+                Vector diff = (rand * eigenVectors[i]) - (eig[i] * eigenVectors[i]);
+                cumulatedNorm += diff.Norm2;
+            }
+            Assert.AreEqual(cumulatedNorm / (n * n), 0, 1e-9, "The EigenDecomposition does not behave as expected");
         }
     }
 }

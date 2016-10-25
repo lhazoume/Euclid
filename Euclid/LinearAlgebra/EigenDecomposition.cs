@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Euclid.LinearAlgebra
 {
@@ -19,13 +20,11 @@ namespace Euclid.LinearAlgebra
         /// <param name="matrix">the <c>Matrix</c> to decompose</param>
         public EigenDecomposition(Matrix matrix)
         {
-            if (!matrix.IsSymetric)
-                throw new ArgumentException("the argument matrix should be symmetric");
-
             int n = matrix.Columns;
             _V = matrix.Clone;
             _d = new double[n];
             _e = new double[n];
+            Solve();
         }
         #endregion
 
@@ -42,6 +41,22 @@ namespace Euclid.LinearAlgebra
                 for (int i = 0; i < eigenValues.Length; i++)
                     eigenValues[i] = new Complex(_d[i], _e[i]);
                 return eigenValues;
+            }
+        }
+
+        /// <summary>
+        /// Returns the real eigen values of the matrix
+        /// </summary>
+        public double[] RealEigenValues
+        {
+            get
+            {
+                int n = _V.Rows;
+                List<double> eigenValues = new List<double>();
+                for (int i = 0; i < n; i++)
+                    if (_e[i] == 0)
+                        eigenValues.Add(_d[i]);
+                return eigenValues.ToArray();
             }
         }
 
@@ -72,7 +87,7 @@ namespace Euclid.LinearAlgebra
         }
 
         /// <summary>
-        /// Returns a <c>Matrix</c> whose columns are the eigen vectors of the matrix
+        /// Returns an array of all the eigen vectors of the matrix
         /// </summary>
         public Vector[] EigenVectors
         {
@@ -85,13 +100,42 @@ namespace Euclid.LinearAlgebra
             }
         }
 
+        /// <summary>
+        /// Returns an array of the eigen vectors attached to the real eigen values of the matrix
+        /// </summary>
+        public Vector[] RealEigenVectors
+        {
+            get
+            {
+                List<Vector> result = new List<Vector>();
+                for (int i = 0; i < _V.Columns; i++)
+                    if (_e[i] == 0)
+                        result.Add(_V.Column(i));
+                return result.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Returns an array of pairs of eigen values and eigen vectors
+        /// </summary>
+        public Tuple<double, Vector>[] RealEigenPairs
+        {
+            get
+            {
+                List<Tuple<double, Vector>> result = new List<Tuple<double, Vector>>();
+                for (int i = 0; i < _V.Columns; i++)
+                    if (_e[i] == 0)
+                        result.Add(new Tuple<double, Vector>(_d[i], _V.Column(i)));
+                return result.ToArray();
+            }
+        }
         #endregion
 
         #region Methods
         /// <summary>
         /// Tridiagonalizes the matrix and then diagonalize it in the complex space
         /// </summary>
-        public void Solve()
+        private void Solve()
         {
             if (_V.IsSymetric)
             {
@@ -974,6 +1018,10 @@ namespace Euclid.LinearAlgebra
                     _V[i, j] = z;
                 }
         }
+        #endregion
+
+        #region New
+
         #endregion
     }
 }
