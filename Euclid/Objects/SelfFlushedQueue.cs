@@ -36,17 +36,22 @@ namespace Euclid.Objects
                 _ctr++;
                 _queue.Enqueue(t);
                 if (_ctr % _checkFrequency == 0)
-                {
                     if (_queue.Count >= _maximumSize)
                     {
                         _ctr = 0;
-
-                        T[] result = _queue.ToArray();
-                        _queue.Clear();
-                        _flush(result);
+                        ForceFlush();
                     }
-                }
             }
+        }
+
+        /// <summary>
+        /// Flushes the data stored in the queue
+        /// </summary>
+        public void ForceFlush()
+        {
+            T[] result = _queue.ToArray();
+            _queue.Clear();
+            _flush(result);
         }
 
         /// <summary>Delegate definition of the flush method</summary>
