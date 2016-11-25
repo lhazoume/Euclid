@@ -34,9 +34,9 @@ namespace Euclid.IndexedSeries
         public static DataFrame<T, U, V> Create(XmlNode node)
         {
 
-            XmlNodeList labelNodes = node.SelectNodes("timeDataFrame/label"),
-                legendNodes = node.SelectNodes("timeDataFrame/legend"),
-                dataNodes = node.SelectNodes("timeDataFrame/point");
+            XmlNodeList labelNodes = node.SelectNodes("dataFrame/label"),
+                legendNodes = node.SelectNodes("dataFrame/legend"),
+                dataNodes = node.SelectNodes("dataFrame/point");
 
             #region Labels
             V[] labels = new V[labelNodes.Count];
@@ -108,7 +108,36 @@ namespace Euclid.IndexedSeries
         /// <param name="text">the <c>String</c> content</param>
         public static DataFrame<T, U, V> Create(string text)
         {
-            throw new NotImplementedException();
+            string[] lines = text.Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            char[] separator = CSVHelper.Separator.ToCharArray();
+
+            #region Labels
+            string[] labelStrings = lines[0].Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            labelStrings = labelStrings.SubArray(1, labelStrings.Length - 1);
+            int cols = labelStrings.Length;
+
+            V[] labels = new V[cols];
+            for (int j = 0; j < cols; j++)
+                labels[j] = labelStrings[j].Parse<V>();
+            #endregion
+
+            #region Legends and data
+            int rows = lines.Length - 1;
+            T[] legends = new T[rows];
+            U[,] data = new U[rows, cols];
+
+            for (int i = 0; i < rows; i++)
+            {
+                string[] lineSplit = lines[1 + i].Split(separator, StringSplitOptions.RemoveEmptyEntries);
+
+                legends[i] = lineSplit[0].Parse<T>();
+
+                for (int j = 0; j < cols; j++)
+                    data[i, j] = lineSplit[1 + j].Parse<U>();
+            }
+            #endregion
+
+            return new DataFrame<T, U, V>(labels, legends, data);
         }
 
         #endregion
@@ -346,7 +375,7 @@ namespace Euclid.IndexedSeries
             _data = newData;
             return Slice<T, U, V>.Create(_labels, legend, takenData);
         }
-        
+
         #endregion
 
         #region Get
@@ -616,14 +645,6 @@ namespace Euclid.IndexedSeries
                 lines[i + 1] = string.Format("{0}{1}{2}", _legends[i].ToString(), CSVHelper.Separator, string.Join(CSVHelper.Separator.ToString(), row));
             }
             return string.Join(Environment.NewLine, lines);
-        }
-
-        /// <summary>Fills a <c>DataFrame</c> from a string</summary>
-        /// <param name="text">the <c>String</c> content</param>
-        public void FromCSV(string text)
-        {
-            //TODO
-            throw new NotImplementedException();
         }
         #endregion
 
