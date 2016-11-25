@@ -2883,10 +2883,6 @@
             <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
             <returns>a <c>String</c></returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.FromCSV(System.String)">
-            <summary>Fills a <c>DataFrame</c> from a string</summary>
-            <param name="text">the <c>String</c> content</param>
-        </member>
         <member name="T:Euclid.IndexedSeries.IIndexedSeries`3">
             <summary>
             Interface for all series : DataFrame, Slice, Series
@@ -3609,6 +3605,11 @@
         <member name="M:Euclid.Objects.SelfFlushedQueue`1.Add(`0)">
             <summary>Adds an item to the queue</summary>
             <param name="t">the item to add</param>
+        </member>
+        <member name="M:Euclid.Objects.SelfFlushedQueue`1.ForceFlush">
+            <summary>
+            Flushes the data stored in the queue
+            </summary>
         </member>
         <member name="T:Euclid.Objects.SelfFlushedQueue`1.Flush">
             <summary>Delegate definition of the flush method</summary>
