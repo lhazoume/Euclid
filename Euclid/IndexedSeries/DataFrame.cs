@@ -93,6 +93,14 @@ namespace Euclid.IndexedSeries
                     data[i, j] = slices.ElementAt(i)[j];
             return new DataFrame<T, U, V>(slices.ElementAt(0).Labels, slices.Select(s => s.Legend), data);
         }
+        public static DataFrame<T, U, V> Create(IEnumerable<Series<T, U, V>> series)
+        {
+            U[,] data = new U[series.ElementAt(0).Rows, series.Count()];
+            for (int i = 0; i < data.GetLength(0); i++)
+                for (int j = 0; j < data.GetLength(1); j++)
+                    data[i, j] = series.ElementAt(j)[i];
+            return new DataFrame<T, U, V>(series.Select(s=>s.Label), series.ElementAt(0).Legends, data);
+        }
 
         /// <summary>
         /// Builds an empty <c>DataFrame</c>
@@ -308,6 +316,19 @@ namespace Euclid.IndexedSeries
             return removed;
         }
 
+        #endregion
+
+        #region Sub DataFrame
+        public DataFrame<T, U, V> SubDataFrame(Predicate<T> predicate)
+        {
+            Slice<T, U, V>[] slices = GetSlices();
+            return Create(Array.FindAll(slices, sl => predicate(sl.Legend)));
+        }
+        public DataFrame<T, U, V> SubDataFrame(Predicate<V> predicate)
+        {
+            Series<T, U, V>[] slices = GetSeries();
+            return Create(Array.FindAll(slices, sl => predicate(sl.Label)));
+        }
         #endregion
 
         #region Take

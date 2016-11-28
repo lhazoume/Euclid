@@ -100,6 +100,7 @@
     <Compile Include="Helpers\Geodesic\Ellipsoid.cs" />
     <Compile Include="Helpers\Geodesic\Helper.cs" />
     <Compile Include="Helpers\Parser.cs" />
+    <Compile Include="Helpers\Quantilizer.cs" />
     <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Histograms\Bound.cs" />
     <Compile Include="Histograms\Interval.cs" />
