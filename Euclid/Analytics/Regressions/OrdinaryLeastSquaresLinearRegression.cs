@@ -95,8 +95,10 @@ namespace Euclid.Analytics.Regressions
             {
                 if (_withConstant)
                 {
-                    X[i * (p + 1)] = 1;
-                    for (int j = 0; j < p; j++) X[i * (p + 1) + j + 1] = _x[i, j];
+                    X[i, 0] = 1;
+                    for (int j = 0; j < p; j++) X[i, j + 1] = _x[i, j];
+                    /*X[i * (p + 1)] = 1;
+                    for (int j = 0; j < p; j++) X[i * (p + 1) + j + 1] = _x[i, j];*/
                 }
                 else
                     for (int j = 0; j < p; j++) X[i * p + j] = _x[i, j];
@@ -138,9 +140,9 @@ namespace Euclid.Analytics.Regressions
                 #region Correlations
                 for (int i = 0; i < p; i++)
                 {
-                    double xb = X.Column(1 + i).Sum / n,
-                        sX = tXX[1 + i, 1 + i] / n - xb * xb,
-                        cXY = cov[1 + i] / n - yb * xb;
+                    double xb = X.Column((_withConstant ? 1 : 0) + i).Sum / n,
+                        sX = tXX[(_withConstant ? 1 : 0) + i, (_withConstant ? 1 : 0) + i] / n - xb * xb,
+                        cXY = cov[(_withConstant ? 1 : 0) + i] / n - yb * xb;
                     correls[i] = cXY / Math.Sqrt(sX * sst);
                 }
                 #endregion

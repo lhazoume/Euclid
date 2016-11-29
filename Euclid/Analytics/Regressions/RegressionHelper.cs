@@ -24,7 +24,7 @@ namespace Euclid.Analytics.Regressions
             for (int i = 0; i < linearModel.Factors.Size; i++)
                 sb.AppendFormat(string.Format("{0}*{1}", string.Format(format, linearModel.Factors[i]), dataFrame.GetLabel(i).ToString()));
             sb.Append(Environment.NewLine);
-            sb.Append(string.Format("R²={0} Adj={1}", linearModel.R2, linearModel.AdjustedR2));
+            sb.Append(string.Format("R²={0:0.#}% Adj={1:0.#}%", 100 * linearModel.R2, 100 * linearModel.AdjustedR2));
             return sb.ToString();
         }
     }
