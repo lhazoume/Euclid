@@ -4,31 +4,40 @@ using System;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>
-    /// Truncated normal distribution class
+    /// Bounded normal distribution class
     /// </summary>
-    public class TruncatedNormalDistribution : ContinuousDistribution
+    public class BoundedNormalDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _mu,
             _sigma, _sigma2,
-            _a, _alpha, _phiAlpha, _gbAlpha, _Z;
+            _a, _b,
+            _alpha, _beta,
+            _phiAlpha, _phiBeta,
+            _gbAlpha, _gbBeta,
+            _Z;
         #endregion
 
         #region Constructors
-        private TruncatedNormalDistribution(double mu, double sigma, double a, Random randomSource)
+        private BoundedNormalDistribution(double mu, double sigma, double a, double b, Random randomSource)
         {
             if (sigma <= 0) throw new ArgumentException("sigma has to be positive");
+            if (a >= b) throw new ArgumentException("the interval is not defined");
             _sigma = sigma;
             _sigma2 = _sigma * _sigma;
             _mu = mu;
             _a = a;
+            _b = b;
             _alpha = (_a - _mu) / _sigma;
+            _beta = (_b - _mu) / _sigma;
             _phiAlpha = Fn.Phi(_alpha);
+            _phiBeta = Fn.Phi(_beta);
             _gbAlpha = Fn.GaussBell(_alpha);
-            _Z = 1 - _phiAlpha;
+            _gbBeta = Fn.GaussBell(_beta);
+            _Z = _phiBeta - _phiAlpha;
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
-            _support = new Interval(_a, double.PositiveInfinity, true, true);
+            _support = new Interval(_a, _b, true, true);
         }
 
         /// <summary>
@@ -37,8 +46,9 @@ namespace Euclid.Distributions.Continuous
         /// <param name="mu">the location</param>
         /// <param name="sigma">the scale</param>
         /// <param name="a">the interval's lower bound</param>
-        public TruncatedNormalDistribution(double mu, double sigma, double a)
-            : this(mu, sigma, a, new Random(Guid.NewGuid().GetHashCode()))
+        /// <param name="b">the interval's upper bound</param>
+        public BoundedNormalDistribution(double mu, double sigma, double a, double b)
+            : this(mu, sigma, a, b, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 
@@ -46,7 +56,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy
         {
-            get { return Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + (_alpha * _gbAlpha) / (2 * _Z); }
+            get { return Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + (_alpha * _gbAlpha - _beta * _gbBeta) / (2 * _Z); }
         }
 
         /// <summary>Gets the distribution's support</summary>
@@ -58,13 +68,13 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean
         {
-            get { return _mu + (_gbAlpha) * _sigma / _Z; }
+            get { return _mu + (_gbAlpha - _gbBeta) * _sigma / _Z; }
         }
 
         /// <summary>Gets the distribution's median</summary>
         public override double Median
         {
-            get { return _mu + _sigma * Fn.InvPhi(0.5 * (1 + _phiAlpha)); }
+            get { return _mu + _sigma * Fn.InvPhi(0.5 * (_phiBeta + _phiAlpha)); }
         }
 
         /// <summary>Gets the distribution's mode</summary>
@@ -73,6 +83,7 @@ namespace Euclid.Distributions.Continuous
             get
             {
                 if (_mu < _a) return _a;
+                if (_mu > _b) return _b;
                 return _mu;
             }
         }
@@ -85,11 +96,11 @@ namespace Euclid.Distributions.Continuous
         {
             get
             {
-                double k0 = _alpha,
-                    z0 = _gbAlpha / _Z,
-                    dz = -z0, dkz = -k0 * z0,
+                double k0 = _alpha, k1 = _beta,
+                    z0 = _gbAlpha / _Z, z1 = _gbBeta / _Z,
+                    dz = z1 - z0, dkz = k1 * z1 - k0 * z0,
                     V = 1 - dkz - Math.Pow(dz, 2),
-                    s = -Math.Pow(V, -1.5) * (2 * Math.Pow(dz, 3) + (3 * dkz - 1) * dz  - k0 * k0 * z0);
+                    s = -Math.Pow(V, -1.5) * (2 * Math.Pow(dz, 3) + (3 * dkz - 1) * dz + k1 * k1 * z1 - k0 * k0 * z0);
                 return s;
             }
         }
@@ -103,7 +114,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's variance</summary>
         public override double Variance
         {
-            get { return _sigma2 * (1 + (_alpha * _gbAlpha) / _Z - Math.Pow((_gbAlpha) / _Z, 2)); }
+            get { return _sigma2 * (1 + (_alpha * _gbAlpha - _beta * _gbBeta) / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2)); }
         }
         #endregion
 
