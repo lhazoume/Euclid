@@ -374,8 +374,8 @@ namespace Euclid
             if (a.IsSquare && a.Rows == x.Size && a.Columns == y.Size)
             {
                 double result = 0;
-                for (int i = 0; i <= x._size; i++)
-                    for (int j = 0; j <= y._size; j++)
+                for (int i = 0; i < x._size; i++)
+                    for (int j = 0; j < y._size; j++)
                         result += x[i] * a[i, j] * y[j];
                 return result;
             }

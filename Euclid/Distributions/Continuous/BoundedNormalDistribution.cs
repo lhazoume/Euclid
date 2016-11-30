@@ -15,6 +15,7 @@ namespace Euclid.Distributions.Continuous
             _alpha, _beta,
             _phiAlpha, _phiBeta,
             _gbAlpha, _gbBeta,
+            _dGb,
             _Z;
         #endregion
 
@@ -26,14 +27,21 @@ namespace Euclid.Distributions.Continuous
             _sigma = sigma;
             _sigma2 = _sigma * _sigma;
             _mu = mu;
+
             _a = a;
             _b = b;
-            _alpha = (_a - _mu) / _sigma;
-            _beta = (_b - _mu) / _sigma;
-            _phiAlpha = Fn.Phi(_alpha);
-            _phiBeta = Fn.Phi(_beta);
-            _gbAlpha = Fn.GaussBell(_alpha);
-            _gbBeta = Fn.GaussBell(_beta);
+
+            _alpha = double.IsNegativeInfinity(_a) ? double.NegativeInfinity : (_a - _mu) / _sigma;
+            _beta = double.IsPositiveInfinity(_b) ? double.PositiveInfinity : (_b - _mu) / _sigma;
+
+            _phiAlpha = double.IsNegativeInfinity(_a) ? 0 : Fn.Phi(_alpha);
+            _phiBeta = double.IsPositiveInfinity(_b) ? 1 : Fn.Phi(_beta);
+
+            _gbAlpha = double.IsNegativeInfinity(_a) ? 0 : Fn.GaussBell(_alpha);
+            _gbBeta = double.IsPositiveInfinity(_b) ? 0 : Fn.GaussBell(_beta);
+
+            _dGb = (double.IsNegativeInfinity(_a) ? 0 : (_alpha * _gbAlpha)) - (double.IsPositiveInfinity(_b) ? 0 : (_beta * _gbBeta));
+
             _Z = _phiBeta - _phiAlpha;
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
@@ -56,7 +64,10 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy
         {
-            get { return Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + (_alpha * _gbAlpha - _beta * _gbBeta) / (2 * _Z); }
+            get
+            {
+                return Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + _dGb / (2 * _Z);
+            }
         }
 
         /// <summary>Gets the distribution's support</summary>
@@ -82,8 +93,8 @@ namespace Euclid.Distributions.Continuous
         {
             get
             {
-                if (_mu < _a) return _a;
-                if (_mu > _b) return _b;
+                if (!double.IsNegativeInfinity(_a) && _mu < _a) return _a;
+                if (!double.IsPositiveInfinity(_b) && _mu > _b) return _b;
                 return _mu;
             }
         }
@@ -96,8 +107,10 @@ namespace Euclid.Distributions.Continuous
         {
             get
             {
-                double k0 = _alpha, k1 = _beta,
-                    z0 = _gbAlpha / _Z, z1 = _gbBeta / _Z,
+                double k0 = double.IsNegativeInfinity(_a) ? 0 : _alpha,
+                    k1 = double.IsPositiveInfinity(_b) ? 0 : _beta,
+                    z0 = _gbAlpha / _Z,
+                    z1 = _gbBeta / _Z,
                     dz = z1 - z0, dkz = k1 * z1 - k0 * z0,
                     V = 1 - dkz - Math.Pow(dz, 2),
                     s = -Math.Pow(V, -1.5) * (2 * Math.Pow(dz, 3) + (3 * dkz - 1) * dz + k1 * k1 * z1 - k0 * k0 * z0);
@@ -114,7 +127,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's variance</summary>
         public override double Variance
         {
-            get { return _sigma2 * (1 + (_alpha * _gbAlpha - _beta * _gbBeta) / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2)); }
+            get { return _sigma2 * (1 + _dGb / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2)); }
         }
         #endregion
 
@@ -127,7 +140,7 @@ namespace Euclid.Distributions.Continuous
         {
             if (x < _support.LowerBound) return 0;
             else if (x > _support.UpperBound) return 1;
-            return (Fn.Phi((x - _mu) / _sigma) - Fn.Phi(_alpha)) / _Z;
+            return (Fn.Phi((x - _mu) / _sigma) - _phiAlpha) / _Z;
         }
 
         /// <summary>

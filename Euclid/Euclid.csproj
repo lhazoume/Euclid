@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Euclid.XML</DocumentationFile>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -91,7 +91,6 @@
     <Compile Include="Distributions\Continuous\NormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\ExponentialDistribution.cs" />
     <Compile Include="Distributions\Continuous\ContinousDistribution.cs" />
-    <Compile Include="Distributions\Continuous\TruncatedNormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\BoundedNormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\UniformDistribution.cs" />
     <Compile Include="Distributions\Continuous\WeibullDistribution.cs" />

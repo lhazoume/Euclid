@@ -1805,12 +1805,12 @@
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
         </member>
-        <member name="T:Euclid.Distributions.Continuous.TruncatedNormalDistribution">
+        <member name="T:Euclid.Distributions.Continuous.BoundedNormalDistribution">
             <summary>
-            Truncated normal distribution class
+            Bounded normal distribution class
             </summary>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.#ctor(System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.BoundedNormalDistribution.#ctor(System.Double,System.Double,System.Double,System.Double)">
             <summary>
             Builds a truncated normal distribution
             </summary>
@@ -1819,46 +1819,46 @@
             <param name="a">the interval's lower bound</param>
             <param name="b">the interval's upper bound</param>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Entropy">
+        <member name="P:Euclid.Distributions.Continuous.BoundedNormalDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Support">
+        <member name="P:Euclid.Distributions.Continuous.BoundedNormalDistribution.Support">
             <summary>Gets the distribution's support</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Mean">
+        <member name="P:Euclid.Distributions.Continuous.BoundedNormalDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Median">
+        <member name="P:Euclid.Distributions.Continuous.BoundedNormalDistribution.Median">
             <summary>Gets the distribution's median</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Mode">
+        <member name="P:Euclid.Distributions.Continuous.BoundedNormalDistribution.Mode">
             <summary>Gets the distribution's mode</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Skewness">
+        <member name="P:Euclid.Distributions.Continuous.BoundedNormalDistribution.Skewness">
             <summary>
             Gets the distribution's skewness
             </summary>
             <remarks>using Shah and Jaiswal (1966)</remarks>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.StandardDeviation">
+        <member name="P:Euclid.Distributions.Continuous.BoundedNormalDistribution.StandardDeviation">
             <summary>Gets the distribution's standard deviation</summary>
         </member>
-        <member name="P:Euclid.Distributions.Continuous.TruncatedNormalDistribution.Variance">
+        <member name="P:Euclid.Distributions.Continuous.BoundedNormalDistribution.Variance">
             <summary>Gets the distribution's variance</summary>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.CumulativeDistribution(System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.BoundedNormalDistribution.CumulativeDistribution(System.Double)">
             <summary>Computes the cumulative distribution function at x</summary>
             <param name="x">the location at which to compute the function</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.InverseCumulativeDistribution(System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.BoundedNormalDistribution.InverseCumulativeDistribution(System.Double)">
             <summary>
             Computes the inverse of the cumulative distribution function
             </summary>
             <param name="p">the target probablity</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.TruncatedNormalDistribution.ProbabilityDensity(System.Double)">
+        <member name="M:Euclid.Distributions.Continuous.BoundedNormalDistribution.ProbabilityDensity(System.Double)">
             <summary>
             Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
             </summary>
