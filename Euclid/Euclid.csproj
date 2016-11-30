@@ -92,6 +92,7 @@
     <Compile Include="Distributions\Continuous\ExponentialDistribution.cs" />
     <Compile Include="Distributions\Continuous\ContinousDistribution.cs" />
     <Compile Include="Distributions\Continuous\TruncatedNormalDistribution.cs" />
+    <Compile Include="Distributions\Continuous\BoundedNormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\UniformDistribution.cs" />
     <Compile Include="Distributions\Continuous\WeibullDistribution.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
