@@ -364,6 +364,11 @@ namespace Euclid
             throw new ArgumentException("The scalar product of two matrices can only be performed if they are the same size");
         }
 
+        public Vector Apply(Func<double, double> method)
+        {
+            return Vector.Create(_data.Select(d => method(d)));
+        }
+
         /// <summary>Computes a quadratic form product of two Vectors </summary>
         /// <param name="x">the left hand side Vector</param>
         /// <param name="a">the matrix</param>

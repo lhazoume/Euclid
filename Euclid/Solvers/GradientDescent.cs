@@ -10,9 +10,10 @@ namespace Euclid.Solvers
     {
         #region Declarations
         private Func<Vector, double> _function;
+        private Func<Vector, Vector> _gradient;
         private double _error;
         private int _iterations, _maxIterations, _maxLineSearchIterations, _evaluations;
-        private Vector _initialGuess, _increments, _result;
+        private Vector _initialGuess, _result;
         private List<Vector> _descentDirections = new List<Vector>();
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private LineSearch _lineSearch;
@@ -35,6 +36,20 @@ namespace Euclid.Solvers
             _evaluations = 0;
             _function = function;
             _maxLineSearchIterations = maxLineSearchIterations;
+
+            _gradient = x => NumericalGradient(x, Vector.Create(_initialGuess.Size, Descents.STEP_EPSILON));
+        }
+
+        public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, Func<Vector, Vector> gradient, int maxIterations, int maxLineSearchIterations)
+        {
+            _initialGuess = initialGuess.Clone;
+            _lineSearch = lineSearch;
+            _maxIterations = maxIterations;
+            _evaluations = 0;
+            _function = function;
+            _maxLineSearchIterations = maxLineSearchIterations;
+
+            _gradient = gradient;
         }
 
         #region Accessors
@@ -157,11 +172,13 @@ namespace Euclid.Solvers
                 c1_d0 = 1e-4 * Vector.Scalar(direction, gradient),
                 alpha = 1;
             int k = 0;
-            while (_function(x + (alpha * direction)) > error + c1_d0 * alpha && k < _maxLineSearchIterations)
+            double f = _function(x + (alpha * direction));
+            while ((double.IsNaN(f) || f > error + c1_d0 * alpha) && k < _maxLineSearchIterations)
             {
                 _evaluations++;
                 alpha *= 0.5;
                 k++;
+                f = _function(x + (alpha * direction));
             }
 
             return alpha;
@@ -179,7 +196,7 @@ namespace Euclid.Solvers
 
             while ((_function(x + (alpha * direction)) > error + c1_d0 * alpha
                 ||
-                Vector.Scalar(direction, NumericalGradient(x + (alpha * direction), _increments)) < c2_d0)
+                Vector.Scalar(direction, _gradient(x + (alpha * direction))) < c2_d0)
                 &&
                 k < _maxLineSearchIterations)
             {
@@ -198,7 +215,7 @@ namespace Euclid.Solvers
                 c1_d0 = 1e-4 * d0,
                 c2_d0 = 0.9 * d0;
             int k = 0;
-            double curvature = Vector.Scalar(direction, NumericalGradient(x + (alpha * direction), _increments));
+            double curvature = Vector.Scalar(direction, _gradient(x + (alpha * direction)));
 
             while ((_function(x + (alpha * direction)) > error + c1_d0 * alpha
                 ||
@@ -210,7 +227,7 @@ namespace Euclid.Solvers
             {
                 _evaluations++;
                 alpha *= 0.5;
-                curvature = Vector.Scalar(direction, NumericalGradient(x + (alpha * direction), _increments));
+                curvature = Vector.Scalar(direction, _gradient(x + (alpha * direction)));
                 k++;
             }
             return alpha;
@@ -245,7 +262,7 @@ namespace Euclid.Solvers
         {
             _evaluations = 0;
             if (_function == null) throw new NullReferenceException("function should not be null");
-            _increments = Vector.Create(_initialGuess.Size, Descents.STEP_EPSILON);
+
             _descentDirections.Clear();
             _convergence.Clear();
 
@@ -253,7 +270,7 @@ namespace Euclid.Solvers
             _status = SolverStatus.Diverged;
             _error = _function(_result);
             _evaluations++;
-            Vector gradient = NumericalGradient(_result, _increments),
+            Vector gradient = _gradient(_result),
                 direction = -gradient;
 
             _descentDirections.Add(direction.Clone);
@@ -268,7 +285,7 @@ namespace Euclid.Solvers
 
                 _error = _function(_result);
                 _evaluations++;
-                gradient = NumericalGradient(_result, _increments);
+                gradient = _gradient(_result);
                 direction = (momentum * direction) - gradient;
 
                 _descentDirections.Add(direction.Clone);
@@ -288,7 +305,6 @@ namespace Euclid.Solvers
         {
             _evaluations = 0;
             if (_function == null) throw new NullReferenceException("function should not be null");
-            _increments = Vector.Create(_initialGuess.Size, Descents.STEP_EPSILON);
 
             _convergence.Clear();
 
@@ -298,7 +314,7 @@ namespace Euclid.Solvers
             _status = SolverStatus.Diverged;
             _error = _function(_result);
             _evaluations++;
-            Vector gradient = NumericalGradient(_result, _increments),
+            Vector gradient = _gradient(_result),
                 direction = -gradient;
             Matrix B = Matrix.CreateIdentityMatrix(gradient.Size, gradient.Size);
 
@@ -316,7 +332,7 @@ namespace Euclid.Solvers
 
                 _error = _function(_result);
                 _evaluations++;
-                gradient = NumericalGradient(_result, _increments);
+                gradient = _gradient(_result);
                 gradients.Add(gradient);
                 Vector y = gradients[gradients.Count - 1] - gradients[gradients.Count - 2];
                 B = B + (y * y) / Vector.Scalar(y, s) - ((B * s) * (s * B)) / Vector.Scalar(s, B * s);
