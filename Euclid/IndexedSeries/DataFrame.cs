@@ -99,7 +99,7 @@ namespace Euclid.IndexedSeries
             for (int i = 0; i < data.GetLength(0); i++)
                 for (int j = 0; j < data.GetLength(1); j++)
                     data[i, j] = series.ElementAt(j)[i];
-            return new DataFrame<T, U, V>(series.Select(s=>s.Label), series.ElementAt(0).Legends, data);
+            return new DataFrame<T, U, V>(series.Select(s => s.Label), series.ElementAt(0).Legends, data);
         }
 
         /// <summary>
@@ -414,6 +414,14 @@ namespace Euclid.IndexedSeries
             for (int j = 0; j < _labels.Length; j++)
                 result[j] = _data[index, j];
             return Slice<T, U, V>.Create(_labels, t, result);
+        }
+
+        public Slice<T, U, V> GetSliceAt(int k)
+        {
+            U[] result = new U[_labels.Length];
+            for (int j = 0; j < _labels.Length; j++)
+                result[j] = _data[k, j];
+            return Slice<T, U, V>.Create(_labels, _legends[k], result);
         }
 
         /// <summary>

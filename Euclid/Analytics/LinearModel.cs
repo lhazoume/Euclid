@@ -104,6 +104,11 @@ namespace Euclid.Analytics
             get { return _succeeded ? _correlations : Vector.Create(0.0); }
         }
 
+        public int SampleSize
+        {
+            get { return _n; }
+        }
+
         /// <summary>
         /// Gets the R² on the sample data
         /// </summary>
