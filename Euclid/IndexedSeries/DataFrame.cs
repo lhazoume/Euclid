@@ -81,10 +81,9 @@ namespace Euclid.IndexedSeries
             return new DataFrame<T, U, V>(labels, legends, data);
         }
 
-        /// <summary>
-        /// Builds a <c>DataFrame</c>
-        /// </summary>
+        /// <summary> Builds a <c>DataFrame</c></summary>
         /// <param name="slices">the slices</param>
+        /// <returns>a DataFrame</returns>
         public static DataFrame<T, U, V> Create(IEnumerable<Slice<T, U, V>> slices)
         {
             U[,] data = new U[slices.Count(), slices.ElementAt(0).Columns];
@@ -93,6 +92,10 @@ namespace Euclid.IndexedSeries
                     data[i, j] = slices.ElementAt(i)[j];
             return new DataFrame<T, U, V>(slices.ElementAt(0).Labels, slices.Select(s => s.Legend), data);
         }
+
+        /// <summary>Builds a <c>DataFrame</c> </summary>
+        /// <param name="series">the series</param>
+        /// <returns>a DataFrame</returns>
         public static DataFrame<T, U, V> Create(IEnumerable<Series<T, U, V>> series)
         {
             U[,] data = new U[series.ElementAt(0).Rows, series.Count()];
@@ -319,11 +322,18 @@ namespace Euclid.IndexedSeries
         #endregion
 
         #region Sub DataFrame
+        /// <summary>Extracts the part of the DataFrame whose legends obeys the predicate</summary>
+        /// <param name="predicate">the predicate on the legends</param>
+        /// <returns>a DataFrame</returns>
         public DataFrame<T, U, V> SubDataFrame(Predicate<T> predicate)
         {
             Slice<T, U, V>[] slices = GetSlices();
             return Create(Array.FindAll(slices, sl => predicate(sl.Legend)));
         }
+
+        /// <summary>Extracts the part of the DataFrame whose labels obeys the predicate</summary>
+        /// <param name="predicate">the predicate on the labels</param>
+        /// <returns>a DataFrame</returns>
         public DataFrame<T, U, V> SubDataFrame(Predicate<V> predicate)
         {
             Series<T, U, V>[] slices = GetSeries();

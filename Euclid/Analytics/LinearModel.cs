@@ -80,38 +80,31 @@ namespace Euclid.Analytics
         #endregion
 
         #region Accessors
-        /// <summary>
-        /// Gets the constant term
-        /// </summary>
+        /// <summary>Gets the constant term</summary>
         public double Constant
         {
             get { return _succeeded ? _constant : 0; }
         }
 
-        /// <summary>
-        /// Gets the linear terms
-        /// </summary>
+        /// <summary>Gets the linear terms</summary>
         public Vector Factors
         {
             get { return _succeeded ? _factors : Vector.Create(0.0); }
         }
 
-        /// <summary>
-        /// Gets the correlations between the explanatory variables and the regressand
-        /// </summary>
+        /// <summary>Gets the correlations between the explanatory variables and the regressand </summary>
         public Vector Correlations
         {
             get { return _succeeded ? _correlations : Vector.Create(0.0); }
         }
 
+        /// <summary>Gets the sample size</summary>
         public int SampleSize
         {
             get { return _n; }
         }
 
-        /// <summary>
-        /// Gets the R² on the sample data
-        /// </summary>
+        /// <summary>Gets the R² on the sample data</summary>
         public double R2
         {
             get { return _succeeded ? _ssr / _sst : 0; }

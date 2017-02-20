@@ -364,6 +364,9 @@ namespace Euclid
             throw new ArgumentException("The scalar product of two matrices can only be performed if they are the same size");
         }
 
+        /// <summary>Applies a function on the fields on a Vector</summary>
+        /// <param name="method"></param>
+        /// <returns>a Vector</returns>
         public Vector Apply(Func<double, double> method)
         {
             return Vector.Create(_data.Select(d => method(d)));

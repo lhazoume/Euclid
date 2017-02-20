@@ -94,6 +94,8 @@
     <Compile Include="Distributions\Continuous\BoundedNormalDistribution.cs" />
     <Compile Include="Distributions\Continuous\UniformDistribution.cs" />
     <Compile Include="Distributions\Continuous\WeibullDistribution.cs" />
+    <Compile Include="Distributions\Discrete\BinomialDistribution.cs" />
+    <Compile Include="Distributions\Discrete\DiscreteDistribution.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
     <Compile Include="Helpers\Arrays.cs" />
     <Compile Include="Helpers\Geodesic\Coordinates.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="IndexedSeries\IIndexedSeries.cs" />
     <Compile Include="Serialization\XmlHelper.cs" />
     <Compile Include="Solvers\Descents.cs" />
+    <Compile Include="Solvers\EndCriteria.cs" />
     <Compile Include="Solvers\GradientDescent.cs" />
     <Compile Include="Solvers\ISingleVariableSolver.cs" />
     <Compile Include="Solvers\LineSearch.cs" />

@@ -29,24 +29,17 @@ namespace Euclid.Distributions
         /// <returns>a double</returns>
         double ProbabilityLnDensity(double x);
 
-        /// <summary>
-        /// Returns the distribution's entropy
-        /// </summary>
+        /// <summary>Returns the distribution's entropy</summary>
         double Entropy { get; }
 
         /// <summary>Returns the distribution's support</summary>
-        Interval Support { get; }
+        //Interval Support { get; }
 
-        /// <summary>
-        /// Returns the distribution's mean
-        /// </summary>
+        /// <summary>Returns the distribution's mean</summary>
         double Mean { get; }
         
-        /// <summary>
-        /// Returns the distribution's median
-        /// </summary>
+        /// <summary>Returns the distribution's median </summary>
         double Median { get; }
-
 
         /// <summary>Returns the distribution's mode</summary>
         double Mode { get; }
