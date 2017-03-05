@@ -12,14 +12,14 @@ namespace Euclid.Tests
         #region Constructors
 
         [TestMethod()]
-        public void MatrixCreateTest()
+        public void CreateTest()
         {
             Matrix m = Matrix.Create();
             Assert.AreEqual(m.Size, 4, "Failed on the argument less matrix creation");
         }
 
         [TestMethod()]
-        public void MatrixCreateSquareTest()
+        public void CreateSquareTest()
         {
             int n = 10;
             Matrix m = Matrix.CreateSquare(n);
@@ -27,7 +27,7 @@ namespace Euclid.Tests
         }
 
         [TestMethod()]
-        public void MatrixCreateRectangularTest()
+        public void CreateTest2()
         {
             int r = 5, c = 7;
             Matrix m = Matrix.Create(r, c);
@@ -35,7 +35,7 @@ namespace Euclid.Tests
         }
 
         [TestMethod()]
-        public void MatrixCreateRectangularFullTest()
+        public void CreateTest3()
         {
             int r = 5, c = 7;
             double d = Math.PI;
@@ -44,7 +44,7 @@ namespace Euclid.Tests
         }
 
         [TestMethod()]
-        public void MatrixCreateCopy()
+        public void CreateTest4()
         {
             double[,] data = new double[2, 2];
             data[0, 0] = 1;
@@ -56,7 +56,7 @@ namespace Euclid.Tests
         }
 
         [TestMethod()]
-        public void ZeroMatrixTest()
+        public void CreateZeroMatrixTest()
         {
             int rows = 5,
                 cols = 8;
@@ -71,7 +71,7 @@ namespace Euclid.Tests
         }
 
         [TestMethod()]
-        public void IdentityMatrixTest()
+        public void CreateIdentityMatrixTest()
         {
             int rows = 4,
                 cols = rows + 1;
@@ -79,18 +79,18 @@ namespace Euclid.Tests
                 control = Matrix.Create(rows, cols);
             for (int i = 0; i < rows; i++)
                 control[i, i] = 1;
-            Assert.AreEqual((control - m).Norm1, 0, "The IdentityMatrix does not match the expected");
+            Assert.AreEqual((control - m).Norm1, 0, "The Identity Matrix does not match the expected");
         }
 
         [TestMethod()]
-        public void RandomMatrix()
+        public void CreateRandomTest()
         {
             Matrix testRnd = Matrix.CreateRandom(10, 5);
             Assert.IsTrue(testRnd.Data.All(d => d >= 0 && d <= 1));
         }
 
         [TestMethod()]
-        public void RandomSquareMatrix()
+        public void CreateSquareRandomTest()
         {
             Matrix testRnd = Matrix.CreateSquareRandom(10);
             Assert.IsTrue(testRnd.Data.All(d => d >= 0 && d <= 1));
@@ -272,8 +272,9 @@ namespace Euclid.Tests
         {
             Matrix m1 = Matrix.Create(2, 3, 5),
                 m2 = Matrix.Create(2, 3);
-            for (int i = 0; i < m2.Size; i++)
-                m2[i] = 5;
+            for (int i = 0; i < m2.Rows; i++)
+                for (int j = 0; j < m2.Columns; j++)
+                    m2[i, j] = 5;
             Assert.AreEqual(0, (m1 - m2).Norm2, 1e-10);
         }
 
@@ -282,8 +283,13 @@ namespace Euclid.Tests
         {
             int dimension = 2;
             Matrix m = Matrix.CreateSquare(dimension);
-            for (int i = 0; i < m.Size; i++)
-                m[i] = i + 1;
+            int k = 1;
+            for (int i = 0; i < dimension; i++)
+                for (int j = 0; j < dimension; j++)
+                {
+                    m[i, j] = k;
+                    k++;
+                }
 
             string toString = m.ToString(),
                 control = string.Format("1;2{0}3;4", Environment.NewLine);

@@ -19,6 +19,12 @@ namespace Euclid.Solvers.Tests
         }
 
         [TestMethod()]
+        public void NewtonRaphsonTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
         public void SolveTest()
         {
             NewtonRaphson nr = new NewtonRaphson(0, x => (x - 2) * (x - 2) - 1, 1000);

@@ -19,11 +19,6 @@ namespace Euclid.Solvers
         SolverStatus Status { get; }
 
         /// <summary>
-        /// Gets the number of iterations the solver went through
-        /// </summary>
-        int Iterations { get; }
-
-        /// <summary>
         /// Gets and sets the maximum number of iterations
         /// </summary>
         int MaxIterations { get; set; }

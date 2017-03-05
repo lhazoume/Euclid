@@ -1,10 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Euclid.Arithmetics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid.Arithmetics.Tests
 {
@@ -31,8 +26,8 @@ namespace Euclid.Arithmetics.Tests
             int[] expected = new int[6] { 1, 5, 10, 10, 5, 1 };
 
             int sum = 0;
-            for (int i = 0; i < 5; i++)
-                sum += (bc[i] - expected[i]);
+            for (int i = 0; i <= 5; i++)
+                sum += Math.Abs(bc[i] - expected[i]);
             Assert.IsTrue(sum == 0);
         }
     }

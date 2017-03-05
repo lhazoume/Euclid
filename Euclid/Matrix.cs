@@ -132,7 +132,7 @@ namespace Euclid
         /// </summary>
         /// <param name="i">the coefficient index</param>
         /// <returns>a double value</returns>
-        public double this[int i]
+        private double this[int i]
         {
             get { return _data[i]; }
             set { _data[i] = value; }
@@ -317,7 +317,7 @@ namespace Euclid
         /// <summary>
         /// Returns the transposed <c>Matrix</c>
         /// </summary>
-        public Matrix Transpose
+        public virtual Matrix Transpose
         {
             get
             {

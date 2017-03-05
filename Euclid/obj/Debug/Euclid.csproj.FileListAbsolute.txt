@@ -15,3 +15,9 @@ C:\Users\lhazoume\Documents\GitHub\Euclid\Euclid\bin\Debug\Euclid.pdb
 C:\Users\lhazoume\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.csprojResolveAssemblyReference.cache
 C:\Users\lhazoume\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.dll
 C:\Users\lhazoume\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.pdb
+C:\Users\lucha\Documents\GitHub\Euclid\Euclid\bin\Debug\Euclid.XML
+C:\Users\lucha\Documents\GitHub\Euclid\Euclid\bin\Debug\Euclid.dll
+C:\Users\lucha\Documents\GitHub\Euclid\Euclid\bin\Debug\Euclid.pdb
+C:\Users\lucha\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.dll
+C:\Users\lucha\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.pdb
+C:\Users\lucha\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.csprojResolveAssemblyReference.cache

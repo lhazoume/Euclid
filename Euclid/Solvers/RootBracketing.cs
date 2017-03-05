@@ -15,8 +15,7 @@ namespace Euclid.Solvers
             _error = 0;
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private Func<double, double> _f;
-        private int _iterations = 0,
-            _maxIterations;
+        private int _maxIterations;
         private RootBracketingMethod _method;
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion
@@ -114,14 +113,6 @@ namespace Euclid.Solvers
         }
 
         /// <summary>
-        /// Returns the number of iterations of the solver
-        /// </summary>
-        public int Iterations
-        {
-            get { return _iterations; }
-        }
-
-        /// <summary>
         /// The result of the solver
         /// </summary>
         public double Result
@@ -165,8 +156,9 @@ namespace Euclid.Solvers
         public void Solve(double target)
         {
             _convergence.Clear();
-            _iterations = 1;
-            while (_iterations <= _maxIterations)
+
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations);
+            while (!endCriteria.ShouldStop(_error))
             {
                 double fu = _f(_upperBound) - target,
                     fl = _f(_lowerBound) - target,
@@ -185,7 +177,7 @@ namespace Euclid.Solvers
 
                 if (Math.Sign(_error) == 0 || Math.Abs(_upperBound - _lowerBound) < _tolerance)
                 {
-                    _status = SolverStatus.Normal;
+                    _status = SolverStatus.FunctionConvergence;
                     _result = m;
                     return;
                 }
@@ -194,10 +186,8 @@ namespace Euclid.Solvers
                     _lowerBound = m;
                 else
                     _upperBound = m;
-
-                _iterations++;
             }
-            _status = SolverStatus.IterationExceeded;
+            _status = endCriteria.Status;
             _result = 0.5 * (_upperBound + _lowerBound);
             _error = _f(_result) - target;
         }

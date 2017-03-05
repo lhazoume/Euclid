@@ -93,11 +93,11 @@ namespace Euclid.Analytics.Regressions
                 Y[i] = _y[i];
                 if (_withConstant)
                 {
-                    X[i * (p + 1)] = 1;
-                    for (int j = 0; j < p; j++) X[i * (p + 1) + j + 1] = _x[i, j];
+                    X[i, 0] = 1;
+                    for (int j = 0; j < p; j++) X[i, j + 1] = _x[i, j];
                 }
                 else
-                    for (int j = 0; j < p; j++) X[i * p + j] = _x[i, j];
+                    for (int j = 0; j < p; j++) X[i, j] = _x[i, j];
             }
             #endregion
 

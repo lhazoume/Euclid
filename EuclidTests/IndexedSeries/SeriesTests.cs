@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Euclid.IndexedSeries;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid.IndexedSeries.Tests
 {
@@ -118,7 +114,7 @@ namespace Euclid.IndexedSeries.Tests
         public void SetLegendTest()
         {
             Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
-            series.SetLegend(2, new DateTime(2012, 6, 1));
+            series.Rename(new DateTime(2007, 6, 1), new DateTime(2012, 6, 1));
             Assert.AreEqual(2012, series.GetLegend(2).Year);
         }
 

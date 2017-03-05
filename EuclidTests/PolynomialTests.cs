@@ -72,7 +72,10 @@ namespace Euclid.Tests
         [TestMethod()]
         public void ComplexRootsTest()
         {
-            Assert.Fail();
+            Polynomial p = new Polynomial(1, 1, 1, 1, 1);
+            List<Tuple<Complex, int>> roots = p.ComplexRoots();
+            double sum = roots.Select(t => p.Evaluate(t.Item1).Modulus()).Sum();
+            Assert.AreEqual(sum, 0, 0.001);
         }
 
         [TestMethod()]
@@ -82,9 +85,9 @@ namespace Euclid.Tests
                 r2 = new Polynomial(-6, 1),
                 r3 = new Polynomial(-Math.PI, 1);
             Polynomial p = (r1 ^ 2) * (r2 ^ 3) * r3;
-            List<Tuple<double, int>> roots = p.Roots();
+            List<double> roots = p.Roots().Select(t => t.Item1).ToList();
 
-            Assert.IsTrue(roots.Contains(new Tuple<double, int>(1, 2)) && roots.Contains(new Tuple<double, int>(2, 3)) && roots.Contains(new Tuple<double, int>(Math.PI, 1)));
+            Assert.IsTrue(roots.Contains(5) && roots.Contains(6) && roots.Contains(Math.PI));
         }
 
         [TestMethod()]

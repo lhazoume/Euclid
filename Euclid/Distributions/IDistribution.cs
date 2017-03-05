@@ -32,9 +32,6 @@ namespace Euclid.Distributions
         /// <summary>Returns the distribution's entropy</summary>
         double Entropy { get; }
 
-        /// <summary>Returns the distribution's support</summary>
-        //Interval Support { get; }
-
         /// <summary>Returns the distribution's mean</summary>
         double Mean { get; }
         

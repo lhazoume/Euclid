@@ -1,5 +1,4 @@
 ﻿using Euclid.Helpers;
-using Euclid.Objects;
 using Euclid.Serialization;
 using System;
 using System.Collections.Generic;
@@ -19,27 +18,32 @@ namespace Euclid.IndexedSeries
         #region Declarations
         private V _label;
         private U[] _data;
-        private T[] _legends;
-        //private Map<T, int> _legends;
+        private Header<T> _legends;
         #endregion
 
         /// <summary>Builds a <c>Series</c></summary>
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
-        private Series(V label, T[] legends, U[] data)
+        private Series(V label, IList<T> legends, U[] data)
         {
             _data = Arrays.Clone(data);
             _label = label;
-            //_legends = new Map<T, int>(Enumerable.Range(0, legends.Count()).Select(i => new Tuple<T, int>(legends.ElementAt(i), i)));
-            _legends = Arrays.Clone(legends);
+            _legends = new Header<T>(legends);
+        }
+
+        private Series(V label, Header<T> legends, U[] data)
+        {
+            _data = Arrays.Clone(data);
+            _label = label;
+            _legends = legends.Clone();
         }
 
         #region Accessors
         /// <summary>Returns the legends of the <c>Series</c></summary>
         public T[] Legends
         {
-            get { return Arrays.Clone(_legends); }
+            get { return _legends.Values; }
         }
 
         /// <summary>Returns the labels of the <c>Series</c> (in this case, it is the only label)</summary>
@@ -70,7 +74,7 @@ namespace Euclid.IndexedSeries
         /// <summary>Returns the number of rows of the <c>Series</c></summary>
         public int Rows
         {
-            get { return _legends.Length; }
+            get { return _data.Length; }
         }
         #endregion
 
@@ -79,7 +83,7 @@ namespace Euclid.IndexedSeries
         /// <returns>a <c>Series</c></returns>
         public Series<T, U, V> Clone()
         {
-            return new Series<T, U, V>(_label, Arrays.Clone(_legends), Arrays.Clone(_data));
+            return new Series<T, U, V>(_label, _legends, _data);
         }
 
         /// <summary>Gets and sets the i-th data of the <c>Series</c></summary>
@@ -96,36 +100,25 @@ namespace Euclid.IndexedSeries
         /// <returns>a data point</returns>
         public U this[T t]
         {
-            get
-            {
-                int index = Array.IndexOf<T>(_legends, t);
-                if (index == -1) throw new ArgumentException("Legend [" + t.ToString() + "] was not found");
-                return _data[index];
-            }
-            set
-            {
-                int index = Array.IndexOf<T>(_legends, t);
-                if (index == -1) throw new ArgumentException("Legend [" + t.ToString() + "] was not found");
-                _data[index] = value;
-            }
+            get { return _data[_legends[t]]; }
+            set { _data[_legends[t]] = value; }
         }
 
         /// <summary>Removes the row for a given legend</summary>
         /// <param name="t">the legend</param>
         public void RemoveRowAt(T t)
         {
-            int indexToRemove = Array.IndexOf<T>(_legends, t);
-            if (indexToRemove == -1 || _legends.Length == 1) return;
-            U[] newData = new U[_legends.Length - 1];
-            T[] newLegends = new T[_legends.Length - 1];
-            for (int i = 0; i < _legends.Length; i++)
+            int indexToRemove = _legends[t];
+            if (indexToRemove == -1 || _legends.Count == 1) return;
+            U[] newData = new U[_data.Length - 1];
+
+            for (int i = 0; i < _data.Length; i++)
             {
                 if (i == indexToRemove) continue;
-                int k = i - (i < indexToRemove ? 0 : 1);
-                newLegends[k] = _legends[i];
-                newData[k] = _data[i];
+                newData[i - (i < indexToRemove ? 0 : 1)] = _data[i];
             }
-            _legends = newLegends;
+
+            _legends.Remove(t);
             _data = newData;
         }
 
@@ -137,17 +130,12 @@ namespace Euclid.IndexedSeries
             if (_legends.Contains(legend))
                 throw new ArgumentException("The legend is already in the series");
             U[] newData = new U[_data.Length + 1];
-            T[] newLegends = new T[_legends.Length + 1];
-            for (int j = 0; j < _legends.Length; j++)
-            {
-                newLegends[j] = _legends[j];
+            for (int j = 0; j < _data.Length; j++)
                 newData[j] = _data[j];
-            }
 
-            newLegends[_legends.Length] = legend;
+            _legends.Add(legend);
             newData[_data.Length] = value;
 
-            _legends = newLegends;
             _data = newData;
         }
 
@@ -156,22 +144,15 @@ namespace Euclid.IndexedSeries
         public void Remove(Func<T, U, bool> predicate)
         {
             #region Kept Indices
-            List<int> keptIndices = new List<int>();
-            for (int i = 0; i < _legends.Length; i++)
-                if (!predicate(_legends[i], _data[i]))
-                    keptIndices.Add(i);
+            List<T> keptIndices = new List<T>();
+            foreach (T t in _legends)
+                if (!predicate(t, _data[_legends[t]]))
+                    keptIndices.Add(t);
             #endregion
 
             #region Extraction
-            U[] newData = new U[keptIndices.Count];
-            T[] newLegends = new T[keptIndices.Count];
-            for (int i = 0; i < keptIndices.Count; i++)
-            {
-                newLegends[i] = _legends[keptIndices[i]];
-                newData[i] = _data[keptIndices[i]];
-            }
-            _legends = newLegends;
-            _data = newData;
+            foreach (T t in keptIndices)
+                RemoveRowAt(t);
             #endregion
         }
 
@@ -179,7 +160,7 @@ namespace Euclid.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnData(Func<U, U> function)
         {
-            for (int i = 0; i < _legends.Length; i++)
+            for (int i = 0; i < _data.Length; i++)
                 _data[i] = function(_data[i]);
         }
 
@@ -187,8 +168,7 @@ namespace Euclid.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnLegends(Func<T, T> function)
         {
-            for (int i = 0; i < _legends.Length; i++)
-                _legends[i] = function(_legends[i]);
+            _legends = new Header<T>(_legends.Select(t => function(t)).ToList());
         }
 
         /// <summary>Returns the sum of the data passed through a function</summary>
@@ -198,7 +178,7 @@ namespace Euclid.IndexedSeries
         {
             dynamic sum = default(U);
 
-            for (int i = 0; i < _legends.Length; i++)
+            for (int i = 0; i < _data.Length; i++)
                 sum += function(_data[i]);
             return (U)sum;
         }
@@ -208,15 +188,15 @@ namespace Euclid.IndexedSeries
         /// <returns>a legend value</returns>
         public T GetLegend(int index)
         {
-            return _legends[index];
+            return _legends.ElementAt(index);
         }
 
         /// <summary>Sets the i-th legend value </summary>
-        /// <param name="index">the index</param>
-        /// <param name="value">the new legend value</param>
-        public void SetLegend(int index, T value)
+        /// <param name="oldValue">the old legend</param>
+        /// <param name="newValue">the new legend value</param>
+        public void Rename(T oldValue, T newValue)
         {
-            _legends[index] = value;
+            _legends.Rename(oldValue, newValue);
         }
         #endregion
 
@@ -231,11 +211,11 @@ namespace Euclid.IndexedSeries
             writer.WriteAttributeString("value", _label.ToString());
             writer.WriteEndElement();
 
-            for (int i = 0; i < _legends.Length; i++)
+            foreach (T t in _legends)
             {
                 writer.WriteStartElement("point");
-                writer.WriteAttributeString("legend", _legends[i].ToString());
-                writer.WriteAttributeString("value", _data[i].ToString());
+                writer.WriteAttributeString("legend", t.ToString());
+                writer.WriteAttributeString("value", _data[_legends[t]].ToString());
                 writer.WriteEndElement();
             }
             writer.WriteEndElement();
@@ -247,34 +227,11 @@ namespace Euclid.IndexedSeries
         /// <returns>a <c>String</c></returns>
         public string ToCSV()
         {
-            string[] lines = new string[1 + this.Rows];
-            lines[0] = string.Join(CSVHelper.Separator, "x", _label.ToString());
-            for (int i = 0; i < this.Rows; i++)
-                lines[1 + i] = string.Join(CSVHelper.Separator, _legends[i].ToString(), _data[i].ToString());
+            List<string> lines = new List<string>();
+            lines.Add(string.Join(CSVHelper.Separator, "x", _label.ToString()));
+            foreach (T t in _legends)
+                lines.Add(string.Join(CSVHelper.Separator, t.ToString(), _data[_legends[t]].ToString()));
             return string.Join(Environment.NewLine, lines);
-        }
-
-        /// <summary>Fills a <c>Series</c> from a string</summary>
-        /// <param name="text">the <c>String</c> content</param>
-        public void FromCSV(string text)
-        {
-            string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            if (lines.Length == 0) return;
-            _data = new U[lines.Length - 1];
-            _legends = new T[lines.Length - 1];
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] content = lines[i].Split(CSVHelper.Separator.ToCharArray());
-                if (content.Length == 2)
-                    if (i == 0)
-                        _label = content[i].Parse<V>();
-                    else
-                    {
-                        _data[i - 1] = content[1].Parse<U>();
-                        _legends[i - 1] = content[0].Parse<T>();
-                    }
-            }
         }
         #endregion
 
@@ -286,9 +243,7 @@ namespace Euclid.IndexedSeries
         public static Series<T, U, V> operator +(Series<T, U, V> ts1, Series<T, U, V> ts2)
         {
             if (ts1.Rows != ts2.Rows) throw new Exception("Series length do not match");
-            for (int i = 0; i < ts1.Rows; i++)
-                if (!ts1._legends[i].Equals(ts2._legends[i]))
-                    throw new Exception("Series values do not match at #" + i + " : " + ts1._label + "=" + ts1._legends[i] + " while " + ts2._label + "=" + ts2._legends[i]);
+            if (ts1._legends != ts2._legends) throw new DataMisalignedException("The series legends do not match");
 
             U[] data = new U[ts1._data.Length];
             for (int i = 0; i < ts1._data.Length; i++)
@@ -303,9 +258,7 @@ namespace Euclid.IndexedSeries
         public static Series<T, U, V> operator -(Series<T, U, V> ts1, Series<T, U, V> ts2)
         {
             if (ts1.Rows != ts2.Rows) throw new Exception("Series length do not match");
-            for (int i = 0; i < ts1.Rows; i++)
-                if (!ts1._legends[i].Equals(ts2._legends[i]))
-                    throw new Exception("Series values do not match at #" + i + " : " + ts1._label + "=" + ts1._legends[i] + " while " + ts2._label + "=" + ts2._legends[i]);
+            if (ts1._legends != ts2._legends) throw new DataMisalignedException("The series legends do not match");
 
             U[] data = new U[ts1._data.Length];
             for (int i = 0; i < ts1._data.Length; i++)
@@ -397,7 +350,7 @@ namespace Euclid.IndexedSeries
         {
             return new Series<T, U, V>(label, legends.ToArray(), data.ToArray());
         }
-        
+
         /// <summary>Builds a <c>Series</c> from its serialized form</summary>
         /// <param name="node">the <c>XmlNode</c></param>
         public static Series<T, U, V> Create(XmlNode node)
@@ -415,7 +368,27 @@ namespace Euclid.IndexedSeries
                 data.Add(value);
             }
 
-            return new Series<T, U, V>(label, legends.ToArray(), data.ToArray());
+            return new Series<T, U, V>(label, legends, data.ToArray());
+        }
+
+        /// <summary>Builds a <c>Series</c> from a string</summary>
+        /// <param name="text">the <c>String</c> content</param>
+        public static Series<T, U, V> Create(string text)
+        {
+            string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            if (lines.Length == 0) return null;
+
+            U[] data = new U[lines.Length - 1];
+            T[] legends = new T[lines.Length - 1];
+            V label = lines[0].Split(CSVHelper.Separator.ToCharArray())[1].Parse<V>();
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] content = lines[i].Split(CSVHelper.Separator.ToCharArray());
+                data[i - 1] = content[1].Parse<U>();
+                legends[i - 1] = content[0].Parse<T>();
+            }
+
+            return new Series<T, U, V>(label, legends, data);
         }
         #endregion
     }

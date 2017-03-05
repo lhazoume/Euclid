@@ -101,7 +101,7 @@ namespace Euclid.Analytics.Regressions
                     for (int j = 0; j < p; j++) X[i * (p + 1) + j + 1] = _x[i, j];*/
                 }
                 else
-                    for (int j = 0; j < p; j++) X[i * p + j] = _x[i, j];
+                    for (int j = 0; j < p; j++) X[i, j] = _x[i, j];
             }
             #endregion
 

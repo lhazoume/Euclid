@@ -2,6 +2,7 @@
 
 namespace Euclid.Helpers
 {
+    /// <summary>Helper class for random number generation</summary>
     public static class RandomHelper
     {
         /// <summary>

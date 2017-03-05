@@ -6,43 +6,32 @@ using System.Threading.Tasks;
 
 namespace Euclid.Analytics.NeuralNetworks.FeedForward
 {
+    /// <summary>Class used to train a Perceptron network</summary>
     public class Trainer
     {
+        #region declarations
         private Perceptron _network;
         private IErrorFunction _errorFunction;
         private List<Tuple<int, double, double>> _convergence;
+        #endregion
 
+        /// <summary>Builds a trainer class</summary>
+        /// <param name="network">the initial state of the network to train</param>
+        /// <param name="errorFunction">the error function</param>
         public Trainer(Perceptron network, IErrorFunction errorFunction)
         {
             _network = network;
             _errorFunction = errorFunction;
         }
 
+        /// <summary>Trains the underlyng network using standard back propagation</summary>
+        /// <param name="learningX">the learning phase's inputs</param>
+        /// <param name="learningY">the learning phase's expected responses</param>
+        /// <param name="validationX">the validation phase's inputs</param>
+        /// <param name="validationY">the validation phase's expected responses</param>
+        /// <param name="learningRate">the learning rate</param>
+        /// <param name="epochs">the number of epochs</param>
         public void TrainBackPropagation(List<Vector> learningX, List<Vector> learningY,
-            List<Vector> validationX, List<Vector> validationY,
-            double learningRate,
-            int epochs)
-        {
-            _convergence = new List<Tuple<int, double, double>>();
-
-            for (int epoch = 0; epoch < epochs; epoch++)
-            {
-                #region Calculate Errs
-                double sampleErr = _errorFunction.Function(_network.Process(learningX), learningY),
-                    outOfSampleErr = _errorFunction.Function(_network.Process(validationX), validationY);
-                _convergence.Add(new Tuple<int, double, double>(epoch, sampleErr, outOfSampleErr));
-                #endregion
-
-                #region Gradient and increnemt
-                Tuple<Matrix, Vector>[] gradient = GlobalGradients(learningX, learningY);
-
-                for (int l = 0; l < _network.LayerCount; l++)
-                    _network[l].Increment(-learningRate * gradient[l].Item1, -learningRate * gradient[l].Item2);
-                #endregion
-            }
-        }
-
-        public void TrainBackPropagationAlternative(List<Vector> learningX, List<Vector> learningY,
             List<Vector> validationX, List<Vector> validationY,
             double learningRate,
             int epochs)
@@ -62,11 +51,23 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
                     direction = BuildDirection(gradient, learningRate);
 
                 for (int l = 0; l < _network.LayerCount; l++)
-                    _network[l].Increment(direction[l].Item1, direction[l].Item2);
+                {
+                    _network[l].Weights += direction[l].Item1;
+                    _network[l].Biases += direction[l].Item2;
+                }
+
                 #endregion
             }
         }
 
+        /// <summary>Trains the underlyng network using standard back propagation with a momentum</summary>
+        /// <param name="learningX">the learning phase's inputs</param>
+        /// <param name="learningY">the learning phase's expected responses</param>
+        /// <param name="validationX">the validation phase's inputs</param>
+        /// <param name="validationY">the validation phase's expected responses</param>
+        /// <param name="learningRate">the learning rate</param>
+        /// <param name="momentum">the momentum applied to the descent direction</param>
+        /// <param name="epochs">the number of epochs</param>
         public void TrainBackPropagationMomentum(List<Vector> learningX, List<Vector> learningY,
             List<Vector> validationX, List<Vector> validationY,
             double learningRate, double momentum,
@@ -89,11 +90,22 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
                 descentDirections.Add(direction);
 
                 for (int l = 0; l < _network.LayerCount; l++)
-                    _network[l].Increment(direction[l].Item1, direction[l].Item2);
+                {
+                    _network[l].Weights += direction[l].Item1;
+                    _network[l].Biases += direction[l].Item2;
+                }
                 #endregion
             }
         }
 
+        /// <summary>Trains the underlying network using the resilient propagation</summary>
+        /// <param name="learningX">the learning phase's inputs</param>
+        /// <param name="learningY">the learning phase's expected responses</param>
+        /// <param name="validationX">the validation phase's inputs</param>
+        /// <param name="validationY">the validation phase's expected responses</param>
+        /// <param name="etaPlus">the speeding factor</param>
+        /// <param name="etaMinus">the slowing factor</param>
+        /// <param name="epochs">the number of epochs</param>
         public void TrainResilientPropagation(List<Vector> learningX, List<Vector> learningY,
             List<Vector> validationX, List<Vector> validationY,
             double etaPlus, double etaMinus,
@@ -127,14 +139,15 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
                     #region Deltas
 
                     #region Matrix
-                    for (int k = 0; k < delta[l].Item1.Size; k++)
-                    {
-                        double previousDelta = deltas[deltas.Count - 1][l].Item1[k],
-                            previousGradient = gradients[gradients.Count - 2][l].Item1[k],
-                            currentGradient = gradient[l].Item1[k];
-                        int sign = Math.Sign(previousGradient * currentGradient);
-                        delta[l].Item1[k] = (sign > 0 ? etaPlus : (sign < 0 ? etaMinus : 1)) * previousDelta;
-                    }
+                    for (int i = 0; i < delta[l].Item1.Rows; i++)
+                        for (int j = 0; j < delta[l].Item1.Columns; j++)
+                        {
+                            double previousDelta = deltas[deltas.Count - 1][l].Item1[i, j],
+                                previousGradient = gradients[gradients.Count - 2][l].Item1[i, j],
+                                currentGradient = gradient[l].Item1[i, j];
+                            int sign = Math.Sign(previousGradient * currentGradient);
+                            delta[l].Item1[i, j] = (sign > 0 ? etaPlus : (sign < 0 ? etaMinus : 1)) * previousDelta;
+                        }
                     #endregion
 
                     #region Vector
@@ -153,8 +166,9 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
                     #region Increment
 
                     #region Matrix
-                    for (int k = 0; k < delta[l].Item1.Size; k++)
-                        increment[l].Item1[k] = -Math.Sign(gradient[l].Item1[k]) * delta[l].Item1[k];
+                    for (int i = 0; i < delta[l].Item1.Rows; i++)
+                        for (int j = 0; j < delta[l].Item1.Columns; j++)
+                            increment[l].Item1[i, j] = -Math.Sign(gradient[l].Item1[i, j]) * delta[l].Item1[i, j];
                     #endregion
 
                     #region Vector
@@ -169,11 +183,15 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
 
                 #region Perform Incrementation
                 for (int l = 0; l < _network.LayerCount; l++)
-                    _network[l].Increment(increment[l].Item1, increment[l].Item2);
+                {
+                    _network[l].Weights += increment[l].Item1;
+                    _network[l].Biases += increment[l].Item2;
+                }
                 #endregion
             }
         }
 
+        /// <summary>The history of training and validation errors, epoch by epoch</summary>
         public List<Tuple<int, double, double>> Convergence
         {
             get { return _convergence; }

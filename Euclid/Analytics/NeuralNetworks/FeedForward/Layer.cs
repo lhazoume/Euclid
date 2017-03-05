@@ -10,9 +10,9 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
     {
         #region Declarations
         private readonly int _layerSize, _inputSize;
-        private readonly Matrix _weights;
-        private readonly Vector _biases;
-        private Vector _z, _a;
+        private Matrix _weights;
+        private Vector _biases,
+            _z, _a;
         private readonly IActivationFunction _activation;
         #endregion
 
@@ -23,6 +23,15 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             _inputSize = inputSize;
             _weights = Matrix.Create(_layerSize, _inputSize);
             _biases = Vector.Create(_layerSize);
+            _activation = function;
+        }
+        private Layer(Matrix weights, Vector biases, IActivationFunction function)
+        {
+            if (weights.Rows != biases.Size) throw new RankException("The size of the biases should fit the number of rows of the wieght matrix");
+            _layerSize = biases.Size;
+            _inputSize = weights.Columns;
+            _weights = weights.Clone;
+            _biases = biases.Clone;
             _activation = function;
         }
         #endregion
@@ -66,36 +75,26 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
 
         #region Get and set weights and biases
 
-        /// <summary>Increments the weights and biases of the layer</summary>
-        /// <param name="weightIncrements">the values to be added to the weights</param>
-        /// <param name="biasIncrements">the values to be added to the biases</param>
-        public void Increment(Matrix weightIncrements, Vector biasIncrements)
+        /// <summary>Gets and sets the biases of the layer</summary>
+        public Vector Biases
         {
-            for (int i = 0; i < _weights.Size; i++) _weights[i] += weightIncrements[i];
-            for (int i = 0; i < _biases.Size; i++) _biases[i] += biasIncrements[i];
+            get { return _biases; }
+            set
+            {
+                if (value.Size == _biases.Size)
+                    _biases = value.Clone;
+            }
         }
 
-        /// <summary>Sets the weights and biases of the layer</summary>
-        /// <param name="weights">the new values of the weights</param>
-        /// <param name="biases">the new values of the biases</param>
-        public void Set(Matrix weights, Vector biases)
+        /// <summary>Gets and sets the weights of the layer</summary>
+        public Matrix Weights
         {
-            for (int i = 0; i < _weights.Size; i++) _weights[i] = weights[i];
-            for (int i = 0; i < _biases.Size; i++) _biases[i] = biases[i];
-        }
-
-        /// <summary>Sets the biases of the layer</summary>
-        /// <param name="biases">the new values of the biases</param>
-        public void SetBiases(Vector biases)
-        {
-            for (int i = 0; i < _biases.Size; i++) _biases[i] = biases[i];
-        }
-
-        /// <summary>Sets the weights of the layer</summary>
-        /// <param name="weights">the new values of the weights</param>
-        public void SetWeights(Matrix weights)
-        {
-            for (int i = 0; i < _weights.Size; i++) _weights[i] = weights[i];
+            get { return _weights; }
+            set
+            {
+                if (value.Rows == _weights.Rows && value.Columns == _weights.Columns)
+                    _weights = value.Clone;
+            }
         }
 
         /// <summary>Gets the weight of a given neuron for a given input</summary>
@@ -123,13 +122,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <summary>Gets a deep copy of the Layer</summary>
         public Layer Clone
         {
-            get
-            {
-                Layer layer = new Layer(_layerSize, _inputSize, _activation);
-                for (int i = 0; i < _weights.Size; i++) layer._weights[i] = _weights[i];
-                for (int i = 0; i < _biases.Size; i++) layer._biases[i] = _biases[i];
-                return layer;
-            }
+            get { return new Layer(_weights, _biases, _activation); }
         }
 
         /// <summary>Gets the number of parameters of the Layer</summary>
@@ -156,17 +149,6 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             get { return _activation; }
         }
 
-        /// <summary>Gets the biases of the layer's neurons</summary>
-        public Vector Biases
-        {
-            get { return _biases; }
-        }
-
-        /// <summary>Gets the weights of the layer's neurons</summary>
-        public Matrix Weights
-        {
-            get { return _weights; }
-        }
 
         /// <summary>Gets the linear output of the layer before activation</summary>
         public Vector A
@@ -221,8 +203,8 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             if (weights.Rows != biases.Size) throw new ArgumentException("the matrix and biases' sizes do not match");
             Layer layer = new Layer(weights.Rows, weights.Columns, function);
 
-            for (int i = 0; i < weights.Size; i++) layer._weights[i] = weights[i];
-            for (int i = 0; i < biases.Size; i++) layer._biases[i] = biases[i];
+            layer._weights = weights.Clone;
+            layer._biases = biases.Clone;
 
             return layer;
         }

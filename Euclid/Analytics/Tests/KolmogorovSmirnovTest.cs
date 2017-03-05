@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Solvers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Euclid.Analytics.Tests
 {
-    public class KolmogorovSmirnovTest
+    /// <summary> Helps testing empiric distribution adequacy using Kolmogorov-Smirnov</summary>
+    public static class KolmogorovSmirnovTest
     {
 
         private static double PValue(double[] series1, double[] series2)
@@ -40,7 +42,7 @@ namespace Euclid.Analytics.Tests
         public static bool IsSameDistribution(double[] series1, double[] series2, double alpha)
         {
             double pValue = PValue(series1, series2);
-            Euclid.Solvers.RootBracketing rb = new Solvers.RootBracketing(1, 3, Fn.SupBrownianBridgeCDF, Solvers.RootBracketingMethod.Dichotomy, 100);
+            RootBracketing rb = new RootBracketing(1, 3, Fn.SupBrownianBridgeCDF, Solvers.RootBracketingMethod.Dichotomy, 100);
             rb.Solve(alpha);
             double cap = rb.Result;
 

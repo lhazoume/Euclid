@@ -12,7 +12,19 @@ namespace Euclid.Solvers.Tests
     public class GradientDescentTests
     {
         [TestMethod()]
-        public void SolveTest()
+        public void GradientDescentTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GradientDescentTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void MinimizeTest()
         {
             Vector initialGuess = Vector.Create(1.0, 1.0),
                 target = Vector.Create(3.0, 3.0);
@@ -22,7 +34,7 @@ namespace Euclid.Solvers.Tests
         }
 
         [TestMethod()]
-        public void SolveBFGSTest()
+        public void MinimizeBFGSTest()
         {
             Vector initialGuess = Vector.Create(1.0, 1.0),
                 target = Vector.Create(3.0, 3.0);

@@ -18,8 +18,7 @@ namespace Euclid.Solvers
             _error = 0;
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private Func<double, double> _f, _df;
-        private int _iterations = 0,
-            _maxIterations;
+        private int _maxIterations;
         private SolverStatus _status = SolverStatus.NotRan;
 
         #endregion
@@ -121,14 +120,6 @@ namespace Euclid.Solvers
         }
 
         /// <summary>
-        /// Returns the number of interations of the solver
-        /// </summary>
-        public int Iterations
-        {
-            get { return _iterations; }
-        }
-
-        /// <summary>
         /// The final status of the solver
         /// </summary>
         public SolverStatus Status
@@ -183,23 +174,19 @@ namespace Euclid.Solvers
 
             double slope = _df(_result);
 
-            _iterations = 1;
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations,
+                functionEpsilon: _absoluteTolerance,
+                gradientEpsilon: _slopeTolerance);
 
-            while (Math.Abs(_error) > _absoluteTolerance && Math.Abs(slope) > _slopeTolerance && _iterations <= _maxIterations)
+            while (!endCriteria.ShouldStop(_error, slope))
             {
                 _result = _result - _error / slope;
                 _error = _f(_result) - target;
                 _convergence.Add(new Tuple<double, double>(_result, _error));
                 slope = _df(_result);
-                _iterations++;
             }
 
-            if (Math.Abs(_error) <= _absoluteTolerance)
-                _status = SolverStatus.Normal;
-            else if (_iterations > _maxIterations)
-                _status = SolverStatus.IterationExceeded;
-            else if (Math.Abs(slope) <= _slopeTolerance)
-                _status = SolverStatus.BadFunction;
+            _status = endCriteria.Status;
         }
 
         #endregion

@@ -4,8 +4,14 @@ using System.Linq;
 
 namespace Euclid.Analytics
 {
+    /// <summary>Class used to calculate statistic relationships between dataframes</summary>
     public static class InterRelations
     {
+        /// <summary>Gets the covariance matrix between the series of the dataframe</summary>
+        /// <typeparam name="T">the dataframes' legend types</typeparam>
+        /// <typeparam name="V">the dataframes' label types</typeparam>
+        /// <param name="dataFrame">the underlying data frame</param>
+        /// <returns>a dataFrame</returns>
         public static DataFrame<V, double, V> CovarianceEstimatorMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
             DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Columns, dataFrame.Columns);
@@ -41,6 +47,12 @@ namespace Euclid.Analytics
 
             return result;
         }
+
+        /// <summary>Gets the correlation matrix between the series of the dataframe</summary>
+        /// <typeparam name="T">the dataframes' legend types</typeparam>
+        /// <typeparam name="V">the dataframes' label types</typeparam>
+        /// <param name="dataFrame">the underlying data frame</param>
+        /// <returns>a dataFrame</returns>
         public static DataFrame<V, double, V> CorrelationMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
             DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Columns, dataFrame.Columns);
@@ -83,6 +95,13 @@ namespace Euclid.Analytics
 
             return result;
         }
+
+        /// <summary>Gets the cross-correlation between the time series of the input dataframes</summary>
+        /// <typeparam name="T">the dataframes' legend types</typeparam>
+        /// <typeparam name="V">the dataframes' label types</typeparam>
+        /// <param name="dataFrame1">the left hand side dataFrame</param>
+        /// <param name="dataFrame2">the right hand side data frame</param>
+        /// <returns>a dataFrame</returns>
         public static DataFrame<V, double, V> CorrelationMatrix<T, V>(DataFrame<T, double, V> dataFrame1, DataFrame<T, double, V> dataFrame2) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
             DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame1.Columns, dataFrame2.Columns);
@@ -142,6 +161,12 @@ namespace Euclid.Analytics
 
             return result;
         }
+
+        /// <summary>Gets the redundancy matrix of the series of the dataframe</summary>
+        /// <typeparam name="T">the dataframe's legend types</typeparam>
+        /// <typeparam name="V">the dataframe's label types</typeparam>
+        /// <param name="dataFrame">the underlying dataFrame</param>
+        /// <returns>a dataframe</returns>
         public static DataFrame<V, double, V> RedundancyMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
             DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Columns, dataFrame.Columns);
@@ -152,7 +177,7 @@ namespace Euclid.Analytics
             #region Distinct values
             double[][] distincts = new double[dataFrame.Columns][];
             for (int i = 0; i < dataFrame.Columns; i++)
-                distincts[i] = dataFrame.GetSeriesAt(i).Data.Distinct().OrderBy(d => d).ToArray();
+                distincts[i] = dataFrame.GetSeriesAt(dataFrame.Labels[i]).Data.Distinct().OrderBy(d => d).ToArray();
             #endregion
 
             #region Redundancy

@@ -7,7 +7,9 @@ namespace Euclid.Objects
     /// <summary>A two ways dictionary class</summary>
     /// <typeparam name="T1">the left hand side type</typeparam>
     /// <typeparam name="T2">the right hand side type</typeparam>
-    public class Map<T1, T2> where T1 : IEquatable<T1> where T2 : IEquatable<T2>
+    public class Map<T1, T2>
+        where T1 : IEquatable<T1>
+        where T2 : IEquatable<T2>
     {
         #region Declarations
         private readonly object _lock = new object();
@@ -15,6 +17,7 @@ namespace Euclid.Objects
         private readonly Dictionary<T2, T1> _backward = new Dictionary<T2, T1>();
         #endregion
 
+        #region Constructors
         private Map(Dictionary<T1, T2> forward, Dictionary<T2, T1> backward)
         {
             _forward = new Dictionary<T1, T2>(forward);
@@ -22,9 +25,7 @@ namespace Euclid.Objects
         }
 
         /// <summary>Builds an empty map</summary>
-        public Map()
-        {
-        }
+        public Map() { }
 
         /// <summary>Builds a Map of </summary>
         /// <param name="values"></param>
@@ -36,6 +37,21 @@ namespace Euclid.Objects
                 _backward.Add(tuple.Item2, tuple.Item1);
             }
         }
+        #endregion
+
+        #region Enumerators
+        /// <summary>Gets an enumerator for the left hand side</summary>
+        public IEnumerator<T1> LeftEnumerator
+        {
+            get { return _forward.Keys.GetEnumerator(); }
+        }
+
+        /// <summary>Gets an enumerator for the right hand side </summary>
+        public IEnumerator<T2> Enumerator
+        {
+            get { return _backward.Keys.GetEnumerator(); }
+        }
+        #endregion
 
         #region Add / remove
         /// <summary>Adds a pair to the map</summary>
@@ -142,6 +158,8 @@ namespace Euclid.Objects
             get { return _backward.Keys.ToArray(); }
         }
 
+        #endregion
+
         /// <summary>Gets the number of pairs in the map</summary>
         public int Count
         {
@@ -149,16 +167,12 @@ namespace Euclid.Objects
         }
 
         /// <summary>Gets a deep copy of the map</summary>
-        public Map<T1, T2> Clone
+        public Map<T1, T2> Clone()
         {
-            get
-            {
-                Map<T1, T2> map;
-                lock (_lock)
-                    map = new Map<T1, T2>(_forward, _backward);
-                return map;
-            }
+            Map<T1, T2> map;
+            lock (_lock)
+                map = new Map<T1, T2>(_forward, _backward);
+            return map;
         }
-        #endregion
     }
 }

@@ -408,6 +408,38 @@ namespace Euclid
             throw new ArgumentException("The Hadamard product of two Vectors can only be performed if they are the same size");
         }
 
+        /// <summary>Builds a Vector made of the highest values </summary>
+        /// <param name="v1">a Vector</param>
+        /// <param name="v2">a Vector</param>
+        /// <returns>a Vector</returns>
+        public static Vector Max(Vector v1, Vector v2)
+        {
+            if (v1.Size == v2.Size)
+            {
+                Vector result = new Vector(v1.Size);
+                for (int k = 0; k < v1.Size; k++)
+                    result[k] = Math.Max(v1[k], v2[k]);
+                return result;
+            }
+            throw new RankException("The vectors have different sizes.");
+        }
+
+        /// <summary>Builds a Vector made of the smallest values </summary>
+        /// <param name="v1">a Vector</param>
+        /// <param name="v2">a Vector</param>
+        /// <returns>a Vector</returns>
+        public static Vector Min(Vector v1, Vector v2)
+        {
+            if (v1.Size == v2.Size)
+            {
+                Vector result = new Vector(v1.Size);
+                for (int k = 0; k < v1.Size; k++)
+                    result[k] = Math.Min(v1[k], v2[k]);
+                return result;
+            }
+            throw new RankException("The vectors have different sizes.");
+        }
+
         /// <summary>
         /// Creates a Vector made from the linear combination of two vectors
         /// </summary>
@@ -422,6 +454,25 @@ namespace Euclid
             Vector r = Vector.Create(v1.Size);
             for (int k = 0; k < r.Size; k++)
                 r[k] = f1 * v1[k] + f2 * v2[k];
+            return r;
+        }
+
+        /// <summary>
+        /// Creates a Vector made from the linear combination of three vectors
+        /// </summary>
+        /// <param name="f1">the left hand side factor</param>
+        /// <param name="v1">the left hand side vector</param>
+        /// <param name="f2">the right hand side factor</param>
+        /// <param name="v2">the right hand side vector</param>
+        /// <param name="f3">the right hand side factor</param>
+        /// <param name="v3">the right hand side vector</param>
+        /// <returns>a <c>Vector</c> containing the linear combination of the input</returns>
+        public static Vector Create(double f1, Vector v1, double f2, Vector v2, double f3, Vector v3)
+        {
+            if (v1.Size != v2.Size) throw new ArgumentException("Vectors must have the same dimensions!");
+            Vector r = Vector.Create(v1.Size);
+            for (int k = 0; k < r.Size; k++)
+                r[k] = f1 * v1[k] + f2 * v2[k] + f3 * v3[k];
             return r;
         }
         #endregion

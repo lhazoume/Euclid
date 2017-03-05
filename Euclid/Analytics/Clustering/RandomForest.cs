@@ -64,7 +64,7 @@ namespace Euclid.Analytics.Clustering
             int minSize,
             ClusteringContext<T> context)
         {
-            Series<T, double, string> variableSeries = X.GetSeriesAt(varIndex);
+            Series<T, double, string> variableSeries = X.GetSeriesAt(X.Labels[varIndex]);
 
             #region Check whether the data are the relevant sizes
             if (X.Rows < 2 * minSize)

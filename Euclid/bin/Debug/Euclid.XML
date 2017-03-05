@@ -154,6 +154,38 @@
             <param name="benchmark">the obtained vector</param>
             <returns>a vector whose size is the same as the obtained vector</returns>
         </member>
+        <member name="T:Euclid.Analytics.InterRelations">
+            <summary>Class used to calculate statistic relationships between dataframes</summary>
+        </member>
+        <member name="M:Euclid.Analytics.InterRelations.CovarianceEstimatorMatrix``2(Euclid.IndexedSeries.DataFrame{``0,System.Double,``1})">
+            <summary>Gets the covariance matrix between the series of the dataframe</summary>
+            <typeparam name="T">the dataframes' legend types</typeparam>
+            <typeparam name="V">the dataframes' label types</typeparam>
+            <param name="dataFrame">the underlying data frame</param>
+            <returns>a dataFrame</returns>
+        </member>
+        <member name="M:Euclid.Analytics.InterRelations.CorrelationMatrix``2(Euclid.IndexedSeries.DataFrame{``0,System.Double,``1})">
+            <summary>Gets the correlation matrix between the series of the dataframe</summary>
+            <typeparam name="T">the dataframes' legend types</typeparam>
+            <typeparam name="V">the dataframes' label types</typeparam>
+            <param name="dataFrame">the underlying data frame</param>
+            <returns>a dataFrame</returns>
+        </member>
+        <member name="M:Euclid.Analytics.InterRelations.CorrelationMatrix``2(Euclid.IndexedSeries.DataFrame{``0,System.Double,``1},Euclid.IndexedSeries.DataFrame{``0,System.Double,``1})">
+            <summary>Gets the cross-correlation between the time series of the input dataframes</summary>
+            <typeparam name="T">the dataframes' legend types</typeparam>
+            <typeparam name="V">the dataframes' label types</typeparam>
+            <param name="dataFrame1">the left hand side dataFrame</param>
+            <param name="dataFrame2">the right hand side data frame</param>
+            <returns>a dataFrame</returns>
+        </member>
+        <member name="M:Euclid.Analytics.InterRelations.RedundancyMatrix``2(Euclid.IndexedSeries.DataFrame{``0,System.Double,``1})">
+            <summary>Gets the redundancy matrix of the series of the dataframe</summary>
+            <typeparam name="T">the dataframe's legend types</typeparam>
+            <typeparam name="V">the dataframe's label types</typeparam>
+            <param name="dataFrame">the underlying dataFrame</param>
+            <returns>a dataframe</returns>
+        </member>
         <member name="T:Euclid.Analytics.LinearModel">
             <summary>
             Stores the metrics of a linear regression and allows prediction
@@ -364,6 +396,92 @@
         <member name="P:Euclid.Analytics.NeuralNetworks.ActivationFunctions.IActivationFunction.Min">
             <summary>The minimum value of the activation function</summary>
         </member>
+        <member name="T:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron">
+            <summary>Perceptron feed-forward neural network class</summary>
+        </member>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.Clone">
+            <summary>Gets a deep copy of the perceptron network</summary>
+        </member>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.Item(System.Int32)">
+            <summary>Gets a layer of the perceptron</summary>
+            <param name="index">the layer's index</param>
+            <returns>a Layer</returns>
+        </member>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.LayerCount">
+            <summary>Gets the number of layers in the network</summary>
+        </member>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.Parameters">
+            <summary>Gets the number of parameters (i.e. freedom degrees) of the network</summary>
+        </member>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.InputSize">
+            <summary>Gets the size of the input data expected by the network</summary>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.ToXml(System.Xml.XmlWriter)">
+            <summary>Writes the network's characteristics to an XML</summary>
+            <param name="writer">the XML writer</param>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.Process(Euclid.Vector)">
+            <summary>Calculates the network's response to an input</summary>
+            <param name="input">the input data</param>
+            <returns>a Vector</returns>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.Process(System.Collections.Generic.List{Euclid.Vector})">
+            <summary>Calculates the network's responses to a set of inputs</summary>
+            <param name="inputs">the set of input data</param>
+            <returns>a List of Vectors</returns>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.Create(Euclid.Analytics.NeuralNetworks.ActivationFunctions.IActivationFunction,System.Int32,System.Int32[])">
+            <summary>Creates an empty network</summary>
+            <param name="function">the activation function</param>
+            <param name="inputSize">the input size</param>
+            <param name="layerSizes">the layers' sizes</param>
+            <returns>a Perceptron network</returns>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron.Create(System.Xml.XmlNode)">
+            <summary>Builds ans fills a Perceptron network from its XML representation</summary>
+            <param name="node">the XML node</param>
+            <returns>a Perceptron network</returns>
+        </member>
+        <member name="T:Euclid.Analytics.NeuralNetworks.FeedForward.Trainer">
+            <summary>Class used to train a Perceptron network</summary>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Trainer.#ctor(Euclid.Analytics.NeuralNetworks.FeedForward.Perceptron,Euclid.Analytics.ErrorFunctions.IErrorFunction)">
+            <summary>Builds a trainer class</summary>
+            <param name="network">the initial state of the network to train</param>
+            <param name="errorFunction">the error function</param>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Trainer.TrainBackPropagation(System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Double,System.Int32)">
+            <summary>Trains the underlyng network using standard back propagation</summary>
+            <param name="learningX">the learning phase's inputs</param>
+            <param name="learningY">the learning phase's expected responses</param>
+            <param name="validationX">the validation phase's inputs</param>
+            <param name="validationY">the validation phase's expected responses</param>
+            <param name="learningRate">the learning rate</param>
+            <param name="epochs">the number of epochs</param>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Trainer.TrainBackPropagationMomentum(System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Double,System.Double,System.Int32)">
+            <summary>Trains the underlyng network using standard back propagation with a momentum</summary>
+            <param name="learningX">the learning phase's inputs</param>
+            <param name="learningY">the learning phase's expected responses</param>
+            <param name="validationX">the validation phase's inputs</param>
+            <param name="validationY">the validation phase's expected responses</param>
+            <param name="learningRate">the learning rate</param>
+            <param name="momentum">the momentum applied to the descent direction</param>
+            <param name="epochs">the number of epochs</param>
+        </member>
+        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Trainer.TrainResilientPropagation(System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector},System.Double,System.Double,System.Int32)">
+            <summary>Trains the underlying network using the resilient propagation</summary>
+            <param name="learningX">the learning phase's inputs</param>
+            <param name="learningY">the learning phase's expected responses</param>
+            <param name="validationX">the validation phase's inputs</param>
+            <param name="validationY">the validation phase's expected responses</param>
+            <param name="etaPlus">the speeding factor</param>
+            <param name="etaMinus">the slowing factor</param>
+            <param name="epochs">the number of epochs</param>
+        </member>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Trainer.Convergence">
+            <summary>The history of training and validation errors, epoch by epoch</summary>
+        </member>
         <member name="T:Euclid.Analytics.NeuralNetworks.FeedForward.Layer">
             <summary>A Layer class for feed-forward perceptron</summary>
         </member>
@@ -377,23 +495,11 @@
             <param name="inputs">the list of input vectors</param>
             <returns>a list of <c>Vector</c></returns>
         </member>
-        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Increment(Euclid.Matrix,Euclid.Vector)">
-            <summary>Increments the weights and biases of the layer</summary>
-            <param name="weightIncrements">the values to be added to the weights</param>
-            <param name="biasIncrements">the values to be added to the biases</param>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Biases">
+            <summary>Gets and sets the biases of the layer</summary>
         </member>
-        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Set(Euclid.Matrix,Euclid.Vector)">
-            <summary>Sets the weights and biases of the layer</summary>
-            <param name="weights">the new values of the weights</param>
-            <param name="biases">the new values of the biases</param>
-        </member>
-        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.SetBiases(Euclid.Vector)">
-            <summary>Sets the biases of the layer</summary>
-            <param name="biases">the new values of the biases</param>
-        </member>
-        <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.SetWeights(Euclid.Matrix)">
-            <summary>Sets the weights of the layer</summary>
-            <param name="weights">the new values of the weights</param>
+        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Weights">
+            <summary>Gets and sets the weights of the layer</summary>
         </member>
         <member name="M:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Weight(System.Int32,System.Int32)">
             <summary>Gets the weight of a given neuron for a given input</summary>
@@ -420,12 +526,6 @@
         </member>
         <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Function">
             <summary>Gets the activation function of the Layer</summary>
-        </member>
-        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Biases">
-            <summary>Gets the biases of the layer's neurons</summary>
-        </member>
-        <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.Weights">
-            <summary>Gets the weights of the layer's neurons</summary>
         </member>
         <member name="P:Euclid.Analytics.NeuralNetworks.FeedForward.Layer.A">
             <summary>Gets the linear output of the layer before activation</summary>
@@ -653,6 +753,9 @@
             <summary>Creates a Scaling based on the minimum and maximum</summary>
             <param name="data">the data to scale</param>
             <returns>a <c>Scaling</c> class</returns>
+        </member>
+        <member name="T:Euclid.Analytics.Tests.KolmogorovSmirnovTest">
+            <summary> Helps testing empiric distribution adequacy using Kolmogorov-Smirnov</summary>
         </member>
         <member name="M:Euclid.Analytics.Tests.KolmogorovSmirnovTest.IsSameDistribution(System.Double[],System.Double[],System.Double)">
             <summary>
@@ -1981,6 +2084,48 @@
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
+        <member name="T:Euclid.Distributions.Discrete.BinomialDistribution">
+            <summary> Binonmial distribution class</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.Support">
+            <summary>Gets the distribution's support</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).</summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.ProbabilityDensity(System.Double)">
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
         <member name="T:Euclid.Distributions.Discrete.DiscreteDistribution">
             <summary>Abstract class base for continuous distributions</summary>
         </member>
@@ -2210,6 +2355,9 @@
             <typeparam name="T">the generic type</typeparam>
             <param name="text"></param>
             <returns>a T</returns>
+        </member>
+        <member name="T:Euclid.Helpers.RandomHelper">
+            <summary>Helper class for random number generation</summary>
         </member>
         <member name="M:Euclid.Helpers.RandomHelper.NextDouble(System.Random,System.Double,System.Double)">
             <summary>
@@ -2507,6 +2655,72 @@
             <param name="numberOfIntervals">the number of intervals</param>
             <returns>an <c>Histogram</c></returns>
         </member>
+        <member name="T:Euclid.IndexedSeries.Header`1">
+            <summary>Header class for the IIndexe</summary>
+            <typeparam name="T">the type of label</typeparam>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.#ctor(System.Collections.Generic.IList{`0})">
+            <summary>Builds a zero-indexed header</summary>
+            <param name="content">the values of the labels</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.#ctor(Euclid.Objects.Map{`0,System.Int32})">
+            <summary> Builds a header from a two-way dictionary</summary>
+            <param name="map">the map</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.GetEnumerator">
+            <summary>Gets an enumerator of the labels</summary>
+            <returns>a IEnumerator</returns>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Header`1.Item(`0)">
+            <summary>Gets the index associated with a label</summary>
+            <param name="t">the label</param>
+            <returns>an integer</returns>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Header`1.Count">
+            <summary>Gets the number of labels in the header</summary>
+        </member>
+        <member name="P:Euclid.IndexedSeries.Header`1.Values">
+            <summary>Gets the labels</summary>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.Clone">
+            <summary>Clones the header</summary>
+            <returns>a Header</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.Remove(`0)">
+            <summary>Removes a label from the header</summary>
+            <param name="t">the label</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.Add(`0)">
+            <summary>Adds a label to the header</summary>
+            <param name="t">the label</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.Rename(`0,`0)">
+            <summary>Renames a label</summary>
+            <param name="oldValue">the old value of the label</param>
+            <param name="newValue">the new value of the label</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.ElementAt(System.Int32)">
+            <summary>Returns the label at a given index</summary>
+            <param name="index">the index</param>
+            <returns>a label</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.Contains(`0)">
+            <summary>Checks if the header contains a given label</summary>
+            <param name="t">the target label</param>
+            <returns>true if the label is in the header, false otherwise</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.op_Equality(Euclid.IndexedSeries.Header{`0},Euclid.IndexedSeries.Header{`0})">
+            <summary>Equality operator</summary>
+            <param name="h1">the left-hand-side header</param>
+            <param name="h2">the right-hand-side header</param>
+            <returns>true if the headers have the same content, false otherwise</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Header`1.op_Inequality(Euclid.IndexedSeries.Header{`0},Euclid.IndexedSeries.Header{`0})">
+            <summary>Inequality operator</summary>
+            <param name="h1">the left-hand-side header</param>
+            <param name="h2">the right-hand-side header</param>
+            <returns>true if the headers do not have the same content, false otherwise</returns>
+        </member>
         <member name="T:Euclid.IndexedSeries.Slice`3">
             <summary>Class representing a Slice of synchronized data</summary>
             <typeparam name="T">the legend type</typeparam>
@@ -2563,10 +2777,10 @@
             <param name="i">the index</param>
             <returns>a label</returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.Slice`3.SetLabel(System.Int32,`2)">
+        <member name="M:Euclid.IndexedSeries.Slice`3.RenameLabel(`2,`2)">
             <summary>Sets the i-th label's value</summary>
-            <param name="i">the index</param>
-            <param name="value">the new value</param>
+            <param name="oldValue">the old value</param>
+            <param name="newValue">the new value</param>
         </member>
         <member name="M:Euclid.IndexedSeries.Slice`3.ToXml(System.Xml.XmlWriter)">
             <summary>Serializes the slice to Xml </summary>
@@ -2580,7 +2794,7 @@
             <summary>De-serializes the slice from a Xml node</summary>
             <param name="node">the <c>XmlNode</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.Slice`3.Create(System.Collections.Generic.IEnumerable{`2},`0,System.Collections.Generic.IEnumerable{`1})">
+        <member name="M:Euclid.IndexedSeries.Slice`3.Create(System.Collections.Generic.IList{`2},`0,System.Collections.Generic.IEnumerable{`1})">
             <summary>Builds a slice from generic enumerable labels and data</summary>
             <param name="labels">the labels</param>
             <param name="legend">the legend</param>
@@ -2597,7 +2811,7 @@
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
         </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(`2,`0[],`1[])">
+        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(`2,System.Collections.Generic.IList{`0},`1[])">
             <summary>Builds a <c>Series</c></summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>
@@ -2666,10 +2880,10 @@
             <param name="index">the index</param>
             <returns>a legend value</returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.SetLegend(System.Int32,`0)">
+        <member name="M:Euclid.IndexedSeries.Series`3.Rename(`0,`0)">
             <summary>Sets the i-th legend value </summary>
-            <param name="index">the index</param>
-            <param name="value">the new legend value</param>
+            <param name="oldValue">the old legend</param>
+            <param name="newValue">the new legend value</param>
         </member>
         <member name="M:Euclid.IndexedSeries.Series`3.ToXml(System.Xml.XmlWriter)">
             <summary>Serializes the <c>Series</c> to Xml </summary>
@@ -2678,10 +2892,6 @@
         <member name="M:Euclid.IndexedSeries.Series`3.ToCSV">
             <summary>Builds a string representing the content of the <c>Series</c></summary>
             <returns>a <c>String</c></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.FromCSV(System.String)">
-            <summary>Fills a <c>Series</c> from a string</summary>
-            <param name="text">the <c>String</c> content</param>
         </member>
         <member name="M:Euclid.IndexedSeries.Series`3.op_Addition(Euclid.IndexedSeries.Series{`0,`1,`2},Euclid.IndexedSeries.Series{`0,`1,`2})">
             <summary>Adds two <c>Series</c></summary>
@@ -2745,6 +2955,10 @@
         <member name="M:Euclid.IndexedSeries.Series`3.Create(System.Xml.XmlNode)">
             <summary>Builds a <c>Series</c> from its serialized form</summary>
             <param name="node">the <c>XmlNode</c></param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.Series`3.Create(System.String)">
+            <summary>Builds a <c>Series</c> from a string</summary>
+            <param name="text">the <c>String</c> content</param>
         </member>
         <member name="T:Euclid.IndexedSeries.DataFrame`3">
             <summary>
@@ -2870,6 +3084,11 @@
             </summary>
             <param name="t">the legend</param>
             <returns>a <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSliceAt(System.Int32)">
+            <summary>Gets the slice at</summary>
+            <param name="k"></param>
+            <returns></returns>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeriesAt(`2)">
             <summary>
@@ -3583,11 +3802,6 @@
             Returns the error of the integration
             </summary>
         </member>
-        <member name="P:Euclid.Numerics.Integrator.Iterations">
-            <summary>
-            Returns the number of iterations of the integration process
-            </summary>
-        </member>
         <member name="P:Euclid.Numerics.Integrator.Status">
             <summary>
             Returns the status of the solver after the integration process
@@ -3696,6 +3910,12 @@
             <summary>Builds a Map of </summary>
             <param name="values"></param>
         </member>
+        <member name="P:Euclid.Objects.Map`2.LeftEnumerator">
+            <summary>Gets an enumerator for the left hand side</summary>
+        </member>
+        <member name="P:Euclid.Objects.Map`2.Enumerator">
+            <summary>Gets an enumerator for the right hand side </summary>
+        </member>
         <member name="M:Euclid.Objects.Map`2.Add(`0,`1)">
             <summary>Adds a pair to the map</summary>
             <param name="t1">the left hand side key</param>
@@ -3745,7 +3965,7 @@
         <member name="P:Euclid.Objects.Map`2.Count">
             <summary>Gets the number of pairs in the map</summary>
         </member>
-        <member name="P:Euclid.Objects.Map`2.Clone">
+        <member name="M:Euclid.Objects.Map`2.Clone">
             <summary>Gets a deep copy of the map</summary>
         </member>
         <member name="T:Euclid.Polynomial">
@@ -3981,6 +4201,32 @@
         <member name="F:Euclid.Solvers.Descents.STEP_EPSILON">
             <summary>Default increment </summary>
         </member>
+        <member name="T:Euclid.Solvers.EndCriteria">
+            <summary>
+            Class used to specify the end criterion or criteria for all iterative optimisation classes
+            </summary>
+        </member>
+        <member name="M:Euclid.Solvers.EndCriteria.#ctor(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Double},System.Nullable{System.Double})">
+            <summary>End criteria constructor</summary>
+            <param name="maxIterations">the maximum number of iterations</param>
+            <param name="maxStaticIterations">the maximum number of iterations without substancial change</param>
+            <param name="functionEpsilon">the error tolerance (beyond that value, convergence is assumed)</param>
+            <param name="gradientEpsilon">the gradient tolerance (beyond that value, convergence is assumed)</param>
+        </member>
+        <member name="M:Euclid.Solvers.EndCriteria.ShouldStop(System.Double,System.Double)">
+            <summary>Specifies whether the end criteria are met for the current value</summary>
+            <param name="value">the current value of the optimized function</param>
+            <param name="gradient">the current gradient norm of the optimized function</param>
+            <returns>a boolean</returns>
+        </member>
+        <member name="M:Euclid.Solvers.EndCriteria.ShouldStop(System.Double)">
+            <summary>Specifies whether the end criteria are met for the current value</summary>
+            <param name="value">the current value of the optimizated function</param>
+            <returns>a boolean</returns>
+        </member>
+        <member name="P:Euclid.Solvers.EndCriteria.Status">
+            <summary>Gets the current status of the optimization controlled by this end criteria</summary>
+        </member>
         <member name="T:Euclid.Solvers.GradientDescent">
             <summary>
             Class used to perform a gradient descent on any multivariate function
@@ -3996,26 +4242,25 @@
             <param name="maxIterations">the maximum number of iterations in the gradient</param>
             <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
         </member>
+        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},System.Int32,System.Int32)">
+            <summary>Gradient descent constructor
+            </summary>
+            <param name="initialGuess">the initial guess Vector</param>
+            <param name="lineSearch">the line search method</param>
+            <param name="function">the function to minimize</param>
+            <param name="gradient">the gradient function to minimize</param>
+            <param name="maxIterations">the maximum number of iterations in the gradient</param>
+            <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
+        </member>
         <member name="P:Euclid.Solvers.GradientDescent.LineSearch">
             <summary>Gets and sets the line search method used to optimize the step</summary>
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.Function">
             <summary>Gets and sets the function to minimize</summary>
         </member>
-        <member name="P:Euclid.Solvers.GradientDescent.MaxIterations">
-            <summary>Gets and sets the maximum number of iterations </summary>
-        </member>
-        <member name="P:Euclid.Solvers.GradientDescent.MaxLineSearchIterations">
-            <summary>Gets and sets the maxium number of iterations in the line search </summary>
-        </member>
         <member name="P:Euclid.Solvers.GradientDescent.Status">
             <summary>
             The final status of the solver
-            </summary>
-        </member>
-        <member name="P:Euclid.Solvers.GradientDescent.Iterations">
-            <summary>
-            Returns the number of interations of the solver
             </summary>
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.Error">
@@ -4024,15 +4269,19 @@
             </summary>
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.Result">
-            <summary>
-            The result of the solver
-            </summary>
+            <summary>The result of the solver</summary>
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.Convergence">
             <summary>Gets the details of the convergence (gradient norm, error)</summary>
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.Evaluations">
             <summary>Gets the number of times the function was evaluated </summary>
+        </member>
+        <member name="P:Euclid.Solvers.GradientDescent.MaxIterations">
+            <summary>Gets the maximum number of iterations </summary>
+        </member>
+        <member name="P:Euclid.Solvers.GradientDescent.MaxLineSearchIterations">
+            <summary>Gets the maxium number of iterations in the line search </summary>
         </member>
         <member name="M:Euclid.Solvers.GradientDescent.Minimize(System.Double)">
             <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
@@ -4054,11 +4303,6 @@
         <member name="P:Euclid.Solvers.ISingleVariableSolver.Status">
             <summary>
             Gets the solver's status
-            </summary>
-        </member>
-        <member name="P:Euclid.Solvers.ISingleVariableSolver.Iterations">
-            <summary>
-            Gets the number of iterations the solver went through
             </summary>
         </member>
         <member name="P:Euclid.Solvers.ISingleVariableSolver.MaxIterations">
@@ -4161,11 +4405,6 @@
             Returns the final error
             </summary>
         </member>
-        <member name="P:Euclid.Solvers.NewtonRaphson.Iterations">
-            <summary>
-            Returns the number of interations of the solver
-            </summary>
-        </member>
         <member name="P:Euclid.Solvers.NewtonRaphson.Status">
             <summary>
             The final status of the solver
@@ -4191,6 +4430,65 @@
             Solve the equation f(x)=target using the Newton-Raphson method
             </summary>
             <param name="target">the target</param>
+        </member>
+        <member name="T:Euclid.Solvers.ParticleSwarmOptimizer">
+            <summary>Particle Swarm Optimization class</summary>
+        </member>
+        <member name="M:Euclid.Solvers.ParticleSwarmOptimizer.#ctor(System.Int32,Euclid.Vector,Euclid.Vector,System.Func{Euclid.Vector,System.Double},System.Func{System.Int32,Euclid.Vector[]},System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
+            <summary>Builds a Particle Swarm Optimizer</summary>
+            <param name="swarmSize">the swarm size</param>
+            <param name="lowerBounds">the lower bounds of the space</param>
+            <param name="upperBounds">the upper bounds of the space</param>
+            <param name="function">the function to optimize</param>
+            <param name="generator">a generator of seed vectors</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+            <param name="maxStaticIterations">the maximum number of static iterations</param>
+            <param name="epsilon">the convergence threshold</param>
+            <param name="attractionToParticleBest">the attraction to particle best factor</param>
+            <param name="attractionToOverallBest">the attraction to overall best factor</param>
+            <param name="velocityInertia">the velocity inertia</param>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.Epsilon">
+            <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.MaxIterations">
+            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.MaxStaticIterations">
+            <summary>Gets the maximum number of stationary iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.Status">
+            <summary>Gets the current status of the optimization proces</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.SwarmSize">
+            <summary> Gets the size of the swarm</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.Dimension">
+            <summary>Gets the dimension of each particle of the swarm</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.LowerBound">
+            <summary>Gets the lower bounds of the space in which the particles evolve</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.UpperBound">
+            <summary>Gets the upper bounds of the space in which the particles evolve</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.VelocityInertia">
+            <summary>Gets the inertia applied to the velocity</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.AttractionToParticleBest">
+            <summary>Gets the attraction to particle best</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.AttractionToOverallBest">
+            <summary>Gets the attraction to overall best</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.Result">
+            <summary>The result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Solvers.ParticleSwarmOptimizer.Convergence">
+            <summary>Gets the details of the convergence (Vector, error)</summary>
+        </member>
+        <member name="M:Euclid.Solvers.ParticleSwarmOptimizer.Solve">
+            <summary>Minimizes the function using Particle Swarm Optimization</summary>
         </member>
         <member name="T:Euclid.Solvers.RootBracketing">
             <summary>
@@ -4242,11 +4540,6 @@
             Returns the final error
             </summary>
         </member>
-        <member name="P:Euclid.Solvers.RootBracketing.Iterations">
-            <summary>
-            Returns the number of iterations of the solver
-            </summary>
-        </member>
         <member name="P:Euclid.Solvers.RootBracketing.Result">
             <summary>
             The result of the solver
@@ -4296,11 +4589,17 @@
         <member name="F:Euclid.Solvers.SolverStatus.NotRan">
             <summary> The solver did not run </summary>
         </member>
-        <member name="F:Euclid.Solvers.SolverStatus.Normal">
-            <summary> The solver ran as expected </summary>
+        <member name="F:Euclid.Solvers.SolverStatus.FunctionConvergence">
+            <summary> The solver stopped because the error value reached it's target</summary>
+        </member>
+        <member name="F:Euclid.Solvers.SolverStatus.GradientConvergence">
+            <summary> The solver stopped because the error gradient reached it's target</summary>
         </member>
         <member name="F:Euclid.Solvers.SolverStatus.IterationExceeded">
             <summary> The solver exceeded its maximum iterations </summary>
+        </member>
+        <member name="F:Euclid.Solvers.SolverStatus.StationaryFunction">
+            <summary> The solver exceeded the number of evaluation without substantial change in error value</summary>
         </member>
         <member name="F:Euclid.Solvers.SolverStatus.BadFunction">
             <summary> The function is not adapted to the solver's requirements </summary>
@@ -4690,6 +4989,39 @@
             <param name="x"></param>
             <returns></returns>
         </member>
+        <member name="T:Euclid.SparseMatrix">
+            <summary>
+            Matrix of double
+            </summary>
+        </member>
+        <member name="M:Euclid.SparseMatrix.Create(System.Int32,System.Int32)">
+            <summary>
+            Builds a  sparse matrix filled with the specified value
+            </summary>
+            <param name="rows">the number of rows</param>
+            <param name="cols">the number of columns</param>
+        </member>
+        <member name="P:Euclid.SparseMatrix.Columns">
+            <summary>Returns the number of columns of the <c>Matrix</c></summary>
+        </member>
+        <member name="P:Euclid.SparseMatrix.Rows">
+            <summary>Returns the number of rows of the <c>Matrix</c></summary>
+        </member>
+        <member name="P:Euclid.SparseMatrix.IsSquare">
+            <summary>Specifies whether the <c>Matrix</c> is square</summary>
+        </member>
+        <member name="P:Euclid.SparseMatrix.CountNonZeros">
+            <summary>Returns the number of non zero values in the <c>SparseMatrix</c></summary>
+        </member>
+        <member name="P:Euclid.SparseMatrix.Item(System.Int32,System.Int32)">
+            <summary>Allows reading and modifying the coefficients of the <c>Matrix</c></summary>
+            <param name="i">the row</param>
+            <param name="j">the column</param>
+            <returns>a double value</returns>
+        </member>
+        <member name="P:Euclid.SparseMatrix.Clone">
+            <summary>Returns a deep copy of the <c>Matrix</c></summary>
+        </member>
         <member name="T:Euclid.Vector">
             <summary>
             Vector of double class
@@ -4881,6 +5213,18 @@
             <param name="v2">the right hand side</param>
             <returns>a <c>Vector</c> containing the Hadamard product</returns>
         </member>
+        <member name="M:Euclid.Vector.Max(Euclid.Vector,Euclid.Vector)">
+            <summary>Builds a Vector made of the highest values </summary>
+            <param name="v1">a Vector</param>
+            <param name="v2">a Vector</param>
+            <returns>a Vector</returns>
+        </member>
+        <member name="M:Euclid.Vector.Min(Euclid.Vector,Euclid.Vector)">
+            <summary>Builds a Vector made of the smallest values </summary>
+            <param name="v1">a Vector</param>
+            <param name="v2">a Vector</param>
+            <returns>a Vector</returns>
+        </member>
         <member name="M:Euclid.Vector.Create(System.Double,Euclid.Vector,System.Double,Euclid.Vector)">
             <summary>
             Creates a Vector made from the linear combination of two vectors
@@ -4889,6 +5233,18 @@
             <param name="v1">the left hand side vector</param>
             <param name="f2">the right hand side factor</param>
             <param name="v2">the right hand side vector</param>
+            <returns>a <c>Vector</c> containing the linear combination of the input</returns>
+        </member>
+        <member name="M:Euclid.Vector.Create(System.Double,Euclid.Vector,System.Double,Euclid.Vector,System.Double,Euclid.Vector)">
+            <summary>
+            Creates a Vector made from the linear combination of three vectors
+            </summary>
+            <param name="f1">the left hand side factor</param>
+            <param name="v1">the left hand side vector</param>
+            <param name="f2">the right hand side factor</param>
+            <param name="v2">the right hand side vector</param>
+            <param name="f3">the right hand side factor</param>
+            <param name="v3">the right hand side vector</param>
             <returns>a <c>Vector</c> containing the linear combination of the input</returns>
         </member>
         <member name="M:Euclid.Vector.Create(System.Double[])">

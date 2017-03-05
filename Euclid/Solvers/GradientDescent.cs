@@ -12,7 +12,7 @@ namespace Euclid.Solvers
         private Func<Vector, double> _function;
         private Func<Vector, Vector> _gradient;
         private double _error;
-        private int _iterations, _maxIterations, _maxLineSearchIterations, _evaluations;
+        private int _maxIterations, _maxLineSearchIterations, _evaluations;
         private Vector _initialGuess, _result;
         private List<Vector> _descentDirections = new List<Vector>();
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
@@ -40,6 +40,14 @@ namespace Euclid.Solvers
             _gradient = x => NumericalGradient(x, Vector.Create(_initialGuess.Size, Descents.STEP_EPSILON));
         }
 
+        /// <summary>Gradient descent constructor
+        /// </summary>
+        /// <param name="initialGuess">the initial guess Vector</param>
+        /// <param name="lineSearch">the line search method</param>
+        /// <param name="function">the function to minimize</param>
+        /// <param name="gradient">the gradient function to minimize</param>
+        /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
+        /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
         public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, Func<Vector, Vector> gradient, int maxIterations, int maxLineSearchIterations)
         {
             _initialGuess = initialGuess.Clone;
@@ -70,20 +78,6 @@ namespace Euclid.Solvers
             set { _function = value; }
         }
 
-        /// <summary>Gets and sets the maximum number of iterations </summary>
-        public int MaxIterations
-        {
-            get { return _maxIterations; }
-            set { _maxIterations = value; }
-        }
-
-        /// <summary>Gets and sets the maxium number of iterations in the line search </summary>
-        public int MaxLineSearchIterations
-        {
-            get { return _maxLineSearchIterations; }
-            set { _maxLineSearchIterations = value; }
-        }
-
         #endregion
 
         #region Get
@@ -97,14 +91,6 @@ namespace Euclid.Solvers
         }
 
         /// <summary>
-        /// Returns the number of interations of the solver
-        /// </summary>
-        public int Iterations
-        {
-            get { return _iterations; }
-        }
-
-        /// <summary>
         /// Returns the final value of the function
         /// </summary>
         public double Error
@@ -112,9 +98,7 @@ namespace Euclid.Solvers
             get { return _error; }
         }
 
-        /// <summary>
-        /// The result of the solver
-        /// </summary>
+        /// <summary>The result of the solver</summary>
         public Vector Result
         {
             get { return _result; }
@@ -130,6 +114,18 @@ namespace Euclid.Solvers
         public int Evaluations
         {
             get { return _evaluations; }
+        }
+
+        /// <summary>Gets the maximum number of iterations </summary>
+        public int MaxIterations
+        {
+            get { return _maxIterations; }
+        }
+
+        /// <summary>Gets the maxium number of iterations in the line search </summary>
+        public int MaxLineSearchIterations
+        {
+            get { return _maxLineSearchIterations; }
         }
 
         #endregion
@@ -275,10 +271,9 @@ namespace Euclid.Solvers
 
             _descentDirections.Add(direction.Clone);
             _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, gradientEpsilon: Descents.GRADIENT_EPSILON);
 
-            _iterations = 1;
-
-            while (gradient.Norm2 > Descents.GRADIENT_EPSILON && _iterations <= _maxIterations)
+            while (!endCriteria.ShouldStop(_error, gradient.Norm2))
             {
                 double factor = LineSearchBranch(_error, _result, direction, gradient);
                 _result = _result + (factor * direction);
@@ -290,14 +285,9 @@ namespace Euclid.Solvers
 
                 _descentDirections.Add(direction.Clone);
                 _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
-
-                _iterations++;
             }
 
-            if (gradient.Norm2 <= Descents.GRADIENT_EPSILON)
-                _status = SolverStatus.Normal;
-            else if (_iterations > _maxIterations)
-                _status = SolverStatus.IterationExceeded;
+            _status = endCriteria.Status;
         }
 
         /// <summary>Minimizes the function using the BFGS gradient descent</summary>
@@ -322,9 +312,8 @@ namespace Euclid.Solvers
             _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
             gradients.Add(gradient);
 
-            _iterations = 1;
-
-            while (gradient.Norm2 > Descents.GRADIENT_EPSILON && _iterations <= _maxIterations)
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, gradientEpsilon: Descents.GRADIENT_EPSILON);
+            while (!endCriteria.ShouldStop(_error, gradient.Norm2))
             {
                 double factor = LineSearchBranch(_error, _result, direction, gradient);
                 Vector s = factor * direction;
@@ -340,14 +329,9 @@ namespace Euclid.Solvers
 
                 _descentDirections.Add(direction.Clone);
                 _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
-
-                _iterations++;
             }
 
-            if (gradient.Norm2 <= Descents.GRADIENT_EPSILON)
-                _status = SolverStatus.Normal;
-            else if (_iterations > _maxIterations)
-                _status = SolverStatus.IterationExceeded;
+            _status = endCriteria.Status;
         }
 
         #endregion

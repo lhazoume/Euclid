@@ -1,12 +1,10 @@
 ﻿using Euclid.Arithmetics;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid.Distributions.Discrete
 {
+    /// <summary> Binonmial distribution class</summary>
     public class BinomialDistribution : DiscreteDistribution
     {
         #region Declarations
@@ -24,16 +22,19 @@ namespace Euclid.Distributions.Discrete
         }
 
         #region Accessors
+        /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy
         {
             get { return 0.5 * Math.Log(2 * Math.PI * Math.E * _n * _p * _q); }
         }
 
+        /// <summary>Gets the distribution's mean</summary>
         public override double Mean
         {
             get { return _n * _p; }
         }
 
+        /// <summary>Gets the distribution's median</summary>
         public override double Median
         {
             get
@@ -45,32 +46,40 @@ namespace Euclid.Distributions.Discrete
             }
         }
 
+        /// <summary>Gets the distribution's mode</summary>
         public override double Mode
         {
             get { return 0.5 * (Math.Floor((_n + 1) * _p) + Math.Ceiling((_n + 1) * _p) - 1); }
         }
 
+        /// <summary>Gets the distribution's skewness</summary>
         public override double Skewness
         {
             get { return (1 - 2 * _p) / Math.Sqrt(_n * _p * _q); }
         }
 
+        /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation
         {
             get { return Math.Sqrt(_n * _p * _q); }
         }
 
+        /// <summary>Gets the distribution's variance</summary>
         public override double Variance
         {
             get { return _n * _p * _q; }
         }
 
+        /// <summary>Gets the distribution's support</summary>
         public override double[] Support
         {
             get { return Enumerable.Range(0, _n + 1).Select(d => Convert.ToDouble(d)).ToArray(); }
         }
         #endregion
 
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).</summary>
+        /// <param name="x">The location at which to compute the cumulative distribution function</param>
+        /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
             if (x < 0) return 0;
@@ -79,6 +88,9 @@ namespace Euclid.Distributions.Discrete
             return Fn.IncompleteRegularizedBeta(_q, _n - k, k + 1);
         }
 
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
+        /// <param name="p">The location at which to compute the inverse cumulative density</param>
+        /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
         {
             if (_p <= 0) return 0;
@@ -90,6 +102,9 @@ namespace Euclid.Distributions.Discrete
             return k - 1;
         }
 
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+        /// <param name="x">The location at which to compute the density</param>
+        /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
             int k = Convert.ToInt32(Math.Round(x));

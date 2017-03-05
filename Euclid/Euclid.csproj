@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Euclid.XML</DocumentationFile>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -107,6 +107,7 @@
     <Compile Include="Histograms\Bound.cs" />
     <Compile Include="Histograms\Interval.cs" />
     <Compile Include="Histograms\Histogram.cs" />
+    <Compile Include="IndexedSeries\Header.cs" />
     <Compile Include="IndexedSeries\Slice.cs" />
     <Compile Include="LinearAlgebra\EigenDecomposition.cs" />
     <Compile Include="Matrix.cs" />
@@ -133,10 +134,12 @@
     <Compile Include="Solvers\ISingleVariableSolver.cs" />
     <Compile Include="Solvers\LineSearch.cs" />
     <Compile Include="Solvers\NewtonRaphson.cs" />
+    <Compile Include="Solvers\ParticleSwarmOptimizer.cs" />
     <Compile Include="Solvers\RootBracketing.cs" />
     <Compile Include="Solvers\RootBracketingMethod.cs" />
     <Compile Include="Solvers\SolverStatus.cs" />
     <Compile Include="Fn.cs" />
+    <Compile Include="SparseMatrix.cs" />
     <Compile Include="Vector.cs" />
   </ItemGroup>
   <ItemGroup />

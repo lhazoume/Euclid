@@ -426,6 +426,9 @@ namespace Euclid.IndexedSeries
             return Slice<T, U, V>.Create(_labels, t, result);
         }
 
+        /// <summary>Gets the slice at</summary>
+        /// <param name="k"></param>
+        /// <returns></returns>
         public Slice<T, U, V> GetSliceAt(int k)
         {
             U[] result = new U[_labels.Length];
