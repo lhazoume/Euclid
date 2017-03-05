@@ -13,6 +13,12 @@ namespace Euclid.IndexedSeries
         private Map<T, int> _map;
 
         #region Constructors
+
+        public Header()
+        {
+            _map = new Map<T, int>();
+        }
+
         /// <summary>Builds a zero-indexed header</summary>
         /// <param name="content">the values of the labels</param>
         public Header(IList<T> content)
@@ -62,7 +68,7 @@ namespace Euclid.IndexedSeries
         /// <summary>Gets the labels</summary>
         public T[] Values
         {
-            get { return _map.Lefts; }
+            get { return _map.Rights.OrderBy(i => i).Select(i => _map.Backward(i)).ToArray(); }
         }
         #endregion
 
@@ -123,7 +129,7 @@ namespace Euclid.IndexedSeries
         /// <param name="h1">the left-hand-side header</param>
         /// <param name="h2">the right-hand-side header</param>
         /// <returns>true if the headers have the same content, false otherwise</returns>
-        public static bool operator==(Header<T> h1, Header<T> h2)
+        public static bool operator ==(Header<T> h1, Header<T> h2)
         {
             if (h1.Count != h2.Count) return false;
             return h1._map.Lefts.SequenceEqual(h2._map.Lefts);

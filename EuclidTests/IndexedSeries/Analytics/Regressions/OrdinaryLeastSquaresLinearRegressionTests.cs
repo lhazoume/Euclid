@@ -20,11 +20,11 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
 
             DataFrame<int, double, string> x = DataFrame<int, double, string>.Create(new string[] { "V0" }, indexes, data);
             for (int v = 1; v <= 9; v++)
-                x.Add("V" + v, Matrix.CreateRandom(n, 1).Data);
+                x.AddSeries("V" + v, Matrix.CreateRandom(n, 1).Data);
 
             double[] factors = new double[] { Math.PI, Math.E, Math.Log(2) };
 
-            Series<int, double, string> y = (factors[0] * x.GetSeriesAt(0)) + (factors[1] * x.GetSeriesAt(1)) + (factors[2] * x.GetSeriesAt(2));
+            Series<int, double, string> y = (factors[0] * x.GetSeriesAt("V0")) + (factors[1] * x.GetSeriesAt("V1")) + (factors[2] * x.GetSeriesAt("V2"));
             y.Label = "Y";
 
             OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);
@@ -44,12 +44,12 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             for (int v = 1; v <= 2; v++)
             {
                 Thread.Sleep(37);
-                x.Add("V" + v, Matrix.CreateRandom(n, 1).Data);
+                x.AddSeries("V" + v, Matrix.CreateRandom(n, 1).Data);
             }
 
             double[] factors = new double[] { Math.PI, Math.E, Math.Log(2) };
 
-            Series<int, double, string> y = (factors[0] * x.GetSeriesAt(0)) + (factors[1] * x.GetSeriesAt(1)) + (factors[2] * x.GetSeriesAt(2));
+            Series<int, double, string> y = (factors[0] * x.GetSeriesAt("V0")) + (factors[1] * x.GetSeriesAt("V1")) + (factors[2] * x.GetSeriesAt("V2"));
             y.Label = "Y";
 
             OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);
@@ -76,12 +76,12 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             for (int v = 1; v <= 3; v++)
             {
                 Thread.Sleep(37);
-                x.Add("V" + v, Matrix.CreateRandom(n, 1).Data);
+                x.AddSeries("V" + v, Matrix.CreateRandom(n, 1).Data);
             }
 
             double[] factors = new double[] { Math.PI, Math.E, Math.Log(2) };
 
-            Series<int, double, string> y = (factors[0] * x.GetSeriesAt(0)) + (factors[1] * x.GetSeriesAt(1)) + (factors[2] * x.GetSeriesAt(2));
+            Series<int, double, string> y = (factors[0] * x.GetSeriesAt("V0")) + (factors[1] * x.GetSeriesAt("V1")) + (factors[2] * x.GetSeriesAt("V2"));
             y.Label = "Y";
 
             OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);
@@ -92,7 +92,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             for (int i = 0; i <= 2; i++)
                 sumSq += Math.Abs(lm.Factors[i] - factors[i]);
 
-            Assert.IsTrue(ols.Status == RegressionStatus.Normal && lm.Succeeded && sumSq < 1e-10 && Math.Abs(lm.Factors[3])<1e-10);
+            Assert.IsTrue(ols.Status == RegressionStatus.Normal && lm.Succeeded && sumSq < 1e-10 && Math.Abs(lm.Factors[3]) < 1e-10);
         }
     }
 }

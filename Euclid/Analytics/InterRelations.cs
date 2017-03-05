@@ -14,10 +14,8 @@ namespace Euclid.Analytics
         /// <returns>a dataFrame</returns>
         public static DataFrame<V, double, V> CovarianceEstimatorMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Columns, dataFrame.Columns);
-            result.SetLabels(dataFrame.Labels);
-            result.SetLegends(dataFrame.Labels);
             int n = dataFrame.Rows;
+            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
 
             #region Averages
             double[] averages = new double[dataFrame.Columns];
@@ -55,10 +53,8 @@ namespace Euclid.Analytics
         /// <returns>a dataFrame</returns>
         public static DataFrame<V, double, V> CorrelationMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Columns, dataFrame.Columns);
-            result.SetLabels(dataFrame.Labels);
-            result.SetLegends(dataFrame.Labels);
             int n = dataFrame.Rows;
+            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
 
             #region Averages
             double[] averages = new double[dataFrame.Columns],
@@ -104,9 +100,7 @@ namespace Euclid.Analytics
         /// <returns>a dataFrame</returns>
         public static DataFrame<V, double, V> CorrelationMatrix<T, V>(DataFrame<T, double, V> dataFrame1, DataFrame<T, double, V> dataFrame2) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame1.Columns, dataFrame2.Columns);
-            result.SetLabels(dataFrame2.Labels);
-            result.SetLegends(dataFrame1.Labels);
+            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame1.Labels, dataFrame2.Labels,new double[dataFrame2.Columns, dataFrame1.Columns]);
             if (dataFrame1.Rows != dataFrame2.Rows) throw new Exception("Rows do not match");
             int n = dataFrame1.Rows;
 
@@ -169,10 +163,8 @@ namespace Euclid.Analytics
         /// <returns>a dataframe</returns>
         public static DataFrame<V, double, V> RedundancyMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Columns, dataFrame.Columns);
-            result.SetLabels(dataFrame.Labels);
-            result.SetLegends(dataFrame.Labels);
             int n = dataFrame.Rows;
+            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Labels, dataFrame.Labels, new double[n,n]);
 
             #region Distinct values
             double[][] distincts = new double[dataFrame.Columns][];

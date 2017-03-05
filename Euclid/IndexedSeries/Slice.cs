@@ -21,13 +21,6 @@ namespace Euclid.IndexedSeries
         #endregion
 
         #region Constructors
-        private Slice(IList<V> labels, T legend, IEnumerable<U> data)
-        {
-            _data = data.ToArray();
-            _labels = new Header<V>(labels);
-            _legend = legend;
-        }
-
         private Slice(Header<V> labels, T legend, IEnumerable<U> data)
         {
             _data = data.ToArray();
@@ -208,13 +201,13 @@ namespace Euclid.IndexedSeries
 
             #region Data
             U[] data = new U[dataNodes.Count];
-            V[] labels = new V[dataNodes.Count];
+            Header<V> labels = new Header<V>();
             for (int i = 0; i < dataNodes.Count; i++)
             {
                 V label = dataNodes[i].Attributes["label"].Value.Parse<V>();
                 U value = dataNodes[i].Attributes["value"].Value.Parse<U>();
                 data[i] = value;
-                labels[i] = label;
+                labels.Add(label);
             }
             #endregion
 
@@ -226,7 +219,7 @@ namespace Euclid.IndexedSeries
         /// <param name="legend">the legend</param>
         /// <param name="data">the data</param>
         /// <returns>a <c>Slice</c></returns>
-        public static Slice<T, U, V> Create(IList<V> labels, T legend, IEnumerable<U> data)
+        public static Slice<T, U, V> Create(Header<V> labels, T legend, IEnumerable<U> data)
         {
             return new Slice<T, U, V>(labels, legend, data);
         }
@@ -243,12 +236,12 @@ namespace Euclid.IndexedSeries
             int count = header.Length - 1;
 
             U[] data = new U[count];
-            V[] labels = new V[count];
+            Header<V> labels = new Header<V>();
             T legend = content[0].Parse<T>();
 
             for (int i = 0; i < count; i++)
             {
-                labels[i] = header[1 + i].Parse<V>();
+                labels.Add(header[1 + i].Parse<V>());
                 data[i] = content[1 + i].Parse<U>();
             }
 

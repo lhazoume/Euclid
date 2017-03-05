@@ -2794,7 +2794,7 @@
             <summary>De-serializes the slice from a Xml node</summary>
             <param name="node">the <c>XmlNode</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.Slice`3.Create(System.Collections.Generic.IList{`2},`0,System.Collections.Generic.IEnumerable{`1})">
+        <member name="M:Euclid.IndexedSeries.Slice`3.Create(Euclid.IndexedSeries.Header{`2},`0,System.Collections.Generic.IEnumerable{`1})">
             <summary>Builds a slice from generic enumerable labels and data</summary>
             <param name="labels">the labels</param>
             <param name="legend">the legend</param>
@@ -2811,7 +2811,7 @@
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
         </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(`2,System.Collections.Generic.IList{`0},`1[])">
+        <member name="M:Euclid.IndexedSeries.Series`3.#ctor(`2,Euclid.IndexedSeries.Header{`0},`1[])">
             <summary>Builds a <c>Series</c></summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>
@@ -2941,11 +2941,7 @@
             <param name="amount">the scalar</param>
             <returns>a <c>Series</c></returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.Create(System.Int32)">
-            <summary>Builds an empty <c>Series</c></summary>
-            <param name="rows">the size of the <c>Series</c></param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.Create(`2,System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1})">
+        <member name="M:Euclid.IndexedSeries.Series`3.Create(`2,Euclid.IndexedSeries.Header{`0},System.Collections.Generic.IEnumerable{`1})">
             <summary>Builds a <c>Series</c> from generic enumerables of legends and data</summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>
@@ -2961,9 +2957,7 @@
             <param name="text">the <c>String</c> content</param>
         </member>
         <member name="T:Euclid.IndexedSeries.DataFrame`3">
-            <summary>
-            Class representing a DataFrame of synchronized data
-            </summary>
+            <summary>Class representing a DataFrame of synchronized data</summary>
             <typeparam name="T">the legend type</typeparam>
             <typeparam name="U">the data type</typeparam>
             <typeparam name="V">the label type</typeparam>
@@ -2972,7 +2966,7 @@
             <summary>Builds a <c>DataFrame</c> from its serialized form</summary>
             <param name="node">the <c>XmlNode</c></param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{`2},System.Collections.Generic.IEnumerable{`0},`1[0:,0:])">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IList{`2},System.Collections.Generic.IList{`0},`1[0:,0:])">
             <summary>
             Builds a <c>DataFrame</c>
             </summary>
@@ -2990,13 +2984,6 @@
             <param name="series">the series</param>
             <returns>a DataFrame</returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.Int32,System.Int32)">
-            <summary>
-            Builds an empty <c>DataFrame</c>
-            </summary>
-            <param name="rows">the number of rows</param>
-            <param name="columns">the number of columns</param>
-        </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.Create(System.String)">
             <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
             <param name="text">the <c>String</c> content</param>
@@ -3007,19 +2994,13 @@
             </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Labels">
-            <summary>
-            Gets the labels
-            </summary>
+            <summary>Gets the labels </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Columns">
-            <summary>
-            Gets the number of columns
-            </summary>
+            <summary>Gets the number of columns</summary>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Rows">
-            <summary>
-            Returns the number of rows
-            </summary>
+            <summary>Returns the number of rows</summary>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Data">
             <summary>Gets the data</summary>
@@ -3038,94 +3019,77 @@
             <param name="v">the label</param>
             <returns>a data point</returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.Clone">
-            <summary>Clones the <c>DataFrame</c></summary>
-            <returns>a <c>DataFrame</c></returns>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeriesAt(`2)">
+            <summary> Gets the data-point column of the given label</summary>
+            <param name="label">the label</param>
+            <returns> a <c>Series</c></returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.RemoveColumnAt(`2)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeries">
+            <summary> Gets all the data as an array of <c>Series</c></summary>
+            <returns>an array of <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.AddSeries(`2,`1[])">
+            <summary> Adds a column to the <c>DataFrame</c></summary>
+            <param name="label">the new column's label</param>
+            <param name="column">the new column's data</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.AddSeries(`2)">
+            <summary>Adds an empty column to the <c>DataFrame</c></summary>
+            <param name="label">the new column's label</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.TakeSeries(`2)">
+            <summary>Takes a <c>Series</c> from the DataFrame thereby removing it from the DataFrame</summary>
+            <param name="label">the label of the <c>Series</c> to take</param>
+            <returns> a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.RemoveSeriesAt(`2)">
             <summary>Remove the data for a given label</summary>
             <param name="label">the label</param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.RemoveRowAt(`0)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ExtractByLabels(System.Func{`2,System.Boolean})">
+            <summary>Extracts the part of the DataFrame whose labels obeys the predicate</summary>
+            <param name="predicate">the predicate on the labels</param>
+            <returns>a DataFrame</returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSliceAt(`0)">
+            <summary>Gets the data-point row of the given legend</summary>
+            <param name="legend">the legend</param>
+            <returns>a <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSlices">
+            <summary>Gets all the data as an array of <c>Slice</c></summary>
+            <returns>an array of <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.AddSlice(`0,`1[])">
+            <summary> Adds a slice to the <c>DataFrame</c></summary>
+            <param name="legend">the new slice's legend</param>
+            <param name="slice">the new slice's data</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.AddSlice(`0)">
+            <summary>Adds an empty slice to the <c>DataFrame</c></summary>
+            <param name="legend">the new slice's legend</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.TakeSlice(`0)">
+            <summary>Takes a <c>Slice</c> from the DataFrame thereby removing it from the DataFrame</summary>
+            <param name="legend">the legend of the <c>Slice</c> to take</param>
+            <returns> a <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.RemoveSliceAt(`0)">
             <summary>Removes the row for a given legend</summary>
-            <param name="t">the legend</param>
+            <param name="legend">the legend</param>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ExtractByLegend(System.Func{`0,System.Boolean})">
+            <summary>Extracts the part of the DataFrame whose legends obeys the predicate</summary>
+            <param name="predicate">the predicate on the legends</param>
+            <returns>a DataFrame</returns>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.Remove(System.Func{`0,`1,`2,System.Boolean})">
             <summary>Removes all the rows containing a data-point that fits a predicate</summary>
             <param name="predicate">the predicate</param>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.SubDataFrame(System.Predicate{`0})">
-            <summary>Extracts the part of the DataFrame whose legends obeys the predicate</summary>
-            <param name="predicate">the predicate on the legends</param>
-            <returns>a DataFrame</returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.SubDataFrame(System.Predicate{`2})">
-            <summary>Extracts the part of the DataFrame whose labels obeys the predicate</summary>
-            <param name="predicate">the predicate on the labels</param>
-            <returns>a DataFrame</returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.TakeSeries(`2)">
-            <summary>
-            Takes a <c>Series</c> from the DataFrame thereby removing it from the DataFrame
-            </summary>
-            <param name="label">the label of the <c>Series</c> to take</param>
-            <returns> a <c>Series</c></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.TakeSlice(`0)">
-            <summary>
-            Takes a <c>Slice</c> from the DataFrame thereby removing it from the DataFrame
-            </summary>
-            <param name="legend">the legend of the <c>Slice</c> to take</param>
-            <returns> a <c>Slice</c></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSliceAt(`0)">
-            <summary>
-            Gets the data-point row of the given legend
-            </summary>
-            <param name="t">the legend</param>
-            <returns>a <c>Slice</c></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSliceAt(System.Int32)">
-            <summary>Gets the slice at</summary>
-            <param name="k"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeriesAt(`2)">
-            <summary>
-            Gets the data-point column of the given label
-            </summary>
-            <param name="v">the label</param>
-            <returns> a <c>Series</c></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeriesAt(System.Int32)">
-            <summary>Gets the k-th column of the dataframe</summary>
-            <param name="k">the target column</param>
-            <returns>a <c>Series</c></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSlices">
-            <summary>
-            Gets all the data as an array of <c>Slice</c>
-            </summary>
-            <returns>an array of <c>Slice</c></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeries">
-            <summary>
-            Gets all the data as an array of <c>Series</c>
-            </summary>
-            <returns>an array of <c>Series</c></returns>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.Add(`2,`1[])">
-            <summary>
-            Adds a column to the <c>DataFrame</c>
-            </summary>
-            <param name="label">the new column's label</param>
-            <param name="column">the new column's data</param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.Add(`2)">
-            <summary>
-            Adds an empty column to the <c>DataFrame</c>
-            </summary>
-            <param name="label">the new column's label</param>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.Clone">
+            <summary>Clones the <c>DataFrame</c></summary>
+            <returns>a <c>DataFrame</c></returns>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.ApplyOnData(System.Func{`1,`1})">
             <summary>Applies a function to all the data</summary>
@@ -3135,33 +3099,29 @@
             <summary>Applies a function to all the legends</summary>
             <param name="function">the function</param>
         </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.ApplyOnLabels(System.Func{`2,`2})">
+            <summary>Applies a function to all the labels</summary>
+            <param name="function">the function</param>
+        </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.GetLegend(System.Int32)">
             <summary>Gets the i-th legend value</summary>
             <param name="index">the index</param>
             <returns>a legend value</returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLegend(System.Int32,`0)">
-            <summary>Sets the i-th legend value </summary>
-            <param name="index">the index</param>
-            <param name="value">the new legend value</param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLegends(System.Collections.Generic.IEnumerable{`0})">
-            <summary>Sets all the legends</summary>
-            <param name="values">the new legends</param>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.RenameLegend(`0,`0)">
+            <summary>Renames a legend</summary>
+            <param name="oldValue">the old legend value</param>
+            <param name="newValue">the new legend value</param>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.GetLabel(System.Int32)">
             <summary>Gets the i-th label's value</summary>
             <param name="index">the index</param>
             <returns>a label</returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLabel(System.Int32,`2)">
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLabel(`2,`2)">
             <summary>Sets the i-th label's value</summary>
-            <param name="index">the index</param>
-            <param name="value">the new value</param>
-        </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLabels(System.Collections.Generic.IEnumerable{`2})">
-            <summary>Sets all the label's values</summary>
-            <param name="values">the new values</param>
+            <param name="oldValue">the old value</param>
+            <param name="newValue">the new value</param>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.ToXml(System.Xml.XmlWriter)">
             <summary>Serializes the <c>DataFrame</c> to Xml </summary>

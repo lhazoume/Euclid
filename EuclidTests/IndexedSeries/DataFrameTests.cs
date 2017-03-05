@@ -49,7 +49,7 @@ namespace Euclid.IndexedSeries.Tests
         public void RemoveColumnAtTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullCOnstructor();
-            dataFrame.RemoveColumnAt("Col1");
+            dataFrame.RemoveSeriesAt("Col1");
             Assert.IsTrue(!dataFrame.Labels.Contains("Col1") && dataFrame.Columns == 2);
         }
 
@@ -58,7 +58,7 @@ namespace Euclid.IndexedSeries.Tests
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullCOnstructor();
             DateTime today = DateTime.Today;
-            dataFrame.RemoveRowAt(today);
+            dataFrame.RemoveSliceAt(today);
             Assert.IsTrue(!dataFrame.Legends.Contains(today) && dataFrame.Rows == 3);
         }
 

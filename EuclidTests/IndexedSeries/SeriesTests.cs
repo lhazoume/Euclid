@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Euclid.IndexedSeries;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 
@@ -7,125 +8,71 @@ namespace Euclid.IndexedSeries.Tests
     [TestClass()]
     public class SeriesTests
     {
-        [TestMethod()]
-        public void SeriesTest()
+        private static Series<DateTime, double, string> BaseSeries(int n)
         {
-            int size = 15;
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create(size);
-            Assert.AreEqual(size, series.Rows);
-        }
+            Header<DateTime> hdr = new Header<DateTime>();
+            for (int i = 0; i < n; i++)
+                hdr.Add(new DateTime(2000 + i, 6, 1));
 
-        [TestMethod()]
-        public void SeriesTest1()
-        {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre",
-                new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) },
-                new double[] { 5, 6, 7, 8 });
-            Assert.IsTrue(series.Label == "Titre" &&
-                series.Legends.Length == 4 &&
-                series.Data.Length == 4 &&
-                series[0] == 5 && series[3] == 8);
+            return Series<DateTime, double, string>.Create("Titre", hdr, Enumerable.Range(0, n).Select(i => Convert.ToDouble(i)));
         }
 
         [TestMethod()]
         public void CloneTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 }),
-                series2 = series.Clone();
-
-            double diff = 0;
-            for (int i = 0; i < series.Rows; i++)
-                diff += Math.Abs(series[i] - series2[i]) + Math.Abs((series.GetLegend(i) - series2.GetLegend(i)).TotalMilliseconds);
-            Assert.IsTrue(series.Label == series2.Label &&
-                series.Legends.Length == series2.Legends.Length &&
-                diff == 0);
+            Assert.Fail();
         }
 
         [TestMethod()]
         public void RemoveRowAtTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre",
-                new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) },
-                new double[] { 5, 6, 7, 8 });
-            DateTime d = new DateTime(2006, 6, 1);
-            bool containsBefore = series.Legends.Contains(d);
-            series.RemoveRowAt(d);
-            bool containsAfter = series.Legends.Contains(d);
-            Assert.IsTrue(containsBefore && !containsAfter && series[2] == 8);
+            Assert.Fail();
         }
 
         [TestMethod()]
         public void AddTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre",
-                new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) },
-                new double[] { 5, 6, 7, 8 });
-            DateTime d = new DateTime(2009, 6, 1);
-            bool containsBefore = series.Legends.Contains(d);
-            series.Add(d, 9);
-            bool containsAfter = series.Legends.Contains(d);
-            Assert.IsTrue(!containsBefore && containsAfter && series[4] == 9);
+            Assert.Fail();
         }
 
         [TestMethod()]
         public void RemoveTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre",
-                new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) },
-                new double[] { 5, 6, 7, 8 });
-            DateTime d = new DateTime(2006, 6, 1);
-            bool containsBefore = series.Legends.Contains(d);
-            series.Remove((x, y) => x == d);
-            bool containsAfter = series.Legends.Contains(d);
-            Assert.IsTrue(containsBefore && !containsAfter && series[2] == 8);
+            Assert.Fail();
         }
 
         [TestMethod()]
         public void ApplyOnDataTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
-            series.ApplyOnData(d => d - 1);
-            Assert.AreEqual(4, series[0]);
+            Assert.Fail();
         }
 
         [TestMethod()]
         public void ApplyOnLegendsTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
-            series.ApplyOnLegends(d => d.AddMonths(1));
-            Assert.AreEqual(7, series.GetLegend(0).Month);
+            Assert.Fail();
         }
 
         [TestMethod()]
         public void SumTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
-            Assert.AreEqual(26, series.Sum(x => x));
+            Assert.Fail();
         }
 
         [TestMethod()]
         public void GetLegendTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
-            Assert.AreEqual(2007, series.GetLegend(2).Year);
+            Assert.Fail();
         }
 
         [TestMethod()]
-        public void SetLegendTest()
-        {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Titre", new DateTime[] { new DateTime(2005, 6, 1), new DateTime(2006, 6, 1), new DateTime(2007, 6, 1), new DateTime(2008, 6, 1) }, new double[] { 5, 6, 7, 8 });
-            series.Rename(new DateTime(2007, 6, 1), new DateTime(2012, 6, 1));
-            Assert.AreEqual(2012, series.GetLegend(2).Year);
-        }
-
-        [TestMethod()]
-        public void ToXmlTest()
+        public void RenameTest()
         {
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void FromXmlTest()
+        public void ToXmlTest()
         {
             Assert.Fail();
         }
@@ -137,7 +84,19 @@ namespace Euclid.IndexedSeries.Tests
         }
 
         [TestMethod()]
-        public void FromCSVTest()
+        public void CreateTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateTest2()
         {
             Assert.Fail();
         }

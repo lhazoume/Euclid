@@ -113,7 +113,6 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         /// <summary>Gets the distribution's skewness</summary>
-        //TODO
         public override double Skewness
         {
             get

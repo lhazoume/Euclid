@@ -7,8 +7,6 @@ using System.Xml;
 
 namespace Euclid.IndexedSeries
 {
-    //TODO : put up an index wherever it is possible
-
     /// <summary>Class representing a Series of data</summary>
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="U">the data type</typeparam>
@@ -25,13 +23,6 @@ namespace Euclid.IndexedSeries
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
-        private Series(V label, IList<T> legends, U[] data)
-        {
-            _data = Arrays.Clone(data);
-            _label = label;
-            _legends = new Header<T>(legends);
-        }
-
         private Series(V label, Header<T> legends, U[] data)
         {
             _data = Arrays.Clone(data);
@@ -334,21 +325,15 @@ namespace Euclid.IndexedSeries
         #endregion
 
         #region Creators
-        /// <summary>Builds an empty <c>Series</c></summary>
-        /// <param name="rows">the size of the <c>Series</c></param>
-        public static Series<T, U, V> Create(int rows)
-        {
-            return new Series<T, U, V>(default(V), new T[rows], new U[rows]);
-        }
 
         /// <summary>Builds a <c>Series</c> from generic enumerables of legends and data</summary>
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the series</param>
         /// <returns></returns>
-        public static Series<T, U, V> Create(V label, IEnumerable<T> legends, IEnumerable<U> data)
+        public static Series<T, U, V> Create(V label, Header<T> legends, IEnumerable<U> data)
         {
-            return new Series<T, U, V>(label, legends.ToArray(), data.ToArray());
+            return new Series<T, U, V>(label, legends, data.ToArray());
         }
 
         /// <summary>Builds a <c>Series</c> from its serialized form</summary>
@@ -356,7 +341,7 @@ namespace Euclid.IndexedSeries
         public static Series<T, U, V> Create(XmlNode node)
         {
             V label = node.SelectSingleNode("label").Attributes["value"].Value.Parse<V>();
-            List<T> legends = new List<T>();
+            Header<T> legends = new Header<T>();
             List<U> data = new List<U>();
 
             XmlNodeList points = node.SelectNodes("point");
@@ -379,13 +364,13 @@ namespace Euclid.IndexedSeries
             if (lines.Length == 0) return null;
 
             U[] data = new U[lines.Length - 1];
-            T[] legends = new T[lines.Length - 1];
+            Header<T> legends = new Header<T>();
             V label = lines[0].Split(CSVHelper.Separator.ToCharArray())[1].Parse<V>();
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 1; i < lines.Length; i++)
             {
                 string[] content = lines[i].Split(CSVHelper.Separator.ToCharArray());
                 data[i - 1] = content[1].Parse<U>();
-                legends[i - 1] = content[0].Parse<T>();
+                legends.Add(content[0].Parse<T>());
             }
 
             return new Series<T, U, V>(label, legends, data);

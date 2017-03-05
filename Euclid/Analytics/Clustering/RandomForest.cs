@@ -27,7 +27,7 @@ namespace Euclid.Analytics.Clustering
         }
         private static Series<T, double, string> PredictedSeries(DataFrame<T, double, string> data, IPredictor<double, double> predictor)
         {
-            return Series<T, double, string>.Create("predicted_Ŷ_true", data.Legends, data.GetSlices().Select(s => predictor.Predict(s.Data)));
+            return Series<T, double, string>.Create("predicted_Ŷ_true", new Header<T>(data.Legends), data.GetSlices().Select(s => predictor.Predict(s.Data)));
         }
         private static Tuple<DataFrame<T, double, string>[], Series<T, double, string>[]> SplitData(DataFrame<T, double, string> X, Series<T, double, string> Y, Predicate<Vector> predicate)
         {
@@ -51,8 +51,8 @@ namespace Euclid.Analytics.Clustering
 
             DataFrame<T, double, string> d1 = DataFrame<T, double, string>.Create(sl1),
                 d2 = DataFrame<T, double, string>.Create(sl2);
-            Series<T, double, string> s1 = Series<T, double, string>.Create("Ŷ1", d1.Legends, a1),
-                s2 = Series<T, double, string>.Create("Ŷ2", d2.Legends, a2);
+            Series<T, double, string> s1 = Series<T, double, string>.Create("Ŷ1", new Header<T>(d1.Legends), a1),
+                s2 = Series<T, double, string>.Create("Ŷ2", new Header<T>(d2.Legends), a2);
             return new Tuple<DataFrame<T, double, string>[], Series<T, double, string>[]>(new DataFrame<T, double, string>[] { d1, d2 }, new Series<T, double, string>[] { s1, s2 });
         }
         #endregion
@@ -184,7 +184,7 @@ namespace Euclid.Analytics.Clustering
             {
                 int[] varIndices = ShuffleAndSelect(nbVars, X.Columns);
                 IDecisionNode<Vector, IPredictor<double, double>> result = BuildNode(varIndices, mininumLeafSize, X, Y, context);
-                results[i] = new  DecisionTreePredictor(result);
+                results[i] = new DecisionTreePredictor(result);
             }
             #endregion
 
