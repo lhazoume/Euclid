@@ -960,6 +960,14 @@ namespace Euclid
             return result;
         }
 
+        public static Matrix CreateDiagonalMatrix(params double[] values)
+        {
+            Matrix result = CreateZeroMatrix(values.Length, values.Length);
+            for (int i = 0; i < values.Length; i++)
+                result[i, i] = values[i];
+            return result;
+        }
+
         /// <summary>
         /// Returns a square matrix full of uniform random values
         /// </summary>

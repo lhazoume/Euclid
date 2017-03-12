@@ -30,6 +30,7 @@ namespace Euclid.Solvers.Tests
             ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(1000,
                 Vector.Create(dimension, 0.0), Vector.Create(dimension, 1.0),
                 v => 0.0,
+                OptimizationType.Min,
                 s => Enumerable.Range(0, s).Select(i => Vector.CreateRandom(dimension, uniform)).ToArray(),
                 100, 10);
 
@@ -44,11 +45,12 @@ namespace Euclid.Solvers.Tests
             ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(10000,
                 Vector.Create(dimension, -2.0), Vector.Create(dimension, 2.0),
                 Rosenbrock,
+                OptimizationType.Min,
                 s => Enumerable.Range(0, s).Select(i => Vector.CreateRandom(dimension, uniform)).ToArray(),
                 100, 10);
             pso.Solve();
 
-            Assert.IsTrue(Rosenbrock(pso.Result)<1e-5);
+            Assert.IsTrue(Rosenbrock(pso.Result) < 1e-5);
         }
 
         [TestMethod()]
@@ -59,6 +61,7 @@ namespace Euclid.Solvers.Tests
             ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(10000,
                 Vector.Create(dimension, -5.0), Vector.Create(dimension, 5.0),
                 Rastrigin,
+                OptimizationType.Min,
                 s => Enumerable.Range(0, s).Select(i => Vector.CreateRandom(dimension, uniform)).ToArray(),
                 10000, 100);
             pso.Solve();

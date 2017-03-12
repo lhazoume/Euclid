@@ -1,5 +1,4 @@
-﻿using Euclid.Distributions.Continuous;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ namespace Euclid.Solvers
         private readonly Vector _lowerBound, _upperBound;
         private int _swarmSize, _maxIterations, _maxStaticIterations, _dimension;
         private SolverStatus _status;
+        private OptimizationType _optimizationType;
 
         private double _attractionToParticleBest, _attractionToOverallBest, _velocityInertia, _epsilon;
         private Func<Vector, double> _function;
@@ -24,6 +24,7 @@ namespace Euclid.Solvers
         /// <param name="lowerBounds">the lower bounds of the space</param>
         /// <param name="upperBounds">the upper bounds of the space</param>
         /// <param name="function">the function to optimize</param>
+        /// <param name="optimizationType">the optimization type</param>
         /// <param name="generator">a generator of seed vectors</param>
         /// <param name="maxIterations">the maximum number of iterations</param>
         /// <param name="maxStaticIterations">the maximum number of static iterations</param>
@@ -33,6 +34,7 @@ namespace Euclid.Solvers
         /// <param name="velocityInertia">the velocity inertia</param>
         public ParticleSwarmOptimizer(int swarmSize, Vector lowerBounds, Vector upperBounds,
             Func<Vector, double> function,
+            OptimizationType optimizationType,
             Func<int, Vector[]> generator,
             int maxIterations,
             int maxStaticIterations,
@@ -54,6 +56,10 @@ namespace Euclid.Solvers
             _velocityInertia = velocityInertia;
 
 
+            _optimizationType = optimizationType;
+
+            if (epsilon <= 0)
+                throw new ArgumentOutOfRangeException("The epsilon should all be >0");
             _epsilon = epsilon;
 
             if (maxIterations <= 0 || maxStaticIterations <= 0)
@@ -98,6 +104,8 @@ namespace Euclid.Solvers
         {
             get { return _status; }
         }
+
+        public OptimizationType OptimizationType { get { return _optimizationType; } }
 
         #endregion
 
@@ -160,6 +168,7 @@ namespace Euclid.Solvers
         /// <summary>Minimizes the function using Particle Swarm Optimization</summary>
         public void Solve()
         {
+            int sign = _optimizationType == OptimizationType.Min ? -1 : 1;
             Vector[] swarm = new Vector[_swarmSize],
                 velocities = new Vector[_swarmSize],
                 particleBests = new Vector[_swarmSize];
@@ -182,7 +191,7 @@ namespace Euclid.Solvers
                 personalBestsValues[i] = _function(randomVectors[i]);
             });
 
-            overallBestValue = personalBestsValues.Data.Min();
+            overallBestValue = _optimizationType == OptimizationType.Min ? personalBestsValues.Data.Min() : personalBestsValues.Data.Max();
             overallBest = swarm[Array.IndexOf(personalBestsValues.Data, overallBestValue)].Clone;
             #endregion
 
@@ -201,12 +210,12 @@ namespace Euclid.Solvers
                     swarm[i] = Vector.Max(_lowerBound, Vector.Min(swarm[i] + velocities[i], _upperBound));
 
                     double value = _function(swarm[i]);
-                    if (value < personalBestsValues[i])
+                    if (Math.Sign(value - personalBestsValues[i]) == sign)
                     {
                         particleBests[i] = swarm[i].Clone;
                         personalBestsValues[i] = value;
 
-                        if (value < overallBestValue)
+                        if (Math.Sign(value - overallBestValue) == sign)
                         {
                             overallBestValue = value;
                             overallBest = swarm[i].Clone;

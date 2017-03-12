@@ -549,13 +549,18 @@ namespace Euclid
             return true;
         }
 
-        /// <summary>
-        /// Returns a string that represents the matrix
-        /// </summary>
-        /// <returns>a string that represents the matrix</returns>
+        /// <summary>Returns a string that represents the vector</summary>
+        /// <returns>a string that represents the vector</returns>
         public override string ToString()
         {
             return string.Join(";", _data);
+        }
+
+        /// <summary>Returns a string that represents the vector</summary>
+        /// <returns>a string that represents the vector</returns>
+        public string ToString(string format)
+        {
+            return string.Join(";", _data.Select(d => d.ToString(format)));
         }
         #endregion
     }

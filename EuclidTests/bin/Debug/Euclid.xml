@@ -4192,23 +4192,25 @@
             Class used to perform a gradient descent on any multivariate function
             </summary>
         </member>
-        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Int32,System.Int32)">
+        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},Euclid.Solvers.OptimizationType,System.Int32,System.Int32)">
             <summary>
             Builds a GradientDescent helper
             </summary>
             <param name="initialGuess">the initial guess Vector</param>
             <param name="lineSearch">the line search method</param>
             <param name="function">the function to minimize</param>
+            <param name="optimizationType">the optimization type</param>
             <param name="maxIterations">the maximum number of iterations in the gradient</param>
             <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
         </member>
-        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},System.Int32,System.Int32)">
+        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},Euclid.Solvers.OptimizationType,System.Int32,System.Int32)">
             <summary>Gradient descent constructor
             </summary>
             <param name="initialGuess">the initial guess Vector</param>
             <param name="lineSearch">the line search method</param>
             <param name="function">the function to minimize</param>
             <param name="gradient">the gradient function to minimize</param>
+            <param name="optimizationType">the optimization type</param>
             <param name="maxIterations">the maximum number of iterations in the gradient</param>
             <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
         </member>
@@ -4219,14 +4221,10 @@
             <summary>Gets and sets the function to minimize</summary>
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.Status">
-            <summary>
-            The final status of the solver
-            </summary>
+            <summary>The final status of the solver</summary>
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.Error">
-            <summary>
-            Returns the final value of the function
-            </summary>
+            <summary> Returns the final value of the function</summary>
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.Result">
             <summary>The result of the solver</summary>
@@ -4242,6 +4240,9 @@
         </member>
         <member name="P:Euclid.Solvers.GradientDescent.MaxLineSearchIterations">
             <summary>Gets the maxium number of iterations in the line search </summary>
+        </member>
+        <member name="P:Euclid.Solvers.GradientDescent.OptimizationType">
+            <summary>Gets the optimization type</summary>
         </member>
         <member name="M:Euclid.Solvers.GradientDescent.Minimize(System.Double)">
             <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
@@ -4391,15 +4392,25 @@
             </summary>
             <param name="target">the target</param>
         </member>
+        <member name="T:Euclid.Solvers.OptimizationType">
+            <summary>The type of optimization</summary>
+        </member>
+        <member name="F:Euclid.Solvers.OptimizationType.Min">
+            <summary>Minimization</summary>
+        </member>
+        <member name="F:Euclid.Solvers.OptimizationType.Max">
+            <summary>Maximization</summary>
+        </member>
         <member name="T:Euclid.Solvers.ParticleSwarmOptimizer">
             <summary>Particle Swarm Optimization class</summary>
         </member>
-        <member name="M:Euclid.Solvers.ParticleSwarmOptimizer.#ctor(System.Int32,Euclid.Vector,Euclid.Vector,System.Func{Euclid.Vector,System.Double},System.Func{System.Int32,Euclid.Vector[]},System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Solvers.ParticleSwarmOptimizer.#ctor(System.Int32,Euclid.Vector,Euclid.Vector,System.Func{Euclid.Vector,System.Double},Euclid.Solvers.OptimizationType,System.Func{System.Int32,Euclid.Vector[]},System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Particle Swarm Optimizer</summary>
             <param name="swarmSize">the swarm size</param>
             <param name="lowerBounds">the lower bounds of the space</param>
             <param name="upperBounds">the upper bounds of the space</param>
             <param name="function">the function to optimize</param>
+            <param name="optimizationType">the optimization type</param>
             <param name="generator">a generator of seed vectors</param>
             <param name="maxIterations">the maximum number of iterations</param>
             <param name="maxStaticIterations">the maximum number of static iterations</param>

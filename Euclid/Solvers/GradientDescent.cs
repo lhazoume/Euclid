@@ -17,6 +17,8 @@ namespace Euclid.Solvers
         private List<Vector> _descentDirections = new List<Vector>();
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private LineSearch _lineSearch;
+        private OptimizationType _optimizationType;
+        private int _sign;
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion
 
@@ -26,9 +28,10 @@ namespace Euclid.Solvers
         /// <param name="initialGuess">the initial guess Vector</param>
         /// <param name="lineSearch">the line search method</param>
         /// <param name="function">the function to minimize</param>
+        /// <param name="optimizationType">the optimization type</param>
         /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
         /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
-        public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, int maxIterations, int maxLineSearchIterations)
+        public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, OptimizationType optimizationType, int maxIterations, int maxLineSearchIterations)
         {
             _initialGuess = initialGuess.Clone;
             _lineSearch = lineSearch;
@@ -36,7 +39,8 @@ namespace Euclid.Solvers
             _evaluations = 0;
             _function = function;
             _maxLineSearchIterations = maxLineSearchIterations;
-
+            _optimizationType = optimizationType;
+            _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
             _gradient = x => NumericalGradient(x, Vector.Create(_initialGuess.Size, Descents.STEP_EPSILON));
         }
 
@@ -46,9 +50,10 @@ namespace Euclid.Solvers
         /// <param name="lineSearch">the line search method</param>
         /// <param name="function">the function to minimize</param>
         /// <param name="gradient">the gradient function to minimize</param>
+        /// <param name="optimizationType">the optimization type</param>
         /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
         /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
-        public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, Func<Vector, Vector> gradient, int maxIterations, int maxLineSearchIterations)
+        public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, Func<Vector, Vector> gradient, OptimizationType optimizationType, int maxIterations, int maxLineSearchIterations)
         {
             _initialGuess = initialGuess.Clone;
             _lineSearch = lineSearch;
@@ -56,6 +61,8 @@ namespace Euclid.Solvers
             _evaluations = 0;
             _function = function;
             _maxLineSearchIterations = maxLineSearchIterations;
+            _optimizationType = optimizationType;
+            _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
 
             _gradient = gradient;
         }
@@ -82,17 +89,13 @@ namespace Euclid.Solvers
 
         #region Get
 
-        /// <summary>
-        /// The final status of the solver
-        /// </summary>
+        /// <summary>The final status of the solver</summary>
         public SolverStatus Status
         {
             get { return _status; }
         }
 
-        /// <summary>
-        /// Returns the final value of the function
-        /// </summary>
+        /// <summary> Returns the final value of the function</summary>
         public double Error
         {
             get { return _error; }
@@ -128,6 +131,12 @@ namespace Euclid.Solvers
             get { return _maxLineSearchIterations; }
         }
 
+        /// <summary>Gets the optimization type</summary>
+        public OptimizationType OptimizationType
+        {
+            get { return _optimizationType; }
+        }
+
         #endregion
 
         #endregion
@@ -151,11 +160,14 @@ namespace Euclid.Solvers
                 d0 = Vector.Scalar(direction, gradient),
                 alpha = 1;
             int k = 0;
+            double f = _function(x + (alpha * direction));
+            _evaluations++;
 
-            while (_function(x + (alpha * direction)) >= error && k < _maxLineSearchIterations)
+            while (double.IsNaN(f) || (Math.Sign(f - error) == -_sign && k < _maxLineSearchIterations))
             {
-                _evaluations++;
                 alpha *= 0.5;
+                f = _function(x + (alpha * direction));
+                _evaluations++;
                 k++;
             }
 
@@ -169,7 +181,7 @@ namespace Euclid.Solvers
                 alpha = 1;
             int k = 0;
             double f = _function(x + (alpha * direction));
-            while ((double.IsNaN(f) || f > error + c1_d0 * alpha) && k < _maxLineSearchIterations)
+            while ((double.IsNaN(f) || Math.Sign(f - error - c1_d0 * alpha) == -_sign) && k < _maxLineSearchIterations)
             {
                 _evaluations++;
                 alpha *= 0.5;
@@ -190,9 +202,9 @@ namespace Euclid.Solvers
 
             int k = 0;
 
-            while ((_function(x + (alpha * direction)) > error + c1_d0 * alpha
+            while ((Math.Sign(_function(x + (alpha * direction)) - error - c1_d0 * alpha) == -_sign
                 ||
-                Vector.Scalar(direction, _gradient(x + (alpha * direction))) < c2_d0)
+                Math.Sign(Vector.Scalar(direction, _gradient(x + (alpha * direction))) - c2_d0) == _sign)
                 &&
                 k < _maxLineSearchIterations)
             {
@@ -213,9 +225,9 @@ namespace Euclid.Solvers
             int k = 0;
             double curvature = Vector.Scalar(direction, _gradient(x + (alpha * direction)));
 
-            while ((_function(x + (alpha * direction)) > error + c1_d0 * alpha
+            while ((Math.Sign(_function(x + (alpha * direction)) - error - c1_d0 * alpha) == -_sign
                 ||
-                curvature < c2_d0
+                Math.Sign(curvature - c2_d0) == _sign
                 ||
                 Math.Abs(curvature) > Math.Abs(c2_d0))
                 &&
@@ -254,7 +266,7 @@ namespace Euclid.Solvers
 
         /// <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
         /// <param name="momentum">the momentum of the descent</param>
-        public void Minimize(double momentum = 0)
+        public void Optimize(double momentum = 0)
         {
             _evaluations = 0;
             if (_function == null) throw new NullReferenceException("function should not be null");
@@ -267,7 +279,7 @@ namespace Euclid.Solvers
             _error = _function(_result);
             _evaluations++;
             Vector gradient = _gradient(_result),
-                direction = -gradient;
+                direction = _sign * gradient;
 
             _descentDirections.Add(direction.Clone);
             _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
@@ -281,7 +293,7 @@ namespace Euclid.Solvers
                 _error = _function(_result);
                 _evaluations++;
                 gradient = _gradient(_result);
-                direction = (momentum * direction) - gradient;
+                direction = (momentum * direction) + (_sign * gradient);
 
                 _descentDirections.Add(direction.Clone);
                 _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
@@ -291,7 +303,7 @@ namespace Euclid.Solvers
         }
 
         /// <summary>Minimizes the function using the BFGS gradient descent</summary>
-        public void MinimizeBFGS()
+        public void OptimizeBFGS()
         {
             _evaluations = 0;
             if (_function == null) throw new NullReferenceException("function should not be null");
@@ -305,7 +317,7 @@ namespace Euclid.Solvers
             _error = _function(_result);
             _evaluations++;
             Vector gradient = _gradient(_result),
-                direction = -gradient;
+                direction = _sign * gradient;
             Matrix B = Matrix.CreateIdentityMatrix(gradient.Size, gradient.Size);
 
             _descentDirections.Add(direction.Clone);
@@ -325,7 +337,7 @@ namespace Euclid.Solvers
                 gradients.Add(gradient);
                 Vector y = gradients[gradients.Count - 1] - gradients[gradients.Count - 2];
                 B = B + (y * y) / Vector.Scalar(y, s) - ((B * s) * (s * B)) / Vector.Scalar(s, B * s);
-                direction = -gradient;
+                direction = _sign * B.Inverse * gradient;
 
                 _descentDirections.Add(direction.Clone);
                 _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
