@@ -98,6 +98,12 @@ namespace Euclid.IndexedSeries
             _map.Add(t, _map.Count);
         }
 
+        public void AddRange(params T[] ts)
+        {
+            foreach (T t in ts)
+                Add(t);
+        }
+
         /// <summary>Renames a label</summary>
         /// <param name="oldValue">the old value of the label</param>
         /// <param name="newValue">the new value of the label</param>

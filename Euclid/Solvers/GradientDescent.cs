@@ -11,7 +11,7 @@ namespace Euclid.Solvers
         #region Declarations
         private Func<Vector, double> _function;
         private Func<Vector, Vector> _gradient;
-        private double _error;
+        private double _error, _gradientThreshold;
         private int _maxIterations, _maxLineSearchIterations, _evaluations;
         private Vector _initialGuess, _result;
         private List<Vector> _descentDirections = new List<Vector>();
@@ -31,7 +31,9 @@ namespace Euclid.Solvers
         /// <param name="optimizationType">the optimization type</param>
         /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
         /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
-        public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, OptimizationType optimizationType, int maxIterations, int maxLineSearchIterations)
+        public GradientDescent(Vector initialGuess, LineSearch lineSearch,
+            Func<Vector, double> function, OptimizationType optimizationType,
+            int maxIterations, int maxLineSearchIterations, double gradientNormThreshold = Descents.GRADIENT_EPSILON)
         {
             _initialGuess = initialGuess.Clone;
             _lineSearch = lineSearch;
@@ -41,6 +43,7 @@ namespace Euclid.Solvers
             _maxLineSearchIterations = maxLineSearchIterations;
             _optimizationType = optimizationType;
             _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
+            _gradientThreshold = gradientNormThreshold;
             _gradient = x => NumericalGradient(x, Vector.Create(_initialGuess.Size, Descents.STEP_EPSILON));
         }
 
@@ -53,7 +56,9 @@ namespace Euclid.Solvers
         /// <param name="optimizationType">the optimization type</param>
         /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
         /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
-        public GradientDescent(Vector initialGuess, LineSearch lineSearch, Func<Vector, double> function, Func<Vector, Vector> gradient, OptimizationType optimizationType, int maxIterations, int maxLineSearchIterations)
+        public GradientDescent(Vector initialGuess, LineSearch lineSearch,
+            Func<Vector, double> function, Func<Vector, Vector> gradient, OptimizationType optimizationType,
+            int maxIterations, int maxLineSearchIterations, double gradientNormThreshold = Descents.GRADIENT_EPSILON)
         {
             _initialGuess = initialGuess.Clone;
             _lineSearch = lineSearch;
@@ -62,6 +67,7 @@ namespace Euclid.Solvers
             _function = function;
             _maxLineSearchIterations = maxLineSearchIterations;
             _optimizationType = optimizationType;
+            _gradientThreshold = gradientNormThreshold;
             _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
 
             _gradient = gradient;
@@ -283,7 +289,7 @@ namespace Euclid.Solvers
 
             _descentDirections.Add(direction.Clone);
             _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
-            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, gradientEpsilon: Descents.GRADIENT_EPSILON);
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, maxStaticIterations: _maxLineSearchIterations, gradientEpsilon: _gradientThreshold);
 
             while (!endCriteria.ShouldStop(_error, gradient.Norm2))
             {

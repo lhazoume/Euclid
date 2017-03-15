@@ -90,7 +90,7 @@ namespace Euclid.Solvers
 
         private bool ExceededMaxStaticIterations()
         {
-            if (!_maxStaticIterations.HasValue || _history.Count < _maxStaticIterations.Value || _history.Max() - _history.Min() >= _functionEpsilon) return false;
+            if (!_maxStaticIterations.HasValue || _history.Count < _maxStaticIterations.Value || _history.Max() - _history.Min() >= _gradientEpsilon) return false;
             _status = SolverStatus.StationaryFunction;
             return true;
         }

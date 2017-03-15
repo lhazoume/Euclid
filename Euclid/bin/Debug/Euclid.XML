@@ -4192,7 +4192,7 @@
             Class used to perform a gradient descent on any multivariate function
             </summary>
         </member>
-        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},Euclid.Solvers.OptimizationType,System.Int32,System.Int32)">
+        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},Euclid.Solvers.OptimizationType,System.Int32,System.Int32,System.Double)">
             <summary>
             Builds a GradientDescent helper
             </summary>
@@ -4203,7 +4203,7 @@
             <param name="maxIterations">the maximum number of iterations in the gradient</param>
             <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
         </member>
-        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},Euclid.Solvers.OptimizationType,System.Int32,System.Int32)">
+        <member name="M:Euclid.Solvers.GradientDescent.#ctor(Euclid.Vector,Euclid.Solvers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},Euclid.Solvers.OptimizationType,System.Int32,System.Int32,System.Double)">
             <summary>Gradient descent constructor
             </summary>
             <param name="initialGuess">the initial guess Vector</param>
