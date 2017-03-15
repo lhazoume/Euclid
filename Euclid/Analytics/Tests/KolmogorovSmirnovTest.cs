@@ -37,12 +37,12 @@ namespace Euclid.Analytics.Tests
         /// </summary>
         /// <param name="series1">The first sample.</param>
         /// <param name="series2">The second sample.</param>
-        /// <param name="alpha">The confidence level of the test.</param>
+        /// <param name="alpha">The confidence level of the test</param>
         /// <returns>True if the series appear to be drawn from the same distribution, false otherwise.</returns>
         public static bool IsSameDistribution(double[] series1, double[] series2, double alpha)
         {
             double pValue = PValue(series1, series2);
-            RootBracketing rb = new RootBracketing(1, 3, Fn.SupBrownianBridgeCDF, Solvers.RootBracketingMethod.Dichotomy, 100);
+            RootBracketing rb = new RootBracketing(1, 3, Fn.SupBrownianBridgeCDF, RootBracketingMethod.Dichotomy, 100);
             rb.Solve(alpha);
             double cap = rb.Result;
 

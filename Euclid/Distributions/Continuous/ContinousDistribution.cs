@@ -85,6 +85,10 @@ namespace Euclid.Distributions.Continuous
         {
             return Math.Log(ProbabilityDensity(x));
         }
+
+        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public abstract void Fit(FittingMethod method, double[] sample);
         #endregion
 
         /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>

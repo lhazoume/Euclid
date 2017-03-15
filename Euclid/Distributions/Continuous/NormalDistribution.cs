@@ -1,5 +1,6 @@
 ﻿using Euclid.Histograms;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -43,6 +44,22 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        public override void Fit(FittingMethod method, double[] sample)
+        {
+            if (method == FittingMethod.Moments)
+            {
+                double avg = sample.Average(),
+                    stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
+                _mean = avg;
+                _standardDeviation = stdev;
+            }
+            else if (method == FittingMethod.MaximumLikelihood)
+            {
+                //TODO : implement here
+                throw new NotImplementedException();
+            }
+        }
+
         /// <summary>
         /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
         /// </summary>

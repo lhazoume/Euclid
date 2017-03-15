@@ -99,6 +99,12 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
+        public override void Fit(FittingMethod method, double[] sample)
+        {
+            //TODO : implement here
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
         /// </summary>

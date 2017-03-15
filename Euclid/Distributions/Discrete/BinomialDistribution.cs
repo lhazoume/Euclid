@@ -114,5 +114,24 @@ namespace Euclid.Distributions.Discrete
             return _bc[k] * Math.Pow(_p / _q, k) * Math.Pow(_q, _n);
         }
 
+        /// <summary>Generates a sequence of samples from the distribution</summary>
+        /// <param name="size">the sample's size</param>
+        /// <returns>an array of double</returns>
+        public override double[] Sample(int size)
+        {
+            double[] result = new double[size];
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < _n; j++)
+                    result[i] += _randomSource.NextDouble() <= _p ? 1 : 0;
+            return result;
+        }
+
+        
+        public override void Fit(FittingMethod method, double[] sample)
+        {
+            //TODO : implement here
+            throw new NotImplementedException();
+        }
+
     }
 }

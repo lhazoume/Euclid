@@ -96,6 +96,7 @@
     <Compile Include="Distributions\Continuous\WeibullDistribution.cs" />
     <Compile Include="Distributions\Discrete\BinomialDistribution.cs" />
     <Compile Include="Distributions\Discrete\DiscreteDistribution.cs" />
+    <Compile Include="Distributions\FittingMethod.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
     <Compile Include="Helpers\Arrays.cs" />
     <Compile Include="Helpers\Geodesic\Coordinates.cs" />

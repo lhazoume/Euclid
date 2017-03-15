@@ -763,7 +763,7 @@
             </summary>
             <param name="series1">The first sample.</param>
             <param name="series2">The second sample.</param>
-            <param name="alpha">The confidence level of the test.</param>
+            <param name="alpha">The confidence level of the test</param>
             <returns>True if the series appear to be drawn from the same distribution, false otherwise.</returns>
         </member>
         <member name="T:Euclid.Arithmetics.BinomialCoefficients">
@@ -1767,72 +1767,48 @@
             <param name="lambda">the rate</param>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.CumulativeDistribution(System.Double)">
-            <summary>
-            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-            </summary>
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
             <param name="x">The location at which to compute the cumulative distribution function</param>
             <returns>the cumulative distribution at location x</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.InverseCumulativeDistribution(System.Double)">
-            <summary>
-            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-            </summary>
+            <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
             <param name="p">The location at which to compute the inverse cumulative density</param>
             <returns>the inverse cumulative density at p</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.ProbabilityDensity(System.Double)">
-            <summary>
-            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-            </summary>
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.Sample(System.Int32)">
-            <summary>
-            Generates a sequence of samples from the normal distribution using the algorithm
-            </summary>
+            <summary> Generates a sequence of samples from the normal distribution using the algorithm</summary>
             <param name="numberOfPoints">the sample's size</param>
             <returns>an array of double</returns>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Support">
-            <summary>
-            Gets the distribution's support
-            </summary>
+            <summary>Gets the distribution's support</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Entropy">
-            <summary>
-            Gets the distribution's entropy
-            </summary>
+            <summary>Gets the distribution's entropy </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Mean">
-            <summary>
-            Gets the distribution's mean
-            </summary>
+            <summary>Gets the distribution's mean</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Median">
-            <summary>
-            Gets the distribution's median
-            </summary>
+            <summary>Gets the distribution's median</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Mode">
-            <summary>
-            Gets the distribution's mode
-            </summary>
+            <summary>Gets the distribution's mode </summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Skewness">
-            <summary>
-            Gets the distribution's mode
-            </summary>
+            <summary> Gets the distribution's mode</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Variance">
-            <summary>
-            Gets the distribution's variance
-            </summary>
+            <summary>Gets the distribution's variance</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.StandardDeviation">
-            <summary>
-            Gets the distribution's standard deviation
-            </summary>
+            <summary>Gets the distribution's standard deviation</summary>
         </member>
         <member name="T:Euclid.Distributions.Continuous.ContinuousDistribution">
             <summary>Abstract class base for continuous distributions</summary>
@@ -1897,6 +1873,10 @@
             <summary>Computes the probability density function's logarithm at x</summary>
             <param name="x">the location at which to compute the density</param>
             <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+            <summary>Fits the distribution to a sample of data</summary>
+            <param name="sample">the sample of data to fit</param>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.Sample(System.Int32)">
             <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
@@ -2064,9 +2044,7 @@
             <summary>Gets the distribution's variance</summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.WeibullDistribution.CumulativeDistribution(System.Double)">
-            <summary>
-            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-            </summary>
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
             <param name="x">The location at which to compute the cumulative distribution function</param>
             <returns>the cumulative distribution at location x</returns>
         </member>
@@ -2125,6 +2103,11 @@
             <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.Sample(System.Int32)">
+            <summary>Generates a sequence of samples from the distribution</summary>
+            <param name="size">the sample's size</param>
+            <returns>an array of double</returns>
         </member>
         <member name="T:Euclid.Distributions.Discrete.DiscreteDistribution">
             <summary>Abstract class base for continuous distributions</summary>
@@ -2185,13 +2168,17 @@
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
+        <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+            <summary>Fits the distribution to a sample of data</summary>
+            <param name="sample">the sample of data to fit</param>
+        </member>
         <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.ProbabilityLnDensity(System.Double)">
             <summary>Computes the probability density function's logarithm at x</summary>
             <param name="x">the location at which to compute the density</param>
             <returns>a double</returns>
         </member>
         <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.Sample(System.Int32)">
-            <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
+            <summary>Generates a sequence of samples from the distribution using the algorithm</summary>
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
         </member>
@@ -2242,6 +2229,10 @@
         </member>
         <member name="P:Euclid.Distributions.IDistribution.Variance">
             <summary>Returns the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.IDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+            <summary>Fits the distribution to a sample of data</summary>
+            <param name="sample">the sample of data to fit</param>
         </member>
         <member name="T:Euclid.Helpers.Arrays">
             <summary>

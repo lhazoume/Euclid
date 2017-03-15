@@ -1898,6 +1898,10 @@
             <param name="x">the location at which to compute the density</param>
             <returns>a double</returns>
         </member>
+        <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+            <summary>Fits the distribution to a sample of data</summary>
+            <param name="sample">the sample of data to fit</param>
+        </member>
         <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.Sample(System.Int32)">
             <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
             <param name="size">the sample's size</param>
@@ -2064,9 +2068,7 @@
             <summary>Gets the distribution's variance</summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.WeibullDistribution.CumulativeDistribution(System.Double)">
-            <summary>
-            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-            </summary>
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
             <param name="x">The location at which to compute the cumulative distribution function</param>
             <returns>the cumulative distribution at location x</returns>
         </member>
@@ -2125,6 +2127,11 @@
             <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.Sample(System.Int32)">
+            <summary>Generates a sequence of samples from the distribution</summary>
+            <param name="size">the sample's size</param>
+            <returns>an array of double</returns>
         </member>
         <member name="T:Euclid.Distributions.Discrete.DiscreteDistribution">
             <summary>Abstract class base for continuous distributions</summary>
@@ -2185,13 +2192,17 @@
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
+        <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+            <summary>Fits the distribution to a sample of data</summary>
+            <param name="sample">the sample of data to fit</param>
+        </member>
         <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.ProbabilityLnDensity(System.Double)">
             <summary>Computes the probability density function's logarithm at x</summary>
             <param name="x">the location at which to compute the density</param>
             <returns>a double</returns>
         </member>
         <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.Sample(System.Int32)">
-            <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
+            <summary>Generates a sequence of samples from the distribution using the algorithm</summary>
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
         </member>
@@ -2242,6 +2253,10 @@
         </member>
         <member name="P:Euclid.Distributions.IDistribution.Variance">
             <summary>Returns the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.IDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+            <summary>Fits the distribution to a sample of data</summary>
+            <param name="sample">the sample of data to fit</param>
         </member>
         <member name="T:Euclid.Helpers.Arrays">
             <summary>
@@ -4244,11 +4259,11 @@
         <member name="P:Euclid.Solvers.GradientDescent.OptimizationType">
             <summary>Gets the optimization type</summary>
         </member>
-        <member name="M:Euclid.Solvers.GradientDescent.Minimize(System.Double)">
+        <member name="M:Euclid.Solvers.GradientDescent.Optimize(System.Double)">
             <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
             <param name="momentum">the momentum of the descent</param>
         </member>
-        <member name="M:Euclid.Solvers.GradientDescent.MinimizeBFGS">
+        <member name="M:Euclid.Solvers.GradientDescent.OptimizeBFGS">
             <summary>Minimizes the function using the BFGS gradient descent</summary>
         </member>
         <member name="T:Euclid.Solvers.ISingleVariableSolver">
@@ -5253,10 +5268,12 @@
             <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c></returns>
         </member>
         <member name="M:Euclid.Vector.ToString">
-            <summary>
-            Returns a string that represents the matrix
-            </summary>
-            <returns>a string that represents the matrix</returns>
+            <summary>Returns a string that represents the vector</summary>
+            <returns>a string that represents the vector</returns>
+        </member>
+        <member name="M:Euclid.Vector.ToString(System.String)">
+            <summary>Returns a string that represents the vector</summary>
+            <returns>a string that represents the vector</returns>
         </member>
     </members>
 </doc>

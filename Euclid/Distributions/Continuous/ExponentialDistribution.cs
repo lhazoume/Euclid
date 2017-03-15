@@ -1,5 +1,6 @@
 ﻿using Euclid.Histograms;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -33,9 +34,23 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-        /// </summary>
+
+        public override void Fit(FittingMethod method, double[] sample)
+        {
+            if (method == FittingMethod.Moments)
+            {
+                double avg = sample.Average(),
+                    stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
+                _beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
+            }
+            else if (method == FittingMethod.MaximumLikelihood)
+            {
+                //TODO : implement here
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
@@ -44,9 +59,7 @@ namespace Euclid.Distributions.Continuous
             else return 1 - Math.Exp(-_lambda * x);
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
         /// <param name="p">The location at which to compute the inverse cumulative density</param>
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -54,9 +67,7 @@ namespace Euclid.Distributions.Continuous
             return -Math.Log(1 - p) * _beta;
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -65,9 +76,7 @@ namespace Euclid.Distributions.Continuous
             else return _lambda * Math.Exp(-_lambda * x);
         }
 
-        /// <summary>
-        /// Generates a sequence of samples from the normal distribution using the algorithm
-        /// </summary>
+        /// <summary> Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints)
@@ -81,65 +90,49 @@ namespace Euclid.Distributions.Continuous
 
         #region Accessors
 
-        /// <summary>
-        /// Gets the distribution's support
-        /// </summary>
+        /// <summary>Gets the distribution's support</summary>
         public override Interval Support
         {
             get { return _support; }
         }
 
-        /// <summary>
-        /// Gets the distribution's entropy
-        /// </summary>
+        /// <summary>Gets the distribution's entropy </summary>
         public override double Entropy
         {
             get { return Math.Log(Math.E * _beta); }
         }
 
-        /// <summary>
-        /// Gets the distribution's mean
-        /// </summary>
+        /// <summary>Gets the distribution's mean</summary>
         public override double Mean
         {
             get { return _beta; }
         }
 
-        /// <summary>
-        /// Gets the distribution's median
-        /// </summary>
+        /// <summary>Gets the distribution's median</summary>
         public override double Median
         {
             get { return _beta * Math.Log(2); }
         }
 
-        /// <summary>
-        /// Gets the distribution's mode
-        /// </summary>
+        /// <summary>Gets the distribution's mode </summary>
         public override double Mode
         {
             get { return 0; }
         }
 
-        /// <summary>
-        /// Gets the distribution's mode
-        /// </summary>
+        /// <summary> Gets the distribution's mode</summary>
         public override double Skewness
         {
             get { return 2; }
         }
 
-        /// <summary>
-        /// Gets the distribution's variance
-        /// </summary>
+        /// <summary>Gets the distribution's variance</summary>
         public override double Variance
         {
             get { return _beta * _beta; }
         }
 
-        /// <summary>
-        /// Gets the distribution's standard deviation
-        /// </summary>
+        /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation
         {
             get { return _beta; }

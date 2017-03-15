@@ -79,6 +79,10 @@ namespace Euclid.Distributions.Discrete
         /// <returns>a <c>double</c></returns>
         public abstract double ProbabilityDensity(double x);
 
+        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public abstract void Fit(FittingMethod method, double[] sample);
+
         /// <summary>Computes the probability density function's logarithm at x</summary>
         /// <param name="x">the location at which to compute the density</param>
         /// <returns>a double</returns>
@@ -88,7 +92,7 @@ namespace Euclid.Distributions.Discrete
         }
         #endregion
 
-        /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
+        /// <summary>Generates a sequence of samples from the distribution using the algorithm</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
         public virtual double[] Sample(int size)
