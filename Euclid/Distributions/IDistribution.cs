@@ -49,9 +49,5 @@ namespace Euclid.Distributions
 
         /// <summary>Returns the distribution's variance</summary>
         double Variance { get; }
-
-        /// <summary>Fits the distribution to a sample of data</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        void Fit(FittingMethod fitting, double[] sample);
     }
 }

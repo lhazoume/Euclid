@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Bounded normal distribution class
     /// </summary>
-    public class BoundedNormalDistribution : ContinuousDistribution
+    public class BoundedNormalDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private double _mu,
@@ -133,7 +133,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

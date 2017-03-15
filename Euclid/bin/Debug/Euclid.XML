@@ -1652,23 +1652,17 @@
             <returns>a double</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.InverseCumulativeDistribution(System.Double)">
-            <summary>
-            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-            </summary>
+            <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
             <param name="p">The location at which to compute the inverse cumulative density</param>
             <returns>the inverse cumulative density at p</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.ProbabilityDensity(System.Double)">
-            <summary>
-            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-            </summary>
+            <summary> Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x </summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.Sample(System.Int32)">
-            <summary>
-            Builds a sample of random variables under this distribution
-            </summary>
+            <summary> Builds a sample of random variables under this distribution </summary>
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
         </member>
@@ -1874,10 +1868,6 @@
             <param name="x">the location at which to compute the density</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
-            <summary>Fits the distribution to a sample of data</summary>
-            <param name="sample">the sample of data to fit</param>
-        </member>
         <member name="M:Euclid.Distributions.Continuous.ContinuousDistribution.Sample(System.Int32)">
             <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
             <param name="size">the sample's size</param>
@@ -1978,6 +1968,11 @@
         </member>
         <member name="P:Euclid.Distributions.Continuous.UniformDistribution.Variance">
             <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+            <summary>Fits the distribution to a sample of data</summary>
+            <param name="method">the fitting method</param>
+            <param name="sample">the sample of data to fit</param>
         </member>
         <member name="M:Euclid.Distributions.Continuous.UniformDistribution.CumulativeDistribution(System.Double)">
             <summary>
@@ -2168,10 +2163,6 @@
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
-        <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
-            <summary>Fits the distribution to a sample of data</summary>
-            <param name="sample">the sample of data to fit</param>
-        </member>
         <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.ProbabilityLnDensity(System.Double)">
             <summary>Computes the probability density function's logarithm at x</summary>
             <param name="x">the location at which to compute the density</param>
@@ -2230,9 +2221,13 @@
         <member name="P:Euclid.Distributions.IDistribution.Variance">
             <summary>Returns the distribution's variance</summary>
         </member>
-        <member name="M:Euclid.Distributions.IDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+        <member name="T:Euclid.Distributions.IParametricDistribution">
+            <summary> Parametric distribution interface, expose Fit method</summary>
+        </member>
+        <member name="M:Euclid.Distributions.IParametricDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
             <summary>Fits the distribution to a sample of data</summary>
             <param name="sample">the sample of data to fit</param>
+            <param name="fitting">the fitting method</param>
         </member>
         <member name="T:Euclid.Helpers.Arrays">
             <summary>

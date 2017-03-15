@@ -7,7 +7,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Fisher distribution class
     /// </summary>
-    public class FisherDistribution : ContinuousDistribution
+    public class FisherDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private double _d1, _d2;
@@ -94,7 +94,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

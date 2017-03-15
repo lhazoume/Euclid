@@ -4,7 +4,7 @@ using System;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Logistic distribution class</summary>
-    public class LogisticDistribution : ContinuousDistribution
+    public class LogisticDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private readonly double _mu, _s;
@@ -86,7 +86,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

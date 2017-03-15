@@ -7,7 +7,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Normal distribution class
     /// </summary>
-    public class NormalDistribution : ContinuousDistribution
+    public class NormalDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private double _mean, _standardDeviation;
@@ -44,20 +44,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.Moments)
-            {
-                double avg = sample.Average(),
-                    stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
-                _mean = avg;
-                _standardDeviation = stdev;
-            }
-            else if (method == FittingMethod.MaximumLikelihood)
-            {
-                //TODO : implement here
-                throw new NotImplementedException();
-            }
+            double avg = sample.Average(),
+                stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
+            _mean = avg;
+            _standardDeviation = stdev;
         }
 
         /// <summary>

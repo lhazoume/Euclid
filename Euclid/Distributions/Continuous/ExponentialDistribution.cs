@@ -7,7 +7,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Exponential distribution class
     /// </summary>
-    public class ExponentialDistribution : ContinuousDistribution
+    public class ExponentialDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private double _lambda, _beta;
@@ -35,7 +35,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             if (method == FittingMethod.Moments)
             {

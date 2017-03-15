@@ -5,7 +5,7 @@ using System;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Exponential power distribution class</summary>
-    public class ExponentialPowerDistribution : ContinuousDistribution
+    public class ExponentialPowerDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private readonly double _mu, _alpha,
@@ -94,7 +94,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

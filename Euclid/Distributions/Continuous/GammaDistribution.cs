@@ -11,7 +11,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Gamma distribution class
     /// </summary>
-    public class GammaDistribution : ContinuousDistribution
+    public class GammaDistribution : ContinuousDistribution, IParametricDistribution
     {
         private double _k, _theta, _cdfFactor, _pdfFactor, _median;
 
@@ -99,7 +99,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

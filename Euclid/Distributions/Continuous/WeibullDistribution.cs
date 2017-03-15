@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Weibull distribution class
     /// </summary>
-    public class WeibullDistribution : ContinuousDistribution
+    public class WeibullDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private double _lambda, _k, _mu, _sigma2, _sigma;
@@ -95,7 +95,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

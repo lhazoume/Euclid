@@ -5,7 +5,7 @@ using System.Linq;
 namespace Euclid.Distributions.Discrete
 {
     /// <summary> Binonmial distribution class</summary>
-    public class BinomialDistribution : DiscreteDistribution
+    public class BinomialDistribution : DiscreteDistribution, IParametricDistribution
     {
         #region Declarations
         private double _p, _q;
@@ -127,7 +127,7 @@ namespace Euclid.Distributions.Discrete
         }
 
         
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

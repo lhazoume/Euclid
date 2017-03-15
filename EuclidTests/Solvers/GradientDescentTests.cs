@@ -23,7 +23,7 @@ namespace Euclid.Solvers.Tests
             Vector initialGuess = Vector.Create(1.0, 1.0),
                 target = Vector.Create(3.0, 3.0);
             GradientDescent gd = new GradientDescent(initialGuess, LineSearch.Armijo, v => (v - target).SumOfSquares, OptimizationType.Min, 100, 100);
-            gd.Minimize();
+            gd.Optimize();
             Assert.AreEqual(0, (gd.Result - target).SumOfSquares, 1e-10);
         }
 
@@ -33,7 +33,7 @@ namespace Euclid.Solvers.Tests
             Vector initialGuess = Vector.Create(1.0, 1.0),
                 target = Vector.Create(3.0, 3.0);
             GradientDescent gd = new GradientDescent(initialGuess, LineSearch.Armijo, v => (v - target).SumOfSquares, OptimizationType.Min, 100, 100);
-            gd.MinimizeBFGS();
+            gd.OptimizeBFGS();
             Assert.AreEqual(0, (gd.Result - target).SumOfSquares, 1e-10);
         }
     }

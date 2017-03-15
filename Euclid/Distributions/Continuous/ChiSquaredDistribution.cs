@@ -7,7 +7,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Chi squared distribution
     /// </summary>
-    public class ChiSquaredDistribution : ContinuousDistribution
+    public class ChiSquaredDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private int _k;
@@ -107,7 +107,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

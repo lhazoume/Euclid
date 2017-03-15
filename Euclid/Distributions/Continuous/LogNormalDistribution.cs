@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Log Normal distribution class
     /// </summary>
-    public class LogNormalDistribution : ContinuousDistribution
+    public class LogNormalDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private double _mu, _sigma, _sigma2;
@@ -83,7 +83,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

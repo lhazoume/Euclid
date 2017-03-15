@@ -1,12 +1,13 @@
 ﻿using Euclid.Histograms;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>
     ///¨Pareto distribution class
     /// </summary>
-    public class ParetoDistribution : ContinuousDistribution
+    public class ParetoDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private double _xm, _alpha;
@@ -103,8 +104,15 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
+            if (sample.Min() <= 0) throw new ArgumentOutOfRangeException("The Pareto Law doesnot allow negative values");
+
+            if (method == FittingMethod.MaximumLikelihood)
+            {
+                _xm = sample.Min();
+                _alpha = 1 / (-Math.Log(_xm) + sample.Select(x => Math.Log(x)).Sum() / sample.Length);
+            }
             //TODO : implement here
             throw new NotImplementedException();
         }
@@ -120,9 +128,7 @@ namespace Euclid.Distributions.Continuous
             else return 0;
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
         /// <param name="p">The location at which to compute the inverse cumulative density</param>
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -130,9 +136,7 @@ namespace Euclid.Distributions.Continuous
             return _xm / Math.Exp(Math.Log(1 - p) / _alpha);
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary> Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x </summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -141,16 +145,14 @@ namespace Euclid.Distributions.Continuous
             else return 0;
         }
 
-        /// <summary>
-        /// Builds a sample of random variables under this distribution
-        /// </summary>
+        /// <summary> Builds a sample of random variables under this distribution </summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int size)
         {
             double[] result = new double[size];
             for (int i = 0; i < size; i++)
-                result[i] = _xm / Math.Exp(Math.Log(_randomSource.NextDouble()) / _alpha);
+                result[i] = _xm / Math.Pow(_randomSource.NextDouble(), 1 / _alpha);
             return result;
         }
         #endregion

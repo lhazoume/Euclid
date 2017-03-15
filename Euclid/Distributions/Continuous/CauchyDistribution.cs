@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Cauchy distribution class
     /// </summary>
-    public class CauchyDistribution : ContinuousDistribution
+    public class CauchyDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
         private readonly double _x0, _gamma;
@@ -85,7 +85,7 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-        public override void Fit(FittingMethod method, double[] sample)
+        public void Fit(FittingMethod method, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();
