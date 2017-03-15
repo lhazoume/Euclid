@@ -1,88 +1,89 @@
-﻿using Euclid.Arithmetics;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Euclid.Distributions.Discrete
 {
-    /// <summary> Binonmial distribution class</summary>
-    public class BinomialDistribution : DiscreteDistribution, IParametricDistribution
+    public class PoissonDistribution : DiscreteDistribution, IParametricDistribution
     {
         #region Declarations
-        private double _p, _q;
-        private int _n;
-        private BinomialCoefficients _bc;
+        private double _lambda;
+        private Dictionary<int, int> _factorial = new Dictionary<int, int>();
         #endregion
 
-        private BinomialDistribution(int n, double p, Random randomSource)
+        private PoissonDistribution(double lambda, Random randomSource)
         {
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
             _randomSource = randomSource;
 
-            if (p > 1 || p < 0) throw new ArgumentOutOfRangeException("The probability should be in [0,1]");
-            if (n <= 0) throw new ArgumentOutOfRangeException("The number of trials should be >0");
-            _p = p;
-            _q = 1 - p;
-            _n = n;
-            _bc = new BinomialCoefficients(_n);
+            if (lambda <= 0) throw new ArgumentOutOfRangeException("The lambda should be >0");
+            _lambda = lambda;
         }
 
-        public BinomialDistribution(int n, double p)
-            : this(n, p, new Random(Guid.NewGuid().GetHashCode()))
+        public PoissonDistribution(double lambda)
+            : this(lambda, new Random(Guid.NewGuid().GetHashCode()))
         { }
+
+        private int Factorial(int k)
+        {
+            if (k <= 1) return 1;
+            if (_factorial.ContainsKey(k)) return _factorial[k];
+            int result = k * Factorial(k - 1);
+            _factorial.Add(k, result);
+            return result;
+        }
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy
         {
-            get { return 0.5 * Math.Log(2 * Math.PI * Math.E * _n * _p * _q); }
+            get { return 0.5 * Math.Log(2 * Math.PI * Math.E * _lambda) - 1 / (12 * _lambda) - 1 / (24 * _lambda * _lambda); }
         }
 
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean
         {
-            get { return _n * _p; }
+            get { return _lambda; }
         }
 
         /// <summary>Gets the distribution's median</summary>
         public override double Median
         {
-            get
-            {
-                double floor = Math.Floor(_n * _p),
-                    ceiling = Math.Ceiling(_n * _p);
-                return 0.5 * (floor + ceiling);
-
-            }
+            get { return Math.Round(_lambda + 1.0 / 3.0 - 0.02 / _lambda); }
         }
 
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode
         {
-            get { return 0.5 * (Math.Floor((_n + 1) * _p) + Math.Ceiling((_n + 1) * _p) - 1); }
+            get { return Math.Round(_lambda); }
         }
 
         /// <summary>Gets the distribution's skewness</summary>
         public override double Skewness
         {
-            get { return (1 - 2 * _p) / Math.Sqrt(_n * _p * _q); }
+            get { return 1 / Math.Sqrt(_lambda); }
         }
 
         /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation
         {
-            get { return Math.Sqrt(_n * _p * _q); }
+            get { return Math.Sqrt(_lambda); }
         }
 
         /// <summary>Gets the distribution's variance</summary>
         public override double Variance
         {
-            get { return _n * _p * _q; }
+            get { return _lambda; }
         }
 
         /// <summary>Gets the distribution's support</summary>
         public override double[] Support
         {
-            get { return Enumerable.Range(0, _n + 1).Select(d => Convert.ToDouble(d)).ToArray(); }
+            get
+            {
+                //TODO : implement here
+                throw new NotImplementedException();
+            }
         }
         #endregion
 
@@ -94,9 +95,8 @@ namespace Euclid.Distributions.Discrete
         public override double CumulativeDistribution(double x)
         {
             if (x < 0) return 0;
-            if (x > _n + 1) return 1;
             int k = Convert.ToInt32(Math.Floor(x));
-            return Fn.IncompleteRegularizedBeta(_q, _n - k, k + 1);
+            return Fn.IncompleteLowerGamma(k + 1, _lambda) / Factorial(k);
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
@@ -105,7 +105,7 @@ namespace Euclid.Distributions.Discrete
         public override double InverseCumulativeDistribution(double p)
         {
             if (p <= 0) return 0;
-            if (p >= 1) return _n;
+            if (p >= 1) throw new ArgumentOutOfRangeException("The target probability should <1");
             int k = 0;
 
             while (CumulativeDistribution(k) < p)
@@ -119,10 +119,9 @@ namespace Euclid.Distributions.Discrete
         public override double ProbabilityDensity(double x)
         {
             int k = Convert.ToInt32(Math.Round(x));
-            if (k != x) return 0;
-            if (k < 0 || k > _n) return 0;
+            if (k < 0) return 0;
 
-            return _bc[k] * Math.Pow(_p / _q, k) * Math.Pow(_q, _n);
+            return Math.Exp(-_lambda) * Math.Pow(_lambda, k) / Factorial(k);
         }
 
         /// <summary>Generates a sequence of samples from the distribution</summary>
@@ -130,17 +129,14 @@ namespace Euclid.Distributions.Discrete
         /// <returns>an array of double</returns>
         public override double[] Sample(int size)
         {
-            double[] result = new double[size];
-            for (int i = 0; i < size; i++)
-                for (int j = 0; j < _n; j++)
-                    result[i] += _randomSource.NextDouble() <= _p ? 1 : 0;
-            return result;
+            //TODO : implement here
+            throw new NotImplementedException();
         }
 
         public void Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
-            throw new NotImplementedException();
+            if (sample.Min() < 0) throw new ArgumentOutOfRangeException("The sample can not fit a Poisson law (all data should be>0)");
+            _lambda = sample.Average();
         }
         #endregion
     }

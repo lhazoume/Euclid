@@ -2173,6 +2173,50 @@
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
         </member>
+        <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.Median">
+            <summary>Gets the distribution's median</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.Mode">
+            <summary>Gets the distribution's mode</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.Support">
+            <summary>Gets the distribution's support</summary>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.CumulativeDistribution(System.Double)">
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).</summary>
+            <param name="x">The location at which to compute the cumulative distribution function</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.InverseCumulativeDistribution(System.Double)">
+            <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
+            <param name="p">The location at which to compute the inverse cumulative density</param>
+            <returns>the inverse cumulative density at p</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.ProbabilityDensity(System.Double)">
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.Sample(System.Int32)">
+            <summary>Generates a sequence of samples from the distribution</summary>
+            <param name="size">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
         <member name="T:Euclid.Distributions.IDistribution">
             <summary>Interface for all continuous distributions</summary>
         </member>
