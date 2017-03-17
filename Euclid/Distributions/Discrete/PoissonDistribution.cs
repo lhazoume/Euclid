@@ -129,8 +129,21 @@ namespace Euclid.Distributions.Discrete
         /// <returns>an array of double</returns>
         public override double[] Sample(int size)
         {
-            //TODO : implement here
-            throw new NotImplementedException();
+            double[] result = new double[size];
+            for (int i = 0; i < size; i++)
+            {
+                double L = Math.Exp(-_lambda),
+                    p = 1;
+                int k = 0;
+                do
+                {
+                    k++;
+                    p *= (1 - _randomSource.NextDouble());
+
+                } while (p > L);
+                result[i] = k - 1;
+            }
+            return result;
         }
 
         public void Fit(FittingMethod method, double[] sample)
