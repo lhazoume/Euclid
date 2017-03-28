@@ -1095,9 +1095,7 @@
             </summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.EmpiricUnivariateDistribution.Create(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},System.Double,Euclid.Distributions.Continuous.Kernels.IDensityKernel)">
-            <summary>
-            Creates a new empiric univariate distribution
-            </summary>
+            <summary>Creates a new empiric univariate distribution</summary>
             <param name="weights">the weights</param>
             <param name="values">the values</param>
             <param name="h">the bandwidth</param>

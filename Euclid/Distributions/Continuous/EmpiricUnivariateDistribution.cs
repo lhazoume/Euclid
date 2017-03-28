@@ -73,9 +73,7 @@ namespace Euclid.Distributions.Continuous
         }
 
         #region Creators
-        /// <summary>
-        /// Creates a new empiric univariate distribution
-        /// </summary>
+        /// <summary>Creates a new empiric univariate distribution</summary>
         /// <param name="weights">the weights</param>
         /// <param name="values">the values</param>
         /// <param name="h">the bandwidth</param>
