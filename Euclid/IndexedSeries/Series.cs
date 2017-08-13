@@ -132,19 +132,22 @@ namespace Euclid.IndexedSeries
 
         /// <summary>Removes all the data-points that fit a predicate</summary>
         /// <param name="predicate">the predicate</param>
-        public void Remove(Func<T, U, bool> predicate)
+        public int Remove(Func<T, U, bool> predicate)
         {
-            #region Kept Indices
-            List<T> keptIndices = new List<T>();
-            foreach (T t in _legends)
-                if (!predicate(t, _data[_legends[t]]))
-                    keptIndices.Add(t);
-            #endregion
+            int linesRemoved = 0,
+                i = 0;
+            while (i < _legends.Count)
+            {
+                if (predicate(_legends.ElementAt(i), _data[i]))
+                {
+                    RemoveRowAt(_legends.ElementAt(i));
+                    linesRemoved++;
+                }
+                else
+                    i++;
+            }
 
-            #region Extraction
-            foreach (T t in keptIndices)
-                RemoveRowAt(t);
-            #endregion
+            return linesRemoved;
         }
 
         /// <summary>Applies a function to all the data</summary>
@@ -188,6 +191,19 @@ namespace Euclid.IndexedSeries
         public void Rename(T oldValue, T newValue)
         {
             _legends.Rename(oldValue, newValue);
+        }
+
+        public bool Matches(Series<T, U, V> other)
+        {
+            if (other._label.Equals(_label) && other._legends.Count == _legends.Count &&
+                other._legends.Except(_legends).Count() == 0)
+            {
+                for (int i = 0; i < _data.Length; i++)
+                    if (!other._data[i].Equals(_data[i]))
+                        return false;
+                return true;
+            }
+            return false;
         }
         #endregion
 
@@ -340,11 +356,11 @@ namespace Euclid.IndexedSeries
         /// <param name="node">the <c>XmlNode</c></param>
         public static Series<T, U, V> Create(XmlNode node)
         {
-            V label = node.SelectSingleNode("label").Attributes["value"].Value.Parse<V>();
+            V label = node.SelectSingleNode("series/label").Attributes["value"].Value.Parse<V>();
             Header<T> legends = new Header<T>();
             List<U> data = new List<U>();
 
-            XmlNodeList points = node.SelectNodes("point");
+            XmlNodeList points = node.SelectNodes("series/point");
             foreach (XmlNode pointNode in points)
             {
                 U value = pointNode.Attributes["value"].Value.Parse<U>();

@@ -544,10 +544,10 @@ namespace Euclid.IndexedSeries
             return _labels.ElementAt(index);
         }
 
-        /// <summary>Sets the i-th label's value</summary>
+        /// <summary>Renames a label</summary>
         /// <param name="oldValue">the old value</param>
         /// <param name="newValue">the new value</param>
-        public void SetLabel(V oldValue, V newValue)
+        public void RenameLabel(V oldValue, V newValue)
         {
             _labels.Rename(oldValue, newValue);
         }
@@ -618,5 +618,24 @@ namespace Euclid.IndexedSeries
         }
         #endregion
 
+        public bool Matches(DataFrame<T, U, V> other)
+        {
+            if (other._labels.Count == _labels.Count && other._legends.Count == _legends.Count &&
+                other._labels.Except(_labels).Count() == 0 && other._legends.Except(_legends).Count()==0)
+            {
+                for (int i = 0; i < other.Rows; i++)
+                {
+                    T t = other._legends.ElementAt(i);
+                    for (int j = 0; j < other.Columns; j++)
+                    {
+                        V v = other._labels.ElementAt(j);
+                        if (!other[t, v].Equals(this[t, v]))
+                            return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
     }
 }

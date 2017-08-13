@@ -16,6 +16,12 @@ namespace Euclid.Serialization
         /// <param name="filePath">the target file path</param>
         public static void SaveXml(this IXmlable xmlable, string filePath)
         {
+            File.WriteAllText(filePath, xmlable.GetXml());
+        }
+
+        public static string GetXml(this IXmlable xmlable)
+        {
+
             StringBuilder builder = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
             XmlWriter writer = XmlWriter.Create(builder, settings);
@@ -25,7 +31,7 @@ namespace Euclid.Serialization
             writer.WriteEndDocument();
             writer.Flush();
 
-            File.WriteAllText(filePath, builder.ToString());
+            return builder.ToString();
         }
     }
 }

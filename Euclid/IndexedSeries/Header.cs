@@ -41,7 +41,7 @@ namespace Euclid.IndexedSeries
         /// <returns>a IEnumerator</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return _map.LeftEnumerator;
+            return _map.ForwardEnumerator;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -125,7 +125,7 @@ namespace Euclid.IndexedSeries
         /// <returns>true if the label is in the header, false otherwise</returns>
         public bool Contains(T t)
         {
-            return _map.ContainsKey(t);
+            return _map.ContainsForwardKey(t);
         }
 
         #endregion

@@ -47,7 +47,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         {
             if (input.Size != _inputSize) throw new ArgumentOutOfRangeException("the inputs' size does not match the layer's characteristics");
             _z = (_weights * input) + _biases;
-            _a = Vector.Apply(_z, _activation.Function);
+            _a = _z.Apply(_activation.Function);
             return _a.Clone;
         }
 
@@ -63,7 +63,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             for (int i = 0; i < inputs.Count; i++)
             {
                 Vector z = (_weights * inputs[i]) + _biases,
-                    a = Vector.Apply(z, _activation.Function);
+                    a = z.Apply(_activation.Function);
                 _z += z;
                 _a += a;
                 outputs.Add(a);

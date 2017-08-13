@@ -73,25 +73,19 @@
             </summary>
         </member>
         <member name="M:Euclid.Analytics.ErrorFunctions.ManhattanError.Function(Euclid.Vector,Euclid.Vector)">
-            <summary>
-            Calculates the Manhattan norm of the difference between the obtained vector and the expected vector
-            </summary>
+            <summary>Calculates the Manhattan norm of the difference between the obtained vector and the expected vector</summary>
             <param name="x">the obtained vector</param>
             <param name="benchmark">the expected vector</param>
             <returns>the error</returns>
         </member>
         <member name="M:Euclid.Analytics.ErrorFunctions.ManhattanError.Function(System.Collections.Generic.List{Euclid.Vector},System.Collections.Generic.List{Euclid.Vector})">
-            <summary>
-            Calculates the sum of the Manhattan norms of the differences between the obtained and the expected vectors
-            </summary>
+            <summary>Calculates the sum of the Manhattan norms of the differences between the obtained and the expected vectors</summary>
             <param name="x">the list of obtained vectors</param>
             <param name="benchmark"></param>
             <returns>the sum of the errors</returns>
         </member>
         <member name="M:Euclid.Analytics.ErrorFunctions.ManhattanError.Gradient(Euclid.Vector,Euclid.Vector)">
-            <summary>
-            Calculates the gradient of the Manhattan norm, as observed from the obtained vector's value
-            </summary>
+            <summary>Calculates the gradient of the Manhattan norm, as observed from the obtained vector's value</summary>
             <param name="x">the obtained vector</param>
             <param name="benchmark">the obtained vector</param>
             <returns>a vector whose size is the same as the obtained vector</returns>
@@ -1095,9 +1089,7 @@
             </summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.EmpiricUnivariateDistribution.Create(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},System.Double,Euclid.Distributions.Continuous.Kernels.IDensityKernel)">
-            <summary>
-            Creates a new empiric univariate distribution
-            </summary>
+            <summary>Creates a new empiric univariate distribution</summary>
             <param name="weights">the weights</param>
             <param name="values">the values</param>
             <param name="h">the bandwidth</param>
@@ -3148,8 +3140,8 @@
             <param name="index">the index</param>
             <returns>a label</returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.DataFrame`3.SetLabel(`2,`2)">
-            <summary>Sets the i-th label's value</summary>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.RenameLabel(`2,`2)">
+            <summary>Renames a label</summary>
             <param name="oldValue">the old value</param>
             <param name="newValue">the new value</param>
         </member>
@@ -3900,10 +3892,10 @@
             <summary>Builds a Map of </summary>
             <param name="values"></param>
         </member>
-        <member name="P:Euclid.Objects.Map`2.LeftEnumerator">
+        <member name="P:Euclid.Objects.Map`2.ForwardEnumerator">
             <summary>Gets an enumerator for the left hand side</summary>
         </member>
-        <member name="P:Euclid.Objects.Map`2.Enumerator">
+        <member name="P:Euclid.Objects.Map`2.BackwardEnumerator">
             <summary>Gets an enumerator for the right hand side </summary>
         </member>
         <member name="M:Euclid.Objects.Map`2.Add(`0,`1)">
@@ -3926,12 +3918,12 @@
             <param name="key">the right hand side key</param>
             <param name="newValue">the new left right hand side value</param>
         </member>
-        <member name="M:Euclid.Objects.Map`2.ContainsKey(`0)">
+        <member name="M:Euclid.Objects.Map`2.ContainsForwardKey(`0)">
             <summary>Checks if the left hand side contains a key</summary>
             <param name="t1">the left hand side key</param>
             <returns><c>True</c> if this is a left hand side key, <c>False</c> otherwise</returns>
         </member>
-        <member name="M:Euclid.Objects.Map`2.ContainsValue(`1)">
+        <member name="M:Euclid.Objects.Map`2.ContainsBackwardKey(`1)">
             <summary>Checks if the right hand side contains a key</summary>
             <param name="t2">the right hand side key</param>
             <returns><c>True</c> if this a right hand side key, <c>False</c> otherwise</returns>
@@ -5028,12 +5020,6 @@
             Vector of double class
             </summary>
         </member>
-        <member name="M:Euclid.Vector.Apply(Euclid.Vector,System.Func{System.Double,System.Double})">
-            <summary>Applies a function to transform the data of the vector</summary>
-            <param name="v">the vector to transform</param>
-            <param name="func">the transforming function</param>
-            <returns>a <c>Vector</c></returns>
-        </member>
         <member name="P:Euclid.Vector.Size">
             <summary>Returns the Vector's size</summary>
         </member>
@@ -5041,9 +5027,7 @@
             <summary>Gets the Vector's components</summary>
         </member>
         <member name="P:Euclid.Vector.Item(System.Int32)">
-            <summary>
-            Gets a component of the Vector
-            </summary>
+            <summary>Gets a component of the Vector</summary>
             <param name="i">the index</param>
             <returns>a double</returns>
         </member>
@@ -5051,137 +5035,99 @@
             <summary>Returns a deep copy of the Vector</summary>
         </member>
         <member name="P:Euclid.Vector.Norm1">
-            <summary>
-            Return the sum of the absolute values
-            </summary>
+            <summary>Returns the sum of the absolute values</summary>
         </member>
         <member name="P:Euclid.Vector.Norm2">
-            <summary>
-            Returns the square root of the sum of squares
-            </summary>
+            <summary>Returns the square root of the sum of squares</summary>
         </member>
         <member name="P:Euclid.Vector.NormSup">
-            <summary>
-            Returns the largest value of the <c>Matrix</c> in absolute value
-            </summary>
+            <summary>Returns the largest value of the <c>Matrix</c> in absolute value</summary>
         </member>
         <member name="P:Euclid.Vector.SumOfSquares">
-            <summary>
-            Returns the sum of the squared values
-            </summary>
+            <summary>Returns the sum of the squared values</summary>
         </member>
         <member name="P:Euclid.Vector.Sum">
-            <summary>
-            Returns the sum of the values
-            </summary>
+            <summary>Returns the sum of the values</summary>
         </member>
         <member name="M:Euclid.Vector.op_Multiply(Euclid.Vector,System.Double)">
-            <summary>
-            Multiplies a <c>Vector</c> by a scalar
-            </summary>
+            <summary>Multiplies a <c>Vector</c> by a scalar</summary>
             <param name="v">the left hand side <c>Vector</c></param>
             <param name="f">the scalar</param>
             <returns>the <c>Vector</c> result of the multiplication</returns>
         </member>
         <member name="M:Euclid.Vector.op_Multiply(System.Double,Euclid.Vector)">
-            <summary>
-            Multiplies a <c>Vector</c> by a scalar
-            </summary>
+            <summary>Multiplies a <c>Vector</c> by a scalar</summary>
             <param name="f">the scalar</param>
             <param name="v">the right hand side <c>Vector</c></param>
             <returns>the <c>Vector</c> result of the multiplication</returns>
         </member>
         <member name="M:Euclid.Vector.op_Division(Euclid.Vector,System.Double)">
-            <summary>
-            Divides all the coefficients of a <c>Vector</c> by a scalar
-            </summary>
+            <summary>Divides all the coefficients of a <c>Vector</c> by a scalar</summary>
             <param name="v">the left hand side <c>Vector</c></param>
             <param name="f">the scalar</param>
             <returns>the <c>Vector</c> result of the division</returns>
         </member>
         <member name="M:Euclid.Vector.op_Multiply(Euclid.Matrix,Euclid.Vector)">
-            <summary>
-            Multiplies a Matrix by a Vector
-            </summary>
+            <summary>Multiplies a Matrix by a Vector</summary>
             <param name="m">the left hand side <c>Matrix</c></param>
             <param name="v">the right hand side <c>Vector</c></param>
             <returns>the <c>Vector</c> result of the multiplication</returns>
         </member>
         <member name="M:Euclid.Vector.op_Multiply(Euclid.Vector,Euclid.Matrix)">
-            <summary>
-            Multiplies a Vector by a Matrix
-            </summary>
+            <summary>Multiplies a Vector by a Matrix</summary>
             <param name="v">the left hand side <c>Vector</c></param>
             <param name="m">the right hand side <c>Matrix</c></param>
             <returns>the <c>Vector</c> result of the multiplication</returns>
         </member>
         <member name="M:Euclid.Vector.op_Multiply(Euclid.Vector,Euclid.Vector)">
-            <summary>
-            Multiplies a Vector by a Vector's transpose
-            </summary>
+            <summary>Multiplies a Vector by a Vector's transpose</summary>
             <param name="v1">the left hand side <c>Vector</c></param>
             <param name="v2">the right hand side <c>Vector</c></param>
             <returns>the <c>Matrix</c> result of the multiplication</returns>
         </member>
         <member name="M:Euclid.Vector.Add(Euclid.Vector,Euclid.Vector)">
-            <summary>
-            Performs a Vector addition, after going through dimension compatibility verifications.
-            </summary>
+            <summary>Performs a Vector addition, after going through dimension compatibility verifications.</summary>
             <param name="v1">First Vector</param>
             <param name="v2">Second Vector</param>
             <returns>The sum of m1 and m2</returns>
         </member>
         <member name="M:Euclid.Vector.op_Addition(Euclid.Vector,System.Double)">
-            <summary>
-            Adds a scalar to all the coefficients of a <c>Vector</c>
-            </summary>
+            <summary>Adds a scalar to all the coefficients of a <c>Vector</c></summary>
             <param name="v">the left hand side <c>Vector</c></param>
             <param name="c">the scalar</param>
             <returns>the <c>Vector</c> result of the addition</returns>
         </member>
         <member name="M:Euclid.Vector.op_Addition(System.Double,Euclid.Vector)">
-            <summary>
-            Adds a scalar to all the coefficients of a <c>Vector</c>
-            </summary>
+            <summary>Adds a scalar to all the coefficients of a <c>Vector</c></summary>
             <param name="c">the scalar</param>
             <param name="v">the right hand side <c>Vector</c></param>
             <returns>the <c>Vector</c> result of the addition</returns>
         </member>
         <member name="M:Euclid.Vector.op_Subtraction(Euclid.Vector,System.Double)">
-            <summary>
-            Substracts a scalar to all the coefficients of a <c>Vector</c>
-            </summary>
+            <summary>Substracts a scalar to all the coefficients of a <c>Vector</c></summary>
             <param name="v">the left hand side <c>Vector</c></param>
             <param name="c">the scalar</param>
             <returns>the <c>Vector</c> result of the substraction</returns>
         </member>
         <member name="M:Euclid.Vector.op_Subtraction(System.Double,Euclid.Vector)">
-            <summary>
-            Adds a scalar to the opposite of a <c>Vector</c>
-            </summary>
+            <summary>Adds a scalar to the opposite of a <c>Vector</c></summary>
             <param name="c">the scalar</param>
             <param name="v">the right hand side <c>Vector</c></param>
             <returns>the <c>Vector</c> result of the substraction</returns>
         </member>
         <member name="M:Euclid.Vector.op_UnaryNegation(Euclid.Vector)">
-            <summary>
-            Returns the opposite of the <c>Vector</c>
-            </summary>
+            <summary>Returns the opposite of the <c>Vector</c></summary>
             <param name="v">the input Vector</param>
             <returns>the <c>Vector</c> opposite</returns>
         </member>
         <member name="M:Euclid.Vector.op_Addition(Euclid.Vector,Euclid.Vector)">
-            <summary>
-            Performs the Vector addition
-            </summary>
+            <summary>Performs the Vector addition</summary>
             <param name="v1">the left hand side Vector</param>
             <param name="v2">the right hand side Vector</param>
             <returns>a <c>Vector</c></returns>
         </member>
         <member name="M:Euclid.Vector.op_Subtraction(Euclid.Vector,Euclid.Vector)">
-            <summary>
-            Performs a Vector substraction
-            </summary>
+            <summary>Performs a Vector substraction</summary>
             <param name="v1">the left hand side</param>
             <param name="v2">the right hand side</param>
             <returns>the <c>Vector</c> result of the substraction</returns>
@@ -5207,9 +5153,7 @@
             <returns>a double</returns>
         </member>
         <member name="M:Euclid.Vector.Hadamard(Euclid.Vector,Euclid.Vector)">
-            <summary>
-            Returns the Hadamard product
-            </summary>
+            <summary>Returns the Hadamard product</summary>
             <param name="v1">the left hand side</param>
             <param name="v2">the right hand side</param>
             <returns>a <c>Vector</c> containing the Hadamard product</returns>
@@ -5227,9 +5171,7 @@
             <returns>a Vector</returns>
         </member>
         <member name="M:Euclid.Vector.Create(System.Double,Euclid.Vector,System.Double,Euclid.Vector)">
-            <summary>
-            Creates a Vector made from the linear combination of two vectors
-            </summary>
+            <summary>Creates a Vector made from the linear combination of two vectors</summary>
             <param name="f1">the left hand side factor</param>
             <param name="v1">the left hand side vector</param>
             <param name="f2">the right hand side factor</param>
@@ -5237,9 +5179,7 @@
             <returns>a <c>Vector</c> containing the linear combination of the input</returns>
         </member>
         <member name="M:Euclid.Vector.Create(System.Double,Euclid.Vector,System.Double,Euclid.Vector,System.Double,Euclid.Vector)">
-            <summary>
-            Creates a Vector made from the linear combination of three vectors
-            </summary>
+            <summary>Creates a Vector made from the linear combination of three vectors</summary>
             <param name="f1">the left hand side factor</param>
             <param name="v1">the left hand side vector</param>
             <param name="f2">the right hand side factor</param>
@@ -5276,9 +5216,7 @@
             <returns></returns>
         </member>
         <member name="M:Euclid.Vector.Equals(Euclid.Vector)">
-            <summary>
-            Determines whether the specified object is equal to the current object
-            </summary>
+            <summary>Determines whether the specified object is equal to the current object</summary>
             <param name="other">the object to compare with the current object</param>
             <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c></returns>
         </member>

@@ -217,13 +217,13 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             Vector gradient = _errorFunction.Gradient(projectedY, Y);
             #endregion
 
-            delta[L] = Vector.Hadamard(Vector.Apply(outputLayer.Z, outputLayer.Function.Derivative), gradient);
+            delta[L] = Vector.Hadamard(outputLayer.Z.Apply(outputLayer.Function.Derivative), gradient);
             gradients[L] = LayerGradient(_network[L - 1].A, outputLayer, delta[L]);
 
             for (int l = L - 1; l >= 0; l--)
             {
                 Layer layer = _network[l];
-                delta[l] = Vector.Hadamard(Vector.Apply(layer.Z, layer.Function.Derivative), _network[l + 1].Weights.Transpose * delta[l + 1]);
+                delta[l] = Vector.Hadamard(layer.Z.Apply(layer.Function.Derivative), _network[l + 1].Weights.Transpose * delta[l + 1]);
                 gradients[l] = l == 0 ? LayerGradient(X, layer, delta[l]) : LayerGradient(_network[l - 1].A, layer, delta[l]);
             }
 

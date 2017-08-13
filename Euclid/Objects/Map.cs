@@ -41,13 +41,13 @@ namespace Euclid.Objects
 
         #region Enumerators
         /// <summary>Gets an enumerator for the left hand side</summary>
-        public IEnumerator<T1> LeftEnumerator
+        public IEnumerator<T1> ForwardEnumerator
         {
             get { return _forward.Keys.GetEnumerator(); }
         }
 
         /// <summary>Gets an enumerator for the right hand side </summary>
-        public IEnumerator<T2> Enumerator
+        public IEnumerator<T2> BackwardEnumerator
         {
             get { return _backward.Keys.GetEnumerator(); }
         }
@@ -111,7 +111,7 @@ namespace Euclid.Objects
         /// <summary>Checks if the left hand side contains a key</summary>
         /// <param name="t1">the left hand side key</param>
         /// <returns><c>True</c> if this is a left hand side key, <c>False</c> otherwise</returns>
-        public bool ContainsKey(T1 t1)
+        public bool ContainsForwardKey(T1 t1)
         {
             return _forward.ContainsKey(t1);
         }
@@ -119,7 +119,7 @@ namespace Euclid.Objects
         /// <summary>Checks if the right hand side contains a key</summary>
         /// <param name="t2">the right hand side key</param>
         /// <returns><c>True</c> if this a right hand side key, <c>False</c> otherwise</returns>
-        public bool ContainsValue(T2 t2)
+        public bool ContainsBackwardKey(T2 t2)
         {
             return _backward.ContainsKey(t2);
         }

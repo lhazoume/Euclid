@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Euclid
@@ -16,17 +15,6 @@ namespace Euclid
         private int _size;
         private double[] _data;
         #endregion
-
-        /// <summary>Applies a function to transform the data of the vector</summary>
-        /// <param name="v">the vector to transform</param>
-        /// <param name="func">the transforming function</param>
-        /// <returns>a <c>Vector</c></returns>
-        public static Vector Apply(Vector v, Func<double, double> func)
-        {
-            Vector result = Vector.Create(v._size);
-            Parallel.For(0, result.Size, k => { result[k] = func(v._data[k]); });
-            return result;
-        }
 
         #region Constructors
         private Vector(IEnumerable<double> data)
@@ -63,9 +51,7 @@ namespace Euclid
             get { return _data; }
         }
 
-        /// <summary>
-        /// Gets a component of the Vector
-        /// </summary>
+        /// <summary>Gets a component of the Vector</summary>
         /// <param name="i">the index</param>
         /// <returns>a double</returns>
         public double this[int i]
@@ -83,9 +69,7 @@ namespace Euclid
 
         #region Norms and sums
 
-        /// <summary>
-        /// Return the sum of the absolute values
-        /// </summary>
+        /// <summary>Returns the sum of the absolute values</summary>
         public double Norm1
         {
             get
@@ -97,17 +81,13 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the square root of the sum of squares
-        /// </summary>
+        /// <summary>Returns the square root of the sum of squares</summary>
         public double Norm2
         {
             get { return Math.Sqrt(this.SumOfSquares); }
         }
 
-        /// <summary>
-        /// Returns the largest value of the <c>Matrix</c> in absolute value
-        /// </summary>
+        /// <summary>Returns the largest value of the <c>Matrix</c> in absolute value</summary>
         public double NormSup
         {
             get
@@ -118,9 +98,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the sum of the squared values
-        /// </summary>
+        /// <summary>Returns the sum of the squared values</summary>
         public double SumOfSquares
         {
             get
@@ -132,9 +110,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the sum of the values
-        /// </summary>
+        /// <summary>Returns the sum of the values</summary>
         public double Sum
         {
             get
@@ -152,9 +128,7 @@ namespace Euclid
 
         #region Multiplications / divisions
 
-        /// <summary>
-        /// Multiplies a <c>Vector</c> by a scalar
-        /// </summary>
+        /// <summary>Multiplies a <c>Vector</c> by a scalar</summary>
         /// <param name="v">the left hand side <c>Vector</c></param>
         /// <param name="f">the scalar</param>
         /// <returns>the <c>Vector</c> result of the multiplication</returns>
@@ -166,9 +140,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Multiplies a <c>Vector</c> by a scalar
-        /// </summary>
+        /// <summary>Multiplies a <c>Vector</c> by a scalar</summary>
         /// <param name="f">the scalar</param>
         /// <param name="v">the right hand side <c>Vector</c></param>
         /// <returns>the <c>Vector</c> result of the multiplication</returns>
@@ -177,9 +149,7 @@ namespace Euclid
             return v * f;
         }
 
-        /// <summary>
-        /// Divides all the coefficients of a <c>Vector</c> by a scalar
-        /// </summary>
+        /// <summary>Divides all the coefficients of a <c>Vector</c> by a scalar</summary>
         /// <param name="v">the left hand side <c>Vector</c></param>
         /// <param name="f">the scalar</param>
         /// <returns>the <c>Vector</c> result of the division</returns>
@@ -188,9 +158,7 @@ namespace Euclid
             return v * (1 / f);
         }
 
-        /// <summary>
-        /// Multiplies a Matrix by a Vector
-        /// </summary>
+        /// <summary>Multiplies a Matrix by a Vector</summary>
         /// <param name="m">the left hand side <c>Matrix</c></param>
         /// <param name="v">the right hand side <c>Vector</c></param>
         /// <returns>the <c>Vector</c> result of the multiplication</returns>
@@ -205,9 +173,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Multiplies a Vector by a Matrix
-        /// </summary>
+        /// <summary>Multiplies a Vector by a Matrix</summary>
         /// <param name="v">the left hand side <c>Vector</c></param>
         /// <param name="m">the right hand side <c>Matrix</c></param>
         /// <returns>the <c>Vector</c> result of the multiplication</returns>
@@ -222,9 +188,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Multiplies a Vector by a Vector's transpose
-        /// </summary>
+        /// <summary>Multiplies a Vector by a Vector's transpose</summary>
         /// <param name="v1">the left hand side <c>Vector</c></param>
         /// <param name="v2">the right hand side <c>Vector</c></param>
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
@@ -241,9 +205,7 @@ namespace Euclid
 
         #region Additions / substractions
 
-        /// <summary>
-        /// Performs a Vector addition, after going through dimension compatibility verifications.
-        /// </summary>
+        /// <summary>Performs a Vector addition, after going through dimension compatibility verifications.</summary>
         /// <param name="v1">First Vector</param>
         /// <param name="v2">Second Vector</param>
         /// <returns>The sum of m1 and m2</returns>
@@ -256,9 +218,7 @@ namespace Euclid
             return r;
         }
 
-        /// <summary>
-        /// Adds a scalar to all the coefficients of a <c>Vector</c>
-        /// </summary>
+        /// <summary>Adds a scalar to all the coefficients of a <c>Vector</c></summary>
         /// <param name="v">the left hand side <c>Vector</c></param>
         /// <param name="c">the scalar</param>
         /// <returns>the <c>Vector</c> result of the addition</returns>
@@ -270,9 +230,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Adds a scalar to all the coefficients of a <c>Vector</c>
-        /// </summary>
+        /// <summary>Adds a scalar to all the coefficients of a <c>Vector</c></summary>
         /// <param name="c">the scalar</param>
         /// <param name="v">the right hand side <c>Vector</c></param>
         /// <returns>the <c>Vector</c> result of the addition</returns>
@@ -284,9 +242,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Substracts a scalar to all the coefficients of a <c>Vector</c>
-        /// </summary>
+        /// <summary>Substracts a scalar to all the coefficients of a <c>Vector</c></summary>
         /// <param name="v">the left hand side <c>Vector</c></param>
         /// <param name="c">the scalar</param>
         /// <returns>the <c>Vector</c> result of the substraction</returns>
@@ -298,9 +254,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Adds a scalar to the opposite of a <c>Vector</c>
-        /// </summary>
+        /// <summary>Adds a scalar to the opposite of a <c>Vector</c></summary>
         /// <param name="c">the scalar</param>
         /// <param name="v">the right hand side <c>Vector</c></param>
         /// <returns>the <c>Vector</c> result of the substraction</returns>
@@ -308,13 +262,11 @@ namespace Euclid
         {
             Vector tmp = v.Clone;
             for (int i = 0; i < v.Size; i++)
-                tmp[i] = v[i] - c;
+                tmp[i] = c - v[i];
             return tmp;
         }
 
-        /// <summary>
-        /// Returns the opposite of the <c>Vector</c>
-        /// </summary>
+        /// <summary>Returns the opposite of the <c>Vector</c></summary>
         /// <param name="v">the input Vector</param>
         /// <returns>the <c>Vector</c> opposite</returns>
         public static Vector operator -(Vector v)
@@ -322,9 +274,7 @@ namespace Euclid
             return v * -1;
         }
 
-        /// <summary>
-        /// Performs the Vector addition
-        /// </summary>
+        /// <summary>Performs the Vector addition</summary>
         /// <param name="v1">the left hand side Vector</param>
         /// <param name="v2">the right hand side Vector</param>
         /// <returns>a <c>Vector</c></returns>
@@ -333,9 +283,7 @@ namespace Euclid
             return Vector.Add(v1, v2);
         }
 
-        /// <summary>
-        /// Performs a Vector substraction
-        /// </summary>
+        /// <summary>Performs a Vector substraction</summary>
         /// <param name="v1">the left hand side</param>
         /// <param name="v2">the right hand side</param>
         /// <returns>the <c>Vector</c> result of the substraction</returns>
@@ -390,9 +338,7 @@ namespace Euclid
             throw new ArgumentException("the sizes do not fit");
         }
 
-        /// <summary>
-        /// Returns the Hadamard product
-        /// </summary>
+        /// <summary>Returns the Hadamard product</summary>
         /// <param name="v1">the left hand side</param>
         /// <param name="v2">the right hand side</param>
         /// <returns>a <c>Vector</c> containing the Hadamard product</returns>
@@ -440,9 +386,7 @@ namespace Euclid
             throw new RankException("The vectors have different sizes.");
         }
 
-        /// <summary>
-        /// Creates a Vector made from the linear combination of two vectors
-        /// </summary>
+        /// <summary>Creates a Vector made from the linear combination of two vectors</summary>
         /// <param name="f1">the left hand side factor</param>
         /// <param name="v1">the left hand side vector</param>
         /// <param name="f2">the right hand side factor</param>
@@ -457,9 +401,7 @@ namespace Euclid
             return r;
         }
 
-        /// <summary>
-        /// Creates a Vector made from the linear combination of three vectors
-        /// </summary>
+        /// <summary>Creates a Vector made from the linear combination of three vectors</summary>
         /// <param name="f1">the left hand side factor</param>
         /// <param name="v1">the left hand side vector</param>
         /// <param name="f2">the right hand side factor</param>
@@ -524,9 +466,7 @@ namespace Euclid
         #endregion
 
         #region Interface Implementations
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object
-        /// </summary>
+        /// <summary>Determines whether the specified object is equal to the current object</summary>
         /// <param name="other">the object to compare with the current object</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c></returns>
         public bool Equals(Vector other)

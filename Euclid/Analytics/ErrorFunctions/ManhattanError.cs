@@ -8,9 +8,7 @@ namespace Euclid.Analytics.ErrorFunctions
     /// </summary>
     public class ManhattanError : IErrorFunction
     {
-        /// <summary>
-        /// Calculates the Manhattan norm of the difference between the obtained vector and the expected vector
-        /// </summary>
+        /// <summary>Calculates the Manhattan norm of the difference between the obtained vector and the expected vector</summary>
         /// <param name="x">the obtained vector</param>
         /// <param name="benchmark">the expected vector</param>
         /// <returns>the error</returns>
@@ -19,9 +17,7 @@ namespace Euclid.Analytics.ErrorFunctions
             return (x - benchmark).Norm1;
         }
 
-        /// <summary>
-        /// Calculates the sum of the Manhattan norms of the differences between the obtained and the expected vectors
-        /// </summary>
+        /// <summary>Calculates the sum of the Manhattan norms of the differences between the obtained and the expected vectors</summary>
         /// <param name="x">the list of obtained vectors</param>
         /// <param name="benchmark"></param>
         /// <returns>the sum of the errors</returns>
@@ -33,15 +29,13 @@ namespace Euclid.Analytics.ErrorFunctions
             return sum;
         }
 
-        /// <summary>
-        /// Calculates the gradient of the Manhattan norm, as observed from the obtained vector's value
-        /// </summary>
+        /// <summary>Calculates the gradient of the Manhattan norm, as observed from the obtained vector's value</summary>
         /// <param name="x">the obtained vector</param>
         /// <param name="benchmark">the obtained vector</param>
         /// <returns>a vector whose size is the same as the obtained vector</returns>
         public Vector Gradient(Vector x, Vector benchmark)
         {
-            return Vector.Apply(x - benchmark, d => Math.Sign(d));
+            return (x - benchmark).Apply(d => Math.Sign(d));
         }
     }
 }
