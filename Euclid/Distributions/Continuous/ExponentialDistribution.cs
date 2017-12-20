@@ -35,6 +35,9 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
+        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
         public void Fit(FittingMethod method, double[] sample)
         {
             if (method == FittingMethod.Moments)

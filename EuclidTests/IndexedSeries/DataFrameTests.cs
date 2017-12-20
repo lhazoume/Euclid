@@ -42,7 +42,7 @@ namespace Euclid.IndexedSeries.Tests
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(dataFrame.GetXml().Trim());
             DataFrame<DateTime, double, string> newDataFrame = DataFrame<DateTime, double, string>.Create(doc);
-            Assert.IsTrue(dataFrame.Matches(newDataFrame));
+            Assert.IsTrue(dataFrame.Equals(newDataFrame));
         }
 
         [TestMethod()]
@@ -50,7 +50,7 @@ namespace Euclid.IndexedSeries.Tests
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor(),
                 seriesDataFrame = DataFrame<DateTime, double, string>.Create(dataFrame.GetSeries());
-            Assert.IsTrue(dataFrame.Matches(seriesDataFrame));
+            Assert.IsTrue(dataFrame.Equals(seriesDataFrame));
         }
 
         [TestMethod()]
@@ -58,7 +58,7 @@ namespace Euclid.IndexedSeries.Tests
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor(),
                 slicesDataFrame = DataFrame<DateTime, double, string>.Create(dataFrame.GetSlices());
-            Assert.IsTrue(dataFrame.Matches(slicesDataFrame));
+            Assert.IsTrue(dataFrame.Equals(slicesDataFrame));
         }
 
         [TestMethod()]
@@ -341,26 +341,12 @@ namespace Euclid.IndexedSeries.Tests
         #endregion
 
         [TestMethod()]
-        public void RemoveTest()
-        {
-            DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
-
-            Predicate<DateTime> datePredicate = dt => dt.DayOfWeek == DayOfWeek.Monday;
-
-            Func<DateTime, double, string, bool> predicate = (dt, d, s) => datePredicate(dt) || (s == _headers[1] && d % 7 == 0);
-            dataFrame.Remove(predicate);
-
-            Assert.IsTrue(dataFrame.Legends.Count(dt => dt.DayOfWeek == DayOfWeek.Monday) == 0 &&
-                Enumerable.Range(0, dataFrame.Rows).All(i => dataFrame[i, 1] % 7 != 0));
-        }
-
-        [TestMethod()]
         public void CloneTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor(),
                 clone = dataFrame.Clone();
 
-            Assert.IsTrue(dataFrame.Matches(clone));
+            Assert.IsTrue(dataFrame.Equals(clone));
         }
 
         #region Apply
@@ -457,7 +443,7 @@ namespace Euclid.IndexedSeries.Tests
                 falseClone = SampleCreatedUsingFullConstructor();
             falseClone[1, 1] = 1000;
 
-            Assert.IsTrue(dataFrame.Matches(trueClone) && !dataFrame.Matches(falseClone));
+            Assert.IsTrue(dataFrame.Equals(trueClone) && !dataFrame.Equals(falseClone));
         }
     }
 }

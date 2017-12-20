@@ -107,7 +107,10 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        public void Fit(FittingMethod method, double[] sample)
+        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="fitting">the fitting method</param>
+        public void Fit(FittingMethod fitting, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();

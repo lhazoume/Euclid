@@ -74,7 +74,7 @@ namespace Euclid.IndexedSeries.Tests
         {
             Series<DateTime, double, string> series = ValuesSeries(),
                 clone = series.Clone();
-            Assert.IsTrue(series.Matches(clone));
+            Assert.IsTrue(series.Equals(clone));
         }
 
         [TestMethod()]
@@ -162,7 +162,7 @@ namespace Euclid.IndexedSeries.Tests
                 expectedMatch = ValuesSeries(),
                 expectedUnMatch = ValuesSeries();
             expectedUnMatch[_n / 2] = 10000000;
-            Assert.IsTrue(expectedMatch.Matches(series) && !expectedUnMatch.Matches(series));
+            Assert.IsTrue(expectedMatch.Equals(series) && !expectedUnMatch.Equals(series));
         }
 
         [TestMethod()]
@@ -282,7 +282,7 @@ namespace Euclid.IndexedSeries.Tests
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(series.GetXml().Trim());
             Series<DateTime, double, string> newSeries = Series<DateTime, double, string>.Create(doc);
-            Assert.IsTrue(series.Matches(newSeries));
+            Assert.IsTrue(series.Equals(newSeries));
         }
 
         [TestMethod()]
@@ -290,7 +290,7 @@ namespace Euclid.IndexedSeries.Tests
         {
             Series<DateTime, double, string> series = Series<DateTime, double, string>.Create("Label", new Header<DateTime>(_dates), _values),
                 pseudoClone = Series<DateTime, double, string>.Create(series.ToCSV());
-            Assert.IsTrue(series.Matches(pseudoClone));
+            Assert.IsTrue(series.Equals(pseudoClone));
         }
         #endregion
     }

@@ -18,9 +18,7 @@ namespace Euclid.Analytics
 
         #region Constructors
 
-        /// <summary>
-        /// Default constructor for a linear model
-        /// </summary>
+        /// <summary>Default constructor for a linear model</summary>
         /// <param name="constant">the constant term</param>
         /// <param name="factors">the regression coefficients</param>
         /// <param name="correlations">the zero-degree correlations</param>
@@ -49,16 +47,12 @@ namespace Euclid.Analytics
             }
         }
 
-        /// <summary>
-        /// Builds a linear model for a failed regression
-        /// </summary>
+        /// <summary>Builds a linear model for a failed regression</summary>
         public LinearModel()
             : this(0, new double[] { 0 }, new double[] { 0 }, 0, 0, 0, false)
         { }
 
-        /// <summary>
-        /// Builds a constant linear model
-        /// </summary>
+        /// <summary> Builds a constant linear model</summary>
         /// <param name="constant">the constant</param>
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squares due to error</param>
@@ -157,9 +151,7 @@ namespace Euclid.Analytics
         #endregion
 
         #region ToString
-        /// <summary>
-        /// Returns a string that represents the linear model
-        /// </summary>
+        /// <summary>Returns a string that represents the linear model</summary>
         /// <returns>a string that represents the linear model</returns>
         public override string ToString()
         {

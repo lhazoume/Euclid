@@ -960,6 +960,9 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>Creates a diagonal matrix</summary>
+        /// <param name="values">the values to be set on the diagonal</param>
+        /// <returns>a <c>Matrix</c> </returns>
         public static Matrix CreateDiagonalMatrix(params double[] values)
         {
             Matrix result = CreateZeroMatrix(values.Length, values.Length);
@@ -968,9 +971,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Returns a square matrix full of uniform random values
-        /// </summary>
+        /// <summary>Returns a square matrix full of uniform random values</summary>
         /// <param name="size">the number of rows / cols</param>
         /// <returns>a square <c>Matrix</c></returns>
         public static Matrix CreateSquareRandom(int size)
@@ -982,9 +983,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Returns a rectangular matrix full of uniform random values
-        /// </summary>
+        /// <summary>Returns a rectangular matrix full of uniform random values</summary>
         /// <param name="rows">the number of rows</param>
         /// <param name="columns">the number of columns</param>
         /// <returns>a rectangular matrix</returns>

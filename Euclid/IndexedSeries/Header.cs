@@ -8,12 +8,13 @@ namespace Euclid.IndexedSeries
 {
     /// <summary>Header class for the IIndexe</summary>
     /// <typeparam name="T">the type of label</typeparam>
-    public class Header<T> : IEnumerable<T> where T : IEquatable<T>
+    public class Header<T> : IEnumerable<T>, IEquatable<Header<T>> where T : IEquatable<T>
     {
         private Map<T, int> _map;
 
         #region Constructors
 
+        /// <summary>Standard builder</summary>
         public Header()
         {
             _map = new Map<T, int>();
@@ -98,6 +99,9 @@ namespace Euclid.IndexedSeries
             _map.Add(t, _map.Count);
         }
 
+
+        /// <summary>Adds a range of values to the header</summary>
+        /// <param name="ts">the values</param>
         public void AddRange(params T[] ts)
         {
             foreach (T t in ts)
@@ -131,14 +135,38 @@ namespace Euclid.IndexedSeries
         #endregion
 
         #region Static Operators
+        /// <summary>Overriden generic Equals</summary>
+        /// <param name="obj">the compared object</param>
+        /// <returns>true if obj matches this object, false otherwise</returns>
+        public override bool Equals(object obj)
+        {
+            Header<T> item = obj as Header<T>;
+            if (item == null)
+                return false;
+            return Equals(item);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>Equality comparer</summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Header<T> other)
+        {
+            if (other == null || this.Count != other.Count) return false;
+            return _map.Lefts.SequenceEqual(other._map.Lefts) && _map.Rights.SequenceEqual(other._map.Rights);
+        }
+
         /// <summary>Equality operator</summary>
         /// <param name="h1">the left-hand-side header</param>
         /// <param name="h2">the right-hand-side header</param>
         /// <returns>true if the headers have the same content, false otherwise</returns>
         public static bool operator ==(Header<T> h1, Header<T> h2)
         {
-            if (h1.Count != h2.Count) return false;
-            return h1._map.Lefts.SequenceEqual(h2._map.Lefts);
+            return h1.Equals(h2);
         }
 
         /// <summary>Inequality operator</summary>
@@ -147,8 +175,7 @@ namespace Euclid.IndexedSeries
         /// <returns>true if the headers do not have the same content, false otherwise</returns>
         public static bool operator !=(Header<T> h1, Header<T> h2)
         {
-            if (h1.Count != h2.Count) return true;
-            return !h1._map.Lefts.SequenceEqual(h2._map.Lefts);
+            return !h1.Equals(h2);
         }
         #endregion
     }

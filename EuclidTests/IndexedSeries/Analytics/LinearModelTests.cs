@@ -31,12 +31,6 @@ namespace Euclid.IndexedSeries.Analytics.Tests
         }
 
         [TestMethod()]
-        public void ToStringTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
         public void PredictTest()
         {
             LinearModel lm = new LinearModel(5, new double[] { 1, 2, 3, 4, 5, 6 },

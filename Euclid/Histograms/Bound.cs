@@ -48,138 +48,6 @@ namespace Euclid.Histograms
 
         #region Operators
         /// <summary>
-        /// Compares a <c>Bound</c> to a double
-        /// </summary>
-        /// <param name="b">the left hand side <c>Bound</c></param>
-        /// <param name="x">the right hand side double</param>
-        /// <returns><c>true</c> if the Bound is lower, <c>false</c> otherwise</returns>
-        public static bool operator <(Bound b, double x)
-        {
-            return b._value < x;
-        }
-
-        /// <summary>
-        /// Compares a double to a <c>Bound</c>
-        /// </summary>
-        /// <param name="x">the left hand side double</param>
-        /// <param name="b">the right hand side <c>Bound</c> </param>
-        /// <returns><c>true</c> if the Bound if higher, <c>false</c> otherwise</returns>
-        public static bool operator <(double x, Bound b)
-        {
-            return b > x;
-        }
-
-        /// <summary>
-        /// Compares a Bound to a double
-        /// </summary>
-        /// <param name="b">the left hand side <c>Bound</c></param>
-        /// <param name="x">the right hand side double</param>
-        /// <returns><c>true</c> if the Bound is higher, <c>false</c> otherwise </returns>
-        public static bool operator >(Bound b, double x)
-        {
-            return b.Value > x;
-        }
-
-        /// <summary>
-        /// Compares a Bound to a double
-        /// </summary>
-        /// <param name="x">the left hand side double</param>
-        /// <param name="b">the right hand side Bound</param>
-        /// <returns><c>true</c> if the Bound is lower, <c>false</c> otherwise</returns>
-        public static bool operator >(double x, Bound b)
-        {
-            return b < x;
-        }
-
-        /// <summary>
-        /// Compares a Bound to a double
-        /// </summary>
-        /// <param name="b">the left hand side Bound</param>
-        /// <param name="x">the right hand side double</param>
-        /// <returns><c>true</c> if Bound is lower or equal, <c>false</c> otherwise</returns>
-        public static bool operator <=(Bound b, double x)
-        {
-            return b._isIncluded ? b._value < x : b._value <= x;
-        }
-
-        /// <summary>
-        /// Compares a Bound to a double
-        /// </summary>
-        /// <param name="b">the left hand side Bound</param>
-        /// <param name="x">the right hand side double</param>
-        /// <returns><c>true</c> if Bound is greater or equal, <c>false</c> otherwise </returns>
-        public static bool operator >=(Bound b, double x)
-        {
-            return b._isIncluded ? b._value > x : b._value >= x;
-        }
-
-        /// <summary>
-        /// Compares a double to a Bound
-        /// </summary>
-        /// <param name="x">the left hand side double</param>
-        /// <param name="b">the right hand side Bound</param>
-        /// <returns><c>true</c> if the Bound is greater or equal, <c>false</c> otherwise</returns>
-        public static bool operator <=(double x, Bound b)
-        {
-            return b >= x;
-        }
-
-        /// <summary>
-        /// Compares a double to a Bound
-        /// </summary>
-        /// <param name="x">the left hand side double</param>
-        /// <param name="b">the right hand side Bound</param>
-        /// <returns><c>true</c> if the Bound is lower or equal, <c>false</c> otherwise</returns>
-        public static bool operator >=(double x, Bound b)
-        {
-            return b <= x;
-        }
-
-        /// <summary>
-        /// Checks if a bound equals a double
-        /// </summary>
-        /// <param name="b">the left hand side Bound</param>
-        /// <param name="x">the right hand side double</param>
-        /// <returns><c>true</c> if they equal, <c>false</c> otherwise</returns>
-        public static bool operator ==(Bound b, double x)
-        {
-            return b._isIncluded ? false : b._value == x;
-        }
-
-        /// <summary>
-        /// Checks if a bound equals a double
-        /// </summary>
-        /// <param name="b">the right hand side Bound</param>
-        /// <param name="x">the left hand side double</param>
-        /// <returns><c>true</c> if they equal, <c>false</c> otherwise</returns>
-        public static bool operator ==(double x, Bound b)
-        {
-            return b == x;
-        }
-
-        /// <summary>
-        /// Compares a Bound to a double
-        /// </summary>
-        /// <param name="b">the left hand side Bound</param>
-        /// <param name="x">the right hand side double</param>
-        /// <returns><c>true</c> if the Bound doesnot match, <c>false</c> otherwise</returns>
-        public static bool operator !=(Bound b, double x)
-        {
-            return b._value != x;
-        }
-
-        /// <summary>
-        /// Compares a Bound to a double
-        /// </summary>
-        /// <param name="x">the left hand side double</param>
-        /// <param name="b">the right hand side Bound</param>
-        /// <returns><c>true</c> if the Bound doesnt match, <c>false</c> otherwise</returns>
-        public static bool operator !=(double x, Bound b)
-        {
-            return b != x;
-        }
-
-        /// <summary>
         /// Checks the equality between two bounds (reference equality then null coincidence, then content coincidence)
         /// </summary>
         /// <param name="b1">the left hand side <c>Bound</c></param>
@@ -213,9 +81,7 @@ namespace Euclid.Histograms
             return b1._value < b2._value;
         }
 
-        /// <summary>
-        /// Compares two Bounds
-        /// </summary>
+        /// <summary>Compares two Bounds</summary>
         /// <param name="b1">the left hand side Bound</param>
         /// <param name="b2">the right hand side Bound</param>
         /// <returns><c>true</c> if b1 is higher, <c>false</c> otherwise</returns>
@@ -279,8 +145,7 @@ namespace Euclid.Histograms
         #endregion
 
         #region IComparable
-        /// <summary>
-        /// Compares this instance to another <c>Bound</c>
+        /// <summary> Compares this instance to another <c>Bound</c>
         /// </summary>
         /// <param name="other">the <c>Bound</c> to compare to</param>
         /// <returns>-1 if &lt;, +1 if &gt;, 0 otherwise</returns>

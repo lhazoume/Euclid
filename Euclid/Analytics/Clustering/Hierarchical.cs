@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Euclid.Analytics.Clustering
 {
+    /*
     public class Hierarchical<T, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IConvertible
     {
         private class Cluster
@@ -100,4 +101,5 @@ namespace Euclid.Analytics.Clustering
             }
         }
     }
+    */
 }

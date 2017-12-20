@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 
 namespace Euclid.Histograms
@@ -14,9 +15,7 @@ namespace Euclid.Histograms
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Builds an <c>Histogram</c>
-        /// </summary>
+        /// <summary>Builds an <c>Histogram</c></summary>
         /// <param name="intervals">the initial intervals</param>
         public Histogram(Interval[] intervals)
         {
@@ -40,9 +39,7 @@ namespace Euclid.Histograms
             get { return _items.Sum(); }
         }
 
-        /// <summary>
-        /// Gets the intervals
-        /// </summary>
+        /// <summary>Gets the intervals</summary>
         public Interval[] Intervals
         {
             get { return _intervals; }
@@ -78,6 +75,9 @@ namespace Euclid.Histograms
         /// <param name="values">the value</param>
         public void Tabulate(IEnumerable<double> values)
         {
+            double[] data = values.ToArray();
+            Array.Sort(data);
+            //TODO  : tabulate smartly
             foreach (double value in values)
                 Tabulate(value);
         }
@@ -91,10 +91,18 @@ namespace Euclid.Histograms
         /// <returns>an <c>Histogram</c></returns>
         public static Histogram Create(double lowerBound, double upperBound, int numberOfIntervals)
         {
+
+            if (double.IsInfinity(lowerBound) || double.IsInfinity(upperBound) || double.IsNaN(lowerBound) || double.IsNaN(upperBound))
+                throw new NotSupportedException("The bounds are supposed to be finite nunmbers");
+            if (upperBound <= lowerBound)
+                throw new ArgumentException("The upper bound should be greater than the lower bound");
+            if (numberOfIntervals <= 0)
+                throw new ArgumentOutOfRangeException("There can only be a positive number of buckets");
+            
             Interval[] intervals = new Interval[numberOfIntervals];
             double size = (upperBound - lowerBound) / numberOfIntervals;
             for (int i = 0; i < numberOfIntervals; i++)
-                intervals[i] = new Interval(lowerBound + i * size, lowerBound + (i + 1) * size, true, false);
+                intervals[i] = new Interval(lowerBound + i * size, lowerBound + (i + 1) * size, i==0, true);
             return new Histogram(intervals);
         }
         #endregion

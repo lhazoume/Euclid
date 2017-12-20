@@ -193,9 +193,12 @@ namespace Euclid.IndexedSeries
             _legends.Rename(oldValue, newValue);
         }
 
-        public bool Matches(Series<T, U, V> other)
+        /// <summary>Equality comparer for the Series</summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Series<T, U, V> other)
         {
-            if (other._label.Equals(_label) && other._legends.Count == _legends.Count &&
+            if (other != null && other._label.Equals(_label) && other._legends.Count == _legends.Count &&
                 other._legends.Except(_legends).Count() == 0)
             {
                 for (int i = 0; i < _data.Length; i++)

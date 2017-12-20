@@ -455,33 +455,6 @@ namespace Euclid.IndexedSeries
 
         #endregion
 
-        /// <summary>Removes all the rows containing a data-point that fits a predicate</summary>
-        /// <param name="predicate">the predicate</param>
-        public int Remove(Func<T, U, V, bool> predicate)
-        {
-            int linesRemoved = 0,
-                i = 0;
-            while (i < _legends.Count)
-            {
-                bool lineShouldBeRemoved = false;
-                for (int j = 0; j < _labels.Count; j++)
-                    if (predicate(_legends.ElementAt(i), _data[i, j], _labels.ElementAt(j)))
-                    {
-                        lineShouldBeRemoved = true;
-                        break;
-                    }
-                if (lineShouldBeRemoved)
-                {
-                    RemoveSliceAt(_legends.ElementAt(i));
-                    linesRemoved++;
-                }
-
-                i++;
-            }
-
-            return linesRemoved;
-        }
-
         /// <summary>Clones the <c>DataFrame</c></summary>
         /// <returns>a <c>DataFrame</c></returns>
         public DataFrame<T, U, V> Clone()
@@ -618,7 +591,10 @@ namespace Euclid.IndexedSeries
         }
         #endregion
 
-        public bool Matches(DataFrame<T, U, V> other)
+        /// <summary>Equality comparer</summary>
+        /// <param name="other">the other DataFrame</param>
+        /// <returns>true if the data, legends and labels match, false otherwise</returns>
+        public bool Equals(DataFrame<T, U, V> other)
         {
             if (other._labels.Count == _labels.Count && other._legends.Count == _legends.Count &&
                 other._labels.Except(_labels).Count() == 0 && other._legends.Except(_legends).Count()==0)

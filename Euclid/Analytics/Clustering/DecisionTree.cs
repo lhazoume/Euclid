@@ -2,6 +2,7 @@
 
 namespace Euclid.Analytics.Clustering
 {
+    /*
     public interface IDecisionNode<C, A>
     {
         A Evaluate(C client);
@@ -135,4 +136,7 @@ namespace Euclid.Analytics.Clustering
         }
         #endregion
     }
+
+
+    */
 }

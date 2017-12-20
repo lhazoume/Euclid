@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Euclid.Distributions.Discrete
 {
+    /// <summary>Poisson distribution</summary>
     public class PoissonDistribution : DiscreteDistribution, IParametricDistribution
     {
         #region Declarations
@@ -121,7 +122,24 @@ namespace Euclid.Distributions.Discrete
             int k = Convert.ToInt32(Math.Round(x));
             if (k < 0) return 0;
 
-            return Math.Exp(-_lambda) * Math.Pow(_lambda, k) / Factorial(k);
+            return Math.Exp(-_lambda) * LambdaOverFact(_lambda, k); // Math.Pow(_lambda, k) / Factorial(k);
+        }
+
+        public static double Probability(double x, int k)
+        {
+            return Math.Exp(-x) * LambdaOverFact(x, k);
+        }
+        public static double LogProbability(double x, int k)
+        {
+            if (k == 0) return -x;
+            return -x + k * Math.Log(x) + Enumerable.Range(1, k).Sum(i => Math.Log(i));
+        }
+
+        private static double LambdaOverFact(double lambda, int k)
+        {
+            if (k == 0) return 1;
+
+            return (lambda / k) * LambdaOverFact(lambda, k - 1);
         }
 
         /// <summary>Generates a sequence of samples from the distribution</summary>
@@ -146,6 +164,9 @@ namespace Euclid.Distributions.Discrete
             return result;
         }
 
+        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
         public void Fit(FittingMethod method, double[] sample)
         {
             if (sample.Min() < 0) throw new ArgumentOutOfRangeException("The sample can not fit a Poisson law (all data should be>0)");

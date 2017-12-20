@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Euclid.Analytics
 {
+    /*
     public class DecisionTreePredictor : IPredictor<double, double>
     {
         private IDecisionNode<Vector, IPredictor<double,double>> _node;
@@ -23,5 +24,5 @@ namespace Euclid.Analytics
             IPredictor<double, double> model = _node.Evaluate(v);
             return model.Predict(v.Data);
         }
-    }
+    }*/
 }

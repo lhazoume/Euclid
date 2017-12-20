@@ -6,15 +6,21 @@ namespace Euclid.Solvers.Tests
     public class GradientDescentTests
     {
         [TestMethod()]
-        public void GradientDescentTest()
+        public void GradientDescentWithGradientProvidedTest()
         {
-            Assert.Fail();
+            Vector initialGuess = Vector.Create(1.0, 1.0),
+                target = Vector.Create(3.0, 3.0);
+            GradientDescent gd = new GradientDescent(initialGuess, LineSearch.Armijo, v => (v - target).SumOfSquares, v => v - target, OptimizationType.Min, 100, 100);
+            Assert.IsTrue(gd != null && gd.LineSearch == LineSearch.Armijo && gd.OptimizationType == OptimizationType.Min);
         }
 
         [TestMethod()]
-        public void GradientDescentTest1()
+        public void GradientDescentWithoutGradientTest()
         {
-            Assert.Fail();
+            Vector initialGuess = Vector.Create(1.0, 1.0),
+                target = Vector.Create(3.0, 3.0);
+            GradientDescent gd = new GradientDescent(initialGuess, LineSearch.Armijo, v => (v - target).SumOfSquares, v => v, OptimizationType.Min, 100, 100);
+            Assert.IsNotNull(gd);
         }
 
         [TestMethod()]

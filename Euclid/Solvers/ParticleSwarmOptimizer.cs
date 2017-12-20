@@ -99,12 +99,13 @@ namespace Euclid.Solvers
             get { return _maxStaticIterations; }
         }
 
-        /// <summary>Gets the current status of the optimization proces</summary>
+        /// <summary>Gets the current status of the optimization process</summary>
         public SolverStatus Status
         {
             get { return _status; }
         }
 
+        /// <summary>Gets the type of optimization performed (min or max)</summary>
         public OptimizationType OptimizationType { get { return _optimizationType; } }
 
         #endregion

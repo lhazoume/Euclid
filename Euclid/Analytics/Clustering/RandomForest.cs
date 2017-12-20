@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace Euclid.Analytics.Clustering
 {
+    /*
     public class RandomForestGenerator<T> where T : IComparable<T>, IEquatable<T>
     {
         private Func<DataFrame<T, double, string>, Series<T, double, string>, IPredictor<double, double>> _modeller;
@@ -199,4 +200,6 @@ namespace Euclid.Analytics.Clustering
             return generator;
         }
     }
+
+    */
 }

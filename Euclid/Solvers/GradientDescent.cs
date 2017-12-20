@@ -22,15 +22,14 @@ namespace Euclid.Solvers
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion
 
-        /// <summary>
-        /// Builds a GradientDescent helper
-        /// </summary>
+        /// <summary>Builds a GradientDescent helper</summary>
         /// <param name="initialGuess">the initial guess Vector</param>
         /// <param name="lineSearch">the line search method</param>
         /// <param name="function">the function to minimize</param>
         /// <param name="optimizationType">the optimization type</param>
         /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
         /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
+        /// <param name="gradientNormThreshold">the threshold for the gradient norm</param>
         public GradientDescent(Vector initialGuess, LineSearch lineSearch,
             Func<Vector, double> function, OptimizationType optimizationType,
             int maxIterations, int maxLineSearchIterations, double gradientNormThreshold = Descents.GRADIENT_EPSILON)
@@ -47,8 +46,7 @@ namespace Euclid.Solvers
             _gradient = x => NumericalGradient(x, Vector.Create(_initialGuess.Size, Descents.STEP_EPSILON));
         }
 
-        /// <summary>Gradient descent constructor
-        /// </summary>
+        /// <summary>Gradient descent constructor</summary>
         /// <param name="initialGuess">the initial guess Vector</param>
         /// <param name="lineSearch">the line search method</param>
         /// <param name="function">the function to minimize</param>
@@ -56,6 +54,7 @@ namespace Euclid.Solvers
         /// <param name="optimizationType">the optimization type</param>
         /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
         /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
+        /// <param name="gradientNormThreshold">the threshold for the gradient norm</param>
         public GradientDescent(Vector initialGuess, LineSearch lineSearch,
             Func<Vector, double> function, Func<Vector, Vector> gradient, OptimizationType optimizationType,
             int maxIterations, int maxLineSearchIterations, double gradientNormThreshold = Descents.GRADIENT_EPSILON)
@@ -174,7 +173,7 @@ namespace Euclid.Solvers
                 alpha *= 0.5;
                 f = _function(x + (alpha * direction));
                 _evaluations++;
-                k++;
+                if (!double.IsNaN(f)) k++;
             }
 
             return alpha;

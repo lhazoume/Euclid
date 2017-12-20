@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Euclid.Analytics.Clustering
 {
+    /*
     public enum VarType
     {
         Enum = 0,
@@ -96,4 +97,5 @@ namespace Euclid.Analytics.Clustering
         }
 
     }
+    */
 }

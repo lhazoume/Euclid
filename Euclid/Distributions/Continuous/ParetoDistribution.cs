@@ -103,7 +103,9 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-
+        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
         public void Fit(FittingMethod method, double[] sample)
         {
             if (sample.Min() <= 0) throw new ArgumentOutOfRangeException("The Pareto Law doesnot allow negative values");

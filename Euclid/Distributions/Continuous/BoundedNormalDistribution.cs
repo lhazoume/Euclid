@@ -132,8 +132,10 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-
-        public void Fit(FittingMethod method, double[] sample)
+        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="fitting">the fitting method</param>
+        public void Fit(FittingMethod fitting, double[] sample)
         {
             //TODO : implement here
             throw new NotImplementedException();
@@ -144,8 +146,8 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
-            if (x < _support.LowerBound) return 0;
-            else if (x > _support.UpperBound) return 1;
+            if (x < _support.LowerBound.Value) return 0;
+            else if (x > _support.UpperBound.Value) return 1;
             return (Fn.Phi((x - _mu) / _sigma) - _phiAlpha) / _Z;
         }
 

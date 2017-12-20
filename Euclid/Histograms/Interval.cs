@@ -1,9 +1,11 @@
-﻿namespace Euclid.Histograms
+﻿using System;
+
+namespace Euclid.Histograms
 {
     /// <summary>
     /// Interval representation class
     /// </summary>
-    public class Interval
+    public class Interval : IEquatable<Interval>
     {
         #region Declarations
         private Bound _lowerBound, _upperBound;
@@ -64,14 +66,13 @@
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Checks if the double is inside the interval
-        /// </summary>
+        /// <summary> Checks if the double is inside the interval </summary>
         /// <param name="x">the value</param>
         /// <returns><c>true</c> if x is inside the interval, <c>false</c> otherwise</returns>
         public bool Contains(double x)
         {
-            return (x >= _lowerBound && x <= _upperBound);
+            return ((x > _lowerBound.Value || (_lowerBound.IsIncluded && x == _lowerBound.Value)) &&
+                (x < _upperBound.Value || (_upperBound.IsIncluded && x == _upperBound.Value)));
         }
 
         /// <summary>
@@ -110,6 +111,14 @@
                 if (intm == null) return null;
             }
             return intm;
+        }
+
+        /// <summary>Equality comparer</summary>
+        /// <param name="other">the other Interval</param>
+        /// <returns>true if the bounds match, false otherwise</returns>
+        public bool Equals(Interval other)
+        {
+            return other != null && other._lowerBound == _lowerBound && other._upperBound == _upperBound;
         }
     }
 }
