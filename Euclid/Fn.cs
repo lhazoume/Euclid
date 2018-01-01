@@ -63,21 +63,15 @@ namespace Euclid
         /// <remarks>lim(n -> inf){ Sum(k=1 -> n) { 1/k - log(n) } }</remarks>
         public const double EulerGamma = 0.5772156649015328606065120900824024310421593359399235988057672348849d;
 
-        // Physical Constants in cgs Units
+        #region Physical Constants in cgs Units
 
-        /// <summary>
-        /// Boltzman Constant. Units erg/deg(K) 
-        /// </summary>
+        /// <summary>Boltzman Constant. Units erg/deg(K)</summary>
         public const double BOLTZMAN = 1.3807e-16;
 
-        /// <summary>
-        /// Elementary Charge. Units statcoulomb 
-        /// </summary>
+        /// <summary>Elementary Charge. Units statcoulomb</summary>
         public const double ECHARGE = 4.8032e-10;
 
-        /// <summary>
-        /// Electron Mass. Units g 
-        /// </summary>
+        /// <summary>Electron Mass. Units g</summary>
         public const double EMASS = 9.1095e-28;
 
         /// <summary>
@@ -85,9 +79,7 @@ namespace Euclid
         /// </summary>
         public const double PMASS = 1.6726e-24;
 
-        /// <summary>
-        /// Gravitational Constant. Units dyne-cm^2/g^2
-        /// </summary>
+        /// <summary>Gravitational Constant. Units dyne-cm^2/g^2</summary>
         public const double GRAV = 6.6720e-08;
 
         /// <summary>
@@ -95,9 +87,7 @@ namespace Euclid
         /// </summary>
         public const double PLANCK = 6.6262e-27;
 
-        /// <summary>
-        /// Speed of Light in a Vacuum. Units cm/sec 
-        /// </summary>
+        /// <summary> Speed of Light in a Vacuum. Units cm/sec </summary>
         public const double LIGHTSPEED = 2.9979e10;
 
         /// <summary>
@@ -144,6 +134,11 @@ namespace Euclid
         /// Astronomical Unit (radius of the Earth's orbit). Units cm
         /// </summary>
         public const double AU = 1.50e13;
+        #endregion
+
+        public const double ACC = 40.0;
+        public const double BIGNO = 1.0e10;
+        public const double BIGNI = 1.0e-10;
 
         // Function Methods
 
@@ -163,17 +158,6 @@ namespace Euclid
             }
             r = a / b;
             return Math.Abs(b) * Math.Sqrt(1 + r * r);
-        }
-
-        /// <summary>
-        /// Returns the base 10 logarithm of the specified number.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static double log10(double x)
-        {
-            if (x <= 0.0) throw new ArithmeticException("range exception");
-            return Math.Log(x) / 2.30258509299404568401;
         }
 
         #region Hyperbolic arc functions
@@ -229,6 +213,7 @@ namespace Euclid
 
         #region Bessel functions
 
+        #region Bessel J Functions
         /// <summary>
         /// Returns the Bessel function of order 0 of the specified number.
         /// </summary>
@@ -303,9 +288,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the Bessel function of order n of the specified number.
-        /// </summary>
+        /// <summary> Returns the Bessel function of order n of the specified number.</summary>
         /// <param name="n"></param>
         /// <param name="x"></param>
         /// <returns></returns>
@@ -365,10 +348,100 @@ namespace Euclid
             }
             return x < 0.0 && n % 2 == 1 ? -ans : ans;
         }
+        #endregion
 
-        /// <summary>
-        /// Returns the Bessel function of the second kind, of order 0 of the specified number.
-        /// </summary>
+        #region Bessel I Functions
+
+        public static double i0(double x)
+        {
+            double ax, ans;
+            double y;
+
+
+            if ((ax = Math.Abs(x)) < 3.75)
+            {
+                y = x / 3.75;
+                y = y * y;
+                ans = 1.0 + y * (3.5156229 + y * (3.0899424 + y * (1.2067492
+                   + y * (0.2659732 + y * (0.360768e-1 + y * 0.45813e-2)))));
+            }
+            else
+            {
+                y = 3.75 / ax;
+                ans = (Math.Exp(ax) / Math.Sqrt(ax)) * (0.39894228 + y * (0.1328592e-1
+                   + y * (0.225319e-2 + y * (-0.157565e-2 + y * (0.916281e-2
+                   + y * (-0.2057706e-1 + y * (0.2635537e-1 + y * (-0.1647633e-1
+                   + y * 0.392377e-2))))))));
+            }
+            return ans;
+        }
+
+        public static double i1(double x)
+        {
+            double ax, ans;
+            double y;
+
+
+            if ((ax = Math.Abs(x)) < 3.75)
+            {
+                y = x / 3.75;
+                y = y * y;
+                ans = ax * (0.5 + y * (0.87890594 + y * (0.51498869 + y * (0.15084934
+                   + y * (0.2658733e-1 + y * (0.301532e-2 + y * 0.32411e-3))))));
+            }
+            else
+            {
+                y = 3.75 / ax;
+                ans = 0.2282967e-1 + y * (-0.2895312e-1 + y * (0.1787654e-1
+                   - y * 0.420059e-2));
+                ans = 0.39894228 + y * (-0.3988024e-1 + y * (-0.362018e-2
+                   + y * (0.163801e-2 + y * (-0.1031555e-1 + y * ans))));
+                ans *= (Math.Exp(ax) / Math.Sqrt(ax));
+            }
+            return x < 0.0 ? -ans : ans;
+        }
+
+        public static double ik(int n, double x)
+        {
+
+            if (n == 0)
+                return i0(x);
+            if (n == 1)
+                return i1(x);
+
+            int j;
+            double bi, bim, bip, tox, ans;
+
+            if (x == 0.0)
+                return 0.0;
+            else
+            {
+                tox = 2.0 / Math.Abs(x);
+                bip = ans = 0.0;
+                bi = 1.0;
+                for (j = 2 * (n + (int)Math.Sqrt(ACC * n)); j > 0; j--)
+                {
+                    bim = bip + j * tox * bi;
+                    bip = bi;
+                    bi = bim;
+                    if (Math.Abs(bi) > BIGNO)
+                    {
+                        ans *= BIGNI;
+                        bi *= BIGNI;
+                        bip *= BIGNI;
+                    }
+                    if (j == n) ans = bip;
+                }
+                ans *= i0(x) / bi;
+                return x < 0.0 && n % 2 == 1 ? -ans : ans;
+            }
+        }
+
+        #endregion
+
+        #region Bessel Y Functions
+
+        /// <summary>Returns the Bessel function of the second kind, of order 0 of the specified number.</summary>
         /// <param name="x"></param>
         /// <returns></returns>
         public static double y0(double x)
@@ -400,9 +473,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the Bessel function of the second kind, of order 1 of the specified number.
-        /// </summary>
+        /// <summary>Returns the Bessel function of the second kind, of order 1 of the specified number.</summary>
         /// <param name="x"></param>
         /// <returns></returns>
         public static double y1(double x)
@@ -433,9 +504,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the Bessel function of the second kind, of order n of the specified number.
-        /// </summary>
+        /// <summary>Returns the Bessel function of the second kind, of order n of the specified number.</summary>
         /// <param name="n"></param>
         /// <param name="x"></param>
         /// <returns></returns>
@@ -457,6 +526,8 @@ namespace Euclid
             }
             return by;
         }
+
+        #endregion
 
         #endregion
 
@@ -1151,9 +1222,9 @@ namespace Euclid
             return y;
         }
 
-        /// <summary>
-        /// Computes the Phi function which is the cumulative distribution for the standard normal distribution
-        /// </summary>
+        #region Gauss Bell functions
+
+        /// <summary>Computes the Phi function which is the cumulative distribution for the standard normal distribution</summary>
         /// <param name="x">The location at which to compute the Phi</param>
         /// <returns>a double</returns>
         public static double Phi(double x)
@@ -1271,11 +1342,9 @@ namespace Euclid
 
         }
 
-        /// <summary>
-        /// Computes the inverse of the Phi function
-        /// </summary>
+        /// <summary>Computes the inverse of the Phi function</summary>
         /// <param name="p">The location at which to compute the inverse Phi function</param>
-        /// <returns></returns>
+        /// <returns> a <c>double</c></returns>
         public static double InvPhi(double p)
         {
             if (p < 0 || p > 1) throw new ArgumentOutOfRangeException("p", p, "The probability must be comprised in [0, 1].");
@@ -1320,9 +1389,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Computes the Gauss-bell function
-        /// </summary>
+        /// <summary>Computes the Gauss-bell function</summary>
         /// <param name="x">The location at which to compute the function</param>
         /// <returns>a <c>double</c></returns>
         public static double GaussBell(double x)
@@ -1330,6 +1397,8 @@ namespace Euclid
             if (x == double.MinValue || x == double.MaxValue) return 0;
             return Math.Exp((-0.5 * x * x)) / Math.Sqrt(2.0 * Math.PI);
         }
+
+        #endregion
 
         /// <summary>
         /// Evaluates polynomial of degree N
@@ -1549,9 +1618,7 @@ namespace Euclid
             return ans;
         }
 
-        /// <summary>
-        /// Returns the continued fraction expansion #2 for incomplete beta integral.
-        /// </summary>
+        /// <summary>Returns the continued fraction expansion #2 for incomplete beta integral.</summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="x"></param>

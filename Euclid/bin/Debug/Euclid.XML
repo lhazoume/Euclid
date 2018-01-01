@@ -2250,6 +2250,18 @@
             <param name="sample">the sample of data to fit</param>
             <param name="method">the fitting method</param>
         </member>
+        <member name="P:Euclid.Distributions.Discrete.SkellamDistribution.Mean">
+            <summary>Gets the distribution's mean</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.SkellamDistribution.Skewness">
+            <summary>Gets the distribution's skewness</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.SkellamDistribution.StandardDeviation">
+            <summary>Gets the distribution's standard deviation</summary>
+        </member>
+        <member name="P:Euclid.Distributions.Discrete.SkellamDistribution.Variance">
+            <summary>Gets the distribution's variance</summary>
+        </member>
         <member name="T:Euclid.Distributions.FittingMethod">
             <summary>Defines the method used to fit data to a distribution</summary>
         </member>
@@ -4587,19 +4599,13 @@
             <remarks>lim(n -> inf){ Sum(k=1 -> n) { 1/k - log(n) } }</remarks>
         </member>
         <member name="F:Euclid.Fn.BOLTZMAN">
-            <summary>
-            Boltzman Constant. Units erg/deg(K) 
-            </summary>
+            <summary>Boltzman Constant. Units erg/deg(K)</summary>
         </member>
         <member name="F:Euclid.Fn.ECHARGE">
-            <summary>
-            Elementary Charge. Units statcoulomb 
-            </summary>
+            <summary>Elementary Charge. Units statcoulomb</summary>
         </member>
         <member name="F:Euclid.Fn.EMASS">
-            <summary>
-            Electron Mass. Units g 
-            </summary>
+            <summary>Electron Mass. Units g</summary>
         </member>
         <member name="F:Euclid.Fn.PMASS">
             <summary>
@@ -4607,9 +4613,7 @@
             </summary>
         </member>
         <member name="F:Euclid.Fn.GRAV">
-            <summary>
-            Gravitational Constant. Units dyne-cm^2/g^2
-            </summary>
+            <summary>Gravitational Constant. Units dyne-cm^2/g^2</summary>
         </member>
         <member name="F:Euclid.Fn.PLANCK">
             <summary>
@@ -4617,9 +4621,7 @@
             </summary>
         </member>
         <member name="F:Euclid.Fn.LIGHTSPEED">
-            <summary>
-            Speed of Light in a Vacuum. Units cm/sec 
-            </summary>
+            <summary> Speed of Light in a Vacuum. Units cm/sec </summary>
         </member>
         <member name="F:Euclid.Fn.STEFANBOLTZ">
             <summary>
@@ -4674,13 +4676,6 @@
             <param name="b"></param>
             <returns>the norm</returns>
         </member>
-        <member name="M:Euclid.Fn.log10(System.Double)">
-            <summary>
-            Returns the base 10 logarithm of the specified number.
-            </summary>
-            <param name="x"></param>
-            <returns></returns>
-        </member>
         <member name="M:Euclid.Fn.Acosh(System.Double)">
             <summary>
             Returns the hyperbolic arc cosine of the specified number.
@@ -4717,31 +4712,23 @@
             <returns></returns>
         </member>
         <member name="M:Euclid.Fn.jn(System.Int32,System.Double)">
-            <summary>
-            Returns the Bessel function of order n of the specified number.
-            </summary>
+            <summary> Returns the Bessel function of order n of the specified number.</summary>
             <param name="n"></param>
             <param name="x"></param>
             <returns></returns>
         </member>
         <member name="M:Euclid.Fn.y0(System.Double)">
-            <summary>
-            Returns the Bessel function of the second kind, of order 0 of the specified number.
-            </summary>
+            <summary>Returns the Bessel function of the second kind, of order 0 of the specified number.</summary>
             <param name="x"></param>
             <returns></returns>
         </member>
         <member name="M:Euclid.Fn.y1(System.Double)">
-            <summary>
-            Returns the Bessel function of the second kind, of order 1 of the specified number.
-            </summary>
+            <summary>Returns the Bessel function of the second kind, of order 1 of the specified number.</summary>
             <param name="x"></param>
             <returns></returns>
         </member>
         <member name="M:Euclid.Fn.yn(System.Int32,System.Double)">
-            <summary>
-            Returns the Bessel function of the second kind, of order n of the specified number.
-            </summary>
+            <summary>Returns the Bessel function of the second kind, of order n of the specified number.</summary>
             <param name="n"></param>
             <param name="x"></param>
             <returns></returns>
@@ -4881,23 +4868,17 @@
             <returns></returns>
         </member>
         <member name="M:Euclid.Fn.Phi(System.Double)">
-            <summary>
-            Computes the Phi function which is the cumulative distribution for the standard normal distribution
-            </summary>
+            <summary>Computes the Phi function which is the cumulative distribution for the standard normal distribution</summary>
             <param name="x">The location at which to compute the Phi</param>
             <returns>a double</returns>
         </member>
         <member name="M:Euclid.Fn.InvPhi(System.Double)">
-            <summary>
-            Computes the inverse of the Phi function
-            </summary>
+            <summary>Computes the inverse of the Phi function</summary>
             <param name="p">The location at which to compute the inverse Phi function</param>
-            <returns></returns>
+            <returns> a <c>double</c></returns>
         </member>
         <member name="M:Euclid.Fn.GaussBell(System.Double)">
-            <summary>
-            Computes the Gauss-bell function
-            </summary>
+            <summary>Computes the Gauss-bell function</summary>
             <param name="x">The location at which to compute the function</param>
             <returns>a <c>double</c></returns>
         </member>
@@ -4936,9 +4917,7 @@
             <returns></returns>
         </member>
         <member name="M:Euclid.Fn.incbd(System.Double,System.Double,System.Double)">
-            <summary>
-            Returns the continued fraction expansion #2 for incomplete beta integral.
-            </summary>
+            <summary>Returns the continued fraction expansion #2 for incomplete beta integral.</summary>
             <param name="a"></param>
             <param name="b"></param>
             <param name="x"></param>

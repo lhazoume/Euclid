@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Euclid.Distributions.Discrete
@@ -9,7 +8,6 @@ namespace Euclid.Distributions.Discrete
     {
         #region Declarations
         private double _lambda;
-        private Dictionary<int, int> _factorial = new Dictionary<int, int>();
         #endregion
 
         private PoissonDistribution(double lambda, Random randomSource)
@@ -24,15 +22,6 @@ namespace Euclid.Distributions.Discrete
         public PoissonDistribution(double lambda)
             : this(lambda, new Random(Guid.NewGuid().GetHashCode()))
         { }
-
-        private int Factorial(int k)
-        {
-            if (k <= 1) return 1;
-            if (_factorial.ContainsKey(k)) return _factorial[k];
-            int result = k * Factorial(k - 1);
-            _factorial.Add(k, result);
-            return result;
-        }
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
@@ -97,7 +86,7 @@ namespace Euclid.Distributions.Discrete
         {
             if (x < 0) return 0;
             int k = Convert.ToInt32(Math.Floor(x));
-            return Fn.IncompleteLowerGamma(k + 1, _lambda) / Factorial(k);
+            return Fn.IncompleteLowerGamma(k + 1, _lambda) / Fn.Factorial(k);
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
@@ -121,25 +110,19 @@ namespace Euclid.Distributions.Discrete
         {
             int k = Convert.ToInt32(Math.Round(x));
             if (k < 0) return 0;
-
-            return Math.Exp(-_lambda) * LambdaOverFact(_lambda, k); // Math.Pow(_lambda, k) / Factorial(k);
+            if (k == 0) return Math.Exp(-x);
+            return Probability(_lambda, k);
         }
 
         public static double Probability(double x, int k)
         {
-            return Math.Exp(-x) * LambdaOverFact(x, k);
+            if (k == 0) return Math.Exp(-x);
+            return Math.Exp(-x) * Math.Exp(k * Math.Log(x) - Enumerable.Range(1, k).Sum(i => Math.Log(i))); // LambdaOverFact(x, k);
         }
         public static double LogProbability(double x, int k)
         {
             if (k == 0) return -x;
-            return -x + k * Math.Log(x) + Enumerable.Range(1, k).Sum(i => Math.Log(i));
-        }
-
-        private static double LambdaOverFact(double lambda, int k)
-        {
-            if (k == 0) return 1;
-
-            return (lambda / k) * LambdaOverFact(lambda, k - 1);
+            return -x + k * Math.Log(x); //+ Enumerable.Range(1, k).Sum(i => Math.Log(i));
         }
 
         /// <summary>Generates a sequence of samples from the distribution</summary>

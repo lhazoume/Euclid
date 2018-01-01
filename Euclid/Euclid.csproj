@@ -97,6 +97,7 @@
     <Compile Include="Distributions\Discrete\BinomialDistribution.cs" />
     <Compile Include="Distributions\Discrete\DiscreteDistribution.cs" />
     <Compile Include="Distributions\Discrete\PoissonDistribution.cs" />
+    <Compile Include="Distributions\Discrete\SkellamDistribution.cs" />
     <Compile Include="Distributions\FittingMethod.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
     <Compile Include="Distributions\IParametricDistribution.cs" />
