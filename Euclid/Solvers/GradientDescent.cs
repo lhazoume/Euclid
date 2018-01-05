@@ -341,7 +341,12 @@ namespace Euclid.Solvers
                 gradient = _gradient(_result);
                 gradients.Add(gradient);
                 Vector y = gradients[gradients.Count - 1] - gradients[gradients.Count - 2];
-                B = B + (y * y) / Vector.Scalar(y, s) - ((B * s) * (s * B)) / Vector.Scalar(s, B * s);
+
+                B = B - ((B * s) * (s * B)) / Vector.Scalar(s, B * s);
+
+                double ys = Vector.Scalar(y, s);
+                if (ys != 0) B = B + (y * y) / ys;
+
                 direction = _sign * B.Inverse * gradient;
 
                 _descentDirections.Add(direction.Clone);
