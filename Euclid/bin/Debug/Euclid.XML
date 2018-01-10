@@ -4156,9 +4156,7 @@
             </summary>
         </member>
         <member name="M:Euclid.Serialization.XmlHelper.SaveXml(Euclid.Serialization.IXmlable,System.String)">
-            <summary>
-            Saves the class' XML representation
-            </summary>
+            <summary>Saves the class' XML representation</summary>
             <param name="xmlable">the IXmlable class</param>
             <param name="filePath">the target file path</param>
         </member>

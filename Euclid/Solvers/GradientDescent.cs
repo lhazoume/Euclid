@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Euclid.Solvers
 {
@@ -155,15 +156,14 @@ namespace Euclid.Solvers
                 case LineSearch.Armijo: return ArmijoLineSearch(error, x, direction, gradient);
                 case LineSearch.ArmijoGoldStein: return ArmijoGoldsteinLineSearch(error, x, direction, gradient);
                 case LineSearch.StrongWolfe: return StrongWolfeLineSearch(error, x, direction, gradient);
-                default: return NaiveLineSearch(error, x, direction, gradient);
+                case LineSearch.Lowest: return LowestLineSearch(error, x, direction);
+                default: return NaiveLineSearch(error, x, direction);
             }
         }
 
-        private double NaiveLineSearch(double error, Vector x, Vector direction, Vector gradient)
+        private double NaiveLineSearch(double error, Vector x, Vector direction)
         {
-            double h0 = error,
-                d0 = Vector.Scalar(direction, gradient),
-                alpha = 1;
+            double alpha = 1;
             int k = 0;
             double f = _function(x + (alpha * direction));
             _evaluations++;
@@ -177,6 +177,30 @@ namespace Euclid.Solvers
             }
 
             return alpha;
+        }
+
+        private double LowestLineSearch(double error, Vector x, Vector direction)
+        {
+            double alpha = 1;
+
+            Dictionary<double, double> valuesDic = new Dictionary<double, double>();
+            double f;
+            for (int i = 0; i < _maxLineSearchIterations; i++)
+            {
+                f = _function(x + (alpha * direction));
+                _evaluations++;
+
+                if (!double.IsNaN(f) && Math.Sign(f - error) == _sign)
+                    valuesDic.Add(alpha, f);
+                alpha *= 0.8;
+            }
+
+            if (valuesDic.Count == 0) return 0;
+
+            double targetValue = _sign == 1 ? valuesDic.Values.Max() : valuesDic.Values.Min(),
+                targetAlpha = valuesDic.Where(kvp => kvp.Value == targetValue).First().Key;
+
+            return targetAlpha;
         }
 
         private double ArmijoLineSearch(double error, Vector x, Vector direction, Vector gradient)
@@ -342,7 +366,8 @@ namespace Euclid.Solvers
                 gradients.Add(gradient);
                 Vector y = gradients[gradients.Count - 1] - gradients[gradients.Count - 2];
 
-                B = B - ((B * s) * (s * B)) / Vector.Scalar(s, B * s);
+                double sBs = Vector.Quadratic(s, B, s);
+                if (sBs != 0) B = -((B * s) * (s * B)) / sBs;
 
                 double ys = Vector.Scalar(y, s);
                 if (ys != 0) B = B + (y * y) / ys;

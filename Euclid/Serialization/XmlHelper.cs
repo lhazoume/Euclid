@@ -9,9 +9,7 @@ namespace Euclid.Serialization
     /// </summary>
     public static class XmlHelper
     {
-        /// <summary>
-        /// Saves the class' XML representation
-        /// </summary>
+        /// <summary>Saves the class' XML representation</summary>
         /// <param name="xmlable">the IXmlable class</param>
         /// <param name="filePath">the target file path</param>
         public static void SaveXml(this IXmlable xmlable, string filePath)

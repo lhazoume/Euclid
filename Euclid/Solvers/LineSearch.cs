@@ -7,11 +7,12 @@
     {
         /// <summary>Naïve line search by dividing the alpha until the functional is lowered</summary>
         Naive = 0,
+        Lowest =1,
         /// <summary>Armijo criteria</summary>
-        Armijo = 1,
+        Armijo = 2,
         /// <summary>Armijo Goldstein criteria </summary>
-        ArmijoGoldStein = 2,
+        ArmijoGoldStein = 3,
         /// <summary>Strong Wolfe criteria </summary>
-        StrongWolfe = 3
+        StrongWolfe = 4
     }
 }
