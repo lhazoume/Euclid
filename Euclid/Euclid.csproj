@@ -134,6 +134,7 @@
     <Compile Include="Serialization\XmlHelper.cs" />
     <Compile Include="Solvers\Descents.cs" />
     <Compile Include="Solvers\EndCriteria.cs" />
+    <Compile Include="Solvers\Function.cs" />
     <Compile Include="Solvers\GradientDescent.cs" />
     <Compile Include="Solvers\ISingleVariableSolver.cs" />
     <Compile Include="Solvers\LineSearch.cs" />
