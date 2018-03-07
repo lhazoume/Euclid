@@ -122,7 +122,12 @@ namespace Euclid.Distributions.Discrete
         public static double LogProbability(double x, int k)
         {
             if (k == 0) return -x;
-            return -x + k * Math.Log(x); //+ Enumerable.Range(1, k).Sum(i => Math.Log(i));
+            return -x + k * Math.Log(x) + Enumerable.Range(1, k).Sum(i => Math.Log(i));
+        }
+
+        public static double LogProbabilityDerivative(double x, int k)
+        {
+            return -1 + k / x;
         }
 
         /// <summary>Generates a sequence of samples from the distribution</summary>

@@ -2333,9 +2333,7 @@
             </summary>
         </member>
         <member name="M:Euclid.Helpers.Arrays.Clone``1(``0[])">
-            <summary>
-            clones a generic array
-            </summary>
+            <summary>clones a generic array</summary>
             <typeparam name="T">template type</typeparam>
             <param name="data">the array of data</param>
             <returns>a shallow copy of data</returns>

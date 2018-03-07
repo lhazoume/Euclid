@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Euclid.Helpers
 {
@@ -7,9 +9,7 @@ namespace Euclid.Helpers
     /// </summary>
     public static class Arrays
     {
-        /// <summary>
-        /// clones a generic array
-        /// </summary>
+        /// <summary>clones a generic array</summary>
         /// <typeparam name="T">template type</typeparam>
         /// <param name="data">the array of data</param>
         /// <returns>a shallow copy of data</returns>
@@ -65,6 +65,25 @@ namespace Euclid.Helpers
             T[] result = new T[data.Length];
             for (int i = 0; i < data.Length; i++)
                 result[i] = function(data[i]);
+            return result;
+        }
+
+        public static List<T[]> Split<T>(this T[] data, int size)
+        {
+
+            List<T[]> result = new List<T[]>();
+
+            IEnumerable<T> list = data;
+            T[] slice = list.Take(size).ToArray();
+            list = list.Skip(size);
+
+            while (slice.Length != 0)
+            {
+                result.Add(slice);
+                slice = list.Take(size).ToArray();
+                list = list.Skip(size);
+            }
+
             return result;
         }
     }
