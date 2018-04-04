@@ -4,9 +4,7 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Exponential distribution class
-    /// </summary>
+    /// <summary>Exponential distribution class</summary>
     public class ExponentialDistribution : ContinuousDistribution, IParametricDistribution
     {
         #region Declarations
@@ -89,6 +87,14 @@ namespace Euclid.Distributions.Continuous
                 result[i] = -Math.Log(_randomSource.NextDouble()) * _beta;
             return result;
         }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Exponential(λ = {0})", _lambda);
+        }
+
         #endregion
 
         #region Accessors

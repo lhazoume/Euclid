@@ -973,16 +973,16 @@
             <returns>the inverse cumulative density at p</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.ProbabilityDensity(System.Double)">
-            <summary>
-            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-            </summary>
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
+        <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
+        </member>
         <member name="T:Euclid.Distributions.Continuous.ChiSquaredDistribution">
-            <summary>
-            Chi squared distribution
-            </summary>
+            <summary>Chi squared distribution</summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.#ctor(System.Int32)">
             <summary>
@@ -1036,25 +1036,23 @@
             <param name="fitting">the fitting method</param>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.CumulativeDistribution(System.Double)">
-            <summary>
-            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-            </summary>
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
             <param name="x">The location at which to compute the cumulative distribution function</param>
             <returns>the cumulative distribution at location x</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.InverseCumulativeDistribution(System.Double)">
-            <summary>
-            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-            </summary>
+            <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
             <param name="p">The location at which to compute the inverse cumulative density</param>
             <returns>the inverse cumulative density at p</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.ProbabilityDensity(System.Double)">
-            <summary>
-            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-            </summary>
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ChiSquaredDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.EmpiricUnivariateDistribution">
             <summary>
@@ -1229,14 +1227,10 @@
             <returns>a <c>double</c></returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.GammaDistribution">
-            <summary>
-            Gamma distribution class
-            </summary>
+            <summary>Gamma distribution class</summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.GammaDistribution.#ctor(System.Double,System.Double)">
-            <summary>
-            Builds a Gamma distribution
-            </summary>
+            <summary>Builds a Gamma distribution</summary>
             <param name="k">the shapee</param>
             <param name="theta">the scale</param>
         </member>
@@ -1270,32 +1264,28 @@
             <param name="method">the fitting method</param>
         </member>
         <member name="M:Euclid.Distributions.Continuous.GammaDistribution.CumulativeDistribution(System.Double)">
-            <summary>
-            Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-            </summary>
+            <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
             <param name="x">The location at which to compute the cumulative distribution function</param>
             <returns>the cumulative distribution at location x</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.GammaDistribution.InverseCumulativeDistribution(System.Double)">
-            <summary>
-            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-            </summary>
+            <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
             <param name="p">The location at which to compute the inverse cumulative density</param>
             <returns>the inverse cumulative density at p</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.GammaDistribution.ProbabilityDensity(System.Double)">
-            <summary>
-            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-            </summary>
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.GammaDistribution.Sample(System.Int32)">
-            <summary>
-            Generates a sequence of samples using the Ahrens-Dieter algorithm
-            </summary>
+            <summary>Generates a sequence of samples using the Ahrens-Dieter algorithm</summary>
             <param name="numberOfPoints">the sample's size</param>
             <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.GammaDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.Kernels.CosineKernel">
             <summary>
@@ -1525,9 +1515,7 @@
             <returns>a double</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.LogisticDistribution.InverseCumulativeDistribution(System.Double)">
-            <summary>
-            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-            </summary>
+            <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
             <param name="p">The location at which to compute the inverse cumulative density</param>
             <returns>the inverse cumulative density at p</returns>
         </member>
@@ -1535,6 +1523,10 @@
             <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.LogisticDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.LogNormalDistribution">
             <summary>
@@ -1666,6 +1658,10 @@
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
         </member>
+        <member name="M:Euclid.Distributions.Continuous.ParetoDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
+        </member>
         <member name="T:Euclid.Distributions.Continuous.NormalDistribution">
             <summary>
             Normal distribution class
@@ -1751,9 +1747,7 @@
             </summary>
         </member>
         <member name="T:Euclid.Distributions.Continuous.ExponentialDistribution">
-            <summary>
-            Exponential distribution class
-            </summary>
+            <summary>Exponential distribution class</summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.#ctor(System.Double)">
             <summary>
@@ -1785,6 +1779,10 @@
             <summary> Generates a sequence of samples from the normal distribution using the algorithm</summary>
             <param name="numberOfPoints">the sample's size</param>
             <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.ExponentialDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
         </member>
         <member name="P:Euclid.Distributions.Continuous.ExponentialDistribution.Support">
             <summary>Gets the distribution's support</summary>
@@ -1945,9 +1943,7 @@
             <returns>a <c>double</c></returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.UniformDistribution">
-            <summary>
-            Uniform distribution class
-            </summary>
+            <summary>Uniform distribution class</summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.UniformDistribution.#ctor(System.Double,System.Double)">
             <summary>
@@ -1993,25 +1989,23 @@
             <returns>the cumulative distribution at location x</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.UniformDistribution.InverseCumulativeDistribution(System.Double)">
-            <summary>
-            Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-            </summary>
+            <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
             <param name="p">The location at which to compute the inverse cumulative density</param>
             <returns>the inverse cumulative density at p</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.UniformDistribution.ProbabilityDensity(System.Double)">
-            <summary>
-            Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-            </summary>
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
             <param name="x">The location at which to compute the density</param>
             <returns>a <c>double</c></returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Sample(System.Int32)">
-            <summary>
-            Generates a sequence of samples from the normal distribution using the algorithm
-            </summary>
+            <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
             <param name="numberOfPoints">the sample's size</param>
             <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.WeibullDistribution">
             <summary>
@@ -2076,6 +2070,11 @@
         <member name="T:Euclid.Distributions.Discrete.BinomialDistribution">
             <summary> Binonmial distribution class</summary>
         </member>
+        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.#ctor(System.Int32,System.Double)">
+            <summary>Initializes a new instance of the binomial distribution</summary>
+            <param name="n">the number of runs</param>
+            <param name="p">the unitary probability</param>
+        </member>
         <member name="P:Euclid.Distributions.Discrete.BinomialDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
@@ -2124,6 +2123,10 @@
             <summary>Fits the distribution to a sample of data</summary>
             <param name="sample">the sample of data to fit</param>
             <param name="method">the fitting method</param>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
         </member>
         <member name="T:Euclid.Distributions.Discrete.DiscreteDistribution">
             <summary>Abstract class base for continuous distributions</summary>
@@ -2197,6 +2200,10 @@
         <member name="T:Euclid.Distributions.Discrete.PoissonDistribution">
             <summary>Poisson distribution</summary>
         </member>
+        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.#ctor(System.Double)">
+            <summary>Initializes a new instance of the Poisson distribution</summary>
+            <param name="lambda">the rate</param>
+        </member>
         <member name="P:Euclid.Distributions.Discrete.PoissonDistribution.Entropy">
             <summary>Gets the distribution's entropy</summary>
         </member>
@@ -2264,13 +2271,18 @@
             <param name="sample">the sample of data to fit</param>
             <param name="method">the fitting method</param>
         </member>
+        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
+        </member>
         <member name="T:Euclid.Distributions.Discrete.SkellamDistribution">
             <summary>Skellam distribution</summary>
         </member>
         <member name="M:Euclid.Distributions.Discrete.SkellamDistribution.#ctor(System.Double,System.Double)">
-            <summary>Builds a Skellam distribution</summary>
+            <summary>Initializes a new instance of the Skellam distribution</summary>
             <param name="mu1">the rate of the first Poisson</param>
             <param name="mu2">the rate of the second Poisson</param>
+            <remarks>Allows to compute the probabilities of a Poisson race</remarks>
         </member>
         <member name="P:Euclid.Distributions.Discrete.SkellamDistribution.Mean">
             <summary>Gets the distribution's mean</summary>
@@ -2320,6 +2332,10 @@
             <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).</summary>
             <param name="x">The location at which to compute the cumulative distribution function</param>
             <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.SkellamDistribution.ToString">
+            <summary>Returns a string that represents this instance</summary>
+            <returns>A string</returns>
         </member>
         <member name="T:Euclid.Distributions.FittingMethod">
             <summary>Defines the method used to fit data to a distribution</summary>

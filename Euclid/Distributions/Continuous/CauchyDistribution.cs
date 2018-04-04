@@ -113,14 +113,19 @@ namespace Euclid.Distributions.Continuous
             return _x0 + _gamma * Math.Tan(Math.PI * (p - 0.5));
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
             return 1 / (Math.PI * _gamma * (1 + Math.Pow((x - _x0) / _gamma, 2)));
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Cauchy(x0 = {0} γ = {1})", _x0, _gamma);
         }
         #endregion
     }

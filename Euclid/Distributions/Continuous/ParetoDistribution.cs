@@ -157,6 +157,13 @@ namespace Euclid.Distributions.Continuous
                 result[i] = _xm / Math.Pow(_randomSource.NextDouble(), 1 / _alpha);
             return result;
         }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Pareto(xm = {0} k = {1})", _xm, _alpha);
+        }
         #endregion
     }
 }

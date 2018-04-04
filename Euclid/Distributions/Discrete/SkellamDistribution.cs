@@ -183,6 +183,13 @@ namespace Euclid.Distributions.Discrete
             if (subSupport.Count == 0) return 0;
             return subSupport.Sum(d => ProbabilityDensity(d));
         }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Skellam(μ1 = {0} μ2 = {1})", _mu1, _mu2);
+        }
         #endregion
     }
 }

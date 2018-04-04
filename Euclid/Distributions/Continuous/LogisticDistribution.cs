@@ -85,12 +85,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public void Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
@@ -102,9 +102,7 @@ namespace Euclid.Distributions.Continuous
             return 1.0 / (1.0 + Math.Exp(-(x - _mu) / _s));
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
         /// <param name="p">The location at which to compute the inverse cumulative density</param>
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -121,6 +119,12 @@ namespace Euclid.Distributions.Continuous
             return e / (_s * Math.Pow(1 + e, 2));
         }
 
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Logistic(μ = {0} s = {1})", _mu, _s);
+        }
         #endregion
     }
 }

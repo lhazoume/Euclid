@@ -54,7 +54,6 @@ namespace Euclid.Distributions.Discrete
                 double floor = Math.Floor(_n * _p),
                     ceiling = Math.Ceiling(_n * _p);
                 return 0.5 * (floor + ceiling);
-
             }
         }
 
@@ -140,7 +139,6 @@ namespace Euclid.Distributions.Discrete
             return result;
         }
 
-
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
@@ -148,6 +146,13 @@ namespace Euclid.Distributions.Discrete
         {
             //TODO : implement here
             throw new NotImplementedException();
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Binomial(n = {0} p = {1})", _n, _p);
         }
         #endregion
     }

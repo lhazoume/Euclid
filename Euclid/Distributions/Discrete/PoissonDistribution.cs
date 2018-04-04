@@ -174,6 +174,13 @@ namespace Euclid.Distributions.Discrete
             if (sample.Min() < 0) throw new ArgumentOutOfRangeException("The sample can not fit a Poisson law (all data should be>0)");
             _lambda = sample.Average();
         }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Poisson(λ = {0})", _lambda);
+        }
         #endregion
     }
 }
