@@ -13,7 +13,7 @@ namespace Euclid.Distributions.Continuous
     /// </summary>
     public class GammaDistribution : ContinuousDistribution, IParametricDistribution
     {
-        private double _k, _theta, _cdfFactor, _pdfFactor, _median;
+        private double _k, _theta, _cdfFactor, _pdfFactor;
 
         #region Constructors
         private GammaDistribution(double k, double theta, Random randomSource)
@@ -30,7 +30,6 @@ namespace Euclid.Distributions.Continuous
 
             _cdfFactor = 1 / Fn.Gamma(_k);
             _pdfFactor = Math.Pow(_theta, -_k) * _cdfFactor;
-            _median = InverseCumulativeDistribution(0.5);
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's median </summary>
         public override double Median
         {
-            get { return _median; }
+            get { return InverseCumulativeDistribution(0.5); ; }
         }
 
         /// <summary>Gets the distribution's mode</summary>

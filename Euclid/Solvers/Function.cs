@@ -4,9 +4,14 @@ namespace Euclid.Solvers
 {
     public class Function
     {
+        #region Variables
         private Func<Vector, double> _value;
         private Func<Vector, Vector> _gradient;
+        #endregion
 
+        /// <summary>Builds an analytically differentiable function</summary>
+        /// <param name="value">the value function</param>
+        /// <param name="gradient">the gradient</param>
         public Function(Func<Vector, double> value, Func<Vector, Vector> gradient)
         {
             _value = value;

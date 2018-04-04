@@ -26,6 +26,9 @@ namespace Euclid.Distributions.Discrete
             _bc = new BinomialCoefficients(_n);
         }
 
+        /// <summary>Initializes a new instance of the binomial distribution</summary>
+        /// <param name="n">the number of runs</param>
+        /// <param name="p">the unitary probability</param>
         public BinomialDistribution(int n, double p)
             : this(n, p, new Random(Guid.NewGuid().GetHashCode()))
         { }

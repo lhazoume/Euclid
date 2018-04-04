@@ -19,6 +19,8 @@ namespace Euclid.Distributions.Discrete
             _lambda = lambda;
         }
 
+        /// <summary>Initializes a new instance of the Poisson distribution</summary>
+        /// <param name="lambda">the rate</param>
         public PoissonDistribution(double lambda)
             : this(lambda, new Random(Guid.NewGuid().GetHashCode()))
         { }
@@ -108,23 +110,35 @@ namespace Euclid.Distributions.Discrete
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            int k = Convert.ToInt32(Math.Round(x));
-            if (k < 0) return 0;
-            if (k == 0) return Math.Exp(-x);
-            return Probability(_lambda, k);
+            if (x< 0) return 0;
+            if (x == 0) return Math.Exp(-x);
+            return Probability(_lambda, Convert.ToInt32(x));
         }
 
+        /// <summary>Computes the probability density of the distribution</summary>
+        /// <param name="x">the rate</param>
+        /// <param name="k">the value</param>
+        /// <returns>a <c>double</c></returns>
         public static double Probability(double x, int k)
         {
             if (k == 0) return Math.Exp(-x);
-            return Math.Exp(-x) * Math.Exp(k * Math.Log(x) - Enumerable.Range(1, k).Sum(i => Math.Log(i))); // LambdaOverFact(x, k);
+            return Math.Exp(-x) * Math.Exp(k * Math.Log(x) - Enumerable.Range(1, k).Sum(i => Math.Log(i)));
         }
+
+        /// <summary>Computes the log-probability density of the distribution</summary>
+        /// <param name="x">the rate</param>
+        /// <param name="k">the value</param>
+        /// <returns>a <c>double</c></returns>
         public static double LogProbability(double x, int k)
         {
             if (k == 0) return -x;
             return -x + k * Math.Log(x) + Enumerable.Range(1, k).Sum(i => Math.Log(i));
         }
 
+        /// <summary>Computes the derivative of the log-probability according to the rate</summary>
+        /// <param name="x">the rate</param>
+        /// <param name="k">the value</param>
+        /// <returns>a <c>double</c></returns>
         public static double LogProbabilityDerivative(double x, int k)
         {
             return -1 + k / x;

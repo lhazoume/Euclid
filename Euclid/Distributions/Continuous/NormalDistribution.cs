@@ -26,16 +26,12 @@ namespace Euclid.Distributions.Continuous
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
 
-        /// <summary>
-        /// Builds a standard normal distribution
-        /// </summary>
+        /// <summary>Builds a standard normal distribution</summary>
         public NormalDistribution()
             : this(0, 1)
         { }
 
-        /// <summary>
-        /// Builds a normal distribution
-        /// </summary>
+        /// <summary>Builds a normal distribution</summary>
         /// <param name="mean">the average</param>
         /// <param name="standardDeviation">the standard deviation</param>
         public NormalDistribution(double mean, double standardDeviation)
