@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Laplace distribution class
     /// </summary>
-    public class LaplaceDistribution : ContinuousDistribution, IParametricDistribution
+    public class LaplaceDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _mu, _b;
@@ -24,9 +24,7 @@ namespace Euclid.Distributions.Continuous
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
 
-        /// <summary>
-        /// Builds a Laplace distribution
-        /// </summary>
+        /// <summary>Initializes a new instance of the Laplace distribution</summary>
         /// <param name="mu">the location</param>
         /// <param name="b">the scale</param>
         public LaplaceDistribution(double mu, double b)
@@ -86,12 +84,11 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static LaplaceDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
@@ -107,9 +104,7 @@ namespace Euclid.Distributions.Continuous
                 return 1 - 0.5 * Math.Exp(-e);
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function</summary>
         /// <param name="p">the target probablity</param>
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -120,9 +115,7 @@ namespace Euclid.Distributions.Continuous
                 return _mu + _b * Math.Log(2 * p);
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -138,6 +131,12 @@ namespace Euclid.Distributions.Continuous
             return -Math.Abs(x - _mu) / _b - Math.Log(2 * _b);
         }
 
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Laplace(μ = {0} b = {1} )", _mu, _b);
+        }
         #endregion
     }
 }

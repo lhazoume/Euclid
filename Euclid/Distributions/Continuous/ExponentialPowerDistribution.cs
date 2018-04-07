@@ -5,7 +5,7 @@ using System;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Exponential power distribution class</summary>
-    public class ExponentialPowerDistribution : ContinuousDistribution, IParametricDistribution
+    public class ExponentialPowerDistribution : ContinuousDistribution
     {
         #region Declarations
         private readonly double _mu, _alpha,
@@ -94,12 +94,11 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static ExponentialPowerDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
@@ -111,9 +110,7 @@ namespace Euclid.Distributions.Continuous
             return 0.5 + Math.Sign(x - _mu) * Fn.IncompleteLowerGamma(_1Beta, Math.Pow(Math.Abs(x - _mu) / _alpha, _beta)) / (2 * Fn.Gamma(_1Beta));
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function</summary>
         /// <param name="p">the target probablity</param>
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -129,6 +126,13 @@ namespace Euclid.Distributions.Continuous
         public override double ProbabilityDensity(double x)
         {
             return _beta * Math.Exp(-Math.Pow(Math.Abs(x - _mu) / _alpha, _beta)) / (2 * _alpha * _gamma1Beta);
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("ExponentialPower(μ = {0}, α = {1}, β = {2})", _mu, _alpha, _beta);
         }
 
         #endregion

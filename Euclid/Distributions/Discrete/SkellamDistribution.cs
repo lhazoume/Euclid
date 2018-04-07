@@ -5,13 +5,13 @@ using System.Linq;
 namespace Euclid.Distributions.Discrete
 {
     /// <summary>Skellam distribution</summary>
-    public class SkellamDistribution : DiscreteDistribution, IParametricDistribution
+    public class SkellamDistribution : DiscreteDistribution
     {
         #region Declarations
         private double _mu1, _mu2;
+        private const double _supportWidthInStandardDeviations = 10;
         #endregion
 
-        private const double _supportWidthInStandardDeviations = 10;
 
         private SkellamDistribution(double mu1, double mu2, Random randomSource)
         {
@@ -120,23 +120,20 @@ namespace Euclid.Distributions.Discrete
             return Math.Exp(-_mu1 - _mu2) * Math.Pow(_mu1 / _mu2, 0.5 * x) * Fn.ik(Math.Abs(k), 2 * Math.Sqrt(_mu1 * _mu2));
         }
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        /// <param name="fitting">the fitting method</param>
-        public void Fit(FittingMethod fitting, double[] sample)
+        /// <param name="method">the fitting method</param>
+        public static SkellamDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (fitting == FittingMethod.Moments)
+            if (method == FittingMethod.Moments)
             {
                 double mean = sample.Average(),
                     var = sample.Average(x => x * x) - mean * mean;
                 if (var > Math.Abs(mean))
-                {
-                    _mu1 = 0.5 * (mean + var);
-                    _mu2 = 0.5 * (var - mean);
-                }
+                    return new SkellamDistribution(0.5 * (var + mean), 0.5 * (var - mean));
             }
-            else
-                throw new NotImplementedException();
+
+            throw new NotImplementedException();
         }
 
         /// <summary>Generates a sequence of samples from the distribution</summary>

@@ -86,7 +86,6 @@ namespace Euclid.Distributions.Continuous
             return Math.Log(ProbabilityDensity(x));
         }
         
-
         /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>

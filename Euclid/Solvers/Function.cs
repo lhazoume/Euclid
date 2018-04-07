@@ -75,18 +75,34 @@ namespace Euclid.Solvers
         #endregion
 
         #region Composed
+        /// <summary>Elevates a function to a power</summary>
+        /// <param name="func">the function</param>
+        /// <param name="pow">the power</param>
+        /// <returns>a Function</returns>
         public static Function Power(Function func, double pow)
         {
             return new Function(v => Math.Pow(func.Value(v), pow), v => pow * Math.Pow(func.Value(v), pow - 1) * func.Gradient(v));
         }
+
+        /// <summary>Applies square root to a Function</summary>
+        /// <param name="func">the function</param>
+        /// <returns>a Function</returns>
         public static Function Sqrt(Function func)
         {
             return Power(func, 0.5);
         }
+
+        /// <summary>Applies exponential to a Function</summary>
+        /// <param name="func">the function</param>
+        /// <returns>a Function</returns>
         public static Function Exp(Function func)
         {
             return new Function(v => Math.Exp(func.Value(v)), v => func.Gradient(v) * func.Value(v));
         }
+
+        /// <summary>Applies Log to a Function</summary>
+        /// <param name="func">the function</param>
+        /// <returns>a Function</returns>
         public static Function Log(Function func)
         {
             return new Function(v => Math.Log(func.Value(v)), v => (1 / func.Value(v)) * func.Gradient(v));
@@ -98,6 +114,10 @@ namespace Euclid.Solvers
         {
             get { return new Function(v => 0, v => Vector.Create(v.Size)); }
         }
+
+        /// <summary>Builds a function operating a scalar product vs the given vector</summary>
+        /// <param name="alt">the vector</param>
+        /// <returns>a Function</returns>
         public static Function Scalar(Vector alt)
         {
             return new Function(v => Vector.Scalar(v, alt), v => alt);

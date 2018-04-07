@@ -5,7 +5,7 @@ using System.Linq;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Uniform distribution class</summary>
-    public class UniformDistribution : ContinuousDistribution, IParametricDistribution
+    public class UniformDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _a, _b, _d, _m;
@@ -89,25 +89,18 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-        /// <summary>Fits the distribution to a sample of data</summary>
-        /// <param name="method">the fitting method</param>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public void Fit(FittingMethod method, double[] sample)
+        /// <param name="method">the fitting method</param>
+        public static UniformDistribution Fit(FittingMethod method, double[] sample)
         {
             if (method == FittingMethod.Moments)
             {
                 double avg = sample.Average(),
-                    stdev = Math.Sqrt(12 * (sample.Select(x => x * x).Average() - avg * avg)),
-                _a = avg - stdev;
-                _b = avg + stdev;
+                    stdev = Math.Sqrt(12 * (sample.Average(x => x * x) - avg * avg));
+                return new UniformDistribution(avg - stdev, avg + stdev);
             }
-            else if (method == FittingMethod.MaximumLikelihood)
-            {
-                _a = sample.Min();
-                _b = sample.Max();
-            }
-            _d = _b - _a;
-            _m = 0.5 * (_b + _a);
+            return new UniformDistribution(sample.Min(), sample.Max());
         }
 
         /// <summary>

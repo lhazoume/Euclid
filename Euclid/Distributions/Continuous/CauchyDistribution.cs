@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Cauchy distribution class
     /// </summary>
-    public class CauchyDistribution : ContinuousDistribution, IParametricDistribution
+    public class CauchyDistribution : ContinuousDistribution
     {
         #region Declarations
         private readonly double _x0, _gamma;
@@ -86,12 +86,11 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static CauchyDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 

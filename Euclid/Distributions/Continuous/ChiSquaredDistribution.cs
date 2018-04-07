@@ -5,7 +5,7 @@ using System;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Chi squared distribution</summary>
-    public class ChiSquaredDistribution : ContinuousDistribution, IParametricDistribution
+    public class ChiSquaredDistribution : ContinuousDistribution
     {
         #region Declarations
         private int _k;
@@ -105,12 +105,11 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        /// <param name="fitting">the fitting method</param>
-        public void Fit(FittingMethod fitting, double[] sample)
+        /// <param name="method">the fitting method</param>
+        public static ChiSquaredDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 

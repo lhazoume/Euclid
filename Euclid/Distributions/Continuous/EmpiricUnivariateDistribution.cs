@@ -8,9 +8,7 @@ using System.Linq;
 namespace Euclid.Distributions.Continuous
 {
 
-    /// <summary>
-    /// Empiric univariate distribution based on kernel functions
-    /// </summary>
+    /// <summary>Empiric univariate distribution based on kernel functions</summary>
     public class EmpiricUnivariateDistribution : ContinuousDistribution
     {
         #region Declarations
@@ -121,7 +119,6 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>Gets the distribution's entropy</summary>
-        //TODO
         public override double Entropy { get { throw new NotImplementedException(); } }
         #endregion
 

@@ -5,7 +5,7 @@ using System.Linq;
 namespace Euclid.Distributions.Discrete
 {
     /// <summary> Binonmial distribution class</summary>
-    public class BinomialDistribution : DiscreteDistribution, IParametricDistribution
+    public class BinomialDistribution : DiscreteDistribution
     {
         #region Declarations
         private double _p, _q;
@@ -13,6 +13,7 @@ namespace Euclid.Distributions.Discrete
         private BinomialCoefficients _bc;
         #endregion
 
+        #region Constructors
         private BinomialDistribution(int n, double p, Random randomSource)
         {
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
@@ -32,6 +33,8 @@ namespace Euclid.Distributions.Discrete
         public BinomialDistribution(int n, double p)
             : this(n, p, new Random(Guid.NewGuid().GetHashCode()))
         { }
+
+        #endregion
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
@@ -142,9 +145,24 @@ namespace Euclid.Distributions.Discrete
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static BinomialDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
+            if (sample.Min() < 0 || sample.Any(x => x != Convert.ToInt32(x)))
+                throw new ArgumentOutOfRangeException("sample");
+
+            if (method == FittingMethod.Moments)
+            {
+                double m = sample.Average(),
+                    v = sample.Average(x => x * x) - m * m,
+                    p = 1 - v / m;
+                if (v >= m)
+                    throw new ArgumentOutOfRangeException("sample", "The moments do not match a Binomial distribution");
+                
+                int n = Convert.ToInt32(m * m / (m - v));
+
+                return new BinomialDistribution(n, p);
+            }
+
             throw new NotImplementedException();
         }
 

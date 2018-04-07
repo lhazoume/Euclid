@@ -4,9 +4,7 @@ using System.Linq;
 
 namespace Euclid.Helpers
 {
-    /// <summary>
-    /// Helper class for generic array manipulations
-    /// </summary>
+    /// <summary>Helper class for generic array manipulations</summary>
     public static class Arrays
     {
         /// <summary>clones a generic array</summary>
@@ -21,9 +19,7 @@ namespace Euclid.Helpers
             return result;
         }
 
-        /// <summary>
-        /// clones a generic 2D array
-        /// </summary>
+        /// <summary>Clones a generic 2D array</summary>
         /// <typeparam name="T">template type</typeparam>
         /// <param name="data">the 2d array of data</param>
         /// <returns>a shallow copy of data</returns>
@@ -38,9 +34,7 @@ namespace Euclid.Helpers
             return result;
         }
 
-        /// <summary>
-        /// Extract a sub array of data
-        /// </summary>
+        /// <summary>Extract a sub array of data</summary>
         /// <typeparam name="T"> template type</typeparam>
         /// <param name="data">the array from which the data will be extracted</param>
         /// <param name="index">the starting index</param>
@@ -53,9 +47,7 @@ namespace Euclid.Helpers
             return result;
         }
 
-        /// <summary>
-        /// Applies a function to all the values in an arry
-        /// </summary>
+        /// <summary>Applies a function to all the values in an arrzy</summary>
         /// <typeparam name="T">template type</typeparam>
         /// <param name="data">the array to transform</param>
         /// <param name="function">the function to apply to the values</param>
@@ -68,6 +60,11 @@ namespace Euclid.Helpers
             return result;
         }
 
+        /// <summary>Splits an array into smaller size arrays</summary>
+        /// <typeparam name="T">the generic type</typeparam>
+        /// <param name="data">the array to split</param>
+        /// <param name="size">the target size for the smaller arrays</param>
+        /// <returns>a List of arrays</returns>
         public static List<T[]> Split<T>(this T[] data, int size)
         {
 

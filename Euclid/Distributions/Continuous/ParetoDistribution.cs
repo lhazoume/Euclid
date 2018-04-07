@@ -4,10 +4,8 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    ///¨Pareto distribution class
-    /// </summary>
-    public class ParetoDistribution : ContinuousDistribution, IParametricDistribution
+    /// <summary>Pareto distribution class</summary>
+    public class ParetoDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _xm, _alpha;
@@ -106,22 +104,21 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static ParetoDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (sample.Min() <= 0) throw new ArgumentOutOfRangeException("The Pareto Law doesnot allow negative values");
+            if (sample.Min() <= 0) throw new ArgumentOutOfRangeException("sample", "The Pareto Law doesnot allow negative values");
 
             if (method == FittingMethod.MaximumLikelihood)
             {
-                _xm = sample.Min();
-                _alpha = 1 / (-Math.Log(_xm) + sample.Select(x => Math.Log(x)).Sum() / sample.Length);
+                double xm = sample.Min(),
+                    alpha = 1 / (-Math.Log(xm) + sample.Select(x => Math.Log(x)).Sum() / sample.Length);
+
+                return new ParetoDistribution(xm, alpha);
             }
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).
-        /// </summary>
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)

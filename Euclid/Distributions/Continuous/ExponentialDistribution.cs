@@ -5,7 +5,7 @@ using System.Linq;
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Exponential distribution class</summary>
-    public class ExponentialDistribution : ContinuousDistribution, IParametricDistribution
+    public class ExponentialDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _lambda, _beta;
@@ -33,22 +33,20 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static ExponentialDistribution Fit(FittingMethod method, double[] sample)
         {
             if (method == FittingMethod.Moments)
             {
-                double avg = sample.Average(),
-                    stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
-                _beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
+                double avg = sample.Average();
+
+                double beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
+                return new ExponentialDistribution(1 / beta);
             }
-            else if (method == FittingMethod.MaximumLikelihood)
-            {
-                //TODO : implement here
-                throw new NotImplementedException();
-            }
+
+            throw new NotImplementedException();
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
