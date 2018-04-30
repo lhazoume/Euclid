@@ -2985,7 +2985,7 @@
             <param name="amount">the scalar</param>
             <returns>a <c>Series</c></returns>
         </member>
-        <member name="M:Euclid.IndexedSeries.Series`3.Create(`2,Euclid.IndexedSeries.Header{`0},System.Collections.Generic.IEnumerable{`1})">
+        <member name="M:Euclid.IndexedSeries.Series`3.Create(`2,System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1})">
             <summary>Builds a <c>Series</c> from generic enumerables of legends and data</summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>

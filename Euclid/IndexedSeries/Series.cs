@@ -350,9 +350,9 @@ namespace Euclid.IndexedSeries
         /// <param name="legends">the legends</param>
         /// <param name="data">the series</param>
         /// <returns></returns>
-        public static Series<T, U, V> Create(V label, Header<T> legends, IEnumerable<U> data)
+        public static Series<T, U, V> Create(V label, IEnumerable<T> legends, IEnumerable<U> data)
         {
-            return new Series<T, U, V>(label, legends, data.ToArray());
+            return new Series<T, U, V>(label, new Header<T>(legends.ToArray()), data.ToArray());
         }
 
         /// <summary>Builds a <c>Series</c> from its serialized form</summary>
