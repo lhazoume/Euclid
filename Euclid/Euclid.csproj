@@ -145,6 +145,8 @@
     <Compile Include="Solvers\SolverStatus.cs" />
     <Compile Include="Fn.cs" />
     <Compile Include="SparseMatrix.cs" />
+    <Compile Include="Text\LevenshteinDistance.cs" />
+    <Compile Include="Text\SentenceParsing.cs" />
     <Compile Include="Vector.cs" />
   </ItemGroup>
   <ItemGroup />

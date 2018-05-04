@@ -5044,6 +5044,9 @@
         <member name="P:Euclid.SparseMatrix.Clone">
             <summary>Returns a deep copy of the <c>Matrix</c></summary>
         </member>
+        <member name="M:Euclid.Text.Distance.Levenshtein(System.String,System.String)">
+            <summary>Compute the distance between two strings</summary>
+        </member>
         <member name="T:Euclid.Vector">
             <summary>
             Vector of double class

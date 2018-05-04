@@ -26,7 +26,7 @@ namespace Euclid.Distributions.Discrete
 
             double lBound = _mu1 - _mu2 - _supportWidthInStandardDeviations * Math.Sqrt(_mu1 + _mu2),
                 uBound = _mu1 - _mu2 + _supportWidthInStandardDeviations * Math.Sqrt(_mu1 + _mu2);
-            _support = Enumerable.Range(Convert.ToInt32(lBound), Convert.ToInt32(uBound - lBound) + 1).Cast<double>().ToArray();
+            _support = Enumerable.Range(Convert.ToInt32(lBound), Convert.ToInt32(uBound - lBound) + 1).Select(i=>Convert.ToDouble(i)).ToArray();
         }
 
         /// <summary>Initializes a new instance of the Skellam distribution</summary>
