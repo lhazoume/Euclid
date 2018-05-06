@@ -100,6 +100,14 @@ namespace Euclid.Distributions.Continuous
             return result;
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override  double MomentGeneratingFunction(double t)
+        {
+            return Math.Exp(_mean * t + 0.5 * Math.Pow(_standardDeviation * t, 2));
+        }
+
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>
         public override string ToString()

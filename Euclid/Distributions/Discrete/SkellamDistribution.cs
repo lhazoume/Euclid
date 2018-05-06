@@ -26,7 +26,7 @@ namespace Euclid.Distributions.Discrete
 
             double lBound = _mu1 - _mu2 - _supportWidthInStandardDeviations * Math.Sqrt(_mu1 + _mu2),
                 uBound = _mu1 - _mu2 + _supportWidthInStandardDeviations * Math.Sqrt(_mu1 + _mu2);
-            _support = Enumerable.Range(Convert.ToInt32(lBound), Convert.ToInt32(uBound - lBound) + 1).Select(i=>Convert.ToDouble(i)).ToArray();
+            _support = Enumerable.Range(Convert.ToInt32(lBound), Convert.ToInt32(uBound - lBound) + 1).Select(i => Convert.ToDouble(i)).ToArray();
         }
 
         /// <summary>Initializes a new instance of the Skellam distribution</summary>
@@ -134,6 +134,14 @@ namespace Euclid.Distributions.Discrete
             }
 
             throw new NotImplementedException();
+        }
+
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            return Math.Exp(-_mu1 - _mu2 + _mu1 * Math.Exp(t) + _mu2 * Math.Exp(-t));
         }
 
         /// <summary>Generates a sequence of samples from the distribution</summary>

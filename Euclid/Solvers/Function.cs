@@ -2,6 +2,7 @@
 
 namespace Euclid.Solvers
 {
+    /// <summary>Analytically differentiable function</summary>
     public class Function
     {
         #region Variables
@@ -18,59 +19,107 @@ namespace Euclid.Solvers
             _gradient = gradient;
         }
 
+        /// <summary>Returns the value function</summary>
         public Func<Vector, double> Value
         {
             get { return _value; }
         }
+
+        /// <summary>Returns the gradient function</summary>
         public Func<Vector, Vector> Gradient
         {
             get { return _gradient; }
         }
 
         #region Operators
+        /// <summary>Builds a function made of the product of a function and a scalar</summary>
+        /// <param name="func">the function</param>
+        /// <param name="factor">the scalar</param>
+        /// <returns>a <c>Function</c> </returns>
         public static Function operator *(Function func, double factor)
         {
             return new Function(v => func.Value(v) * factor, v => func.Gradient(v) * factor);
         }
+
+        /// <summary>Builds a function made of the product of a function and a scalar</summary>
+        /// <param name="func">the function</param>
+        /// <param name="factor">the scalar</param>
+        /// <returns>a <c>Function</c> </returns>
         public static Function operator *(double factor, Function func)
         {
             return func * factor;
         }
 
+        /// <summary>Builds a function made of the addition of a function and a scalar</summary>
+        /// <param name="func">the function</param>
+        /// <param name="qty">the scalar</param>
+        /// <returns>a <c>Function</c> </returns>
         public static Function operator +(Function func, double qty)
         {
             return new Function(v => func.Value(v) + qty, v => func.Gradient(v));
         }
+
+        /// <summary>Builds a function made of the addition of a function and a scalar</summary>
+        /// <param name="func">the function</param>
+        /// <param name="qty">the scalar</param>
+        /// <returns>a <c>Function</c> </returns>
         public static Function operator +(double qty, Function func)
         {
             return func + qty;
         }
 
+        /// <summary>Builds a function made of the substraction of a scalar to a function</summary>
+        /// <param name="func">the function</param>
+        /// <param name="qty">the scalar</param>
+        /// <returns>a <c>Function</c> </returns>
         public static Function operator -(Function func, double qty)
         {
             return func + (-qty);
         }
+
+        /// <summary>Builds a function made of the substraction of a function to a scalar</summary>
+        /// <param name="func">the function</param>
+        /// <param name="qty">the scalar</param>
+        /// <returns>a <c>Function</c> </returns>
         public static Function operator -(double qty, Function func)
         {
             return ((-1) * func) + qty;
         }
 
+        /// <summary>Builds a function made of the division of a function by a scalar</summary>
+        /// <param name="func">the function</param>
+        /// <param name="dividor">the dividor</param>
+        /// <returns>a <c>Function</c> </returns>
         public static Function operator /(Function func, double dividor)
         {
             return func * (1 / dividor);
         }
 
-        public static Function operator +(Function func1, Function func2)
+        /// <summary>Builds a function made of the addition of two functions</summary>
+        /// <param name="lhs">the left-hand side function</param>
+        /// <param name="rhs">the right-hand side function</param>
+        /// <returns>a <c>Function</c> </returns>
+        public static Function operator +(Function lhs, Function rhs)
         {
-            return new Function(v => func1.Value(v) + func2.Value(v), v => func1.Gradient(v) + func2.Gradient(v));
+            return new Function(v => lhs.Value(v) + rhs.Value(v), v => lhs.Gradient(v) + rhs.Gradient(v));
         }
-        public static Function operator -(Function func1, Function func2)
+
+        /// <summary>Builds a function made of the substraction of two functions</summary>
+        /// <param name="lhs">the left-hand side function</param>
+        /// <param name="rhs">the right-hand side function</param>
+        /// <returns>a <c>Function</c> </returns>
+        public static Function operator -(Function lhs, Function rhs)
         {
-            return new Function(v => func1.Value(v) - func2.Value(v), v => func1.Gradient(v) - func2.Gradient(v));
+            return new Function(v => lhs.Value(v) - rhs.Value(v), v => lhs.Gradient(v) - rhs.Gradient(v));
         }
-        public static Function operator /(Function func1, Function func2)
+
+        /// <summary>Builds a function made of the division of two functions</summary>
+        /// <param name="lhs">the left-hand side function</param>
+        /// <param name="rhs">the right-hand side function</param>
+        /// <returns>a <c>Function</c> </returns>
+        public static Function operator /(Function lhs, Function rhs)
         {
-            return new Function(v => func1.Value(v) / func2.Value(v), v => (func1.Gradient(v) / func2.Value(v)) - (func2.Gradient(v) * (func1.Value(v) * Math.Pow(func2.Value(v), -2))));
+            return new Function(v => lhs.Value(v) / rhs.Value(v), v => (lhs.Gradient(v) / rhs.Value(v)) - (rhs.Gradient(v) * (lhs.Value(v) * Math.Pow(rhs.Value(v), -2))));
         }
         #endregion
 
@@ -122,6 +171,10 @@ namespace Euclid.Solvers
         {
             return new Function(v => Vector.Scalar(v, alt), v => alt);
         }
+
+        /// <summary>Builds a function operating a quadratic product over a given vector</summary>
+        /// <param name="a">the matrix</param>
+        /// <returns>a <c>Function</c></returns>
         public static Function Quadratic(Matrix a)
         {
             return new Function(v => Vector.Quadratic(v, a, v), v => v * (a + a.Transpose));

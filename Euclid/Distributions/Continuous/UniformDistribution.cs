@@ -132,6 +132,14 @@ namespace Euclid.Distributions.Continuous
             return 0;
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            return (Math.Exp(t * _b) - Math.Exp(t * _a)) / (t * (_b - _a));
+        }
+
         /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>

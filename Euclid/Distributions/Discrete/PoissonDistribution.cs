@@ -145,6 +145,14 @@ namespace Euclid.Distributions.Discrete
             return -1 + k / x;
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            return Math.Exp(_lambda * (Math.Exp(t) - 1));
+        }
+
         /// <summary>Generates a sequence of samples from the distribution</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>

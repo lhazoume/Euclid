@@ -75,6 +75,16 @@ namespace Euclid.Distributions.Continuous
             else return _lambda * Math.Exp(-_lambda * x);
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (t < _lambda)
+                return _lambda / (_lambda - t);
+            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than the rate");
+        }
+
         /// <summary> Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>

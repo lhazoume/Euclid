@@ -144,6 +144,16 @@ namespace Euclid.Distributions.Continuous
             else return 0;
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (t >= 0) throw new ArgumentException("t should be negative", "t");
+
+            return _alpha * Math.Pow(-_xm * t, _alpha) * Fn.IncompleteUpperGamma(-_alpha, -_xm * t);
+        }
+
         /// <summary> Builds a sample of random variables under this distribution </summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>

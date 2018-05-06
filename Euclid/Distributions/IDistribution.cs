@@ -10,9 +10,7 @@ namespace Euclid.Distributions
         /// <returns>a double</returns>
         double CumulativeDistribution(double x);
 
-        /// <summary>
-        /// Evaluates the cumulative distribution's antecedant for a given probability
-        /// </summary>
+        /// <summary>Evaluates the cumulative distribution's antecedant for a given probability</summary>
         /// <param name="p">the probability</param>
         /// <returns>a double</returns>
         double InverseCumulativeDistribution(double p);
@@ -22,9 +20,13 @@ namespace Euclid.Distributions
         /// <returns>a double</returns>
         double ProbabilityDensity(double x);
 
-        /// <summary>
-        /// Evaluates the log of the probability density function
-        /// </summary>
+
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        double MomentGeneratingFunction(double t);
+
+        /// <summary>Evaluates the log of the probability density function</summary>
         /// <param name="x">the argument</param>
         /// <returns>a double</returns>
         double ProbabilityLnDensity(double x);

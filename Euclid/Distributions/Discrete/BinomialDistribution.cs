@@ -130,6 +130,14 @@ namespace Euclid.Distributions.Discrete
             return _bc[k] * Math.Pow(_p / _q, k) * Math.Pow(_q, _n);
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            return Math.Pow(1 - _p + _p * Math.Exp(t), _n);
+        }
+
         /// <summary>Generates a sequence of samples from the distribution</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>

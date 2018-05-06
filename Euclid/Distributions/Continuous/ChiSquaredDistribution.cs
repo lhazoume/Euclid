@@ -141,6 +141,16 @@ namespace Euclid.Distributions.Continuous
             return Math.Pow(0.5 * x, 0.5 * _k - 1) * Math.Exp(-0.5 * x) / (x * Fn.Gamma(0.5 * _k));
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (t < 0.5)
+                return Math.Pow(1 - 2 * t, -0.5 * _k);
+            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than 0.5");
+        }
+
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>
         public override string ToString()

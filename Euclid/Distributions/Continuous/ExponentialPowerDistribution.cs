@@ -128,6 +128,14 @@ namespace Euclid.Distributions.Continuous
             return _beta * Math.Exp(-Math.Pow(Math.Abs(x - _mu) / _alpha, _beta)) / (2 * _alpha * _gamma1Beta);
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            throw new NotImplementedException("The MGF is not implemented");
+        }
+
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>
         public override string ToString()

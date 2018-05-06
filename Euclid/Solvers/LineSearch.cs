@@ -7,7 +7,8 @@
     {
         /// <summary>Naïve line search by dividing the alpha until the functional is lowered</summary>
         Naive = 0,
-        Lowest =1,
+        /// <summary>Line search by finding the lowest point in all the powers of the alpha factor</summary>
+        Lowest = 1,
         /// <summary>Armijo criteria</summary>
         Armijo = 2,
         /// <summary>Armijo Goldstein criteria </summary>

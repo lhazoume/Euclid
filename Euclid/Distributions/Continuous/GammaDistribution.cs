@@ -128,6 +128,16 @@ namespace Euclid.Distributions.Continuous
             return _pdfFactor * Math.Pow(x, _k - 1) * Math.Exp(-x / _theta);
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (_theta * t < 1)
+                return Math.Pow(1 - _theta * t, -_k);
+            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than the rate");
+        }
+
         /// <summary>Generates a sequence of samples using the Ahrens-Dieter algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>

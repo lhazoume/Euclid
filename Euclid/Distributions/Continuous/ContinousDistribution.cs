@@ -96,6 +96,12 @@ namespace Euclid.Distributions.Continuous
                 result[i] = InverseCumulativeDistribution(_randomSource.NextDouble());
             return result;
         }
+
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public abstract double MomentGeneratingFunction(double t);
+
         #endregion
     }
 }
