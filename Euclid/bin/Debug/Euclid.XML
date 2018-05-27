@@ -4605,14 +4605,10 @@
             </summary>
         </member>
         <member name="P:Euclid.Solvers.NewtonRaphson.AbsoluteTolerance">
-            <summary>
-            Gets and sets the tolerance for the target (threshold for target reached)
-            </summary>
+            <summary>Gets and sets the tolerance for the target (threshold for target reached)</summary>
         </member>
         <member name="P:Euclid.Solvers.NewtonRaphson.SlopeTolerance">
-            <summary>
-            Gets and sets the tolerance for the slope (threshold for stationarity)
-            </summary>
+            <summary>Gets and sets the tolerance for the slope (threshold for stationarity)</summary>
         </member>
         <member name="P:Euclid.Solvers.NewtonRaphson.Error">
             <summary>
