@@ -952,6 +952,16 @@ namespace Euclid
 
         #endregion
 
+        public static double LogisticFunction(double x)
+        {
+            return Math.Min(Math.Max(1e-15, 1 / (1 + Math.Exp(-x))), 1 - 1e-15);
+        }
+
+        public static double LogisticFunction(Vector theta, Vector x)
+        {
+            return LogisticFunction(Vector.Scalar(theta, x));
+        }
+
         /// <summary>
         /// Returns the factorial of the specified number.
         /// </summary>

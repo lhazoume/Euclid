@@ -52,6 +52,7 @@
     <Compile Include="Analytics\ErrorFunctions\SumOfSquares.cs" />
     <Compile Include="Analytics\ErrorFunctions\IErrorFunction.cs" />
     <Compile Include="Analytics\InterRelations.cs" />
+    <Compile Include="Analytics\LogisticModel.cs" />
     <Compile Include="Analytics\LinearModel.cs" />
     <Compile Include="Analytics\IPredictor.cs" />
     <Compile Include="Analytics\NeuralNetworks\ActivationFunctions\ActivationFunctionHelper.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Analytics\NeuralNetworks\FeedForward\Layer.cs" />
     <Compile Include="Analytics\Regressions\LazyPartialLeastSquaresLinearRegression.cs" />
     <Compile Include="Analytics\Regressions\LASSORegression.cs" />
+    <Compile Include="Analytics\Regressions\LogisticRegression.cs" />
     <Compile Include="Analytics\Regressions\RIDGERegression.cs" />
     <Compile Include="Analytics\Regressions\OrdinaryLeastSquaresLinearRegression.cs" />
     <Compile Include="Analytics\Regressions\RegressionStatus.cs" />

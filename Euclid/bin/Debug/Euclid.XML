@@ -151,6 +151,59 @@
             <param name="dataFrame">the underlying dataFrame</param>
             <returns>a dataframe</returns>
         </member>
+        <member name="T:Euclid.Analytics.LogisticModel">
+            <summary>
+            Stores the metrics of a logistic regression and allows prediction
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.LogisticModel.#ctor(System.Double,System.Double[],System.Double,System.Boolean)">
+            <summary>Default constructor for a linear model</summary>
+            <param name="constant">the constant term</param>
+            <param name="factors">the regression coefficients</param>
+            <param name="correlations">the zero-degree correlations</param>
+            <param name="sampleSize">the sample size</param>
+            <param name="SSE">the sum of squared due to error</param>
+            <param name="SSR">the sum of squared due to the regression</param>
+            <param name="succeeded">the status of the regression</param>
+        </member>
+        <member name="M:Euclid.Analytics.LogisticModel.#ctor(System.Double,System.Double)">
+            <summary> Builds a constant linear model</summary>
+            <param name="constant">the constant</param>
+        </member>
+        <member name="M:Euclid.Analytics.LogisticModel.#ctor(System.Double,System.Double[],System.Double)">
+            <summary> Builds a linear model for a succesful regression </summary>
+            <param name="constant">the regression constant term</param>
+            <param name="factors">the regression linear coefficients</param>
+        </member>
+        <member name="P:Euclid.Analytics.LogisticModel.Constant">
+            <summary>Gets the constant term</summary>
+        </member>
+        <member name="P:Euclid.Analytics.LogisticModel.Factors">
+            <summary>Gets the linear terms</summary>
+        </member>
+        <member name="P:Euclid.Analytics.LogisticModel.Succeeded">
+            <summary>
+            specifies whether the regression succeeds
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.LogisticModel.ToString">
+            <summary>Returns a string that represents the linear model</summary>
+            <returns>a string that represents the linear model</returns>
+        </member>
+        <member name="M:Euclid.Analytics.LogisticModel.Predict(System.Collections.Generic.IList{System.Double})">
+            <summary>
+            Returns the estimator for the given set of data
+            </summary>
+            <param name="x">the set of regressors</param>
+            <returns>the estimator of the regressed data</returns>
+        </member>
+        <member name="M:Euclid.Analytics.LogisticModel.Predict(Euclid.Vector)">
+            <summary>
+            Returns the estimator for the given set of data
+            </summary>
+            <param name="x">the set of regressors</param>
+            <returns>the estimator of the regressed data</returns>
+        </member>
         <member name="T:Euclid.Analytics.LinearModel">
             <summary>
             Stores the metrics of a linear regression and allows prediction
@@ -578,6 +631,33 @@
             </summary>
         </member>
         <member name="M:Euclid.Analytics.Regressions.LASSORegression`2.Regress">
+            <summary>Performs the regression</summary>
+        </member>
+        <member name="T:Euclid.Analytics.Regressions.LogisticRegression`2">
+            <summary>OrdinaryLeastSquaresLinearRegression class</summary>
+            <typeparam name="T">the legends' type</typeparam>
+            <typeparam name="V">the labels' type</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.LogisticRegression`2.#ctor(Euclid.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.IndexedSeries.Series{`0,System.Double,`1})">
+            <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
+            <param name="x">the <c>DataFrame</c></param>
+            <param name="y">the <c>Series</c></param>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LogisticRegression`2.ReturnAverageIfFailed">
+            <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LogisticRegression`2.WithConstant">
+            <summary>Gets and sets whether the regression should involve a constant term</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LogisticRegression`2.LogisticModel">
+            <summary>
+            Gets the result <c>LinearModel</c>
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.LogisticRegression`2.Status">
+            <summary>Gets the regression's final status</summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.LogisticRegression`2.RegressUsingGradientDescent(System.Double)">
             <summary>Performs the regression</summary>
         </member>
         <member name="T:Euclid.Analytics.Regressions.RIDGERegression`2">

@@ -355,6 +355,11 @@ namespace Euclid.IndexedSeries
             return new Series<T, U, V>(label, new Header<T>(legends.ToArray()), data.ToArray());
         }
 
+        public static Series<T, U, V> Create(V label, IEnumerable<T> legends)
+        {
+            return new Series<T, U, V>(label, new Header<T>(legends.ToArray()), new U[legends.Count()]);
+        }
+
         /// <summary>Builds a <c>Series</c> from its serialized form</summary>
         /// <param name="node">the <c>XmlNode</c></param>
         public static Series<T, U, V> Create(XmlNode node)

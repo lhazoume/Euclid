@@ -22,7 +22,6 @@ namespace Euclid.Serialization
         /// <returns>a string</returns>
         public static string GetXml(this IXmlable xmlable)
         {
-
             StringBuilder builder = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
             XmlWriter writer = XmlWriter.Create(builder, settings);

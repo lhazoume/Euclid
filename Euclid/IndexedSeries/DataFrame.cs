@@ -79,6 +79,12 @@ namespace Euclid.IndexedSeries
             return new DataFrame<T, U, V>(labels, legends, data);
         }
 
+
+        public static DataFrame<T, U, V> Create(IList<V> labels, IList<T> legends)
+        {
+            return new DataFrame<T, U, V>(labels, legends, new U[legends.Count, labels.Count]);
+        }
+
         /// <summary> Builds a <c>DataFrame</c></summary>
         /// <param name="slices">the slices</param>
         /// <returns>a DataFrame</returns>
@@ -597,7 +603,7 @@ namespace Euclid.IndexedSeries
         public bool Equals(DataFrame<T, U, V> other)
         {
             if (other._labels.Count == _labels.Count && other._legends.Count == _legends.Count &&
-                other._labels.Except(_labels).Count() == 0 && other._legends.Except(_legends).Count()==0)
+                other._labels.Except(_labels).Count() == 0 && other._legends.Except(_legends).Count() == 0)
             {
                 for (int i = 0; i < other.Rows; i++)
                 {
