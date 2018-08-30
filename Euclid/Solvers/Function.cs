@@ -6,8 +6,8 @@ namespace Euclid.Solvers
     public class Function
     {
         #region Variables
-        private Func<Vector, double> _value;
-        private Func<Vector, Vector> _gradient;
+        private readonly Func<Vector, double> _value;
+        private readonly Func<Vector, Vector> _gradient;
         #endregion
 
         /// <summary>Builds an analytically differentiable function</summary>

@@ -952,6 +952,9 @@ namespace Euclid
 
         #endregion
 
+        /// <summary>Evaluates the logistic function (sigmoïd) </summary>
+        /// <param name="x">the evaluation point</param>
+        /// <returns>a double</returns>
         public static double LogisticFunction(double x)
         {
             return Math.Min(Math.Max(1e-15, 1 / (1 + Math.Exp(-x))), 1 - 1e-15);

@@ -67,9 +67,7 @@ namespace Euclid.Analytics
             get { return _succeeded ? _factors : Vector.Create(0.0); }
         }
 
-        /// <summary>
-        /// specifies whether the regression succeeds
-        /// </summary>
+        /// <summary>specifies whether the regression succeeds</summary>
         public bool Succeeded
         {
             get { return _succeeded; }
@@ -86,9 +84,7 @@ namespace Euclid.Analytics
         #endregion
 
         #region IPredictor
-        /// <summary>
-        /// Returns the estimator for the given set of data
-        /// </summary>
+        /// <summary>Returns the estimator for the given set of data</summary>
         /// <param name="x">the set of regressors</param>
         /// <returns>the estimator of the regressed data</returns>
         public double Predict(IList<double> x)
@@ -100,9 +96,7 @@ namespace Euclid.Analytics
             return Fn.LogisticFunction(y);
         }
 
-        /// <summary>
-        /// Returns the estimator for the given set of data
-        /// </summary>
+        /// <summary>Returns the estimator for the given set of data</summary>
         /// <param name="x">the set of regressors</param>
         /// <returns>the estimator of the regressed data</returns>
         public double Predict(Vector x)

@@ -14,12 +14,14 @@ namespace Euclid.Solvers
         private Func<Vector, Vector> _gradient;
         private Func<Vector, Matrix> _hessian;
         private double _error, _gradientThreshold;
-        private int _maxIterations, _maxLineSearchIterations, _evaluations;
+        private readonly int _maxIterations;
+        private int _maxLineSearchIterations;
+        private int _evaluations;
         private Vector _initialGuess, _result;
         private List<Vector> _descentDirections = new List<Vector>();
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private LineSearch _lineSearch;
-        private OptimizationType _optimizationType;
+        private readonly OptimizationType _optimizationType;
         private int _sign;
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion

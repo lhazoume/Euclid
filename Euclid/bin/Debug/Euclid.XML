@@ -10,33 +10,127 @@
             </summary>
         </member>
         <member name="M:Euclid.Analytics.Entropy.EntropyMetric(System.Int32[])">
-            <summary>
-            Entropy is a measure of unpredictability of information content. Here is used Shannon's entropy expressed in nat (base e)
-            </summary>
+            <summary>Entropy is a measure of unpredictability of information content. Here is used Shannon's entropy expressed in nat (base e)</summary>
             <param name="occurences">the occurences in each bucket</param>
             <returns>the entropy in natural bits of information</returns>
         </member>
+        <member name="M:Euclid.Analytics.Entropy.InformationGain(System.Collections.Generic.List{System.Int32[]})">
+            <summary>Change in information entropy from a prior state that takes some more information</summary>
+            <param name="occurencesBuckets">the occurences in each bucket</param>
+            <returns></returns>
+        </member>
         <member name="M:Euclid.Analytics.Entropy.Redundancy(System.Int32[0:,0:])">
-            <summary>
-            Redundancy of information in the pair of variables
-            </summary>
+            <summary>Redundancy of information in the pair of variables</summary>
             <param name="occurences">the occurences in each bucket</param>
             <returns> 0 when the variables are independent and 1 when they are totally redundant</returns>
         </member>
         <member name="M:Euclid.Analytics.Entropy.Uncertainty(System.Int32[0:,0:],System.Int32[])">
-            <summary>
-            The uncertainty coefficient measures the validity of a classification
-            </summary>
+            <summary>The uncertainty coefficient measures the validity of a classification</summary>
             <param name="occurences">the occurences in each cross bucket</param>
             <param name="normalizerOccurences">the normalizing variable occurence</param>
             <returns>the fraction of additional information</returns>
         </member>
         <member name="M:Euclid.Analytics.Entropy.MutualInformation(System.Int32[0:,0:])">
-            <summary>
-            Mutual information measures the amount of information that can be obtained about one random variable by observing another
-            </summary>
+            <summary>Mutual information measures the amount of information that can be obtained about one random variable by observing another</summary>
             <param name="occurences">the occurences in each bucket</param>
             <returns>the mutual information in natural bits of information</returns>
+        </member>
+        <member name="T:Euclid.Analytics.Clustering.IDecisionNode`2">
+            <summary>Interface for decision tree node</summary>
+            <typeparam name="I">the input type</typeparam>
+            <typeparam name="A">the answer type</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.IDecisionNode`2.Evaluate(`0)">
+            <summary>Evaluates the answer for a given input</summary>
+            <param name="input">the input</param>
+            <returns>an answer</returns>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.IDecisionNode`2.Depth">
+            <summary>Returns the depth of the node</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.IDecisionNode`2.Children">
+            <summary>Counts the children of the node</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.IDecisionNode`2.Clone">
+            <summary>Clones the node</summary>
+        </member>
+        <member name="T:Euclid.Analytics.Clustering.DecisionNode`2">
+            <summary>Decision tree node</summary>
+            <typeparam name="I">the input type</typeparam>
+            <typeparam name="A">the answer type</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.DecisionNode`2.#ctor(Euclid.Analytics.Clustering.PrettyPredicate{`0},Euclid.Analytics.Clustering.IDecisionNode{`0,`1},Euclid.Analytics.Clustering.IDecisionNode{`0,`1})">
+            <summary>Builds a decision tree node split according to a predicate</summary>
+            <param name="predicate">the splitting predicate</param>
+            <param name="trueBranch">the tree subpart if the predicate is met</param>
+            <param name="falseBranch">the tree subpart if the predicate is not met</param>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionNode`2.Predicate">
+            <summary>Returns the splitting predicate</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionNode`2.Clone">
+            <summary>Clones the node</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionNode`2.True">
+            <summary>Returns the tree subpart if the predicate is met </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionNode`2.False">
+            <summary>Returns the tree subpart if the predicate is not met</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionNode`2.Depth">
+            <summary>Returns the depth of the node</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionNode`2.Children">
+            <summary>Counts the children of the node</summary>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.DecisionNode`2.Evaluate(`0)">
+            <summary>Evaluates the answer for a given input</summary>
+            <param name="input">the input</param>
+            <returns>an answer</returns>
+        </member>
+        <member name="T:Euclid.Analytics.Clustering.DecisionLeaf`2">
+            <summary>Decision tree leaf</summary>
+            <typeparam name="I">the input type</typeparam>
+            <typeparam name="A">the answer type</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.DecisionLeaf`2.#ctor(`1)">
+            <summary>Builds a decision tree leaf</summary>
+            <param name="answer">the fixed answer</param>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionLeaf`2.Answer">
+            <summary>Returns the answer assigned to the leaf</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionLeaf`2.Clone">
+            <summary>Clones the node</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionLeaf`2.Depth">
+            <summary>Returns the depth of the node</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.DecisionLeaf`2.Children">
+            <summary>Counts the children of the node</summary>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.DecisionLeaf`2.Evaluate(`0)">
+            <summary>Evaluates the answer for a given input</summary>
+            <param name="input">the input</param>
+            <returns>an answer</returns>
+        </member>
+        <member name="T:Euclid.Analytics.Clustering.PrettyPredicate`1">
+            <summary>Decorated predicate class</summary>
+            <typeparam name="I">the input type</typeparam>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.PrettyPredicate`1.#ctor(System.String,System.Predicate{`0})">
+            <summary>Builds a decorated predicate class</summary>
+            <param name="description">the description of the predicate</param>
+            <param name="predicate">the predicate</param>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PrettyPredicate`1.Description">
+            <summary>Returns the description of the predicate</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PrettyPredicate`1.Predicate">
+            <summary>The predicate</summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PrettyPredicate`1.Clone">
+            <summary>Returns a clone of the pretty predicate</summary>
         </member>
         <member name="T:Euclid.Analytics.ErrorFunctions.ManhattanError">
             <summary>
@@ -182,25 +276,19 @@
             <summary>Gets the linear terms</summary>
         </member>
         <member name="P:Euclid.Analytics.LogisticModel.Succeeded">
-            <summary>
-            specifies whether the regression succeeds
-            </summary>
+            <summary>specifies whether the regression succeeds</summary>
         </member>
         <member name="M:Euclid.Analytics.LogisticModel.ToString">
             <summary>Returns a string that represents the linear model</summary>
             <returns>a string that represents the linear model</returns>
         </member>
         <member name="M:Euclid.Analytics.LogisticModel.Predict(System.Collections.Generic.IList{System.Double})">
-            <summary>
-            Returns the estimator for the given set of data
-            </summary>
+            <summary>Returns the estimator for the given set of data</summary>
             <param name="x">the set of regressors</param>
             <returns>the estimator of the regressed data</returns>
         </member>
         <member name="M:Euclid.Analytics.LogisticModel.Predict(Euclid.Vector)">
-            <summary>
-            Returns the estimator for the given set of data
-            </summary>
+            <summary>Returns the estimator for the given set of data</summary>
             <param name="x">the set of regressors</param>
             <returns>the estimator of the regressed data</returns>
         </member>
@@ -823,28 +911,23 @@
             <summary>Gets all the binomial coefficients</summary>
         </member>
         <member name="T:Euclid.Arithmetics.Subsets">
-            <summary>
-            Subsets class
-            </summary>
+            <summary>Subsets class</summary>
         </member>
         <member name="M:Euclid.Arithmetics.Subsets.AllSubsets``1(System.Collections.Generic.List{``0})">
-            <summary>
-            Returns all possible subsets from a List
-            </summary>
+            <summary>Returns all possible subsets from a List</summary>
             <typeparam name="T">the template type</typeparam>
             <param name="data">the original data</param>
             <returns>the List of subsets</returns>
         </member>
         <member name="M:Euclid.Arithmetics.Subsets.SubsetsOfSize``1(System.Collections.Generic.List{``0},System.Int32,System.Int32)">
-            <summary>
-            Returns all possible subsets of a given size from a list
-            </summary>
+            <summary>Returns all possible subsets of a given size from a list</summary>
             <typeparam name="T">the template type</typeparam>
             <param name="data">the original data</param>
             <param name="subsetSize">the subset size</param>
             <param name="startingIndex">the starting index</param>
             <returns>the list of subsets</returns>
         </member>
+        <!-- Commentaire XML incorrect pour le membre "M:Euclid.Arithmetics.Subsets.Shuffle``1(System.Collections.Generic.IList{``0},System.Random)" -->
         <member name="T:Euclid.Complex">
             <summary>
             Standard Complex numbers
@@ -5117,6 +5200,11 @@
             <param name="t"></param>
             <returns></returns>
         </member>
+        <member name="M:Euclid.Fn.LogisticFunction(System.Double)">
+            <summary>Evaluates the logistic function (sigmoïd) </summary>
+            <param name="x">the evaluation point</param>
+            <returns>a double</returns>
+        </member>
         <member name="M:Euclid.Fn.fac(System.Double)">
             <summary>
             Returns the factorial of the specified number.
@@ -5296,6 +5384,26 @@
         </member>
         <member name="M:Euclid.Text.Distance.Levenshtein(System.String,System.String)">
             <summary>Compute the distance between two strings</summary>
+        </member>
+        <member name="M:Euclid.Text.Distance.JaroWrinklerDistance(System.String,System.String)">
+            <summary>
+            Returns the Jaro-Winkler distance between the specified  
+            strings. The distance is symmetric and will fall in the 
+            range 0 (perfect match) to 1 (no match). 
+            </summary>
+            <param name="aString1">First String</param>
+            <param name="aString2">Second String</param>
+            <returns></returns>
+        </member>
+        <member name="M:Euclid.Text.Distance.JaroWrinklerProximity(System.String,System.String)">
+            <summary>
+            Returns the Jaro-Winkler distance between the specified  
+            strings. The distance is symmetric and will fall in the 
+            range 0 (no match) to 1 (perfect match). 
+            </summary>
+            <param name="aString1">First String</param>
+            <param name="aString2">Second String</param>
+            <returns></returns>
         </member>
         <member name="T:Euclid.Vector">
             <summary>

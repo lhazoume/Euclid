@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Euclid.Analytics
@@ -8,9 +9,7 @@ namespace Euclid.Analytics
     /// </summary>
     public static class Entropy
     {
-        /// <summary>
-        /// Entropy is a measure of unpredictability of information content. Here is used Shannon's entropy expressed in nat (base e)
-        /// </summary>
+        /// <summary>Entropy is a measure of unpredictability of information content. Here is used Shannon's entropy expressed in nat (base e)</summary>
         /// <param name="occurences">the occurences in each bucket</param>
         /// <returns>the entropy in natural bits of information</returns>
         public static double EntropyMetric(int[] occurences)
@@ -28,9 +27,25 @@ namespace Euclid.Analytics
             return entropy / totalSum;
         }
 
-        /// <summary>
-        /// Redundancy of information in the pair of variables
-        /// </summary>
+        /// <summary>Change in information entropy from a prior state that takes some more information</summary>
+        /// <param name="occurencesBuckets">the occurences in each bucket</param>
+        /// <returns></returns>
+        public static double InformationGain(List<int[]> occurencesBuckets)
+        {
+            if (occurencesBuckets.Count == 0 || occurencesBuckets.Any(b => b.Length != occurencesBuckets[0].Length))
+                return 0;
+
+            int size = occurencesBuckets[0].Length,
+                totalCount = occurencesBuckets.Sum(b => b.Sum());
+            int[] aggregatedOccurences = Enumerable.Range(0, size).Select(i => occurencesBuckets.Sum(b => b[i])).ToArray();
+
+            double entropyBeforeSplit = EntropyMetric(aggregatedOccurences),
+                entropyAfterSplit = occurencesBuckets.Sum(b => b.Length * EntropyMetric(b) / totalCount);
+
+            return entropyBeforeSplit - entropyAfterSplit;
+        }
+
+        /// <summary>Redundancy of information in the pair of variables</summary>
         /// <param name="occurences">the occurences in each bucket</param>
         /// <returns> 0 when the variables are independent and 1 when they are totally redundant</returns>
         public static double Redundancy(int[,] occurences)
@@ -57,9 +72,7 @@ namespace Euclid.Analytics
             return min == 0 ? 0 : MutualInformation(occurences) / min;
         }
 
-        /// <summary>
-        /// The uncertainty coefficient measures the validity of a classification
-        /// </summary>
+        /// <summary>The uncertainty coefficient measures the validity of a classification</summary>
         /// <param name="occurences">the occurences in each cross bucket</param>
         /// <param name="normalizerOccurences">the normalizing variable occurence</param>
         /// <returns>the fraction of additional information</returns>
@@ -71,9 +84,7 @@ namespace Euclid.Analytics
             return mutualInformation / entropy;
         }
 
-        /// <summary>
-        /// Mutual information measures the amount of information that can be obtained about one random variable by observing another
-        /// </summary>
+        /// <summary>Mutual information measures the amount of information that can be obtained about one random variable by observing another</summary>
         /// <param name="occurences">the occurences in each bucket</param>
         /// <returns>the mutual information in natural bits of information</returns>
         public static double MutualInformation(int[,] occurences)
