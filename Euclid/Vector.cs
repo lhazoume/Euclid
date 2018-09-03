@@ -401,12 +401,12 @@ namespace Euclid
         }
 
         /// <summary>Creates a Vector made from the linear combination of three vectors</summary>
-        /// <param name="f1">the left hand side factor</param>
-        /// <param name="v1">the left hand side vector</param>
-        /// <param name="f2">the right hand side factor</param>
-        /// <param name="v2">the right hand side vector</param>
-        /// <param name="f3">the right hand side factor</param>
-        /// <param name="v3">the right hand side vector</param>
+        /// <param name="f1">the first factor</param>
+        /// <param name="v1">the first vector</param>
+        /// <param name="f2">the second factor</param>
+        /// <param name="v2">the second vector</param>
+        /// <param name="f3">the third factor</param>
+        /// <param name="v3">the third vector</param>
         /// <returns>a <c>Vector</c> containing the linear combination of the input</returns>
         public static Vector Create(double f1, Vector v1, double f2, Vector v2, double f3, Vector v3)
         {

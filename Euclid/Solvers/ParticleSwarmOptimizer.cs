@@ -230,5 +230,78 @@ namespace Euclid.Solvers
             _result = overallBest;
             _status = endCriteria.Status;
         }
+
+        public void SolveFaster()
+        {
+            #region Define the general vars
+            int sign = _optimizationType == OptimizationType.Min ? -1 : 1;
+            Vector[] swarm = new Vector[_swarmSize],
+                velocities = new Vector[_swarmSize],
+                particleBests = new Vector[_swarmSize];
+            Vector personalBestsValues = Vector.Create(_swarmSize);
+            Vector overallBest;
+            double overallBestValue;
+            #endregion
+
+            #region Initialize the swarm and bests (parallel)
+            Vector[] randomVectors = _generator(_swarmSize);
+
+            Parallel.For(0, _swarmSize, i =>
+            {
+                swarm[i] = randomVectors[i];
+                velocities[i] = Vector.Create(_dimension, 0);
+
+                particleBests[i] = randomVectors[i].Clone;
+                personalBestsValues[i] = _function(randomVectors[i]);
+            });
+
+            overallBestValue = _optimizationType == OptimizationType.Min ? personalBestsValues.Data.Min() : personalBestsValues.Data.Max();
+            overallBest = swarm[Array.IndexOf(personalBestsValues.Data, overallBestValue)].Clone;
+            #endregion
+
+            _convergence.Clear();
+            _convergence.Add(new Tuple<Vector, double>(overallBest.Clone, overallBestValue));
+
+            Random rnd = new Random(Guid.NewGuid().GetHashCode());
+
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, maxStaticIterations: _maxStaticIterations, gradientEpsilon: _epsilon);
+            while (!endCriteria.ShouldStop(overallBestValue))
+            {
+                #region Prepare Queue
+                double[] randomNumbers = Enumerable.Range(0, 2 * _swarmSize).Select(i => rnd.NextDouble()).ToArray();
+                #endregion
+
+                #region Move all the particles in the swarm
+                Parallel.For(0, _swarmSize, i =>
+                {
+                    velocities[i] = Vector.Create(_velocityInertia, velocities[i],
+                        _attractionToParticleBest * randomNumbers[2 * i], particleBests[i] - swarm[i],
+                        _attractionToOverallBest * randomNumbers[2 * i + 1], overallBest - swarm[i]);
+                    swarm[i] = Vector.Max(_lowerBound, Vector.Min(swarm[i] + velocities[i], _upperBound));
+
+                    double value = _function(swarm[i]);
+                    if (Math.Sign(value - personalBestsValues[i]) == sign)
+                    {
+                        particleBests[i] = swarm[i].Clone;
+                        personalBestsValues[i] = value;
+                    }
+                });
+                #endregion
+
+                #region
+                for (int i = 0; i < _swarmSize; i++)
+                    if (Math.Sign(personalBestsValues[i] - overallBestValue) == sign)
+                    {
+                        overallBest = swarm[i].Clone;
+                        overallBestValue = personalBestsValues[i];
+                    }
+
+                #endregion
+                _convergence.Add(new Tuple<Vector, double>(overallBest.Clone, overallBestValue));
+            }
+
+            _result = overallBest;
+            _status = endCriteria.Status;
+        }
     }
 }
