@@ -142,6 +142,7 @@
     <Compile Include="Solvers\LineSearch.cs" />
     <Compile Include="Solvers\NewtonRaphson.cs" />
     <Compile Include="Solvers\OptimizationType.cs" />
+    <Compile Include="Solvers\NelderMead.cs" />
     <Compile Include="Solvers\ParticleSwarmOptimizer.cs" />
     <Compile Include="Solvers\RootBracketing.cs" />
     <Compile Include="Solvers\RootBracketingMethod.cs" />
