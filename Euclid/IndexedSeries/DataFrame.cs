@@ -199,6 +199,23 @@ namespace Euclid.IndexedSeries
 
         #region Methods
 
+        #region Label
+
+        /// <summary>
+        /// Return the label rank
+        /// </summary>
+        /// <param name="label">targeting label</param>
+        /// <returns>rank</returns>
+        public int GetLabelRank(V label) { return _labels.Contains(label) ? _labels[label] : -1; }
+
+        #endregion
+
+        #region legend
+
+        public T GetLegendAt(int index) { return _legends.ElementAt(index); }
+
+        #endregion
+
         #region Series
 
         #region Get
@@ -213,6 +230,28 @@ namespace Euclid.IndexedSeries
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i, index];
             return Series<T, U, V>.Create(label, _legends, result);
+        }
+
+        /// <summary> Gets the data-point column of the given label</summary>
+        /// <param name="label">the label</param>
+        /// <param name="predicate">legend predicate</param>
+        /// <returns> a <c>Series</c></returns>
+        public Series<T, U, V> GetSeriesAt(V label, Func<T, bool> predicate)
+        {
+            int indexLabel = _labels[label];
+            if (indexLabel == -1) throw new ArgumentException("Label [" + label.ToString() + "] was not found");
+
+
+            IEnumerable<int> matchingIndices = _legends.FindIndices(predicate);
+            IList<U> data = new List<U>();
+            Header<T> legends = new Header<T>();
+
+            foreach(int indice in matchingIndices)
+            {
+                legends.Add(_legends.ElementAt(indice));
+                data.Add(_data[indice, indexLabel]);
+            }
+            return Series<T, U, V>.Create(label, legends, data);
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
@@ -290,6 +329,10 @@ namespace Euclid.IndexedSeries
             return Series<T, U, V>.Create(label, _legends, takenData);
         }
 
+        #endregion
+
+        #region extract
+        
         #endregion
 
         #region Remove

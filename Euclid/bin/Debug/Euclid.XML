@@ -2644,6 +2644,15 @@
             <param name="numberOfIntervals">the number of intervals</param>
             <returns>an <c>Histogram</c></returns>
         </member>
+        <member name="M:Euclid.IndexedSeries.DataFrameHelper.FindIndices``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Find indices according a predicate
+            </summary>
+            <typeparam name="T">item type</typeparam>
+            <param name="items">collection of candidates</param>
+            <param name="predicate">condition expression</param>
+            <returns>Matching indices</returns>
+        </member>
         <member name="T:Euclid.IndexedSeries.Header`1">
             <summary>Header class for the IIndexe</summary>
             <typeparam name="T">the type of label</typeparam>
@@ -3030,9 +3039,22 @@
             <param name="v">the label</param>
             <returns>a data point</returns>
         </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetLabelRank(`2)">
+            <summary>
+            Return the label rank
+            </summary>
+            <param name="label">targeting label</param>
+            <returns>rank</returns>
+        </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeriesAt(`2)">
             <summary> Gets the data-point column of the given label</summary>
             <param name="label">the label</param>
+            <returns> a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeriesAt(`2,System.Func{`0,System.Boolean})">
+            <summary> Gets the data-point column of the given label</summary>
+            <param name="label">the label</param>
+            <param name="predicate">legend predicate</param>
             <returns> a <c>Series</c></returns>
         </member>
         <member name="M:Euclid.IndexedSeries.DataFrame`3.GetSeries">

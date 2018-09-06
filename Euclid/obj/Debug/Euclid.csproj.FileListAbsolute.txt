@@ -21,3 +21,9 @@ C:\Users\lucha\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.dll
 C:\Users\lucha\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.pdb
 C:\Users\Luc\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.csprojResolveAssemblyReference.cache
 C:\Users\lucha\Documents\GitHub\Euclid\Euclid\obj\Debug\Euclid.csprojResolveAssemblyReference.cache
+E:\Euclid\Euclid\bin\Debug\Euclid.XML
+E:\Euclid\Euclid\bin\Debug\Euclid.dll
+E:\Euclid\Euclid\bin\Debug\Euclid.pdb
+E:\Euclid\Euclid\obj\Debug\Euclid.dll
+E:\Euclid\Euclid\obj\Debug\Euclid.pdb
+E:\Euclid\Euclid\obj\Debug\Euclid.csproj.CoreCompileInputs.cache
