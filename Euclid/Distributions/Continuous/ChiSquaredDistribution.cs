@@ -4,10 +4,8 @@ using System;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Chi squared distribution
-    /// </summary>
-    public class ChiSquaredDistribution : ContinuousDistribution, IParametricDistribution
+    /// <summary>Chi squared distribution</summary>
+    public class ChiSquaredDistribution : ContinuousDistribution
     {
         #region Declarations
         private int _k;
@@ -107,18 +105,15 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        /// <param name="fitting">the fitting method</param>
-        public void Fit(FittingMethod fitting, double[] sample)
+        /// <param name="method">the fitting method</param>
+        public static ChiSquaredDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-        /// </summary>
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
@@ -127,9 +122,7 @@ namespace Euclid.Distributions.Continuous
             return Fn.IncompleteLowerGamma(0.5 * _k, 0.5 * x) / Fn.Gamma(0.5 * _k);
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
         /// <param name="p">The location at which to compute the inverse cumulative density</param>
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -139,9 +132,7 @@ namespace Euclid.Distributions.Continuous
             return solver.Result;
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -150,6 +141,22 @@ namespace Euclid.Distributions.Continuous
             return Math.Pow(0.5 * x, 0.5 * _k - 1) * Math.Exp(-0.5 * x) / (x * Fn.Gamma(0.5 * _k));
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (t < 0.5)
+                return Math.Pow(1 - 2 * t, -0.5 * _k);
+            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than 0.5");
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Χ²(k = {0})", _k);
+        }
         #endregion
     }
 }

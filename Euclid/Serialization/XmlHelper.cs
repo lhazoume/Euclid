@@ -17,9 +17,11 @@ namespace Euclid.Serialization
             File.WriteAllText(filePath, xmlable.GetXml());
         }
 
+        /// <summary>Writes the class'XML representation to a string</summary>
+        /// <param name="xmlable">the IXmlable class</param>
+        /// <returns>a string</returns>
         public static string GetXml(this IXmlable xmlable)
         {
-
             StringBuilder builder = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
             XmlWriter writer = XmlWriter.Create(builder, settings);

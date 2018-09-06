@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Euclid.Arithmetics
 {
-    /// <summary>
-    /// Subsets class
-    /// </summary>
+    /// <summary>Subsets class</summary>
     public static class Subsets
     {
-        /// <summary>
-        /// Returns all possible subsets from a List
-        /// </summary>
+        /// <summary>Returns all possible subsets from a List</summary>
         /// <typeparam name="T">the template type</typeparam>
         /// <param name="data">the original data</param>
         /// <returns>the List of subsets</returns>
@@ -27,9 +24,7 @@ namespace Euclid.Arithmetics
             return haves.Concat(haveNots).ToList();
         }
 
-        /// <summary>
-        /// Returns all possible subsets of a given size from a list
-        /// </summary>
+        /// <summary>Returns all possible subsets of a given size from a list</summary>
         /// <typeparam name="T">the template type</typeparam>
         /// <param name="data">the original data</param>
         /// <param name="subsetSize">the subset size</param>
@@ -42,7 +37,7 @@ namespace Euclid.Arithmetics
                 return combinations;
             else if (subsetSize == 1)
             {
-                foreach(T value in data)
+                foreach (T value in data)
                     combinations.Add(new List<T>() { value });
                 return combinations;
             }
@@ -72,6 +67,45 @@ namespace Euclid.Arithmetics
                 }
                 return combinationsofMore;
             }
+        }
+
+        /// <summary>Shuffles a list of template type</summary>
+        /// <typeparam name="T">the template type<typeparam>
+        /// <param name="list">the list to shuffle</param>
+        /// <param name="randomNumberGenerator">the random number generator</param>
+        public static void Shuffle<T>(this IList<T> list, Random randomNumberGenerator)
+        {
+            if (randomNumberGenerator == null) return;
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = randomNumberGenerator.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+        public static List<int> PickRandomIndices(int maxExcludedValue, int numberOfPicks, Random randomNumberGenerator)
+        {
+            List<int> result = new List<int>();
+
+            while(result.Count < numberOfPicks)
+            {
+                int randomNumber = randomNumberGenerator.Next(maxExcludedValue);
+                if (!result.Contains(randomNumber))
+                    result.Add(randomNumber);
+            }
+
+            return result;
+        }
+
+        public static List<T> CloneAndShuffle<T>(this IList<T> list, Random randomNumberGenerator)
+        {
+            List<int> indexes = Enumerable.Range(0, list.Count).ToList();
+            indexes.Shuffle(randomNumberGenerator);
+            return indexes.Select(i => list[i]).ToList();
         }
     }
 }

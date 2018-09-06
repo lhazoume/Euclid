@@ -136,9 +136,9 @@ namespace Euclid
         public const double AU = 1.50e13;
         #endregion
 
-        public const double ACC = 40.0;
-        public const double BIGNO = 1.0e10;
-        public const double BIGNI = 1.0e-10;
+        private const double ACC = 40.0;
+        private const double BIGNO = 1.0e10;
+        private const double BIGNI = 1.0e-10;
 
         // Function Methods
 
@@ -214,11 +214,9 @@ namespace Euclid
         #region Bessel functions
 
         #region Bessel J Functions
-        /// <summary>
-        /// Returns the Bessel function of order 0 of the specified number.
-        /// </summary>
+        /// <summary>Returns the Bessel function of order 0 of the specified number.</summary>
         /// <param name="x"></param>
-        /// <returns></returns>
+        /// <returns>a double</returns>
         public static double j0(double x)
         {
             double ax;
@@ -352,6 +350,9 @@ namespace Euclid
 
         #region Bessel I Functions
 
+        /// <summary>Returns the modified Bessel function of first type and order 0 of the specified number.</summary>
+        /// <param name="x"></param>
+        /// <returns>a double</returns>
         public static double i0(double x)
         {
             double ax, ans;
@@ -376,6 +377,9 @@ namespace Euclid
             return ans;
         }
 
+        /// <summary>Returns the modified Bessel function of first type and order 1 of the specified number.</summary>
+        /// <param name="x">the argument</param>
+        /// <returns>a double</returns>
         public static double i1(double x)
         {
             double ax, ans;
@@ -401,6 +405,10 @@ namespace Euclid
             return x < 0.0 ? -ans : ans;
         }
 
+        /// <summary>Returns the modified Bessel function of first type and any order of the specified number.</summary>
+        /// <param name="x">the argument</param>
+        /// <param name="n">the order</param>
+        /// <returns>a double</returns>
         public static double ik(int n, double x)
         {
 
@@ -442,8 +450,8 @@ namespace Euclid
         #region Bessel Y Functions
 
         /// <summary>Returns the Bessel function of the second kind, of order 0 of the specified number.</summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
+        /// <param name="x">the argument</param>
+        /// <returns>a double</returns>
         public static double y0(double x)
         {
             if (x < 8.0)
@@ -474,8 +482,8 @@ namespace Euclid
         }
 
         /// <summary>Returns the Bessel function of the second kind, of order 1 of the specified number.</summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
+        /// <param name="x">the argument</param>
+        /// <returns>a double</returns>
         public static double y1(double x)
         {
             if (x < 8.0)
@@ -505,9 +513,9 @@ namespace Euclid
         }
 
         /// <summary>Returns the Bessel function of the second kind, of order n of the specified number.</summary>
-        /// <param name="n"></param>
-        /// <param name="x"></param>
-        /// <returns></returns>
+        /// <param name="n">the order</param>
+        /// <param name="x">the argument</param>
+        /// <returns>a double</returns>
         public static double yn(int n, double x)
         {
             double by, bym, byp, tox;
@@ -943,6 +951,19 @@ namespace Euclid
         }
 
         #endregion
+
+        /// <summary>Evaluates the logistic function (sigmoïd) </summary>
+        /// <param name="x">the evaluation point</param>
+        /// <returns>a double</returns>
+        public static double LogisticFunction(double x)
+        {
+            return Math.Min(Math.Max(1e-15, 1 / (1 + Math.Exp(-x))), 1 - 1e-15);
+        }
+
+        public static double LogisticFunction(Vector theta, Vector x)
+        {
+            return LogisticFunction(Vector.Scalar(theta, x));
+        }
 
         /// <summary>
         /// Returns the factorial of the specified number.

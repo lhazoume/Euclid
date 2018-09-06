@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Bounded normal distribution class
     /// </summary>
-    public class BoundedNormalDistribution : ContinuousDistribution, IParametricDistribution
+    public class BoundedNormalDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _mu,
@@ -132,12 +132,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-        /// <summary>Fits the distribution to a sample of data</summary>
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        /// <param name="fitting">the fitting method</param>
-        public void Fit(FittingMethod fitting, double[] sample)
+        /// <param name="method">the fitting method</param>
+        public static BoundedNormalDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
@@ -151,9 +151,7 @@ namespace Euclid.Distributions.Continuous
             return (Fn.Phi((x - _mu) / _sigma) - _phiAlpha) / _Z;
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function</summary>
         /// <param name="p">the target probablity</param>
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -161,9 +159,7 @@ namespace Euclid.Distributions.Continuous
             return _mu + _sigma * Fn.InvPhi(_phiAlpha + p * _Z);
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -172,6 +168,20 @@ namespace Euclid.Distributions.Continuous
             return Fn.GaussBell((x - _mu) / _sigma) / (_sigma * _Z);
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            return Math.Exp(_mu * t + _sigma2 * t * t / 2) * (Fn.Phi(_beta - _sigma * t) - Fn.Phi(_alpha - _sigma * t)) / (Fn.Phi(_beta) - Fn.Phi(_alpha));
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("BoundedN(μ = {0}, σ = {1}, a = {2}, b = {3})", _mu, _sigma, _a, _b);
+        }
         #endregion
     }
 }

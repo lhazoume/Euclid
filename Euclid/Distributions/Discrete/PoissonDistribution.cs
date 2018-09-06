@@ -4,10 +4,13 @@ using System.Linq;
 namespace Euclid.Distributions.Discrete
 {
     /// <summary>Poisson distribution</summary>
-    public class PoissonDistribution : DiscreteDistribution, IParametricDistribution
+    public class PoissonDistribution : DiscreteDistribution
     {
         #region Declarations
         private double _lambda;
+
+        private const double _supportWidthInStandardDeviations = 10;
+
         #endregion
 
         private PoissonDistribution(double lambda, Random randomSource)
@@ -17,8 +20,12 @@ namespace Euclid.Distributions.Discrete
 
             if (lambda <= 0) throw new ArgumentOutOfRangeException("The lambda should be >0");
             _lambda = lambda;
+
+            _support = Enumerable.Range(0, Convert.ToInt32(_supportWidthInStandardDeviations * Math.Sqrt(_lambda))).Cast<double>().ToArray();
         }
 
+        /// <summary>Initializes a new instance of the Poisson distribution</summary>
+        /// <param name="lambda">the rate</param>
         public PoissonDistribution(double lambda)
             : this(lambda, new Random(Guid.NewGuid().GetHashCode()))
         { }
@@ -69,11 +76,7 @@ namespace Euclid.Distributions.Discrete
         /// <summary>Gets the distribution's support</summary>
         public override double[] Support
         {
-            get
-            {
-                //TODO : implement here
-                throw new NotImplementedException();
-            }
+            get { return _support.ToArray(); }
         }
         #endregion
 
@@ -108,26 +111,46 @@ namespace Euclid.Distributions.Discrete
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            int k = Convert.ToInt32(Math.Round(x));
-            if (k < 0) return 0;
-            if (k == 0) return Math.Exp(-x);
-            return Probability(_lambda, k);
+            if (x < 0) return 0;
+            if (x == 0) return Math.Exp(-x);
+            return Probability(_lambda, Convert.ToInt32(x));
         }
 
+        /// <summary>Computes the probability density of the distribution</summary>
+        /// <param name="x">the rate</param>
+        /// <param name="k">the value</param>
+        /// <returns>a <c>double</c></returns>
         public static double Probability(double x, int k)
         {
             if (k == 0) return Math.Exp(-x);
-            return Math.Exp(-x) * Math.Exp(k * Math.Log(x) - Enumerable.Range(1, k).Sum(i => Math.Log(i))); // LambdaOverFact(x, k);
+            return Math.Exp(-x) * Math.Exp(k * Math.Log(x) - Enumerable.Range(1, k).Sum(i => Math.Log(i)));
         }
+
+        /// <summary>Computes the log-probability density of the distribution</summary>
+        /// <param name="x">the rate</param>
+        /// <param name="k">the value</param>
+        /// <returns>a <c>double</c></returns>
         public static double LogProbability(double x, int k)
         {
             if (k == 0) return -x;
             return -x + k * Math.Log(x) + Enumerable.Range(1, k).Sum(i => Math.Log(i));
         }
 
+        /// <summary>Computes the derivative of the log-probability according to the rate</summary>
+        /// <param name="x">the rate</param>
+        /// <param name="k">the value</param>
+        /// <returns>a <c>double</c></returns>
         public static double LogProbabilityDerivative(double x, int k)
         {
             return -1 + k / x;
+        }
+
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            return Math.Exp(_lambda * (Math.Exp(t) - 1));
         }
 
         /// <summary>Generates a sequence of samples from the distribution</summary>
@@ -152,13 +175,20 @@ namespace Euclid.Distributions.Discrete
             return result;
         }
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static PoissonDistribution Fit(FittingMethod method, double[] sample)
         {
             if (sample.Min() < 0) throw new ArgumentOutOfRangeException("The sample can not fit a Poisson law (all data should be>0)");
-            _lambda = sample.Average();
+            return new PoissonDistribution(sample.Average());
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Poisson(λ = {0})", _lambda);
         }
         #endregion
     }

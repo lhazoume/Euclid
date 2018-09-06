@@ -5,7 +5,7 @@ using System.Linq;
 namespace Euclid.Distributions.Discrete
 {
     /// <summary> Binonmial distribution class</summary>
-    public class BinomialDistribution : DiscreteDistribution, IParametricDistribution
+    public class BinomialDistribution : DiscreteDistribution
     {
         #region Declarations
         private double _p, _q;
@@ -13,6 +13,7 @@ namespace Euclid.Distributions.Discrete
         private BinomialCoefficients _bc;
         #endregion
 
+        #region Constructors
         private BinomialDistribution(int n, double p, Random randomSource)
         {
             if (randomSource == null) throw new ArgumentException("The random source can not be null");
@@ -26,9 +27,14 @@ namespace Euclid.Distributions.Discrete
             _bc = new BinomialCoefficients(_n);
         }
 
+        /// <summary>Initializes a new instance of the binomial distribution</summary>
+        /// <param name="n">the number of runs</param>
+        /// <param name="p">the unitary probability</param>
         public BinomialDistribution(int n, double p)
             : this(n, p, new Random(Guid.NewGuid().GetHashCode()))
         { }
+
+        #endregion
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
@@ -51,7 +57,6 @@ namespace Euclid.Distributions.Discrete
                 double floor = Math.Floor(_n * _p),
                     ceiling = Math.Ceiling(_n * _p);
                 return 0.5 * (floor + ceiling);
-
             }
         }
 
@@ -125,6 +130,14 @@ namespace Euclid.Distributions.Discrete
             return _bc[k] * Math.Pow(_p / _q, k) * Math.Pow(_q, _n);
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            return Math.Pow(1 - _p + _p * Math.Exp(t), _n);
+        }
+
         /// <summary>Generates a sequence of samples from the distribution</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
@@ -137,14 +150,35 @@ namespace Euclid.Distributions.Discrete
             return result;
         }
 
-
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static BinomialDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
+            if (sample.Min() < 0 || sample.Any(x => x != Convert.ToInt32(x)))
+                throw new ArgumentOutOfRangeException("sample");
+
+            if (method == FittingMethod.Moments)
+            {
+                double m = sample.Average(),
+                    v = sample.Average(x => x * x) - m * m,
+                    p = 1 - v / m;
+                if (v >= m)
+                    throw new ArgumentOutOfRangeException("sample", "The moments do not match a Binomial distribution");
+                
+                int n = Convert.ToInt32(m * m / (m - v));
+
+                return new BinomialDistribution(n, p);
+            }
+
             throw new NotImplementedException();
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Binomial(n = {0} p = {1})", _n, _p);
         }
         #endregion
     }

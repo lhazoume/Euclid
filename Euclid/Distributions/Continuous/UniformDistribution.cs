@@ -4,10 +4,8 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Uniform distribution class
-    /// </summary>
-    public class UniformDistribution : ContinuousDistribution, IParametricDistribution
+    /// <summary>Uniform distribution class</summary>
+    public class UniformDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _a, _b, _d, _m;
@@ -91,25 +89,18 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-        /// <summary>Fits the distribution to a sample of data</summary>
-        /// <param name="method">the fitting method</param>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public void Fit(FittingMethod method, double[] sample)
+        /// <param name="method">the fitting method</param>
+        public static UniformDistribution Fit(FittingMethod method, double[] sample)
         {
             if (method == FittingMethod.Moments)
             {
                 double avg = sample.Average(),
-                    stdev = Math.Sqrt(12 * (sample.Select(x => x * x).Average() - avg * avg)),
-                _a = avg - stdev;
-                _b = avg + stdev;
+                    stdev = Math.Sqrt(12 * (sample.Average(x => x * x) - avg * avg));
+                return new UniformDistribution(avg - stdev, avg + stdev);
             }
-            else if (method == FittingMethod.MaximumLikelihood)
-            {
-                _a = sample.Min();
-                _b = sample.Max();
-            }
-            _d = _b - _a;
-            _m = 0.5 * (_b + _a);
+            return new UniformDistribution(sample.Min(), sample.Max());
         }
 
         /// <summary>
@@ -124,9 +115,7 @@ namespace Euclid.Distributions.Continuous
             return (x - _a) / _d;
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
         /// <param name="p">The location at which to compute the inverse cumulative density</param>
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -134,9 +123,7 @@ namespace Euclid.Distributions.Continuous
             return _a + _d * p;
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -145,9 +132,15 @@ namespace Euclid.Distributions.Continuous
             return 0;
         }
 
-        /// <summary>
-        /// Generates a sequence of samples from the normal distribution using the algorithm
-        /// </summary>
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            return (Math.Exp(t * _b) - Math.Exp(t * _a)) / (t * (_b - _a));
+        }
+
+        /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints)
@@ -156,6 +149,13 @@ namespace Euclid.Distributions.Continuous
             for (int i = 0; i < numberOfPoints; i++)
                 result[i] = _a + _d * _randomSource.NextDouble();
             return result;
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Uniform(a = {0} b = {1})", _a, _b);
         }
         #endregion
     }

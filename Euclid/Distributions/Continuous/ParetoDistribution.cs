@@ -4,10 +4,8 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    ///¨Pareto distribution class
-    /// </summary>
-    public class ParetoDistribution : ContinuousDistribution, IParametricDistribution
+    /// <summary>Pareto distribution class</summary>
+    public class ParetoDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _xm, _alpha;
@@ -106,22 +104,21 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static ParetoDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (sample.Min() <= 0) throw new ArgumentOutOfRangeException("The Pareto Law doesnot allow negative values");
+            if (sample.Min() <= 0) throw new ArgumentOutOfRangeException("sample", "The Pareto Law doesnot allow negative values");
 
             if (method == FittingMethod.MaximumLikelihood)
             {
-                _xm = sample.Min();
-                _alpha = 1 / (-Math.Log(_xm) + sample.Select(x => Math.Log(x)).Sum() / sample.Length);
+                double xm = sample.Min(),
+                    alpha = 1 / (-Math.Log(xm) + sample.Select(x => Math.Log(x)).Sum() / sample.Length);
+
+                return new ParetoDistribution(xm, alpha);
             }
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x).
-        /// </summary>
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
@@ -147,6 +144,16 @@ namespace Euclid.Distributions.Continuous
             else return 0;
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (t >= 0) throw new ArgumentException("t should be negative", "t");
+
+            return _alpha * Math.Pow(-_xm * t, _alpha) * Fn.IncompleteUpperGamma(-_alpha, -_xm * t);
+        }
+
         /// <summary> Builds a sample of random variables under this distribution </summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
@@ -156,6 +163,13 @@ namespace Euclid.Distributions.Continuous
             for (int i = 0; i < size; i++)
                 result[i] = _xm / Math.Pow(_randomSource.NextDouble(), 1 / _alpha);
             return result;
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Pareto(xm = {0} k = {1})", _xm, _alpha);
         }
         #endregion
     }

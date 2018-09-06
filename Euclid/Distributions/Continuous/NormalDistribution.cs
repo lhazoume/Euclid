@@ -4,10 +4,8 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Normal distribution class
-    /// </summary>
-    public class NormalDistribution : ContinuousDistribution, IParametricDistribution
+    /// <summary>Normal distribution class</summary>
+    public class NormalDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _mean, _standardDeviation;
@@ -26,16 +24,12 @@ namespace Euclid.Distributions.Continuous
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
 
-        /// <summary>
-        /// Builds a standard normal distribution
-        /// </summary>
+        /// <summary>Builds a standard normal distribution</summary>
         public NormalDistribution()
             : this(0, 1)
         { }
 
-        /// <summary>
-        /// Builds a normal distribution
-        /// </summary>
+        /// <summary>Builds a normal distribution</summary>
         /// <param name="mean">the average</param>
         /// <param name="standardDeviation">the standard deviation</param>
         public NormalDistribution(double mean, double standardDeviation)
@@ -44,20 +38,18 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-        /// <summary>Fits the distribution to a sample of data</summary>
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static NormalDistribution Fit(FittingMethod method, double[] sample)
         {
             double avg = sample.Average(),
                 stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
-            _mean = avg;
-            _standardDeviation = stdev;
+            return new NormalDistribution(avg, stdev);
         }
 
-        /// <summary>
-        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-        /// </summary>
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
@@ -65,9 +57,7 @@ namespace Euclid.Distributions.Continuous
             return Fn.Phi((x - _mean) / _standardDeviation);
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -75,9 +65,7 @@ namespace Euclid.Distributions.Continuous
             return Fn.GaussBell((x - _mean) / _standardDeviation);
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
         /// <param name="p">The location at which to compute the inverse cumulative density</param>
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -85,9 +73,7 @@ namespace Euclid.Distributions.Continuous
             return _mean + _standardDeviation * Fn.InvPhi(p);
         }
 
-        /// <summary>
-        /// Generates a sequence of samples from the normal distribution using the algorithm
-        /// </summary>
+        /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints)
@@ -114,13 +100,26 @@ namespace Euclid.Distributions.Continuous
             return result;
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override  double MomentGeneratingFunction(double t)
+        {
+            return Math.Exp(_mean * t + 0.5 * Math.Pow(_standardDeviation * t, 2));
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("N(μ = {0}, σ = {1})", _mean, _standardDeviation);
+        }
+
         #endregion
 
         #region Accessors
 
-        /// <summary>
-        /// Gets the entropy of the normal distribution
-        /// </summary>
+        /// <summary>Gets the entropy of the normal distribution</summary>
         public override double Entropy
         {
             get { return Math.Log(_standardDeviation * Math.Sqrt(2 * Math.PI * Math.E)); }
@@ -132,49 +131,37 @@ namespace Euclid.Distributions.Continuous
             get { return _support; }
         }
 
-        /// <summary>
-        /// Gets the mean(μ) of the normal distribution
-        /// </summary>
+        /// <summary>Gets the mean(μ) of the normal distribution</summary>
         public override double Mean
         {
             get { return _mean; }
         }
 
-        /// <summary>
-        /// Gets the median of the normal distribution
-        /// </summary>
+        /// <summary>Gets the median of the normal distribution</summary>
         public override double Median
         {
             get { return _mean; }
         }
 
-        /// <summary>
-        /// Gets the mode of the normal distribution
-        /// </summary>
+        /// <summary>Gets the mode of the normal distribution</summary>
         public override double Mode
         {
             get { return _mean; }
         }
 
-        /// <summary>
-        /// Gets the skewness of the normal distribution
-        /// </summary>
+        /// <summary>Gets the skewness of the normal distribution</summary>
         public override double Skewness
         {
             get { return 0; }
         }
 
-        /// <summary>
-        /// Gets the distribution's standard deviation
-        /// </summary>
+        /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation
         {
             get { return _standardDeviation; }
         }
 
-        /// <summary>
-        /// Gets the distribution's variance
-        /// </summary>
+        /// <summary>Gets the distribution's variance</summary>
         public override double Variance
         {
             get { return _standardDeviation * _standardDeviation; }

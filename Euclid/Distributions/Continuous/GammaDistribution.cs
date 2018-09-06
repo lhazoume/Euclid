@@ -1,19 +1,15 @@
 ﻿using Euclid.Histograms;
 using Euclid.Solvers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Gamma distribution class
-    /// </summary>
-    public class GammaDistribution : ContinuousDistribution, IParametricDistribution
+    /// <summary>Gamma distribution class</summary>
+    public class GammaDistribution : ContinuousDistribution
     {
-        private double _k, _theta, _cdfFactor, _pdfFactor, _median;
+        #region Variables
+        private readonly double _k, _theta, _cdfFactor, _pdfFactor;
+        #endregion
 
         #region Constructors
         private GammaDistribution(double k, double theta, Random randomSource)
@@ -30,12 +26,9 @@ namespace Euclid.Distributions.Continuous
 
             _cdfFactor = 1 / Fn.Gamma(_k);
             _pdfFactor = Math.Pow(_theta, -_k) * _cdfFactor;
-            _median = InverseCumulativeDistribution(0.5);
         }
 
-        /// <summary>
-        /// Builds a Gamma distribution
-        /// </summary>
+        /// <summary>Builds a Gamma distribution</summary>
         /// <param name="k">the shapee</param>
         /// <param name="theta">the scale</param>
         public GammaDistribution(double k, double theta)
@@ -65,7 +58,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's median </summary>
         public override double Median
         {
-            get { return _median; }
+            get { return InverseCumulativeDistribution(0.5); ; }
         }
 
         /// <summary>Gets the distribution's mode</summary>
@@ -99,18 +92,15 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static GammaDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-        /// </summary>
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
@@ -119,9 +109,7 @@ namespace Euclid.Distributions.Continuous
             return _cdfFactor * Fn.IncompleteLowerGamma(_k, x / _theta);
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
         /// <param name="p">The location at which to compute the inverse cumulative density</param>
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -131,9 +119,7 @@ namespace Euclid.Distributions.Continuous
             return solver.Result;
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -142,9 +128,17 @@ namespace Euclid.Distributions.Continuous
             return _pdfFactor * Math.Pow(x, _k - 1) * Math.Exp(-x / _theta);
         }
 
-        /// <summary>
-        /// Generates a sequence of samples using the Ahrens-Dieter algorithm
-        /// </summary>
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (_theta * t < 1)
+                return Math.Pow(1 - _theta * t, -_k);
+            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than the rate");
+        }
+
+        /// <summary>Generates a sequence of samples using the Ahrens-Dieter algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints)
@@ -163,6 +157,7 @@ namespace Euclid.Distributions.Continuous
                 #region Remainder
                 double e = GenerateAhrensDieterRejection(_randomSource, delta);
                 #endregion
+
                 result[i] = _theta * (e + sumLog);
             }
             return result;
@@ -192,6 +187,12 @@ namespace Euclid.Distributions.Continuous
 
         }
 
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Γ(k = {0} θ = {1})", _k, _theta);
+        }
         #endregion
     }
 }

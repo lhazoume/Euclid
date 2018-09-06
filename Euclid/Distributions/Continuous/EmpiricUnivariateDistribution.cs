@@ -8,9 +8,7 @@ using System.Linq;
 namespace Euclid.Distributions.Continuous
 {
 
-    /// <summary>
-    /// Empiric univariate distribution based on kernel functions
-    /// </summary>
+    /// <summary>Empiric univariate distribution based on kernel functions</summary>
     public class EmpiricUnivariateDistribution : ContinuousDistribution
     {
         #region Declarations
@@ -121,7 +119,6 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>Gets the distribution's entropy</summary>
-        //TODO
         public override double Entropy { get { throw new NotImplementedException(); } }
         #endregion
 
@@ -138,9 +135,7 @@ namespace Euclid.Distributions.Continuous
             return sum / (_sumWeights);
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function</summary>
         /// <param name="p">the target probablity</param>
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -155,9 +150,7 @@ namespace Euclid.Distributions.Continuous
             return solver.Result;
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
@@ -166,6 +159,17 @@ namespace Euclid.Distributions.Continuous
             for (int i = 0; i < _weights.Length; i++)
                 sum += _weights[i] * _kernel.K((x - _values[i]) / _h);
             return sum / (_h * _sumWeights);
+        }
+
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            double result = 0;
+            for (int i = 0; i < _n; i++)
+                result += Math.Exp(t * _values[i]) * _weights[i];
+            return result;
         }
 
         #endregion

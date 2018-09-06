@@ -22,6 +22,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Euclid.XML</DocumentationFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,6 +53,7 @@
     <Compile Include="Analytics\ErrorFunctions\SumOfSquares.cs" />
     <Compile Include="Analytics\ErrorFunctions\IErrorFunction.cs" />
     <Compile Include="Analytics\InterRelations.cs" />
+    <Compile Include="Analytics\LogisticModel.cs" />
     <Compile Include="Analytics\LinearModel.cs" />
     <Compile Include="Analytics\IPredictor.cs" />
     <Compile Include="Analytics\NeuralNetworks\ActivationFunctions\ActivationFunctionHelper.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Analytics\NeuralNetworks\FeedForward\Layer.cs" />
     <Compile Include="Analytics\Regressions\LazyPartialLeastSquaresLinearRegression.cs" />
     <Compile Include="Analytics\Regressions\LASSORegression.cs" />
+    <Compile Include="Analytics\Regressions\LogisticRegression.cs" />
     <Compile Include="Analytics\Regressions\RIDGERegression.cs" />
     <Compile Include="Analytics\Regressions\OrdinaryLeastSquaresLinearRegression.cs" />
     <Compile Include="Analytics\Regressions\RegressionStatus.cs" />
@@ -100,7 +103,6 @@
     <Compile Include="Distributions\Discrete\SkellamDistribution.cs" />
     <Compile Include="Distributions\FittingMethod.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
-    <Compile Include="Distributions\IParametricDistribution.cs" />
     <Compile Include="Helpers\Arrays.cs" />
     <Compile Include="Helpers\Geodesic\Coordinates.cs" />
     <Compile Include="Helpers\Geodesic\Ellipsoid.cs" />
@@ -141,12 +143,15 @@
     <Compile Include="Solvers\LineSearch.cs" />
     <Compile Include="Solvers\NewtonRaphson.cs" />
     <Compile Include="Solvers\OptimizationType.cs" />
+    <Compile Include="Solvers\NelderMead.cs" />
     <Compile Include="Solvers\ParticleSwarmOptimizer.cs" />
     <Compile Include="Solvers\RootBracketing.cs" />
     <Compile Include="Solvers\RootBracketingMethod.cs" />
     <Compile Include="Solvers\SolverStatus.cs" />
     <Compile Include="Fn.cs" />
     <Compile Include="SparseMatrix.cs" />
+    <Compile Include="Text\LevenshteinDistance.cs" />
+    <Compile Include="Text\SentenceParsing.cs" />
     <Compile Include="Vector.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -12,13 +12,16 @@ namespace Euclid.Solvers
         #region Declarations
         private Func<Vector, double> _function;
         private Func<Vector, Vector> _gradient;
+        private Func<Vector, Matrix> _hessian;
         private double _error, _gradientThreshold;
-        private int _maxIterations, _maxLineSearchIterations, _evaluations;
+        private readonly int _maxIterations;
+        private int _maxLineSearchIterations;
+        private int _evaluations;
         private Vector _initialGuess, _result;
         private List<Vector> _descentDirections = new List<Vector>();
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private LineSearch _lineSearch;
-        private OptimizationType _optimizationType;
+        private readonly OptimizationType _optimizationType;
         private int _sign;
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion
@@ -65,12 +68,32 @@ namespace Euclid.Solvers
             _maxIterations = maxIterations;
             _evaluations = 0;
             _function = function;
+            _gradient = gradient;
+
             _maxLineSearchIterations = maxLineSearchIterations;
             _optimizationType = optimizationType;
             _gradientThreshold = gradientNormThreshold;
             _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
+        }
 
+        public GradientDescent(Vector initialGuess, LineSearch lineSearch,
+            Func<Vector, double> function, Func<Vector, Vector> gradient, Func<Vector, Matrix> hessian,
+            OptimizationType optimizationType,
+            int maxIterations, int maxLineSearchIterations, double gradientNormThreshold = Descents.GRADIENT_EPSILON)
+        {
+            _initialGuess = initialGuess.Clone;
+            _lineSearch = lineSearch;
+            _maxIterations = maxIterations;
+            _evaluations = 0;
+
+            _function = function;
             _gradient = gradient;
+            _hessian = hessian;
+
+            _maxLineSearchIterations = maxLineSearchIterations;
+            _optimizationType = optimizationType;
+            _gradientThreshold = gradientNormThreshold;
+            _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
         }
 
         #region Accessors
@@ -373,6 +396,58 @@ namespace Euclid.Solvers
                 if (ys != 0) B = B + (y * y) / ys;
 
                 direction = _sign * B.Inverse * gradient;
+
+                _descentDirections.Add(direction.Clone);
+                _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
+            }
+
+            _status = endCriteria.Status;
+        }
+
+        public void OptimizeConjugate()
+        {
+            _evaluations = 0;
+            if (_function == null) throw new NullReferenceException("function should not be null");
+
+            _convergence.Clear();
+
+            _result = _initialGuess.Clone;
+            _status = SolverStatus.Diverged;
+
+            #region Value, Gradient, Hessian
+            _error = _function(_result);
+            Vector gradient = _gradient(_result);
+            Matrix H = _hessian(_result);
+            _evaluations++;
+            #endregion
+
+            Vector direction = _sign * gradient;
+
+            _descentDirections.Add(direction.Clone);
+            _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
+
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, maxStaticIterations: _maxLineSearchIterations, gradientEpsilon: _gradientThreshold);
+            while (!endCriteria.ShouldStop(_error, gradient.Norm2))
+            {
+                for (int k = 0; k < _initialGuess.Size; k++)
+                {
+                    double denominator = Vector.Quadratic(direction, H, direction),
+                        numerator = Vector.Scalar(direction, gradient),
+                        alpha = numerator / denominator;
+
+                    _result = _result - (alpha * direction);
+                    gradient = _gradient(_result);
+                    H = _hessian(_result);
+                    _evaluations++;
+
+                    double betaNumerator = Vector.Quadratic(gradient, H, direction),
+                        beta = betaNumerator / denominator;
+
+                    direction = (_sign * gradient) + (beta * direction);
+                }
+
+                _error = _function(_result);
+                _evaluations++;
 
                 _descentDirections.Add(direction.Clone);
                 _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));

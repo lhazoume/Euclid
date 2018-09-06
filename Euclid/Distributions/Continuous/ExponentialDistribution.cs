@@ -4,10 +4,8 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Exponential distribution class
-    /// </summary>
-    public class ExponentialDistribution : ContinuousDistribution, IParametricDistribution
+    /// <summary>Exponential distribution class</summary>
+    public class ExponentialDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _lambda, _beta;
@@ -35,22 +33,20 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static ExponentialDistribution Fit(FittingMethod method, double[] sample)
         {
             if (method == FittingMethod.Moments)
             {
-                double avg = sample.Average(),
-                    stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
-                _beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
+                double avg = sample.Average();
+
+                double beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
+                return new ExponentialDistribution(1 / beta);
             }
-            else if (method == FittingMethod.MaximumLikelihood)
-            {
-                //TODO : implement here
-                throw new NotImplementedException();
-            }
+
+            throw new NotImplementedException();
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -79,6 +75,16 @@ namespace Euclid.Distributions.Continuous
             else return _lambda * Math.Exp(-_lambda * x);
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (t < _lambda)
+                return _lambda / (_lambda - t);
+            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than the rate");
+        }
+
         /// <summary> Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
@@ -89,6 +95,14 @@ namespace Euclid.Distributions.Continuous
                 result[i] = -Math.Log(_randomSource.NextDouble()) * _beta;
             return result;
         }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Exponential(λ = {0})", _lambda);
+        }
+
         #endregion
 
         #region Accessors

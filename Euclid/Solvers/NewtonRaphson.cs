@@ -89,18 +89,14 @@ namespace Euclid.Solvers
             }
         }
 
-        /// <summary>
-        /// Gets and sets the tolerance for the target (threshold for target reached)
-        /// </summary>
+        /// <summary>Gets and sets the tolerance for the target (threshold for target reached)</summary>
         public double AbsoluteTolerance
         {
             get { return _absoluteTolerance; }
             set { _absoluteTolerance = value; }
         }
 
-        /// <summary>
-        /// Gets and sets the tolerance for the slope (threshold for stationarity)
-        /// </summary>
+        /// <summary>Gets and sets the tolerance for the slope (threshold for stationarity)</summary>
         public double SlopeTolerance
         {
             get { return _slopeTolerance; }

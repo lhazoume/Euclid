@@ -7,12 +7,13 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Fisher distribution class
     /// </summary>
-    public class FisherDistribution : ContinuousDistribution, IParametricDistribution
+    public class FisherDistribution : ContinuousDistribution
     {
         #region Declarations
         private double _d1, _d2;
         #endregion
 
+        #region Constructors
         private FisherDistribution(double d1, double d2, Random randomSource)
         {
             if (d1 <= 0) throw new ArgumentException("The d1 can not be negative");
@@ -27,17 +28,12 @@ namespace Euclid.Distributions.Continuous
             _support = new Interval(0, double.PositiveInfinity, true, false);
         }
 
-        #region Creators
-        /// <summary>
-        /// Creates a new Fisher distribution
-        /// </summary>
+        /// <summary>Initializes a new instance of the Fisher distribution</summary>
         /// <param name="d1">the first number of freedom degrees</param>
         /// <param name="d2">the second number of freedom degrees</param>
-        /// <returns>a <c>FisherDistribution</c></returns>
-        public static FisherDistribution Create(double d1, double d2)
-        {
-            return new FisherDistribution(d1, d2, new Random(Guid.NewGuid().GetHashCode()));
-        }
+        public FisherDistribution(double d1, double d2)
+            : this(d1, d2, new Random(Guid.NewGuid().GetHashCode()))
+        { }
         #endregion
 
         #region Accessors
@@ -94,12 +90,11 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static FisherDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
@@ -111,9 +106,7 @@ namespace Euclid.Distributions.Continuous
             return Fn.IncompleteRegularizedBeta(_d1 * x / (_d1 * x + _d2), 0.5 * _d1, 0.5 * _d2);
         }
 
-        /// <summary>
-        /// Computes the inverse of the cumulative distribution function
-        /// </summary>
+        /// <summary>Computes the inverse of the cumulative distribution function</summary>
         /// <param name="p">the target probablity</param>
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
@@ -124,14 +117,27 @@ namespace Euclid.Distributions.Continuous
             return solver.Result;
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
             return Math.Sqrt(Math.Pow(_d1 * x, _d1) * Math.Pow(_d2, _d2) / Math.Pow(_d1 * x + _d2, _d1 + _d2)) / (x * Fn.Beta(0.5 * _d1, 0.5 * _d2));
+        }
+
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            throw new Exception("The MGF is not defined");
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Fisher(d1 = {0} d2 = {1})", _d1, _d2);
         }
 
         #endregion

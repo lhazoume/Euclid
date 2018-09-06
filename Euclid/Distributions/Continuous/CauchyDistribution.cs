@@ -6,7 +6,7 @@ namespace Euclid.Distributions.Continuous
     /// <summary>
     /// Cauchy distribution class
     /// </summary>
-    public class CauchyDistribution : ContinuousDistribution, IParametricDistribution
+    public class CauchyDistribution : ContinuousDistribution
     {
         #region Declarations
         private readonly double _x0, _gamma;
@@ -86,12 +86,11 @@ namespace Euclid.Distributions.Continuous
 
         #region Methods
 
-        /// <summary>Fits the distribution to a sample of data</summary>
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public void Fit(FittingMethod method, double[] sample)
+        public static CauchyDistribution Fit(FittingMethod method, double[] sample)
         {
-            //TODO : implement here
             throw new NotImplementedException();
         }
 
@@ -113,14 +112,27 @@ namespace Euclid.Distributions.Continuous
             return _x0 + _gamma * Math.Tan(Math.PI * (p - 0.5));
         }
 
-        /// <summary>
-        /// Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x
-        /// </summary>
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
         /// <param name="x">The location at which to compute the density</param>
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
             return 1 / (Math.PI * _gamma * (1 + Math.Pow((x - _x0) / _gamma, 2)));
+        }
+
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            throw new Exception( "The MGF is not defined");
+        }
+
+        /// <summary>Returns a string that represents this instance</summary>
+        /// <returns>A string</returns>
+        public override string ToString()
+        {
+            return string.Format("Cauchy(x0 = {0} γ = {1})", _x0, _gamma);
         }
         #endregion
     }
