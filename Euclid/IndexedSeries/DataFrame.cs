@@ -148,21 +148,19 @@ namespace Euclid.IndexedSeries
         #endregion
 
         #region Accessors
-        /// <summary>
-        /// Gets the legends
-        /// </summary>
+        /// <summary>Returns the legends </summary>
         public T[] Legends
         {
             get { return _legends.Values; }
         }
 
-        /// <summary>Gets the labels </summary>
+        /// <summary>Returns the labels </summary>
         public V[] Labels
         {
             get { return _labels.Values; }
         }
 
-        /// <summary>Gets the number of columns</summary>
+        /// <summary>Returns the number of columns</summary>
         public int Columns
         {
             get { return _labels.Count; }
@@ -190,9 +188,7 @@ namespace Euclid.IndexedSeries
             set { _data[i, j] = value; }
         }
 
-        /// <summary>
-        /// Gets and sets the data for a given legend and a given label
-        /// </summary>
+        /// <summary>Gets and sets the data for a given legend and a given label</summary>
         /// <param name="t">the legend</param>
         /// <param name="v">the label</param>
         /// <returns>a data point</returns>

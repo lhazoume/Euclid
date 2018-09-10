@@ -250,5 +250,102 @@ namespace Euclid.Solvers
             _result = simplex[0];
             _status = iterations >= _maxIterations ? SolverStatus.IterationExceeded : SolverStatus.FunctionConvergence;
         }
+
+        private class VectorValuePair
+        {
+            public Vector Vector;
+            public double Value;
+
+            public VectorValuePair(Vector vector, double value)
+            {
+                Vector = vector;
+                Value = value;
+            }
+        }
+
+        public void SolveFast()
+        {
+            #region Parameters
+            List<VectorValuePair> simplex = _initialPopulationGenerator(_dimension + 1).Select(v => new VectorValuePair(v, _function(v))).ToList();
+            Vector centroid = Vector.Create(_dimension);
+            //double[] functionValues = new double[_dimension + 1];
+            //int[] indices = new int[_dimension + 1];
+            #endregion
+
+            int iterations = 0;
+
+            while (iterations < _maxIterations)
+            {
+                #region Evaluate and order the values and indices
+                simplex.ForEach(t => { t.Value = _function(t.Vector); });
+                simplex.Sort((x, y) => x.Value.CompareTo(y.Value));
+                #endregion
+
+                #region Find centroid of the simplex excluding the vertex with highest functionvalue.
+                centroid = Vector.Create(_dimension);
+                for (int s = 0; s <= _dimension; s++)
+                    if (s != _dimension)
+                        centroid += simplex[s].Vector;
+
+                centroid /= _dimension;
+                #endregion
+
+                _convergence.Add(new Tuple<Vector, double>(simplex[0].Vector.Clone, simplex[0].Value));
+                if (Math.Abs(_function(centroid) - simplex[0].Value) < _epsilon)
+                {
+                    break;
+                }
+
+                #region Reflection
+                Vector reflectionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 + _alpha, centroid, -_alpha, simplex[_dimension].Vector), _upperBound));
+                double reflectionValue = _function(reflectionPoint);
+                if (reflectionValue >= simplex[0].Value & reflectionValue < simplex[_dimension - 1].Value)
+                {
+                    simplex[_dimension].Vector = reflectionPoint;
+                    simplex[_dimension].Value = reflectionValue;
+                    iterations++;
+                    continue;
+                }
+                #endregion
+
+                #region Expansion
+                if (reflectionValue < simplex[0].Value)
+                {
+                    Vector expansionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _gamma, centroid, _gamma, reflectionPoint), _upperBound));
+                    double expansionValue = _function(expansionPoint);
+                    simplex[_dimension].Vector = expansionValue < reflectionValue ? expansionPoint : reflectionPoint;
+                    simplex[_dimension].Value = expansionValue < reflectionValue ? expansionValue : reflectionValue;
+                    iterations++;
+                    continue;
+                }
+                #endregion
+
+                #region Contraction
+                Vector contractionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _rho, centroid, _rho, simplex[_dimension].Vector), _upperBound));
+                double contractionValue = _function(contractionPoint);
+                if (contractionValue < simplex[_dimension].Value)
+                {
+                    simplex[_dimension].Vector = contractionPoint;
+                    simplex[_dimension].Value = contractionValue;
+                    iterations++;
+                    continue;
+                }
+                #endregion
+
+                #region Shrink
+                Vector bestPoint = simplex[0].Vector;
+                for (int s = 0; s <= _dimension; s++)
+                {
+                    simplex[s].Vector = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _sigma, bestPoint, _sigma, simplex[s].Vector), _upperBound));
+                    simplex[s].Value = _function(simplex[s].Vector);
+                }
+                #endregion
+
+                iterations++;
+            }
+
+            _result = simplex[0].Vector;
+            _status = iterations >= _maxIterations ? SolverStatus.IterationExceeded : SolverStatus.FunctionConvergence;
+        }
     }
 }
