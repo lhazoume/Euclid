@@ -3302,15 +3302,13 @@
             <param name="text">the <c>String</c> content</param>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Legends">
-            <summary>
-            Gets the legends
-            </summary>
+            <summary>Returns the legends </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Labels">
-            <summary>Gets the labels </summary>
+            <summary>Returns the labels </summary>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Columns">
-            <summary>Gets the number of columns</summary>
+            <summary>Returns the number of columns</summary>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Rows">
             <summary>Returns the number of rows</summary>
@@ -3325,9 +3323,7 @@
             <returns>a data point</returns>
         </member>
         <member name="P:Euclid.IndexedSeries.DataFrame`3.Item(`0,`2)">
-            <summary>
-            Gets and sets the data for a given legend and a given label
-            </summary>
+            <summary>Gets and sets the data for a given legend and a given label</summary>
             <param name="t">the legend</param>
             <param name="v">the label</param>
             <returns>a data point</returns>
@@ -5604,9 +5600,7 @@
             <returns>the <c>Vector</c> result of the substraction</returns>
         </member>
         <member name="M:Euclid.Vector.Scalar(Euclid.Vector,Euclid.Vector)">
-            <summary>
-            Returns the scalar product of the Vectors
-            </summary>
+            <summary>Returns the scalar product of the Vectors</summary>
             <param name="v1">the left hand side</param>
             <param name="v2">the right hand side</param>
             <returns>a double value</returns>

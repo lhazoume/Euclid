@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Euclid
 {
@@ -293,9 +294,7 @@ namespace Euclid
 
         #endregion
 
-        /// <summary>
-        /// Returns the scalar product of the Vectors
-        /// </summary>
+        /// <summary>Returns the scalar product of the Vectors</summary>
         /// <param name="v1">the left hand side</param>
         /// <param name="v2">the right hand side</param>
         /// <returns>a double value</returns>
@@ -309,6 +308,25 @@ namespace Euclid
                 return result;
             }
             throw new ArgumentException("The scalar product of two matrices can only be performed if they are the same size");
+        }
+
+        public static Vector AggregateSum(IList<Vector> vectors)
+        {
+            if (vectors.Count == 0)
+                return Vector.Create(1, 0.0);
+            else if (vectors.Count == 1)
+                return vectors[0].Clone;
+            else
+            {
+                int size = vectors[0].Size;
+                Vector result = Vector.Create(size);
+                Parallel.For(0, size, s =>
+                {
+                    for (int i = 0; i < vectors.Count; i++)
+                        result[s] += vectors[i][s];
+                });
+                return result;
+            }
         }
 
         /// <summary>Applies a function on the fields on a Vector</summary>
@@ -380,6 +398,18 @@ namespace Euclid
                 Vector result = new Vector(v1.Size);
                 for (int k = 0; k < v1.Size; k++)
                     result[k] = Math.Min(v1[k], v2[k]);
+                return result;
+            }
+            throw new RankException("The vectors have different sizes.");
+        }
+
+        public static Vector Bound(Vector lowBound, Vector upBound, Vector x)
+        {
+            if (lowBound.Size == upBound.Size && x.Size == lowBound.Size)
+            {
+                Vector result = new Vector(lowBound.Size);
+                for (int k = 0; k < lowBound.Size; k++)
+                    result[k] = Math.Max(lowBound[k], Math.Min(x[k], upBound[k]));
                 return result;
             }
             throw new RankException("The vectors have different sizes.");

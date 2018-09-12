@@ -202,6 +202,7 @@ namespace Euclid.Solvers
                 #endregion
 
                 _convergence.Add(new Tuple<Vector, double>(simplex[0].Clone, functionValues[0]));
+                Console.WriteLine(string.Format("Convergence = {0}", functionValues[0]));
                 if (Math.Abs(_function(centroid) - functionValues[0]) < _epsilon)
                 {
                     break;
@@ -214,6 +215,7 @@ namespace Euclid.Solvers
                 {
                     simplex[indices[_dimension]] = reflectionPoint;
                     iterations++;
+                    Console.WriteLine(string.Format("Reflection value = {0}", reflectionValue));
                     continue;
                 }
                 #endregion
@@ -222,18 +224,22 @@ namespace Euclid.Solvers
                 if (reflectionValue < functionValues[0])
                 {
                     Vector expansionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _gamma, centroid, _gamma, reflectionPoint), _upperBound));
-                    simplex[indices[_dimension]] = _function(expansionPoint) < reflectionValue ? expansionPoint : reflectionPoint;
+                    double expansionValue = _function(expansionPoint);
+                    simplex[indices[_dimension]] = expansionValue < reflectionValue ? expansionPoint : reflectionPoint;
                     iterations++;
+                    Console.WriteLine(string.Format("Expansion value = {0}", expansionValue));
                     continue;
                 }
                 #endregion
 
                 #region Contraction
                 Vector contractionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _rho, centroid, _rho, simplex[indices[_dimension]]), _upperBound));
-                if (_function(contractionPoint) < functionValues[_dimension])
+                double contractionValue = _function(contractionPoint);
+                if (contractionValue < functionValues[_dimension])
                 {
                     simplex[indices[_dimension]] = contractionPoint;
                     iterations++;
+                    Console.WriteLine(string.Format("Contraction value = {0}", contractionValue));
                     continue;
                 }
                 #endregion
@@ -242,12 +248,14 @@ namespace Euclid.Solvers
                 Vector bestPoint = simplex[indices[0]];
                 for (int s = 0; s <= _dimension; s++)
                     simplex[s] = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _sigma, bestPoint, _sigma, simplex[s]), _upperBound));
+
+                Console.WriteLine("Shrink");
                 #endregion
 
                 iterations++;
             }
 
-            _result = simplex[0];
+            _result = simplex[indices[0]];
             _status = iterations >= _maxIterations ? SolverStatus.IterationExceeded : SolverStatus.FunctionConvergence;
         }
 
@@ -273,36 +281,32 @@ namespace Euclid.Solvers
             #endregion
 
             int iterations = 0;
+            Parallel.For(0, _dimension + 1, s => { simplex[s].Value = _function(simplex[s].Vector); });
 
             while (iterations < _maxIterations)
             {
                 #region Evaluate and order the values and indices
-                simplex.ForEach(t => { t.Value = _function(t.Vector); });
                 simplex.Sort((x, y) => x.Value.CompareTo(y.Value));
                 #endregion
 
-                #region Find centroid of the simplex excluding the vertex with highest functionvalue.
-                centroid = Vector.Create(_dimension);
-                for (int s = 0; s <= _dimension; s++)
-                    if (s != _dimension)
-                        centroid += simplex[s].Vector;
-
-                centroid /= _dimension;
-                #endregion
-
+                //Find centroid of the simplex excluding the vertex with highest functionvalue
+                centroid = Vector.AggregateSum(simplex.GetRange(0, _dimension).Select(p => p.Vector).ToList()) / _dimension;
                 _convergence.Add(new Tuple<Vector, double>(simplex[0].Vector.Clone, simplex[0].Value));
+                Console.WriteLine(string.Format("Convergence = {0}", simplex[0].Value));
                 if (Math.Abs(_function(centroid) - simplex[0].Value) < _epsilon)
                 {
                     break;
                 }
 
                 #region Reflection
-                Vector reflectionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 + _alpha, centroid, -_alpha, simplex[_dimension].Vector), _upperBound));
+                Vector reflectionPoint = Vector.Bound(_lowerBound, _upperBound, Vector.Create(1 + _alpha, centroid, -_alpha, simplex[_dimension].Vector));
                 double reflectionValue = _function(reflectionPoint);
-                if (reflectionValue >= simplex[0].Value & reflectionValue < simplex[_dimension - 1].Value)
+                if (simplex[0].Value <= reflectionValue & reflectionValue < simplex[_dimension - 1].Value)
                 {
                     simplex[_dimension].Vector = reflectionPoint;
                     simplex[_dimension].Value = reflectionValue;
+
+                    Console.WriteLine(string.Format("Reflection value = {0}", reflectionValue));
                     iterations++;
                     continue;
                 }
@@ -311,22 +315,25 @@ namespace Euclid.Solvers
                 #region Expansion
                 if (reflectionValue < simplex[0].Value)
                 {
-                    Vector expansionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _gamma, centroid, _gamma, reflectionPoint), _upperBound));
+                    Vector expansionPoint = Vector.Bound(_lowerBound, _upperBound, Vector.Create(1 - _gamma, centroid, _gamma, reflectionPoint));
                     double expansionValue = _function(expansionPoint);
                     simplex[_dimension].Vector = expansionValue < reflectionValue ? expansionPoint : reflectionPoint;
                     simplex[_dimension].Value = expansionValue < reflectionValue ? expansionValue : reflectionValue;
+
+                    Console.WriteLine(string.Format("Expansion value = {0}", expansionValue));
                     iterations++;
                     continue;
                 }
                 #endregion
 
                 #region Contraction
-                Vector contractionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _rho, centroid, _rho, simplex[_dimension].Vector), _upperBound));
+                Vector contractionPoint = Vector.Bound(_lowerBound, _upperBound, Vector.Create(1 - _rho, centroid, _rho, simplex[_dimension].Vector));
                 double contractionValue = _function(contractionPoint);
                 if (contractionValue < simplex[_dimension].Value)
                 {
                     simplex[_dimension].Vector = contractionPoint;
                     simplex[_dimension].Value = contractionValue;
+                    Console.WriteLine(string.Format("Contraction value = {0}", contractionValue));
                     iterations++;
                     continue;
                 }
@@ -334,11 +341,13 @@ namespace Euclid.Solvers
 
                 #region Shrink
                 Vector bestPoint = simplex[0].Vector;
-                for (int s = 0; s <= _dimension; s++)
-                {
-                    simplex[s].Vector = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _sigma, bestPoint, _sigma, simplex[s].Vector), _upperBound));
-                    simplex[s].Value = _function(simplex[s].Vector);
-                }
+                Parallel.For(1, _dimension + 1, s =>
+                  {
+                      simplex[s].Vector = Vector.Bound(_lowerBound, _upperBound, Vector.Create(1 - _sigma, bestPoint, _sigma, simplex[s].Vector));
+                      simplex[s].Value = _function(simplex[s].Vector);
+                  });
+
+                Console.WriteLine("Shrink");
                 #endregion
 
                 iterations++;
