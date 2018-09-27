@@ -23,9 +23,7 @@ namespace Euclid
 
         #region Constructors
 
-        /// <summary>
-        /// Builds a rectangular matrix filled with the specified value
-        /// </summary>
+        /// <summary>Builds a rectangular matrix filled with the specified value</summary>
         /// <param name="rows">the number of rows</param>
         /// <param name="cols">the number of columns</param>
         /// <param name="value">the value for all the fields of the matrix</param>
@@ -46,33 +44,25 @@ namespace Euclid
         #endregion
 
         #region Accessors
-        /// <summary>
-        /// Returns the number of columns of the <c>Matrix</c>
-        /// </summary>
+        /// <summary>Returns the number of columns of the <c>Matrix</c></summary>
         public virtual int Columns
         {
             get { return _cols; }
         }
 
-        /// <summary>
-        /// Returns the number of rows of the <c>Matrix</c>
-        /// </summary>
+        /// <summary>Returns the number of rows of the <c>Matrix</c></summary>
         public int Rows
         {
             get { return _rows; }
         }
 
-        /// <summary>
-        /// Specifies whether the <c>Matrix</c> is square
-        /// </summary>
+        /// <summary>Specifies whether the <c>Matrix</c> is square</summary>
         public bool IsSquare
         {
             get { return (_rows == _cols); }
         }
 
-        /// <summary>
-        /// Specifies whether the <c>Matrix</c> is square and symmetric
-        /// </summary>
+        /// <summary>Specifies whether the <c>Matrix</c> is square and symmetric</summary>
         public bool IsSymetric
         {
             get
@@ -86,17 +76,13 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the number of values in the <c>Matrix</c>
-        /// </summary>
+        /// <summary>Returns the number of values in the <c>Matrix</c></summary>
         public int Size
         {
             get { return _data.Length; }
         }
 
-        /// <summary>
-        /// Returns the data of the matrix as a array of double with the rows one after the other
-        /// </summary>
+        /// <summary>Returns the data of the matrix as a array of double with the rows one after the other</summary>
         public double[] Data
         {
             get { return _data; }
@@ -115,9 +101,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Allows reading and modifying the coefficients of the <c>Matrix</c>
-        /// </summary>
+        /// <summary>Allows reading and modifying the coefficients of the <c>Matrix</c></summary>
         /// <param name="i">the row</param>
         /// <param name="j">the column</param>
         /// <returns>a double value</returns>
@@ -127,9 +111,7 @@ namespace Euclid
             set { _data[i * _cols + j] = value; }
         }
 
-        /// <summary>
-        /// Allows reading and modifying the coefficients of the <c>Matrix</c>
-        /// </summary>
+        /// <summary> Allows reading and modifying the coefficients of the <c>Matrix</c></summary>
         /// <param name="i">the coefficient index</param>
         /// <returns>a double value</returns>
         private double this[int i]
@@ -138,9 +120,7 @@ namespace Euclid
             set { _data[i] = value; }
         }
 
-        /// <summary>
-        /// Returns a deep copy of the <c>Matrix</c>
-        /// </summary>
+        /// <summary>Returns a deep copy of the <c>Matrix</c></summary>
         public Matrix Clone
         {
             get
@@ -153,9 +133,8 @@ namespace Euclid
         }
 
         #region Inversion
-        /// <summary>
-        /// The Lower triangular part of the LU decomposition
-        /// </summary>
+
+        /// <summary>The Lower triangular part of the LU decomposition</summary>
         public Matrix L
         {
             get
@@ -165,9 +144,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// The Upper triangular part of the LU decomposition
-        /// </summary>
+        /// <summary>Returns the upper triangular part of the LU decomposition</summary>
         public Matrix U
         {
             get
@@ -177,9 +154,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the determinant of the <c>Matrix</c>
-        /// </summary>
+        /// <summary>Returns the determinant of the <c>Matrix</c></summary>
         public double Determinant
         {
             get
@@ -193,9 +168,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the inverse of the <c>Matrix</c> when possible, null otherwise
-        /// </summary>
+        /// <summary>Returns the inverse of the <c>Matrix</c> when possible, null otherwise</summary>
         public Matrix Inverse
         {
             get
@@ -215,9 +188,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the inverse of the <c>Matrix</c> when possible, null otherwise. Done using multithreading !
-        /// </summary>
+        /// <summary>Returns the inverse of the <c>Matrix</c> when possible, null otherwise. Done using multithreading !</summary>
         public Matrix FastInverse
         {
             get
@@ -273,9 +244,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the co-matrix of the current matrix
-        /// </summary>
+        /// <summary>Returns the co-matrix of the current matrix</summary>
         public Matrix CoMatrix
         {
             get
@@ -299,9 +268,7 @@ namespace Euclid
 
         #endregion
 
-        /// <summary>
-        /// Returns the trace of the <c>Matrix</c>
-        /// </summary>
+        /// <summary>Returns the trace of the <c>Matrix</c></summary>
         public double Trace
         {
             get
@@ -314,9 +281,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the transposed <c>Matrix</c>
-        /// </summary>
+        /// <summary>Returns the transposed <c>Matrix</c></summary>
         public virtual Matrix Transpose
         {
             get
@@ -332,9 +297,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the transposed <c>Matrix</c> filled using multithreading
-        /// </summary>
+        /// <summary>Returns the transposed <c>Matrix</c> filled using multithreading</summary>
         public Matrix FastTranspose
         {
             get
@@ -345,17 +308,13 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the symmetric part of the <c>Matrix</c> ( 1/2 . (A^T + A))
-        /// </summary>
+        /// <summary>Returns the symmetric part of the <c>Matrix</c> ( 1/2 . (A^T + A))</summary>
         public Matrix SymmetricPart
         {
             get { return 0.5 * (this + this.Transpose); }
         }
 
-        /// <summary>
-        /// Returns the symmetric part of the <c>Matrix</c> (1/2 . (A - A^T))
-        /// </summary>
+        /// <summary>Returns the symmetric part of the <c>Matrix</c> (1/2 . (A - A^T))</summary>
         public Matrix AntiSymmetricPart
         {
             get { return 0.5 * (this - this.Transpose); }
@@ -363,9 +322,7 @@ namespace Euclid
 
         #region Norms and sums
 
-        /// <summary>
-        /// Return the sum of the absolute values
-        /// </summary>
+        /// <summary>Returns the sum of the absolute values</summary>
         public double Norm1
         {
             get
@@ -379,17 +336,13 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the square root of the sum of squares
-        /// </summary>
+        /// <summary>Returns the square root of the sum of squares</summary>
         public double Norm2
         {
             get { return Math.Sqrt(this.SumOfSquares); }
         }
 
-        /// <summary>
-        /// Returns the largest value of the <c>Matrix</c> in absolute value
-        /// </summary>
+        /// <summary>Returns the largest value of the <c>Matrix</c> in absolute value</summary>
         public double NormSup
         {
             get
@@ -400,9 +353,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the sum of the squared values
-        /// </summary>
+        /// <summary>Returns the sum of the squared values</summary>
         public double SumOfSquares
         {
             get
@@ -414,9 +365,7 @@ namespace Euclid
             }
         }
 
-        /// <summary>
-        /// Returns the sum of the values
-        /// </summary>
+        /// <summary>Returns the sum of the values</summary>
         public double Sum
         {
             get
@@ -440,9 +389,7 @@ namespace Euclid
 
         #region Inversion services
 
-        /// <summary>
-        /// Evaluates the LU decomposition of the matrix and stores the results in the private attributes _L and _U.
-        /// </summary>
+        /// <summary>Evaluates the LU decomposition of the matrix and stores the results in the private attributes _L and _U.</summary>
         private void MakeLU()
         {
             if (!IsSquare) throw new Exception("The matrix is not square!");
@@ -527,9 +474,7 @@ namespace Euclid
             return x;
         }
 
-        /// <summary>
-        /// Returns the matrix from which one row and one column have been excluded (indexed by row and col).
-        /// </summary>
+        /// <summary>Returns the matrix from which one row and one column have been excluded (indexed by row and col)</summary>
         /// <param name="row">The index of the row to exclude</param>
         /// <param name="col">The index of the column to exclude</param>
         /// <returns>The matrix without the speficied line and the column</returns>
@@ -551,9 +496,7 @@ namespace Euclid
             return sub;
         }
 
-        /// <summary>
-        /// Replaces the column of index k with the input matrix v.
-        /// </summary>
+        /// <summary>Replaces the column of index k with the input matrix v</summary>
         /// <param name="v">Column replacing the old one</param>
         /// <param name="k">Index of the column to replace</param>
         public void SetCol(Vector v, int k)
@@ -561,9 +504,7 @@ namespace Euclid
             for (int i = 0; i < _rows; i++) _data[i * _cols + k] = v[i];
         }
 
-        /// <summary>
-        /// Solves the equation : A*x=v, where A is the Matrix, x the unknown, v the input argument.
-        /// </summary>
+        /// <summary>Solves the equation : A*x=v, where A is the Matrix, x the unknown, v the input argument</summary>
         /// <param name="v">The right hand side of the equation</param>
         /// <returns>The solution x of A*x=v</returns>
         public Vector SolveWith(Vector v)
@@ -592,9 +533,7 @@ namespace Euclid
 
         #region Extract row or column
 
-        /// <summary>
-        /// Extracts a specific column
-        /// </summary>
+        /// <summary>Extracts a specific column</summary>
         /// <param name="j">the specified column</param>
         /// <returns>a column Vector</returns>
         public Vector Column(int j)
@@ -605,9 +544,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Extracts a specific row
-        /// </summary>
+        /// <summary> Extracts a specific row</summary>
         /// <param name="i">the specified row</param>
         /// <returns>a row Vector</returns>
         public Vector Row(int i)
@@ -626,9 +563,7 @@ namespace Euclid
 
         #region Multiplications / divisions
 
-        /// <summary>
-        /// Multiplies a <c>Matrix</c> by a scalar
-        /// </summary>
+        /// <summary>Multiplies a <c>Matrix</c> by a scalar</summary>
         /// <param name="m">the left hand side <c>Matrix</c></param>
         /// <param name="f">the scalar</param>
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
@@ -640,9 +575,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Multiplies a <c>Matrix</c> by a scalar
-        /// </summary>
+        /// <summary> Multiplies a <c>Matrix</c> by a scalar</summary>
         /// <param name="f">the scalar</param>
         /// <param name="m">the right hand side <c>Matrix</c></param>
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
@@ -651,9 +584,7 @@ namespace Euclid
             return m * f;
         }
 
-        /// <summary>
-        /// Divides all the coefficients of a <c>Matrix</c> by a scalar
-        /// </summary>
+        /// <summary>Divides all the coefficients of a <c>Matrix</c> by a scalar</summary>
         /// <param name="m">the left hand side <c>Matrix</c></param>
         /// <param name="f">the scalar</param>
         /// <returns>the <c>Matrix</c> result of the division</returns>
@@ -662,9 +593,7 @@ namespace Euclid
             return m * (1 / f);
         }
 
-        /// <summary>
-        /// Multiplies two matrices
-        /// </summary>
+        /// <summary>Multiplies two matrices</summary>
         /// <param name="m1">the left hand side <c>Matrix</c></param>
         /// <param name="m2">the right hand side <c>Matrix</c></param>
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
@@ -672,7 +601,7 @@ namespace Euclid
         {
             if (m1.Columns != m2.Rows) throw new Exception("Wrong dimensions of matrix!");
 
-            Matrix result = CreateZeroMatrix(m1.Rows, m2.Columns);
+            Matrix result = Create(m1.Rows, m2.Columns);
             for (int i = 0; i < result.Rows; i++)
                 for (int j = 0; j < result.Columns; j++)
                     for (int k = 0; k < m1.Columns; k++)
@@ -680,9 +609,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Multiplies two matrices using multithreading
-        /// </summary>
+        /// <summary>Multiplies two matrices using multithreading</summary>
         /// <param name="m1">the left hand side <c>Matrix</c></param>
         /// <param name="m2">the right hand side <c>Matrix</c></param>
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
@@ -712,9 +639,7 @@ namespace Euclid
 
         #region Additions / substractions
 
-        /// <summary>
-        /// Performs a matrix addition, after going through dimension compatibility verifications.
-        /// </summary>
+        /// <summary>Performs a matrix addition, after going through dimension compatibility verifications.</summary>
         /// <param name="m1">First matrix</param>
         /// <param name="m2">Second matrix</param>
         /// <returns>The sum of m1 and m2</returns>
@@ -742,9 +667,7 @@ namespace Euclid
             return r;
         }
 
-        /// <summary>
-        /// Adds a scalar to all the coefficients of a <c>Matrix</c>
-        /// </summary>
+        /// <summary>Adds a scalar to all the coefficients of a <c>Matrix</c></summary>
         /// <param name="m">the left hand side <c>Matrix</c></param>
         /// <param name="c">the scalar</param>
         /// <returns>the <c>Matrix</c> result of the addition</returns>
@@ -756,9 +679,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Adds a scalar to all the coefficients of a <c>Matrix</c>
-        /// </summary>
+        /// <summary>Adds a scalar to all the coefficients of a <c>Matrix</c></summary>
         /// <param name="c">the scalar</param>
         /// <param name="m">the right hand side <c>Matrix</c></param>
         /// <returns>the <c>Matrix</c> result of the addition</returns>
@@ -770,9 +691,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Substracts a scalar to all the coefficients of a <c>Matrix</c>
-        /// </summary>
+        /// <summary>Substracts a scalar to all the coefficients of a <c>Matrix</c></summary>
         /// <param name="m">the left hand side <c>Matrix</c></param>
         /// <param name="c">the scalar</param>
         /// <returns>the <c>Matrix</c> result of the substraction</returns>
@@ -784,9 +703,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Adds a scalar to the opposite of a <c>Matrix</c>
-        /// </summary>
+        /// <summary>Adds a scalar to the opposite of a <c>Matrix</c></summary>
         /// <param name="c">the scalar</param>
         /// <param name="m">the right hand side <c>Matrix</c></param>
         /// <returns>the <c>Matrix</c> result of the substraction</returns>
@@ -798,9 +715,7 @@ namespace Euclid
             return tmp;
         }
 
-        /// <summary>
-        /// Returns the opposite of the <c>Matrix</c>
-        /// </summary>
+        /// <summary>Returns the opposite of the <c>Matrix</c></summary>
         /// <param name="m">the input matrix</param>
         /// <returns>the <c>Matrix</c> opposite</returns>
         public static Matrix operator -(Matrix m)
@@ -808,9 +723,7 @@ namespace Euclid
             return m * -1;
         }
 
-        /// <summary>
-        /// Performs the matrix addition
-        /// </summary>
+        /// <summary>Performs the matrix addition</summary>
         /// <param name="m1">the left hand side matrix</param>
         /// <param name="m2">the right hand side matrix</param>
         /// <returns>a <c>Matrix</c></returns>
@@ -819,9 +732,7 @@ namespace Euclid
             return Matrix.Add(m1, m2);
         }
 
-        /// <summary>
-        /// Performs a matrix substraction
-        /// </summary>
+        /// <summary>Performs a matrix substraction</summary>
         /// <param name="m1">the left hand side</param>
         /// <param name="m2">the right hand side</param>
         /// <returns>the <c>Matrix</c> result of the substraction</returns>
@@ -832,9 +743,7 @@ namespace Euclid
 
         #endregion
 
-        /// <summary>
-        /// Evaluates the matrix raised to a power specified by pow.
-        /// </summary>
+        /// <summary>Evaluates the matrix raised to a power specified by pow</summary>
         /// <param name="matrix">the matrix</param>
         /// <param name="pow">The power to raise the matrix to</param>
         /// <returns>The matrix, raised to the power pow</returns>
@@ -860,9 +769,7 @@ namespace Euclid
 
         #region Create Matrices
 
-        /// <summary>
-        /// Builds a <c>Matrix</c> from a 2d-array of double
-        /// </summary>
+        /// <summary>Builds a <c>Matrix</c> from a 2d-array of double</summary>
         /// <param name="model">the 2d-array of data</param>
         public static Matrix Create(double[,] model)
         {
@@ -893,8 +800,7 @@ namespace Euclid
             return new Matrix(rows, cols, value);
         }
 
-        /// <summary>Creates an empty square Matrix
-        /// </summary>
+        /// <summary>Creates an empty square Matrix</summary>
         /// <param name="dimension">the Matrix's number of rows/columns</param>
         /// <returns>a Matrix</returns>
         public static Matrix CreateSquare(int dimension)
@@ -909,41 +815,26 @@ namespace Euclid
             return new Matrix(2, 2, 0);
         }
 
-        /// <summary>
-        /// Returns a matrix filled with zeroes.
-        /// </summary>
-        /// <param name="iRows">The number of rows of the output</param>
-        /// <param name="iCols">The number of columns of the output</param>
-        /// <returns>A matrix filled with zeroes</returns>
-        public static Matrix CreateZeroMatrix(int iRows, int iCols)
-        {
-            return new Matrix(iRows, iCols, 0);
-        }
-
-        /// <summary>
-        /// Returns a matrix with ones on the diagonal of ones starting at the (0,0) element.
-        /// When the matrix is squared, this is the identity matrix.
-        /// </summary>
+        /// <summary>Returns a matrix with ones on the diagonal of ones starting at the (0,0) element.
+        /// When the matrix is squared, this is the identity matrix</summary>
         /// <param name="iRows">The number of rows of the output</param>
         /// <param name="iCols">The number of columns of the output</param>
         /// <returns>A  matrix with ones on the diagonal of ones starting at the (0,0) element</returns>
         public static Matrix CreateIdentityMatrix(int iRows, int iCols)
         {
-            Matrix matrix = CreateZeroMatrix(iRows, iCols);
+            Matrix matrix = Create(iRows, iCols);
             for (int i = 0; i < Math.Min(iRows, iCols); i++)
                 matrix[i, i] = 1;
             return matrix;
         }
 
-        /// <summary>
-        /// Builds a square symmetric band-matrix
-        /// </summary>
+        /// <summary>Builds a square symmetric band-matrix</summary>
         /// <param name="size">the size of the matrix</param>
         /// <param name="values">the values of the diagonals and sub-diagonals</param>
         /// <returns>a square matrix</returns>
         public static Matrix CreateBandMatrix(int size, params double[] values)
         {
-            Matrix result = CreateZeroMatrix(size, size);
+            Matrix result = Create(size, size);
 
             for (int i = 0; i < size; i++)
                 for (int j = i; j < size; j++)
@@ -965,7 +856,7 @@ namespace Euclid
         /// <returns>a <c>Matrix</c> </returns>
         public static Matrix CreateDiagonalMatrix(params double[] values)
         {
-            Matrix result = CreateZeroMatrix(values.Length, values.Length);
+            Matrix result = Create(values.Length, values.Length);
             for (int i = 0; i < values.Length; i++)
                 result[i, i] = values[i];
             return result;
@@ -1021,9 +912,7 @@ namespace Euclid
         #endregion
 
         #region Extensions
-        /// <summary>
-        /// Returns the product X^T . X
-        /// </summary>
+        /// <summary>Returns the product X^T . X</summary>
         /// <param name="X">the <c>Matrix</c></param>
         /// <returns>the <c>Matrix</c> result of the product</returns>
         public static Matrix TransposeBySelf(Matrix X)
@@ -1055,9 +944,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Returns the product X^T . X using multithreading
-        /// </summary>
+        /// <summary>Returns the product X^T . X using multithreading</summary>
         /// <param name="X">the <c>Matrix</c></param>
         /// <returns>the <c>Matrix</c> result of the product</returns>
         public static Matrix FastTransposeBySelf(Matrix X)
@@ -1087,9 +974,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Applies a function to transform the data of the matrix
-        /// </summary>
+        /// <summary>Applies a function to transform the data of the matrix</summary>
         /// <param name="m">the matrix to transform</param>
         /// <param name="func">the transforming function</param>
         /// <returns>a <c>Matrix</c></returns>
@@ -1100,9 +985,7 @@ namespace Euclid
             return result;
         }
 
-        /// <summary>
-        /// Returns the Hadamard product
-        /// </summary>
+        /// <summary>Returns the Hadamard product</summary>
         /// <param name="m1">the left hand side</param>
         /// <param name="m2">the right hand side</param>
         /// <returns>a <c>Matrix</c> containing the Hadamard product</returns>
@@ -1118,9 +1001,7 @@ namespace Euclid
             throw new ArgumentException("The Hadamard product of two matrices can only be performed if they are the same size");
         }
 
-        /// <summary>
-        /// Returns the scalar product of the matrices
-        /// </summary>
+        /// <summary>Returns the scalar product of the matrices</summary>
         /// <param name="m1">the left hand side</param>
         /// <param name="m2">the right hand side</param>
         /// <returns>a double value</returns>
@@ -1139,9 +1020,7 @@ namespace Euclid
         #endregion
 
         #region Interface Implementations
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object
-        /// </summary>
+        /// <summary>Determines whether the specified object is equal to the current object</summary>
         /// <param name="other">the object to compare with the current object</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c></returns>
         public bool Equals(Matrix other)
@@ -1164,9 +1043,7 @@ namespace Euclid
             return true;
         }
 
-        /// <summary>
-        /// Returns a string that represents the matrix
-        /// </summary>
+        /// <summary>Returns a string that represents the matrix</summary>
         /// <returns>a string that represents the matrix</returns>
         public override string ToString()
         {

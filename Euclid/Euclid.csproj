@@ -66,6 +66,7 @@
     <Compile Include="Analytics\NeuralNetworks\FeedForward\Layer.cs" />
     <Compile Include="Analytics\Regressions\LazyPartialLeastSquaresLinearRegression.cs" />
     <Compile Include="Analytics\Regressions\LASSORegression.cs" />
+    <Compile Include="Analytics\Regressions\LevenbergMarquardt.cs" />
     <Compile Include="Analytics\Regressions\LogisticRegression.cs" />
     <Compile Include="Analytics\Regressions\RIDGERegression.cs" />
     <Compile Include="Analytics\Regressions\OrdinaryLeastSquaresLinearRegression.cs" />
@@ -74,7 +75,7 @@
     <Compile Include="Analytics\Regressions\Scaling.cs" />
     <Compile Include="Analytics\Tests\KolmogorovSmirnovTest.cs" />
     <Compile Include="Arithmetics\BinomialCoefficients.cs" />
-    <Compile Include="Arithmetics\Subsets.cs" />
+    <Compile Include="Extensions\Subsets.cs" />
     <Compile Include="Complex.cs" />
     <Compile Include="Distributions\Continuous\CauchyDistribution.cs" />
     <Compile Include="Distributions\Continuous\ChiSquaredDistribution.cs" />
@@ -103,13 +104,14 @@
     <Compile Include="Distributions\Discrete\SkellamDistribution.cs" />
     <Compile Include="Distributions\FittingMethod.cs" />
     <Compile Include="Distributions\IDistribution.cs" />
-    <Compile Include="Helpers\Arrays.cs" />
+    <Compile Include="Extensions\Arrays.cs" />
+    <Compile Include="Extensions\Loops.cs" />
     <Compile Include="Helpers\Geodesic\Coordinates.cs" />
     <Compile Include="Helpers\Geodesic\Ellipsoid.cs" />
     <Compile Include="Helpers\Geodesic\Helper.cs" />
-    <Compile Include="Helpers\Parser.cs" />
+    <Compile Include="Extensions\Parser.cs" />
     <Compile Include="Helpers\Quantilizer.cs" />
-    <Compile Include="Helpers\RandomHelper.cs" />
+    <Compile Include="Extensions\Randomizer.cs" />
     <Compile Include="Histograms\Bound.cs" />
     <Compile Include="Histograms\Interval.cs" />
     <Compile Include="Histograms\Histogram.cs" />

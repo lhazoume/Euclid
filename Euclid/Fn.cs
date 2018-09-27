@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid
 {
@@ -960,32 +956,35 @@ namespace Euclid
             return Math.Min(Math.Max(1e-15, 1 / (1 + Math.Exp(-x))), 1 - 1e-15);
         }
 
+        /// <summary>Evaluates the logistic function (sigmoïd)</summary>
+        /// <param name="theta">the scaling vector</param>
+        /// <param name="x">the input vector</param>
+        /// <returns></returns>
         public static double LogisticFunction(Vector theta, Vector x)
         {
             return LogisticFunction(Vector.Scalar(theta, x));
         }
 
-        /// <summary>
-        /// Returns the factorial of the specified number.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static double fac(double x)
-        {
-            double d = Math.Abs(x);
-            if (Math.Floor(d) == d) return (double)Factorial((int)x);
-            else return Gamma(x + 1.0);
-        }
-
-        /// <summary>
-        /// Returns the factorial of the specified number.
-        /// </summary>
-        /// <param name="j"></param>
-        /// <returns></returns>
+        /// <summary>Returns the factorial of the specified number</summary>
+        /// <param name="j">the target number</param>
+        /// <returns>the factorial</returns>
         public static int Factorial(int j)
         {
-            int i = j;
-            int d = 1;
+            int i = j,
+                d = 1;
+            if (j < 0) i = Math.Abs(j);
+            while (i > 1)
+                d *= i--;
+            return j < 0 ? -d : d;
+        }
+
+        /// <summary>Returns the factorial of the specified number</summary>
+        /// <param name="j">the target number</param>
+        /// <returns>the factorial</returns>
+        public static long Factorial(long j)
+        {
+            long i = j,
+                d = 1;
             if (j < 0) i = Math.Abs(j);
             while (i > 1)
                 d *= i--;
@@ -1076,9 +1075,7 @@ namespace Euclid
             return 2 * sum;
         }
 
-        /// <summary>
-        /// Returns the sum of the first k terms of the Poisson distribution.
-        /// </summary>
+        /// <summary>Returns the sum of the first k terms of the Poisson distribution</summary>
         /// <param name="k">number of terms</param>
         /// <param name="x">double value</param>
         /// <returns></returns>

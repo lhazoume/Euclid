@@ -169,96 +169,6 @@ namespace Euclid.Solvers
         #endregion
 
         /// <summary>Minimizes the function using the Nelder Mead algorithm</summary>
-        public void Solve()
-        {
-            #region Parameters
-            Vector[] simplex = _initialPopulationGenerator(_dimension + 1);
-            Vector centroid = Vector.Create(_dimension);
-            double[] functionValues = new double[_dimension + 1];
-            int[] indices = new int[_dimension + 1];
-            #endregion
-
-            int iterations = 0;
-
-            while (iterations < _maxIterations)
-            {
-                #region Evaluate and order the values and indices
-                Parallel.For(0, _dimension + 1, s =>
-                {
-                    functionValues[s] = _function(simplex[s]);
-                    indices[s] = s;
-                });
-
-                Array.Sort(functionValues, indices);
-                #endregion
-
-                #region Find centroid of the simplex excluding the vertex with highest functionvalue.
-                centroid = Vector.Create(_dimension);
-                for (int s = 0; s <= _dimension; s++)
-                    if (s != indices[_dimension])
-                        centroid += simplex[s];
-
-                centroid /= _dimension;
-                #endregion
-
-                _convergence.Add(new Tuple<Vector, double>(simplex[0].Clone, functionValues[0]));
-                Console.WriteLine(string.Format("Convergence = {0}", functionValues[0]));
-                if (Math.Abs(_function(centroid) - functionValues[0]) < _epsilon)
-                {
-                    break;
-                }
-
-                #region Reflection
-                Vector reflectionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 + _alpha, centroid, -_alpha, simplex[indices[_dimension]]), _upperBound));
-                double reflectionValue = _function(reflectionPoint);
-                if (reflectionValue >= functionValues[0] & reflectionValue < functionValues[_dimension - 1])
-                {
-                    simplex[indices[_dimension]] = reflectionPoint;
-                    iterations++;
-                    Console.WriteLine(string.Format("Reflection value = {0}", reflectionValue));
-                    continue;
-                }
-                #endregion
-
-                #region Expansion
-                if (reflectionValue < functionValues[0])
-                {
-                    Vector expansionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _gamma, centroid, _gamma, reflectionPoint), _upperBound));
-                    double expansionValue = _function(expansionPoint);
-                    simplex[indices[_dimension]] = expansionValue < reflectionValue ? expansionPoint : reflectionPoint;
-                    iterations++;
-                    Console.WriteLine(string.Format("Expansion value = {0}", expansionValue));
-                    continue;
-                }
-                #endregion
-
-                #region Contraction
-                Vector contractionPoint = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _rho, centroid, _rho, simplex[indices[_dimension]]), _upperBound));
-                double contractionValue = _function(contractionPoint);
-                if (contractionValue < functionValues[_dimension])
-                {
-                    simplex[indices[_dimension]] = contractionPoint;
-                    iterations++;
-                    Console.WriteLine(string.Format("Contraction value = {0}", contractionValue));
-                    continue;
-                }
-                #endregion
-
-                #region Shrink
-                Vector bestPoint = simplex[indices[0]];
-                for (int s = 0; s <= _dimension; s++)
-                    simplex[s] = Vector.Max(_lowerBound, Vector.Min(Vector.Create(1 - _sigma, bestPoint, _sigma, simplex[s]), _upperBound));
-
-                Console.WriteLine("Shrink");
-                #endregion
-
-                iterations++;
-            }
-
-            _result = simplex[indices[0]];
-            _status = iterations >= _maxIterations ? SolverStatus.IterationExceeded : SolverStatus.FunctionConvergence;
-        }
-
         private class VectorValuePair
         {
             public Vector Vector;
@@ -271,7 +181,7 @@ namespace Euclid.Solvers
             }
         }
 
-        public void SolveFast()
+        public void Solve()
         {
             #region Parameters
             List<VectorValuePair> simplex = _initialPopulationGenerator(_dimension + 1).Select(v => new VectorValuePair(v, _function(v))).ToList();
@@ -285,14 +195,13 @@ namespace Euclid.Solvers
 
             while (iterations < _maxIterations)
             {
-                #region Evaluate and order the values and indices
+                // Evaluate and order the values and indices
                 simplex.Sort((x, y) => x.Value.CompareTo(y.Value));
-                #endregion
 
                 //Find centroid of the simplex excluding the vertex with highest functionvalue
                 centroid = Vector.AggregateSum(simplex.GetRange(0, _dimension).Select(p => p.Vector).ToList()) / _dimension;
+
                 _convergence.Add(new Tuple<Vector, double>(simplex[0].Vector.Clone, simplex[0].Value));
-                Console.WriteLine(string.Format("Convergence = {0}", simplex[0].Value));
                 if (Math.Abs(_function(centroid) - simplex[0].Value) < _epsilon)
                 {
                     break;
@@ -306,7 +215,6 @@ namespace Euclid.Solvers
                     simplex[_dimension].Vector = reflectionPoint;
                     simplex[_dimension].Value = reflectionValue;
 
-                    Console.WriteLine(string.Format("Reflection value = {0}", reflectionValue));
                     iterations++;
                     continue;
                 }
@@ -320,7 +228,6 @@ namespace Euclid.Solvers
                     simplex[_dimension].Vector = expansionValue < reflectionValue ? expansionPoint : reflectionPoint;
                     simplex[_dimension].Value = expansionValue < reflectionValue ? expansionValue : reflectionValue;
 
-                    Console.WriteLine(string.Format("Expansion value = {0}", expansionValue));
                     iterations++;
                     continue;
                 }
@@ -347,7 +254,6 @@ namespace Euclid.Solvers
                       simplex[s].Value = _function(simplex[s].Vector);
                   });
 
-                Console.WriteLine("Shrink");
                 #endregion
 
                 iterations++;

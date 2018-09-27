@@ -4,9 +4,7 @@ using System.Linq;
 
 namespace Euclid.Solvers
 {
-    /// <summary>
-    /// Class used to perform a gradient descent on any multivariate function
-    /// </summary>
+    /// <summary>Class used to perform a gradient descent on any multivariate function</summary>
     public class GradientDescent
     {
         #region Declarations
@@ -22,9 +20,11 @@ namespace Euclid.Solvers
         private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private LineSearch _lineSearch;
         private readonly OptimizationType _optimizationType;
-        private int _sign;
+        private readonly int _sign;
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion
+
+        #region Constructors
 
         /// <summary>Builds a GradientDescent helper</summary>
         /// <param name="initialGuess">the initial guess Vector</param>
@@ -96,9 +96,9 @@ namespace Euclid.Solvers
             _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
         }
 
-        #region Accessors
+        #endregion
 
-        #region Settables
+        #region Accessors
 
         /// <summary>Gets and sets the line search method used to optimize the step</summary>
         public LineSearch LineSearch
@@ -113,10 +113,6 @@ namespace Euclid.Solvers
             get { return _function; }
             set { _function = value; }
         }
-
-        #endregion
-
-        #region Get
 
         /// <summary>The final status of the solver</summary>
         public SolverStatus Status
@@ -165,8 +161,6 @@ namespace Euclid.Solvers
         {
             get { return _optimizationType; }
         }
-
-        #endregion
 
         #endregion
 
@@ -456,6 +450,73 @@ namespace Euclid.Solvers
             _status = endCriteria.Status;
         }
 
+        /// <summary>Optimizes the function using classic Gradient Descent inside a box</summary>
+        /// <param name="momentum">the momentum of the descent</param>
+        /// <param name="lowBound">the lower bounds of the box</param>
+        /// <param name="upBound">the upper bounds of the box</param>
+        public void OptimizeUnderBoxConstraint(double momentum, Vector lowBound, Vector upBound)
+        {
+            #region Check borders and function
+            if (Enumerable.Range(0, _initialGuess.Size).Any(i => lowBound[i] >= upBound[i]))
+                throw new Exception("The bounds are not coherent");
+
+            if (_function == null)
+                throw new NullReferenceException("The function should not be null");
+
+            if (momentum < 0)
+                throw new ArgumentOutOfRangeException("The momentum should not be negative");
+            #endregion
+
+            _evaluations = 0;
+
+            _descentDirections.Clear();
+            _convergence.Clear();
+
+            _result = _initialGuess.Clone;
+            _status = SolverStatus.Diverged;
+            _error = _function(_result);
+            _evaluations++;
+
+            Vector gradient = _gradient(_result),
+                direction = ConstrainedDirection(_result, _sign * gradient, lowBound, upBound);
+
+            _descentDirections.Add(direction.Clone);
+            _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, maxStaticIterations: _maxLineSearchIterations, gradientEpsilon: _gradientThreshold);
+
+            while (!endCriteria.ShouldStop(_error, gradient.Norm2))
+            {
+                double factor = LineSearchBranch(_error, _result, direction, gradient);
+                _result = _result + (factor * direction);
+
+                _error = _function(_result);
+                _evaluations++;
+                gradient = _gradient(_result);
+                direction = ConstrainedDirection(_result, Vector.Create(momentum, direction, _sign, gradient), lowBound, upBound);
+
+                _descentDirections.Add(direction.Clone);
+                _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
+            }
+
+            _status = endCriteria.Status;
+        }
+
+        /// <summary>Returns a corrected version of the descent direction in order to avoid breaching the box constraints</summary>
+        /// <param name="x">the position</param>
+        /// <param name="d">the direction</param>
+        /// <param name="l">the upper bound</param>
+        /// <param name="u">the lower bound</param>
+        /// <returns>a <c>Vector</c></returns>
+        private static Vector ConstrainedDirection(Vector x, Vector d, Vector l, Vector u)
+        {
+            int dimension = x.Size;
+            Vector result = Vector.Create(dimension);
+
+            for (int i = 0; i < dimension; i++)
+                result[i] = Math.Max(l[i] - x[i], Math.Min(d[i], u[i] - x[i]));
+
+            return result;
+        }
         #endregion
     }
 }

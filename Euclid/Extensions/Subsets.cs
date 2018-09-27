@@ -69,43 +69,5 @@ namespace Euclid.Arithmetics
             }
         }
 
-        /// <summary>Shuffles a list of template type</summary>
-        /// <typeparam name="T">the template type<typeparam>
-        /// <param name="list">the list to shuffle</param>
-        /// <param name="randomNumberGenerator">the random number generator</param>
-        public static void Shuffle<T>(this IList<T> list, Random randomNumberGenerator)
-        {
-            if (randomNumberGenerator == null) return;
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = randomNumberGenerator.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
-        }
-
-        public static List<int> PickRandomIndices(int maxExcludedValue, int numberOfPicks, Random randomNumberGenerator)
-        {
-            List<int> result = new List<int>();
-
-            while(result.Count < numberOfPicks)
-            {
-                int randomNumber = randomNumberGenerator.Next(maxExcludedValue);
-                if (!result.Contains(randomNumber))
-                    result.Add(randomNumber);
-            }
-
-            return result;
-        }
-
-        public static List<T> CloneAndShuffle<T>(this IList<T> list, Random randomNumberGenerator)
-        {
-            List<int> indexes = Enumerable.Range(0, list.Count).ToList();
-            indexes.Shuffle(randomNumberGenerator);
-            return indexes.Select(i => list[i]).ToList();
-        }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.Helpers
+namespace Euclid.Extensions
 {
     /// <summary>Helper class for generic array manipulations</summary>
     public static class Arrays

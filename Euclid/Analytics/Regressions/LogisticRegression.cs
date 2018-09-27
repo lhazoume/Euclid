@@ -54,9 +54,7 @@ namespace Euclid.Analytics.Regressions
         #endregion
 
         #region Get
-        /// <summary>
-        /// Gets the result <c>LinearModel</c>
-        /// </summary>
+        /// <summary>Returns the result <c>LinearModel</c></summary>
         public LogisticModel LogisticModel
         {
             get { return _logisticModel; }

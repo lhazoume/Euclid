@@ -1,4 +1,4 @@
-﻿using Euclid.Helpers;
+﻿using Euclid.Extensions;
 using Euclid.IndexedSeries;
 using System;
 

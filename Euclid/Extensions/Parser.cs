@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Euclid.Helpers
+namespace Euclid.Extensions
 {
-    /// <summary>
-    /// Parser helper class
+    /// <summary>Parser helper class
     /// </summary>
     public static class Parser
     {
-        /// <summary>
-        /// Parses any data generic type when possible
-        /// </summary>
+        /// <summary>Parses any data generic type when possible</summary>
         /// <typeparam name="T">the generic type</typeparam>
         /// <param name="text"></param>
         /// <returns>a T</returns>

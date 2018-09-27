@@ -36,3 +36,9 @@ EuclidTests/obj/Release/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC
 Euclid/bin/Debug/Euclid.dll.CodeAnalysisLog.xml
 *.lastcodeanalysissucceeded
 Euclid/obj/Debug/Euclid.csproj.FileListAbsolute.txt
+.vs/Euclid/DesignTimeBuild/.dtbcache
+.vs/Euclid/v15/Server/sqlite3/db.lock
+*.ide
+*.ide-shm
+*.ide-wal
+*.lastcodeanalysissucceeded

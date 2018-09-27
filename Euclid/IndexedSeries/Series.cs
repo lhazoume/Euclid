@@ -1,4 +1,5 @@
-﻿using Euclid.Helpers;
+﻿using Euclid.Extensions;
+using Euclid.Helpers;
 using Euclid.Serialization;
 using System;
 using System.Collections.Generic;

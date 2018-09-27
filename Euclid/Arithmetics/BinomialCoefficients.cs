@@ -1,16 +1,12 @@
 ﻿namespace Euclid.Arithmetics
 {
-    /// <summary>
-    /// Binomial coefficients class
-    /// </summary>
+    /// <summary>Binomial coefficients class</summary>
     public class BinomialCoefficients
     {
         private int[] _coefficients;
         private int _degree;
 
-        /// <summary>
-        /// Calculates all the binomial coefficients for a given degree
-        /// </summary>
+        /// <summary>Calculates all the binomial coefficients for a given degree</summary>
         /// <param name="n">the degree</param>
         public BinomialCoefficients(int n)
         {

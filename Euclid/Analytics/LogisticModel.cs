@@ -21,10 +21,7 @@ namespace Euclid.Analytics
         /// <summary>Default constructor for a linear model</summary>
         /// <param name="constant">the constant term</param>
         /// <param name="factors">the regression coefficients</param>
-        /// <param name="correlations">the zero-degree correlations</param>
-        /// <param name="sampleSize">the sample size</param>
-        /// <param name="SSE">the sum of squared due to error</param>
-        /// <param name="SSR">the sum of squared due to the regression</param>
+        /// <param name="r2">the R squared</param>
         /// <param name="succeeded">the status of the regression</param>
         private LogisticModel(double constant, double[] factors, double r2, bool succeeded)
         {
@@ -37,6 +34,7 @@ namespace Euclid.Analytics
 
         /// <summary> Builds a constant linear model</summary>
         /// <param name="constant">the constant</param>
+        /// <param name="r2">the R squared</param>
         public LogisticModel(double constant, double r2)
             : this(constant, new double[] { 0 }, r2, false)
         { }
@@ -44,6 +42,7 @@ namespace Euclid.Analytics
         /// <summary> Builds a linear model for a succesful regression </summary>
         /// <param name="constant">the regression constant term</param>
         /// <param name="factors">the regression linear coefficients</param>
+        /// <param name="r2">the R squared</param>
         public LogisticModel(double constant, double[] factors, double r2)
             : this(constant, factors, r2, true)
         { }
@@ -57,6 +56,7 @@ namespace Euclid.Analytics
             get { return _succeeded ? _constant : 0; }
         }
 
+        /// <summary>Returns the R-squared</summary>
         public double R2
         {
             get { return _r2; }
