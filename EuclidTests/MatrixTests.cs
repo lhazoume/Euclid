@@ -56,17 +56,20 @@ namespace Euclid.Tests
         }
 
         [TestMethod()]
-        public void CreateZeroMatrixTest()
+        public void CreateTest5()
         {
             int rows = 5,
                 cols = 8;
-            Matrix z = Matrix.CreateZeroMatrix(rows, cols);
+            Matrix z = Matrix.Create(rows, cols);
 
             bool succeeded = true;
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < cols; j++)
                     if (z[i, j] != 0)
+                    {
                         succeeded = false;
+                        break;
+                    }
             Assert.IsTrue(succeeded, "The zero matrix doesnot contain only zeros");
         }
 
