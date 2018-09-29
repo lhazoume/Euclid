@@ -115,7 +115,6 @@
     <Compile Include="Histograms\Bound.cs" />
     <Compile Include="Histograms\Interval.cs" />
     <Compile Include="Histograms\Histogram.cs" />
-    <Compile Include="IndexedSeries\DataFrameHelper.cs" />
     <Compile Include="IndexedSeries\Header.cs" />
     <Compile Include="IndexedSeries\Slice.cs" />
     <Compile Include="LinearAlgebra\EigenDecomposition.cs" />

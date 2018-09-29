@@ -48,7 +48,7 @@ namespace Euclid.Solvers.Tests
                 OptimizationType.Min,
                 s => Enumerable.Range(0, s).Select(i => Vector.CreateRandom(dimension, uniform)).ToArray(),
                 100, 10);
-            pso.Solve();
+            pso.Solve(false);
 
             Assert.IsTrue(Rosenbrock(pso.Result) < 1e-5);
         }
@@ -64,7 +64,7 @@ namespace Euclid.Solvers.Tests
                 OptimizationType.Min,
                 s => Enumerable.Range(0, s).Select(i => Vector.CreateRandom(dimension, uniform)).ToArray(),
                 10000, 100);
-            pso.Solve();
+            pso.Solve(false);
 
             Assert.IsTrue(Rastrigin(pso.Result) < 1e-5);
         }

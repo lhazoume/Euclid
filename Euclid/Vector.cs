@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Euclid
 {
-    /// <summary>
-    /// Vector of double class
-    /// </summary>
+    /// <summary>Vector of double class</summary>
     public class Vector
     {
         #region Declarations
@@ -310,6 +308,9 @@ namespace Euclid
             throw new ArgumentException("The scalar product of two matrices can only be performed if they are the same size");
         }
 
+        /// <summary>Aggregates a list of <c>Vector</c></summary>
+        /// <param name="vectors">the vectors to sum</param>
+        /// <returns>a <c>Vector</c></returns>
         public static Vector AggregateSum(IList<Vector> vectors)
         {
             if (vectors.Count == 0)
@@ -403,6 +404,11 @@ namespace Euclid
             throw new RankException("The vectors have different sizes.");
         }
 
+        /// <summary>Builds a Vector made of the values bounded</summary>
+        /// <param name="lowBound">the lower bounds</param>
+        /// <param name="upBound">the upper bounds</param>
+        /// <param name="x">the vector to bound</param>
+        /// <returns>a <c>Vector</c></returns>
         public static Vector Bound(Vector lowBound, Vector upBound, Vector x)
         {
             if (lowBound.Size == upBound.Size && x.Size == lowBound.Size)

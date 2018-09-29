@@ -76,6 +76,16 @@ namespace Euclid.Solvers
             _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
         }
 
+        /// <summary>Gradient descent constructor</summary>
+        /// <param name="initialGuess">the initial guess Vector</param>
+        /// <param name="lineSearch">the line search method</param>
+        /// <param name="function">the function to minimize</param>
+        /// <param name="gradient">the gradient of the function to minimize</param>
+        /// <param name="hessian">the hessian matrix of the function to minimize</param>
+        /// <param name="optimizationType">the optimization type</param>
+        /// <param name="maxIterations">the maximum number of iterations in the gradient</param>
+        /// <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
+        /// <param name="gradientNormThreshold">the threshold for the gradient norm</param>
         public GradientDescent(Vector initialGuess, LineSearch lineSearch,
             Func<Vector, double> function, Func<Vector, Vector> gradient, Func<Vector, Matrix> hessian,
             OptimizationType optimizationType,
@@ -310,6 +320,8 @@ namespace Euclid.Solvers
         }
         #endregion
 
+        #region Optimize
+
         /// <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
         /// <param name="momentum">the momentum of the descent</param>
         public void Optimize(double momentum = 0)
@@ -398,6 +410,7 @@ namespace Euclid.Solvers
             _status = endCriteria.Status;
         }
 
+        /// <summary>Optimizes the function using the conjugate gradient descent</summary>
         public void OptimizeConjugate()
         {
             _evaluations = 0;
@@ -517,6 +530,8 @@ namespace Euclid.Solvers
 
             return result;
         }
+        #endregion
+
         #endregion
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Euclid.IndexedSeries;
 using Euclid.Solvers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Euclid.Analytics.Regressions
@@ -66,6 +65,7 @@ namespace Euclid.Analytics.Regressions
             get { return _status; }
         }
 
+        /// <summary>Returns the final log-likelihood of the regression</summary>
         public double LogLikelihood
         {
             get { return _finalLogLikelihood; }
@@ -74,7 +74,7 @@ namespace Euclid.Analytics.Regressions
 
         #endregion
 
-        private double Func(Vector theta, Vector[] Xrows, Vector Y)
+        private static double Func(Vector theta, Vector[] Xrows, Vector Y)
         {
             double result = 0,
                 p = 0;
@@ -86,7 +86,7 @@ namespace Euclid.Analytics.Regressions
             return result / Y.Size;
         }
 
-        private double Func(double intersect, Vector Y)
+        private static double Func(double intersect, Vector Y)
         {
             double result = 0,
                 p = Fn.LogisticFunction(intersect);
@@ -95,7 +95,7 @@ namespace Euclid.Analytics.Regressions
             return result / Y.Size;
         }
 
-        private Vector Gradient(Vector theta, Vector[] Xrows, Vector Y)
+        private static Vector Gradient(Vector theta, Vector[] Xrows, Vector Y)
         {
             int p = theta.Size,
                 n = Y.Size;
@@ -111,7 +111,7 @@ namespace Euclid.Analytics.Regressions
             return result;
         }
 
-        private Matrix Hessian(Vector theta, Vector[] Xrows, Vector Y)
+        private static Matrix Hessian(Vector theta, Vector[] Xrows, Vector Y)
         {
             int p = theta.Size,
                 n = Y.Size;
@@ -134,7 +134,8 @@ namespace Euclid.Analytics.Regressions
             return result;
         }
 
-        /// <summary>Performs the regression</summary>
+        #region Regress methods
+        /// <summary>Performs the regression using gradient descent</summary>
         public void RegressUsingGradientDescent(double momentum)
         {
             #region Load data
@@ -193,6 +194,7 @@ namespace Euclid.Analytics.Regressions
             #endregion
         }
 
+        /// <summary>Performs the regression using conjugate gradient descent</summary>
         public void RegressUsingConjugateGradientDescent()
         {
             #region Load data
@@ -254,5 +256,6 @@ namespace Euclid.Analytics.Regressions
             }
             #endregion
         }
+        #endregion
     }
 }

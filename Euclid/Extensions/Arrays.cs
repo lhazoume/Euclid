@@ -83,5 +83,22 @@ namespace Euclid.Extensions
 
             return result;
         }
+
+        /// <summary>Find indices according to a predicate</summary>
+        /// <typeparam name="T">the item type</typeparam>
+        /// <param name="items">the candidates</param>
+        /// <param name="predicate">the predicate</param>
+        /// <returns>the matching indices</returns>
+        public static IEnumerable<int> FindIndices<T>(this IEnumerable<T> items, Func<T, bool> predicate)
+        {
+            int i = 0;
+
+            foreach (var item in items)
+            {
+                if (predicate(item))
+                    yield return i;
+                i++;
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace Euclid.Extensions
         /// <param name="toExclusive">the end index, excluded</param>
         /// <param name="body">the action executed on every loop</param>
         /// <param name="isParallel">determines whether the loop is sequential or parallel</param>
-        public static void For(int fromInclusive, int toExclusive, Action<int> body, bool isParallel)
+        public static void For(int fromInclusive, int toExclusive, bool isParallel, Action<int> body)
         {
             if (isParallel)
                 Parallel.For(fromInclusive, toExclusive, body);

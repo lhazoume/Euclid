@@ -146,6 +146,8 @@ namespace Euclid.IndexedSeries
             return Equals(item);
         }
 
+        /// <summary>Returns a hash code</summary>
+        /// <returns>an <c>Integer</c></returns>
         public override int GetHashCode()
         {
             return base.GetHashCode();
@@ -159,6 +161,7 @@ namespace Euclid.IndexedSeries
             if (other == null || this.Count != other.Count) return false;
             return _map.Lefts.SequenceEqual(other._map.Lefts) && _map.Rights.SequenceEqual(other._map.Rights);
         }
+
 
         /// <summary>Equality operator</summary>
         /// <param name="h1">the left-hand-side header</param>

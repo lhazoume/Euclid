@@ -350,12 +350,16 @@ namespace Euclid.IndexedSeries
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the series</param>
-        /// <returns></returns>
+        /// <returns>a <c>Series</c></returns>
         public static Series<T, U, V> Create(V label, IEnumerable<T> legends, IEnumerable<U> data)
         {
             return new Series<T, U, V>(label, new Header<T>(legends.ToArray()), data.ToArray());
         }
 
+        /// <summary>Builds a <c>Series</c> from generic enumerables of legends</summary>
+        /// <param name="label">the label</param>
+        /// <param name="legends">the legends</param>
+        /// <returns>a <c>Series</c></returns>
         public static Series<T, U, V> Create(V label, IEnumerable<T> legends)
         {
             return new Series<T, U, V>(label, new Header<T>(legends.ToArray()), new U[legends.Count()]);

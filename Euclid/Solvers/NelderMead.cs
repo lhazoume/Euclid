@@ -181,7 +181,8 @@ namespace Euclid.Solvers
             }
         }
 
-        public void Solve()
+        /// <summary>Minimizes the function</summary>
+        public void Optimize()
         {
             #region Parameters
             List<VectorValuePair> simplex = _initialPopulationGenerator(_dimension + 1).Select(v => new VectorValuePair(v, _function(v))).ToList();

@@ -30,6 +30,7 @@ namespace Euclid.IndexedSeries
 
         /// <summary>Builds a <c>DataFrame</c> from its serialized form</summary>
         /// <param name="node">the <c>XmlNode</c></param>
+        /// <returns>a <c>DataFrame</c></returns>
         public static DataFrame<T, U, V> Create(XmlNode node)
         {
 
@@ -69,18 +70,20 @@ namespace Euclid.IndexedSeries
             return new DataFrame<T, U, V>(labels, legends, data);
         }
 
-        /// <summary>
-        /// Builds a <c>DataFrame</c>
-        /// </summary>
+        /// <summary>Builds a <c>DataFrame</c> </summary>
         /// <param name="labels">the labels</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
+        /// <returns>a <c>DataFrame</c></returns>
         public static DataFrame<T, U, V> Create(IList<V> labels, IList<T> legends, U[,] data)
         {
             return new DataFrame<T, U, V>(labels, legends, data);
         }
 
-
+        /// <summary>Builds a <c>DataFrame</c></summary>
+        /// <param name="labels">the labels</param>
+        /// <param name="legends">the legends</param>
+        /// <returns>a <c>DataFrame</c></returns>
         public static DataFrame<T, U, V> Create(IList<V> labels, IList<T> legends)
         {
             return new DataFrame<T, U, V>(labels, legends, new U[legends.Count, labels.Count]);
@@ -204,18 +207,10 @@ namespace Euclid.IndexedSeries
 
         #region Label
 
-        /// <summary>
-        /// Return the label rank
-        /// </summary>
-        /// <param name="label">targeting label</param>
-        /// <returns>rank</returns>
+        /// <summary>Returns the label rank</summary>
+        /// <param name="label">the target label</param>
+        /// <returns>an <c>Integer</c></returns>
         public int GetLabelRank(V label) { return _labels.Contains(label) ? _labels[label] : -1; }
-
-        #endregion
-
-        #region legend
-
-        public T GetLegendAt(int index) { return _legends.ElementAt(index); }
 
         #endregion
 

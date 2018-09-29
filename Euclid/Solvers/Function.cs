@@ -159,10 +159,6 @@ namespace Euclid.Solvers
         #endregion
 
         #region Base
-        public static Function Zero
-        {
-            get { return new Function(v => 0, v => Vector.Create(v.Size)); }
-        }
 
         /// <summary>Builds a function operating a scalar product vs the given vector</summary>
         /// <param name="alt">the vector</param>
@@ -179,6 +175,7 @@ namespace Euclid.Solvers
         {
             return new Function(v => Vector.Quadratic(v, a, v), v => v * (a + a.Transpose));
         }
+
         #endregion
     }
 }

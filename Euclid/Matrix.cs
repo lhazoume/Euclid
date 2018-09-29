@@ -132,6 +132,19 @@ namespace Euclid
             }
         }
 
+
+        /// <summary>Returns the diagonal matrix of the current Matrix</summary>
+        public Matrix Diagonal
+        {
+            get
+            {
+                Matrix result = new Matrix(_rows, _cols, 0);
+                for (int i = 0; i < Math.Min(_rows, _cols); i++)
+                    result[i * (1 + _cols)] = this[i * (1 + _cols)];
+                return result;
+            }
+        }
+
         #region Inversion
 
         /// <summary>The Lower triangular part of the LU decomposition</summary>
@@ -496,12 +509,20 @@ namespace Euclid
             return sub;
         }
 
-        /// <summary>Replaces the column of index k with the input matrix v</summary>
+        /// <summary>Replaces the column of index k with the input Vector v</summary>
         /// <param name="v">Column replacing the old one</param>
         /// <param name="k">Index of the column to replace</param>
         public void SetCol(Vector v, int k)
         {
             for (int i = 0; i < _rows; i++) _data[i * _cols + k] = v[i];
+        }
+
+        /// <summary>Replaces the row of index k with the input Vector v</summary>
+        /// <param name="v">Row replacing the old one</param>
+        /// <param name="k">Index of the row to replace</param>
+        public void SetRow(Vector v, int k)
+        {
+            for (int i = 0; i < _cols; i++) _data[k * _cols + i] = v[i];
         }
 
         /// <summary>Solves the equation : A*x=v, where A is the Matrix, x the unknown, v the input argument</summary>
