@@ -22,7 +22,7 @@ namespace Euclid.Analytics.Regressions
         private double _finalLogLikelihood = double.MinValue;
         private LogisticModel _logisticModel = null;
 
-        #region Estimates the function and the jacobian
+        #region Estimates the function,the jacobian and the increment
         private static Vector Function(Vector beta, DataFrame<T, double, V> x, Func<Vector, Vector, double> function)
         {
             Slice<T, double, V>[] slices = x.GetSlices();
@@ -47,7 +47,7 @@ namespace Euclid.Analytics.Regressions
         }
         #endregion
 
-        public void Optimize(double lambda0, double vu)
+        public void Optimize(double lambda0, double v)
         {
             double lambda;
         }
