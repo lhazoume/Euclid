@@ -15,7 +15,7 @@ namespace Euclid.Solvers
         private readonly Func<Vector, double> _function;
         private readonly OptimizationType _optimizationType;
 
-        private readonly Func<int, Vector[]> _initialPopulationGenerator;
+        private readonly Vector[] _initialPopulation;
 
         private List<Tuple<Vector, double>> _convergence = new List<Tuple<Vector, double>>();
         private SolverStatus _status;
@@ -37,7 +37,7 @@ namespace Euclid.Solvers
         /// <param name="sigma">the shrink coefficient</param>
         public NelderMead(Vector lowerBounds, Vector upperBounds,
             Func<Vector, double> function,
-            Func<int, Vector[]> initialPopulationGenerator,
+            Vector[] initialSimplex,
             OptimizationType optimizationType,
             int maxIterations,
             double epsilon = 1e-8,
@@ -67,7 +67,7 @@ namespace Euclid.Solvers
             #endregion
 
             _function = function;
-            _initialPopulationGenerator = initialPopulationGenerator;
+            _initialPopulation = initialSimplex.ToArray();
             _status = SolverStatus.NotRan;
             _optimizationType = optimizationType;
 
@@ -185,10 +185,8 @@ namespace Euclid.Solvers
         public void Optimize()
         {
             #region Parameters
-            List<VectorValuePair> simplex = _initialPopulationGenerator(_dimension + 1).Select(v => new VectorValuePair(v, _function(v))).ToList();
+            List<VectorValuePair> simplex = _initialPopulation.Select(v => new VectorValuePair(v.Clone, _function(v))).ToList();
             Vector centroid = Vector.Create(_dimension);
-            //double[] functionValues = new double[_dimension + 1];
-            //int[] indices = new int[_dimension + 1];
             #endregion
 
             int iterations = 0;
