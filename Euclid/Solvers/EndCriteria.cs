@@ -61,6 +61,14 @@ namespace Euclid.Solvers
             return ExceededIterations() || BelowFunctionEpsilon(value) || ExceededMaxStaticIterations();
         }
 
+        /// <summary>Specifies whether the end criteria are met for the current value</summary>
+        /// <returns>a boolean</returns>
+        public bool ShouldStop()
+        {
+            _iterations++;
+            return ExceededIterations();
+        }
+
         /// <summary>Gets the current status of the optimization controlled by this end criteria</summary>
         public SolverStatus Status
         {

@@ -66,5 +66,26 @@ namespace Euclid.Extensions
 
             return result;
         }
+
+        /// <summary>Picks random number</summary>
+        /// <param name="fromIncluded">the lower bound (included)</param>
+        /// <param name="toExcluded">the upper bound (excluded)</param>
+        /// <param name="numberOfPicks">the number of number wanted</param>
+        /// <param name="forbiddenValues">the forbidden values</param>
+        /// <param name="randomNumberGenerator">a random object</param>
+        /// <returns>a list of numbers</returns>
+        public static List<int> PickRandomNumbers(int fromIncluded, int toExcluded, int numberOfPicks, IEnumerable<int> forbiddenValues, Random randomNumberGenerator)
+        {
+            List<int> result = new List<int>();
+
+            while (result.Count < numberOfPicks)
+            {
+                int randomNumber = randomNumberGenerator.Next(fromIncluded, toExcluded);
+                if (!result.Contains(randomNumber) && !forbiddenValues.Contains(randomNumber))
+                    result.Add(randomNumber);
+            }
+
+            return result;
+        }
     }
 }

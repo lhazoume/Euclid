@@ -28,7 +28,7 @@ namespace Euclid.Solvers
         /// <param name="upperBounds">the upper bounds of the space</param>
         /// <param name="function">the function to optimize</param>
         /// <param name="optimizationType">the optimization type</param>
-        /// <param name="initialPopulationGenerator">a generator of seed vectors</param>
+        /// <param name="initialSimplex">the initial population</param>
         /// <param name="maxIterations">the maximum number of iterations</param>
         /// <param name="epsilon">the convergence threshold</param>
         /// <param name="alpha">the reflection coefficient</param>

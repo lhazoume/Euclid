@@ -2,9 +2,7 @@
 
 namespace Euclid.Serialization
 {
-    /// <summary>
-    /// Interface allowing serialization to an XML files
-    /// </summary>
+    /// <summary>Interface allowing serialization to an XML files</summary>
     public interface IXmlable
     {
         /// <summary>Serializes a class to Xml </summary>

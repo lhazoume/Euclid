@@ -1,11 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Euclid.Solvers;
+﻿using Euclid.Distributions.Continuous;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Euclid.Distributions.Continuous;
 
 namespace Euclid.Solvers.Tests
 {
@@ -27,14 +23,13 @@ namespace Euclid.Solvers.Tests
         {
             UniformDistribution uniform = new UniformDistribution(0, 1);
             int dimension = 10;
-            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(1000,
-                Vector.Create(dimension, 0.0), Vector.Create(dimension, 1.0),
-                v => 0.0,
+            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(
+                Enumerable.Range(0, 1000).Select(i => Vector.CreateRandom(dimension, uniform)),
                 OptimizationType.Min,
-                s => Enumerable.Range(0, s).Select(i => Vector.CreateRandom(dimension, uniform)).ToArray(),
+                v => 0.0,
                 100, 10);
 
-            Assert.IsTrue(pso != null && pso.Dimension == dimension && pso.MaxIterations == 100 && pso.MaxStaticIterations == 10 && pso.SwarmSize == 1000);
+            Assert.IsTrue(pso != null && pso.MaxIterations == 100 && pso.MaxStaticIterations == 10 && pso.SwarmSize == 1000);
         }
 
         [TestMethod()]
@@ -42,11 +37,10 @@ namespace Euclid.Solvers.Tests
         {
             UniformDistribution uniform = new UniformDistribution(-2, 2);
             int dimension = 2;
-            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(10000,
-                Vector.Create(dimension, -2.0), Vector.Create(dimension, 2.0),
-                Rosenbrock,
+            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(
+                Enumerable.Range(0, 10000).Select(i => Vector.CreateRandom(dimension, uniform)),
                 OptimizationType.Min,
-                s => Enumerable.Range(0, s).Select(i => Vector.CreateRandom(dimension, uniform)).ToArray(),
+                Rosenbrock,
                 100, 10);
             pso.Solve(false);
 
@@ -58,11 +52,10 @@ namespace Euclid.Solvers.Tests
         {
             UniformDistribution uniform = new UniformDistribution(-5, 5);
             int dimension = 5;
-            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(10000,
-                Vector.Create(dimension, -5.0), Vector.Create(dimension, 5.0),
-                Rastrigin,
+            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(
+                Enumerable.Range(0, 10000).Select(i => Vector.CreateRandom(dimension, uniform)),
                 OptimizationType.Min,
-                s => Enumerable.Range(0, s).Select(i => Vector.CreateRandom(dimension, uniform)).ToArray(),
+                Rastrigin,
                 10000, 100);
             pso.Solve(false);
 
