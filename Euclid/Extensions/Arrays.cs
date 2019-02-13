@@ -34,6 +34,23 @@ namespace Euclid.Extensions
             return result;
         }
 
+        /// <summary>Clones a generic 3D array</summary>
+        /// <typeparam name="T">template type</typeparam>
+        /// <param name="data">the 2d array of data</param>
+        /// <returns>a shallow copy of data</returns>
+        public static T[,,] Clone<T>(this T[,,] data)
+        {
+            int n = data.GetLength(0),
+                p = data.GetLength(1),
+                q = data.GetLength(2);
+            T[,,] result = new T[n, p, q];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < p; j++)
+                    for (int k = 0; k < q; k++)
+                        result[i, j, k] = data[i, j, k];
+            return result;
+        }
+
         /// <summary>Extract a sub array of data</summary>
         /// <typeparam name="T"> template type</typeparam>
         /// <param name="data">the array from which the data will be extracted</param>
