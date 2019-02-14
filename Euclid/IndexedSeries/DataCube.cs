@@ -14,8 +14,8 @@ namespace Euclid.IndexedSeries
     /// <typeparam name="W">the data type</typeparam>
     public class DataCube<T, U, V, W> : IXmlable, ICSVable
         where T : IComparable<T>, IEquatable<T>
-        where U : IEquatable<U>, IConvertible
-        where V : IEquatable<V>, IConvertible
+        where U : IEquatable<U>
+        where V : IEquatable<V>
     {
         #region Declarations
         private Header<T> _legends;

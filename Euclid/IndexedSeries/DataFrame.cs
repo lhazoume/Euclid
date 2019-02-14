@@ -11,7 +11,7 @@ namespace Euclid.IndexedSeries
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="U">the data type</typeparam>
     /// <typeparam name="V">the label type</typeparam>
-    public class DataFrame<T, U, V> : IIndexedSeries<T, U, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IConvertible
+    public class DataFrame<T, U, V> : IIndexedSeries<T, U, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>
     {
         #region Declarations
         private Header<V> _labels;
