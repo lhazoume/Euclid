@@ -31,9 +31,7 @@ namespace Euclid.Distributions.Continuous
             _values = new double[_n];
             _h = h;
             _kernel = kernel;
-
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _sumWeights = 0;
             _m1 = 0;

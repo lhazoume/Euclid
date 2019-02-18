@@ -19,9 +19,7 @@ namespace Euclid.Distributions.Continuous
 
             if (gamma <= 0) throw new ArgumentException("gamma has to be positive");
             _gamma = gamma;
-
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
@@ -125,7 +123,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double MomentGeneratingFunction(double t)
         {
-            throw new Exception( "The MGF is not defined");
+            throw new NotFiniteNumberException("The MGF is not defined");
         }
 
         /// <summary>Returns a string that represents this instance</summary>

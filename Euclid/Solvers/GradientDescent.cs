@@ -9,11 +9,11 @@ namespace Euclid.Solvers
     {
         #region Declarations
         private Func<Vector, double> _function;
-        private Func<Vector, Vector> _gradient;
-        private Func<Vector, Matrix> _hessian;
-        private double _error, _gradientThreshold;
-        private readonly int _maxIterations;
-        private int _maxLineSearchIterations;
+        private readonly Func<Vector, Vector> _gradient;
+        private readonly Func<Vector, Matrix> _hessian;
+        private double _error;
+        private readonly double _gradientThreshold;
+        private readonly int _maxIterations, _maxLineSearchIterations;
         private int _evaluations;
         private Vector _initialGuess, _result;
         private List<Vector> _descentDirections = new List<Vector>();
@@ -121,7 +121,7 @@ namespace Euclid.Solvers
         public Func<Vector, double> Function
         {
             get { return _function; }
-            set { _function = value; }
+            set { _function = value ?? throw new ArgumentNullException("function", "the function can not be null"); }
         }
 
         /// <summary>The final status of the solver</summary>
@@ -364,7 +364,7 @@ namespace Euclid.Solvers
         public void OptimizeBFGS()
         {
             _evaluations = 0;
-            if (_function == null) throw new NullReferenceException("function should not be null");
+            if (_function == null) throw new ArgumentNullException("function should not be null");
 
             _convergence.Clear();
 

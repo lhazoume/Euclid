@@ -27,7 +27,8 @@ namespace Euclid.Analytics.Regressions
         /// <param name="regularization">the regularization factor</param>
         public LASSORegression(DataFrame<T, double, V> x, Series<T, double, V> y, double regularization)
         {
-            if (x == null || y == null) throw new ArgumentNullException("the x and y should not be null");
+            if (x == null) throw new ArgumentNullException("x", "the x should not be null");
+            if (y == null) throw new ArgumentNullException("y", "the y should not be null");
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
             if (regularization <= 0) throw new ArgumentException("the regularization factor should be positive");
 

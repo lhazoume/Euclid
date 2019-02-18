@@ -112,11 +112,9 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             int epochs)
         {
             _convergence = new List<Tuple<int, double, double>>();
-            List<Tuple<Matrix, Vector>[]> gradients = new List<Tuple<Matrix, Vector>[]>(),
-                deltas = new List<Tuple<Matrix, Vector>[]>();
-
-            deltas.Add(Empty(_network, 0.01));
-            gradients.Add(Empty(_network, 0));
+            List<Tuple<Matrix, Vector>[]> gradients = new List<Tuple<Matrix, Vector>[]> { Empty(_network, 0) },
+                deltas = new List<Tuple<Matrix, Vector>[]> { Empty(_network, 0.01) };
+            ;
 
             for (int epoch = 0; epoch < epochs; epoch++)
             {

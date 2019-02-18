@@ -872,7 +872,7 @@ namespace Euclid
             flag = false;
             if ((y * t) <= 1.0 && t <= 0.95)
             {
-                t_ = pseries(x, y, t);
+                t_ = PowerSeries(x, y, t);
                 return t_;
             }
 
@@ -897,7 +897,7 @@ namespace Euclid
 
             if (flag && (b_ * x_) <= 1.0 && x_ <= 0.95)
             {
-                t_ = pseries(a_, b_, x_);
+                t_ = PowerSeries(a_, b_, x_);
                 if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
                 else t_ = 1.0 - t_;
                 return t_;
@@ -1086,9 +1086,7 @@ namespace Euclid
             return IncompleteUpperGamma((double)(k + 1), x);
         }
 
-        /// <summary>
-        /// Returns the sum of the terms k+1 to infinity of the Poisson distribution.
-        /// </summary>
+        /// <summary>Returns the sum of the terms k+1 to infinity of the Poisson distribution</summary>
         /// <param name="k">start</param>
         /// <param name="x">double value</param>
         /// <returns></returns>
@@ -1099,11 +1097,9 @@ namespace Euclid
             return IncompleteLowerGamma((double)(k + 1), x);
         }
 
-        /// <summary>
-        /// Returns the area under the Gaussian probability density function, integrated from minus infinity to a.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
+        /// <summary>Returns the area under the Gaussian probability density function, integrated from minus infinity to a.</summary>
+        /// <param name="a">the upper bound</param>
+        /// <returns>the probability</returns>
         public static double normal(double a)
         {
             double x, y, z;
@@ -1726,14 +1722,12 @@ namespace Euclid
             return ans;
         }
 
-        /// <summary>
-        /// Returns the power series for incomplete beta integral. Use when b*x is small and x not too close to 1.
-        /// </summary>
+        /// <summary>Returns the power series for incomplete beta integral. Use when b*x is small and x not too close to 1.</summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="x"></param>
         /// <returns></returns>
-        private static double pseries(double a, double b, double x)
+        private static double PowerSeries(double a, double b, double x)
         {
             double s, t, u, v, n, t1, z, ai;
 

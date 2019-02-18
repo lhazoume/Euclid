@@ -15,8 +15,8 @@ namespace Euclid.Analytics.Regressions
         private readonly Func<Vector, Vector, double> _function;
         private readonly Func<Vector, Vector, Vector> _gradient;
         private readonly int _maxIterations;
-
         #endregion
+
         private readonly bool _returnAverageIfFailed;
         private readonly bool _withConstant;
         private readonly RegressionStatus _status;

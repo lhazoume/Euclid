@@ -21,7 +21,7 @@ namespace Euclid.IndexedSeries
         private Header<T> _legends;
         private Header<U> _labels;
         private Header<V> _layers;
-        private W[,,] _data;
+        private readonly W[,,] _data;
         #endregion
 
         #region Constructors
@@ -274,6 +274,7 @@ namespace Euclid.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnData(Func<W, W> function)
         {
+            if (function == null) throw new ArgumentNullException("function", "the function should not be null");
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     for (int k = 0; k < _layers.Count; k++)
@@ -284,6 +285,7 @@ namespace Euclid.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnLegends(Func<T, T> function)
         {
+            if (function == null) throw new ArgumentNullException("function", "the function should not be null");
             for (int i = 0; i < _legends.Count; i++)
                 _legends.Rename(_legends.ElementAt(i), function(_legends.ElementAt(i)));
         }
@@ -292,6 +294,7 @@ namespace Euclid.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnLabels(Func<U, U> function)
         {
+            if (function == null) throw new ArgumentNullException("function", "the function should not be null");
             for (int i = 0; i < _labels.Count; i++)
                 _labels.Rename(_labels.ElementAt(i), function(_labels.ElementAt(i)));
         }
@@ -300,6 +303,7 @@ namespace Euclid.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnLayers(Func<V, V> function)
         {
+            if (function == null) throw new ArgumentNullException("function", "the function should not be null");
             for (int i = 0; i < _layers.Count; i++)
                 _layers.Rename(_layers.ElementAt(i), function(_layers.ElementAt(i)));
         }
@@ -421,8 +425,10 @@ namespace Euclid.IndexedSeries
         /// <returns>a <c>String</c></returns>
         public string ToCSV()
         {
-            List<string> lines = new List<string>();
-            lines.Add(string.Join(CSVHelper.Separator.ToString(), "Legend", "Label", "Layer", "Value"));
+            List<string> lines = new List<string>
+            {
+                string.Join(CSVHelper.Separator.ToString(), "Legend", "Label", "Layer", "Value")
+            };
 
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)

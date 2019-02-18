@@ -8,8 +8,10 @@ namespace Euclid.LinearAlgebra
     /// </summary>
     public class EigenDecomposition
     {
+
         #region Declarations
-        private double[] _d, _e;
+        private readonly double[] _d;
+        private readonly double[] _e;
         private Matrix _V, _H;
         #endregion
 
@@ -144,7 +146,6 @@ namespace Euclid.LinearAlgebra
             }
             else
             {
-                int n = _V.Rows;
                 _H = _V.Clone;
                 NonsymmetricReduceToHessenberg();
                 NonsymmetricReduceHessenberToRealSchur();

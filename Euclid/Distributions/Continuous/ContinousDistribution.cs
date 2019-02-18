@@ -45,11 +45,7 @@ namespace Euclid.Distributions.Continuous
         public Random RandomSource
         {
             get { return _randomSource; }
-            set
-            {
-                if (value == null) throw new ArgumentException("The random source can not be null");
-                _randomSource = value;
-            }
+            set { _randomSource = value ?? throw new ArgumentException("The random source can not be null"); }
         }
         #endregion
 
@@ -85,7 +81,7 @@ namespace Euclid.Distributions.Continuous
         {
             return Math.Log(ProbabilityDensity(x));
         }
-        
+
         /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>

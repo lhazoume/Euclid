@@ -139,13 +139,13 @@ namespace Euclid
         }
 
         /// <summary>Returns a complex from its exponential form </summary>
-        /// <param name="c">the exponential argument</param>
+        /// <param name="complex">the exponential argument</param>
         /// <returns>a <c>Complex</c></returns>
-        public static Complex Exp(Complex c)
+        public static Complex Exp(Complex complex)
         {
-            double f = Math.Exp(c._re),
-                newRe = Math.Cos(c._im),
-                newIm = Math.Sin(c._im);
+            double f = Math.Exp(complex._re),
+                newRe = Math.Cos(complex._im),
+                newIm = Math.Sin(complex._im);
             return new Complex(f * newRe, f * newIm);
         }
         #endregion
