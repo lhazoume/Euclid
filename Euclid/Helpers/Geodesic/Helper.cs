@@ -27,6 +27,9 @@ namespace Euclid.Helpers.Geodesic
         /// <returns>the distance between the points (expressed in meters)</returns>
         public static double EllipsoidDistance(this Ellipsoid ellipsoid, Coordinates point1, Coordinates point2)
         {
+            if (point1 == null) throw new ArgumentNullException("point1", "the point1 is null");
+            if (point2 == null) throw new ArgumentNullException("point2", "the point1 is null");
+
             double factor = Math.PI / 180.0;
             // get constants
             double a = ellipsoid.EquatorialRadius;

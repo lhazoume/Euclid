@@ -427,13 +427,13 @@ namespace Euclid.IndexedSeries
         {
             List<string> lines = new List<string>
             {
-                string.Join(CSVHelper.Separator.ToString(), "Legend", "Label", "Layer", "Value")
+                string.Join(CsvHelper.Separator.ToString(), "Legend", "Label", "Layer", "Value")
             };
 
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     for (int k = 0; k < _layers.Count; k++)
-                        lines.Add(string.Join(CSVHelper.Separator.ToString(), _legends.ElementAt(i).ToString(), _labels.ElementAt(j).ToString(), _layers.ElementAt(k).ToString(), _data[i, j, k].ToString()));
+                        lines.Add(string.Join(CsvHelper.Separator.ToString(), _legends.ElementAt(i).ToString(), _labels.ElementAt(j).ToString(), _layers.ElementAt(k).ToString(), _data[i, j, k].ToString()));
             return string.Join(Environment.NewLine, lines);
         }
         #endregion

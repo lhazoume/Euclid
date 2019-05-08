@@ -1,9 +1,5 @@
 ﻿using Euclid.IndexedSeries;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid.Analytics.Regressions
 {
@@ -16,12 +12,6 @@ namespace Euclid.Analytics.Regressions
         private readonly Func<Vector, Vector, Vector> _gradient;
         private readonly int _maxIterations;
         #endregion
-
-        private readonly bool _returnAverageIfFailed;
-        private readonly bool _withConstant;
-        private readonly RegressionStatus _status;
-        private readonly double _finalLogLikelihood = double.MinValue;
-        private readonly LogisticModel _logisticModel = null;
 
         #region Estimates the function,the jacobian and the increment
         private static Vector Function(Vector beta, DataFrame<T, double, V> x, Func<Vector, Vector, double> function)

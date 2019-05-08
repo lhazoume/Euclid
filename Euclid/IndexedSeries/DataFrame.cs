@@ -14,8 +14,8 @@ namespace Euclid.IndexedSeries
     public class DataFrame<T, U, V> : IIndexedSeries<T, U, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>
     {
         #region Declarations
-        private Header<V> _labels;
-        private Header<T> _legends;
+        private readonly Header<V> _labels;
+        private readonly Header<T> _legends;
         private U[,] _data;
         #endregion
 
@@ -117,7 +117,7 @@ namespace Euclid.IndexedSeries
         public static DataFrame<T, U, V> Create(string text)
         {
             string[] lines = text.Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            char[] separator = CSVHelper.Separator.ToCharArray();
+            char[] separator = CsvHelper.Separator.ToCharArray();
 
             #region Labels
             string[] labelStrings = lines[0].Split(separator, StringSplitOptions.RemoveEmptyEntries);
@@ -243,7 +243,7 @@ namespace Euclid.IndexedSeries
             IList<U> data = new List<U>();
             Header<T> legends = new Header<T>();
 
-            foreach(int indice in matchingIndices)
+            foreach (int indice in matchingIndices)
             {
                 legends.Add(_legends.ElementAt(indice));
                 data.Add(_data[indice, indexLabel]);
@@ -329,7 +329,7 @@ namespace Euclid.IndexedSeries
         #endregion
 
         #region extract
-        
+
         #endregion
 
         #region Remove
@@ -341,7 +341,6 @@ namespace Euclid.IndexedSeries
             int indexToRemove = _labels[label];
             if (indexToRemove == -1 || _labels.Count == 1) return false;
             U[,] newData = new U[_legends.Count, _data.Length - 1];
-            V[] newLabels = new V[_labels.Count - 1];
 
             for (int j = 0; j < _labels.Count; j++)
             {
@@ -610,6 +609,44 @@ namespace Euclid.IndexedSeries
 
             writer.WriteEndElement();
         }
+
+        public static DataFrame<T, U, V> FromXml(XmlNode node)
+        {
+            #region Labels and legends
+            XmlNodeList labelNodes = node.SelectNodes("label"),
+                legendNodes = node.SelectNodes("legend");
+
+            List<V> labels = new List<V>();
+            List<T> legends = new List<T>();
+
+            for (int j = 0; j < labelNodes.Count; j++)
+            {
+                V label = labelNodes[j].Attributes["value"].Value.Parse<V>();
+                labels.Add(label);
+            }
+
+            for (int i = 0; i < legendNodes.Count; i++)
+            {
+                T legend = legendNodes[i].Attributes["value"].Value.Parse<T>();
+                legends.Add(legend);
+            }
+            #endregion
+
+            #region Values
+            XmlNodeList pointNodes = node.SelectNodes("point");
+            U[,] data= new U[legends.Count, labels.Count];
+
+            foreach(XmlNode pointNode in pointNodes)
+            {
+                int i = int.Parse(pointNode.Attributes["row"].Value),
+                    j = int.Parse(pointNode.Attributes["col"].Value);
+                U value = pointNode.Attributes["value"].Value.Parse<U>();
+                data[i, j] = value;
+            }
+
+            return new DataFrame<T, U, V>(labels, legends, data);
+            #endregion
+        }
         #endregion
 
         #region ICSVable
@@ -619,13 +656,13 @@ namespace Euclid.IndexedSeries
         {
 
             string[] lines = new string[1 + _legends.Count];
-            lines[0] = string.Format("x{0}{1}", CSVHelper.Separator, string.Join(CSVHelper.Separator.ToString(), _labels));
+            lines[0] = string.Format("x{0}{1}", CsvHelper.Separator, string.Join(CsvHelper.Separator.ToString(), _labels));
 
             for (int i = 0; i < _legends.Count; i++)
             {
                 U[] row = new U[_labels.Count];
                 for (int j = 0; j < _labels.Count; j++) row[j] = _data[i, j];
-                lines[i + 1] = string.Format("{0}{1}{2}", _legends.ElementAt(i).ToString(), CSVHelper.Separator, string.Join(CSVHelper.Separator.ToString(), row));
+                lines[i + 1] = string.Format("{0}{1}{2}", _legends.ElementAt(i).ToString(), CsvHelper.Separator, string.Join(CsvHelper.Separator.ToString(), row));
             }
             return string.Join(Environment.NewLine, lines);
         }

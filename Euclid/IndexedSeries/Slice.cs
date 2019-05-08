@@ -184,8 +184,8 @@ namespace Euclid.IndexedSeries
         public string ToCSV()
         {
             string[] lines = new string[2];
-            lines[0] = "x" + CSVHelper.Separator + string.Join(CSVHelper.Separator.ToString(), _labels);
-            lines[1] = _legend.ToString() + CSVHelper.Separator + string.Join(CSVHelper.Separator.ToString(), _data);
+            lines[0] = "x" + CsvHelper.Separator + string.Join(CsvHelper.Separator.ToString(), _labels);
+            lines[1] = _legend.ToString() + CsvHelper.Separator + string.Join(CsvHelper.Separator.ToString(), _data);
             return string.Join(Environment.NewLine, lines);
         }
         #endregion
@@ -231,8 +231,8 @@ namespace Euclid.IndexedSeries
         {
             string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length != 2) return null;
-            string[] header = lines[0].Split(new string[] { CSVHelper.Separator }, StringSplitOptions.RemoveEmptyEntries),
-                content = lines[1].Split(new string[] { CSVHelper.Separator }, StringSplitOptions.RemoveEmptyEntries);
+            string[] header = lines[0].Split(new string[] { CsvHelper.Separator }, StringSplitOptions.RemoveEmptyEntries),
+                content = lines[1].Split(new string[] { CsvHelper.Separator }, StringSplitOptions.RemoveEmptyEntries);
             if ((header.Length != content.Length) || (header.Length <= 1)) return null;
             int count = header.Length - 1;
 

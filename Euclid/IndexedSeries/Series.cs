@@ -239,9 +239,9 @@ namespace Euclid.IndexedSeries
         public string ToCSV()
         {
             List<string> lines = new List<string>();
-            lines.Add(string.Join(CSVHelper.Separator, "x", _label.ToString()));
+            lines.Add(string.Join(CsvHelper.Separator, "x", _label.ToString()));
             foreach (T t in _legends)
-                lines.Add(string.Join(CSVHelper.Separator, t.ToString(), _data[_legends[t]].ToString()));
+                lines.Add(string.Join(CsvHelper.Separator, t.ToString(), _data[_legends[t]].ToString()));
             return string.Join(Environment.NewLine, lines);
         }
         #endregion
@@ -394,10 +394,10 @@ namespace Euclid.IndexedSeries
 
             U[] data = new U[lines.Length - 1];
             Header<T> legends = new Header<T>();
-            V label = lines[0].Split(CSVHelper.Separator.ToCharArray())[1].Parse<V>();
+            V label = lines[0].Split(CsvHelper.Separator.ToCharArray())[1].Parse<V>();
             for (int i = 1; i < lines.Length; i++)
             {
-                string[] content = lines[i].Split(CSVHelper.Separator.ToCharArray());
+                string[] content = lines[i].Split(CsvHelper.Separator.ToCharArray());
                 data[i - 1] = content[1].Parse<U>();
                 legends.Add(content[0].Parse<T>());
             }

@@ -1,12 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
 
 namespace Euclid.Serialization
 {
-    /// <summary>
-    /// Helper class for IXmlable classes
-    /// </summary>
+    /// <summary>Helper class for IXmlable classes</summary>
     public static class XmlHelper
     {
         /// <summary>Saves the class' XML representation</summary>
@@ -32,6 +32,39 @@ namespace Euclid.Serialization
             writer.Flush();
 
             return builder.ToString();
+        }
+
+        public static XmlNode ReadXml(string filePath)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+
+            return doc;
+        }
+
+        public static string ToEuclidDateString(this DateTime date)
+        {
+            return string.Format("YYYYMMDD", date);
+        }
+        public static DateTime FromEuclidDateString(this string text)
+        {
+            return new DateTime(int.Parse(text.Substring(0, 4)), int.Parse(text.Substring(4, 2)), int.Parse(text.Substring(6, 2)));
+        }
+    }
+    /// <summary>Helps building a list of objects from their serialized representation</summary>
+    /// <typeparam name="T">the object type</typeparam>
+    public class BuildList<T> where T : IXmlable
+    {
+        /// <summary>Builds a list of objects from an XML node list</summary>
+        /// <param name="nodeList">the node list</param>
+        /// <param name="builder">the function that turns an XML node into an instance of an object </param>
+        /// <returns>a list of objects</returns>
+        public static List<T> FromXmls(XmlNodeList nodeList, Func<XmlNode, T> builder)
+        {
+            List<T> result = new List<T>();
+            foreach (XmlNode node in nodeList)
+                result.Add(builder(node));
+            return result;
         }
     }
 }

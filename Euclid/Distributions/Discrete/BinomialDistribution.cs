@@ -7,10 +7,11 @@ namespace Euclid.Distributions.Discrete
     /// <summary> Binonmial distribution class</summary>
     public class BinomialDistribution : DiscreteDistribution
     {
+
         #region Declarations
-        private double _p, _q;
-        private int _n;
-        private BinomialCoefficients _bc;
+        private readonly double _q, _p;
+        private readonly int _n;
+        private readonly BinomialCoefficients _bc;
         #endregion
 
         #region Constructors

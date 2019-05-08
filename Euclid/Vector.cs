@@ -10,8 +10,8 @@ namespace Euclid
     public class Vector
     {
         #region Declarations
-        private int _size;
-        private double[] _data;
+        private readonly int _size;
+        private readonly double[] _data;
         #endregion
 
         #region Constructors

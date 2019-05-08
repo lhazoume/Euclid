@@ -32,27 +32,21 @@ namespace Euclid
         #endregion
 
         #region Accessors
-        /// <summary>
-        /// Returns the real part of the <c>Complex</c>
-        /// </summary>
+        /// <summary>Returns the real part of the <c>Complex</c></summary>
         public double Re
         {
             get { return _re; }
             set { _re = value; }
         }
 
-        /// <summary>
-        /// Returns the imaginary part of the <c>Complex</c>
-        /// </summary>
+        /// <summary>Returns the imaginary part of the <c>Complex</c></summary>
         public double Im
         {
             get { return _im; }
             set { _im = value; }
         }
 
-        /// <summary>
-        /// The conjugate number of the <c>Complex</c>
-        /// </summary>
+        /// <summary>The conjugate number of the <c>Complex</c></summary>
         public Complex Conjugate
         {
             get { return new Complex(_re, -_im); }
@@ -114,25 +108,19 @@ namespace Euclid
         #endregion
 
         #region Helpers
-        /// <summary>
-        /// Returns the imaginary number i
-        /// </summary>
+        /// <summary>Returns the imaginary number <c>i</c></summary>
         public static Complex I
         {
             get { return new Complex(0, 1); }
         }
 
-        /// <summary>
-        /// Returns the complex representation of the real number 1
-        /// </summary>
+        /// <summary>Returns the complex representation of the real number 1</summary>
         public static Complex One
         {
             get { return new Complex(1, 0); }
         }
 
-        /// <summary>
-        /// Returns a complex with both imaginary and real parts equal to zero
-        /// </summary>
+        /// <summary>Returns a complex with both imaginary and real parts equal to zero</summary>
         public static Complex Zero
         {
             get { return new Complex(0, 0); }
@@ -152,109 +140,106 @@ namespace Euclid
 
         #region Operators
 
-        /// <summary>
-        /// Allows to add a complex to another complex
-        /// </summary>
-        /// <param name="x">the right hand side</param>
-        /// <param name="y">the left hand side</param>
+        /// <summary>Allows to add a complex to another complex</summary>
+        /// <param name="lhs">the right hand side</param>
+        /// <param name="rhs">the left hand side</param>
         /// <returns>the <c>Complex</c> result of the addition</returns>
-        public static Complex operator +(Complex x, Complex y)
+        public static Complex operator +(Complex lhs, Complex rhs)
         {
-            return new Complex(x._re + y._re, x._im + y._im);
+            return Add(lhs, rhs);
         }
 
-        /// <summary>
-        /// Allows to add a scalar to a complex
-        /// </summary>
-        /// <param name="c">the complex left hand side</param>
-        /// <param name="d">the scalar right hand side</param>
-        /// <returns>the <c>Complex</c> result of the addition</returns>
-        public static Complex operator +(Complex c, double d)
+        public static Complex Add(Complex lhs, Complex rhs)
         {
-            return new Complex(c._re + d, c._im);
+            if (lhs == null) throw new ArgumentNullException("lhs", "the left hand side is null");
+            if (rhs == null) throw new ArgumentNullException("rhs", "the right hand side is null");
+
+            return new Complex(lhs._re + rhs._re, lhs._im + rhs._im);
         }
 
-        /// <summary>
-        /// Allows to add a scalar to a complex
-        /// </summary>
-        /// <param name="d">the scalar right hand side </param>
-        /// <param name="c">the complex left hand side</param>
-        /// <returns>the <c>Complex</c> result of the addition</returns>
-        public static Complex operator +(double d, Complex c)
+        public static Complex Add(Complex lhs, double addon)
         {
-            return c + d;
+            return new Complex(lhs._re + addon, lhs._im);
         }
 
-        /// <summary>
-        /// Allows to substract a complex to another complex
-        /// </summary>
-        /// <param name="x">the right hand side</param>
-        /// <param name="y">the left hand side</param>
+        /// <summary>Allows to add a scalar to a complex</summary>
+        /// <param name="complex">the complex left hand side</param>
+        /// <param name="addon">the scalar right hand side</param>
+        /// <returns>the <c>Complex</c> result of the addition</returns>
+        public static Complex operator +(Complex complex, double addon)
+        {
+            return Add(complex, addon);
+        }
+
+        /// <summary>Allows to add a scalar to a complex</summary>
+        /// <param name="addon">the scalar right hand side </param>
+        /// <param name="complex">the complex left hand side</param>
+        /// <returns>the <c>Complex</c> result of the addition</returns>
+        public static Complex operator +(double addon, Complex complex)
+        {
+            return Add(complex, addon);
+        }
+
+        /// <summary>Allows to substract a complex to another complex</summary>
+        /// <param name="rhs">the right hand side</param>
+        /// <param name="lhs">the left hand side</param>
         /// <returns>the <c>Complex</c> result of the substraction</returns>
-        public static Complex operator -(Complex x, Complex y)
+        public static Complex operator -(Complex lhs, Complex rhs)
         {
-            return x + (-1) * y;
+            return lhs + (-1) * rhs;
         }
 
-        /// <summary>
-        /// Allows to multiply a complex by another complex
-        /// </summary>
-        /// <param name="x">the left hand side</param>
-        /// <param name="y">the right hand side</param>
+        /// <summary>Allows to multiply a complex by another complex</summary>
+        /// <param name="lhs">the left hand side</param>
+        /// <param name="rhs">the right hand side</param>
         /// <returns>the <c>Complex</c> result of the multiplication</returns>
-        public static Complex operator *(Complex x, Complex y)
+        public static Complex operator *(Complex lhs, Complex rhs)
         {
-            return new Complex(x._re * y._re - x._im * y._im, x._im * y._re + y._im * x._re);
+            return new Complex(lhs._re * rhs._re - lhs._im * rhs._im, lhs._im * rhs._re + rhs._im * lhs._re);
         }
 
-        /// <summary>
-        /// Allows to multiply a complex by a scalar
-        /// </summary>
-        /// <param name="c">the complex number</param>
-        /// <param name="d">the scalar</param>
+        /// <summary>Allows to multiply a complex by a scalar</summary>
+        /// <param name="complex">the complex number</param>
+        /// <param name="factor">the scalar</param>
         /// <returns>the <c>Complex</c> result of the multiplication</returns>
-        public static Complex operator *(Complex c, double d)
+        public static Complex operator *(Complex complex, double factor)
         {
-            return new Complex(c._re * d, c._im * d);
+            return new Complex(complex._re * factor, complex._im * factor);
         }
 
-        /// <summary>
-        /// Allows to multiply a complex by a scalar
-        /// </summary>
-        /// <param name="d">the scalar</param>
-        /// <param name="c">the complex number</param>
+        /// <summary>Allows to multiply a complex by a scalar</summary>
+        /// <param name="factor">the scalar</param>
+        /// <param name="complex">the complex number</param>
         /// <returns>the <c>Complex</c> result of the multiplication</returns>
-        public static Complex operator *(double d, Complex c)
+        public static Complex operator *(double factor, Complex complex)
         {
-            return c * d;
+            return complex * factor;
         }
 
-        /// <summary>
-        /// Allows to divide a complex by another complex
-        /// </summary>
-        /// <param name="x">the numerator</param>
-        /// <param name="y">the denominator</param>
+        /// <summary>Allows to divide a complex by another complex</summary>
+        /// <param name="numerator">the numerator</param>
+        /// <param name="denominator">the denominator</param>
         /// <returns>the <c>Complex</c> result of the division</returns>
-        public static Complex operator /(Complex x, Complex y)
+        public static Complex operator /(Complex numerator, Complex denominator)
         {
-            return x * y.Conjugate * (1.0 / y.SquareModulus());
+            return numerator * denominator.Conjugate * (1.0 / denominator.SquareModulus());
         }
 
         /// <summary>Allows to divide a complex by a double</summary>
-        /// <param name="x">the numerator</param>
-        /// <param name="d">the denominator</param>
+        /// <param name="complex">the numerator</param>
+        /// <param name="factor">the denominator</param>
         /// <returns>the <c>Complex</c> result of the division</returns>
-        public static Complex operator /(Complex x, double d)
+        public static Complex operator /(Complex complex, double factor)
         {
-            return x * (1.0 / d);
+            return complex * (1.0 / factor);
         }
 
         /// <summary>Returns the opposite of the complex</summary>
-        /// <param name="x">the <c>Complex</c></param>
+        /// <param name="complex">the <c>Complex</c></param>
         /// <returns>the opposite complex</returns>
-        public static Complex operator -(Complex x)
+        public static Complex operator -(Complex complex)
         {
-            return new Complex(-x._re, -x._im);
+            return new Complex(-complex._re, -complex._im);
         }
 
         #endregion
