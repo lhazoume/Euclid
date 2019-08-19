@@ -10,6 +10,8 @@ The objects implemented include :
 - *Interval* and *Histogram*
 - data handling tools : *DataFrame*, *Series*, *Slice*
 
+For more details, please go to [Euclid's wiki](https://github.com/lhazoume/Euclid/wiki)
+
 Methods :
 =========
 Some tools come with it :
