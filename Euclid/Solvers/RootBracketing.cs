@@ -13,7 +13,7 @@ namespace Euclid.Solvers
             _tolerance,
             _result = 0,
             _error = 0;
-        private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
+        private readonly List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private Func<double, double> _f;
         private int _maxIterations;
         private RootBracketingMethod _method;

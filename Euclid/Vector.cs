@@ -21,6 +21,13 @@ namespace Euclid
             _size = data.Count();
         }
 
+        private Vector(double[] data)
+        {
+            _size = data.Length;
+            _data = new double[_size];
+            Array.Copy(data, _data, _size);
+        }
+
         private Vector(int size)
         {
             _data = new double[size];
@@ -132,9 +139,9 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the multiplication</returns>
         public static Vector operator *(Vector v, double f)
         {
-            Vector tmp = v.Clone;
-            for (int k = 0; k < v.Size; k++)
-                tmp[k] = f * v[k];
+            Vector tmp = new Vector(v._size);
+            for (int k = 0; k < v._size; k++)
+                tmp._data[k] = f * v._data[k];
             return tmp;
         }
 
@@ -192,10 +199,10 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
         public static Matrix operator *(Vector v1, Vector v2)
         {
-            Matrix result = Matrix.Create(v1.Size, v2.Size);
-            for (int i = 0; i < v1.Size; i++)
-                for (int j = 0; j < v2.Size; j++)
-                    result[i, j] = v1[i] * v2[j];
+            Matrix result = Matrix.Create(v1._size, v2._size);
+            for (int i = 0; i < v1._size; i++)
+                for (int j = 0; j < v2._size; j++)
+                    result[i, j] = v1._data[i] * v2._data[j];
             return result;
         }
 
@@ -209,10 +216,23 @@ namespace Euclid
         /// <returns>The sum of m1 and m2</returns>
         private static Vector Add(Vector v1, Vector v2)
         {
-            if (v1.Size != v2.Size) throw new ArgumentException("Vectors must have the same dimensions!");
-            Vector r = new Vector(v1.Size);
-            for (int k = 0; k < r.Size; k++)
-                r[k] = v1[k] + v2[k];
+            if (v1._size != v2._size) throw new ArgumentException("Vectors must have the same dimensions!");
+            Vector r = new Vector(v1._size);
+            for (int k = 0; k < v1._size; k++)
+                r._data[k] = v1._data[k] + v2._data[k];
+            return r;
+        }
+
+        /// <summary>Performs a Vector substraction, after going through dimension compatibility verifications.</summary>
+        /// <param name="v1">First Vector</param>
+        /// <param name="v2">Second Vector</param>
+        /// <returns>The difference of m1 and m2</returns>
+        private static Vector Substract(Vector v1, Vector v2)
+        {
+            if (v1._size != v2._size) throw new ArgumentException("Vectors must have the same dimensions!");
+            Vector r = new Vector(v1._size);
+            for (int k = 0; k < v1._size; k++)
+                r._data[k] = v1._data[k] - v2._data[k];
             return r;
         }
 
@@ -222,9 +242,9 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the addition</returns>
         public static Vector operator +(Vector v, double c)
         {
-            Vector tmp = v.Clone;
-            for (int i = 0; i < v.Size; i++)
-                tmp[i] = v[i] + c;
+            Vector tmp = new Vector(v._size);
+            for (int i = 0; i < v._size; i++)
+                tmp._data[i] = v._data[i] + c;
             return tmp;
         }
 
@@ -234,10 +254,7 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the addition</returns>
         public static Vector operator +(double c, Vector v)
         {
-            Vector tmp = v.Clone;
-            for (int i = 0; i < v.Size; i++)
-                tmp[i] = v[i] + c;
-            return tmp;
+            return v + c;
         }
 
         /// <summary>Substracts a scalar to all the coefficients of a <c>Vector</c></summary>
@@ -246,9 +263,9 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the substraction</returns>
         public static Vector operator -(Vector v, double c)
         {
-            Vector tmp = v.Clone;
+            Vector tmp = new Vector(v._size);
             for (int i = 0; i < v.Size; i++)
-                tmp[i] = v[i] - c;
+                tmp._data[i] = v._data[i] - c;
             return tmp;
         }
 
@@ -258,9 +275,9 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the substraction</returns>
         public static Vector operator -(double c, Vector v)
         {
-            Vector tmp = v.Clone;
+            Vector tmp = new Vector(v._size);
             for (int i = 0; i < v.Size; i++)
-                tmp[i] = c - v[i];
+                tmp._data[i] = c - v._data[i];
             return tmp;
         }
 
@@ -287,7 +304,7 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the substraction</returns>
         public static Vector operator -(Vector v1, Vector v2)
         {
-            return Vector.Add(v1, -v2);
+            return Vector.Substract(v1, v2);
         }
 
         #endregion
@@ -298,14 +315,12 @@ namespace Euclid
         /// <returns>a double value</returns>
         public static double Scalar(Vector v1, Vector v2)
         {
-            if (v1.Size == v2.Size)
-            {
-                double result = 0;
-                for (int k = 0; k < v1.Size; k++)
-                    result += v1[k] * v2[k];
-                return result;
-            }
-            throw new ArgumentException("The scalar product of two matrices can only be performed if they are the same size");
+            if (v1.Size != v2.Size) throw new ArgumentException("The scalar product of two matrices can only be performed if they are the same size");
+
+            double result = 0;
+            for (int k = 0; k < v1.Size; k++)
+                result += v1[k] * v2[k];
+            return result;
         }
 
         /// <summary>Aggregates a list of <c>Vector</c></summary>
@@ -320,13 +335,13 @@ namespace Euclid
             else
             {
                 int size = vectors[0].Size;
-                Vector result = Vector.Create(size);
+                double[] array = new double[size];
                 Parallel.For(0, size, s =>
                 {
                     for (int i = 0; i < vectors.Count; i++)
-                        result[s] += vectors[i][s];
+                        array[s] += vectors[i][s];
                 });
-                return result;
+                return new Vector(array);
             }
         }
 
@@ -362,14 +377,12 @@ namespace Euclid
         /// <returns>a <c>Vector</c> containing the Hadamard product</returns>
         public static Vector Hadamard(Vector v1, Vector v2)
         {
-            if (v1.Size == v2.Size)
-            {
-                Vector result = new Vector(v1.Size);
-                for (int k = 0; k < v1.Size; k++)
-                    result[k] = v1[k] * v2[k];
-                return result;
-            }
-            throw new ArgumentException("The Hadamard product of two Vectors can only be performed if they are the same size");
+            if (v1.Size != v2.Size) throw new ArgumentException("The Hadamard product of two Vectors can only be performed if they are the same size");
+
+            Vector result = new Vector(v1.Size);
+            for (int k = 0; k < v1.Size; k++)
+                result[k] = v1[k] * v2[k];
+            return result;
         }
 
         /// <summary>Builds a Vector made of the highest values </summary>
@@ -430,7 +443,7 @@ namespace Euclid
         public static Vector Create(double f1, Vector v1, double f2, Vector v2)
         {
             if (v1.Size != v2.Size) throw new ArgumentException("Vectors must have the same dimensions!");
-            Vector r = Vector.Create(v1.Size);
+            Vector r = new Vector(v1._size);
             for (int k = 0; k < r.Size; k++)
                 r[k] = f1 * v1[k] + f2 * v2[k];
             return r;
@@ -446,8 +459,8 @@ namespace Euclid
         /// <returns>a <c>Vector</c> containing the linear combination of the input</returns>
         public static Vector Create(double f1, Vector v1, double f2, Vector v2, double f3, Vector v3)
         {
-            if (v1.Size != v2.Size) throw new ArgumentException("Vectors must have the same dimensions!");
-            Vector r = Vector.Create(v1.Size);
+            if (v1.Size != v2.Size || v2.Size != v3.Size) throw new ArgumentException("Vectors must have the same dimensions!");
+            Vector r = new Vector(v1._size);
             for (int k = 0; k < r.Size; k++)
                 r[k] = f1 * v1[k] + f2 * v2[k] + f3 * v3[k];
             return r;
@@ -507,9 +520,7 @@ namespace Euclid
         public bool Equals(Vector other)
         {
             // Reject equality when the argument is null or has a different shape.
-            if (other == null)
-                return false;
-            if (_size != other._size)
+            if (other == null || _size != other._size)
                 return false;
 
             // Accept if the argument is the same object as this.

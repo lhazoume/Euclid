@@ -1,0 +1,58 @@
+﻿using Euclid;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EuclidBenchmark
+{
+    public static class VectorCases
+    {
+        public static void MultiplyScalar(int iterations)
+        {
+            Vector vector = Vector.Create(10);
+            for(int i = 0; i < iterations;i++)
+            {
+                Vector v = vector * 1.0;
+            }
+        }
+
+        public static void MultiplyVector(int iterations)
+        {
+            Vector v1 = Vector.Create(10, 1.0),
+                v2 = Vector.Create(20, 2.0);
+            for (int i = 0; i < iterations; i++)
+            {
+                Matrix m = v1 * v2;
+            }
+        }
+
+        public static void AddVector(int iterations)
+        {
+            Vector v1 = Vector.Create(10, 1.0),
+                v2 = Vector.Create(10, 2.0);
+            for (int i = 0; i < iterations; i++)
+            {
+                Vector v = v1 + v2;
+            }
+        }
+
+        public static void AddVectorScalar(int iterations)
+        {
+            Vector vector = Vector.Create(10);
+            for (int i = 0; i < iterations; i++)
+            {
+                Vector v = vector + 1.0;
+            }
+        }
+        public static void SubstractVectorScalar(int iterations)
+        {
+            Vector vector = Vector.Create(10);
+            for (int i = 0; i < iterations; i++)
+            {
+                Vector v = vector - 1.0;
+            }
+        }
+    }
+}

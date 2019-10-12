@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analytics\DecisionTree\DecisionTreeBarrierNode.cs" />
     <Compile Include="Analytics\Entropy.cs" />
     <Compile Include="Analytics\Clustering\ClusteringContext.cs" />
     <Compile Include="Analytics\Clustering\RandomForest.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="IndexedSeries\Series.cs" />
     <Compile Include="IndexedSeries\DataFrame.cs" />
     <Compile Include="IndexedSeries\IIndexedSeries.cs" />
+    <Compile Include="Serialization\TextHelper.cs" />
     <Compile Include="Serialization\XmlHelper.cs" />
     <Compile Include="Solvers\Descents.cs" />
     <Compile Include="Solvers\EndCriteria.cs" />
@@ -153,7 +155,7 @@
     <Compile Include="Solvers\SolverStatus.cs" />
     <Compile Include="Fn.cs" />
     <Compile Include="SparseMatrix.cs" />
-    <Compile Include="Text\LevenshteinDistance.cs" />
+    <Compile Include="Text\Distance.cs" />
     <Compile Include="Text\SentenceParsing.cs" />
     <Compile Include="Vector.cs" />
   </ItemGroup>

@@ -1,0 +1,10 @@
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\EuclidBenchmark.exe.config
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\EuclidBenchmark.exe
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\EuclidBenchmark.pdb
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\Euclid.dll
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\Euclid.pdb
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark.csprojAssemblyReference.cache
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark.csproj.CoreCompileInputs.cache
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark.csproj.CopyComplete
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark.exe
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark.pdb

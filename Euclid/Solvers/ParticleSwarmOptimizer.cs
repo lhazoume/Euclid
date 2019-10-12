@@ -13,7 +13,7 @@ namespace Euclid.Solvers
         private readonly int _swarmSize, _maxIterations, _maxStaticIterations;
         private SolverStatus _status;
         private readonly OptimizationType _optimizationType;
-        private readonly double _attractionToParticleBest, _attractionToOverallBest, _velocityInertia;
+        private readonly double _attractionToParticleBest, _attractionToOverallBest, _velocityInertia, _shrinkageFactor;
         private double _epsilon;
         private readonly Func<Vector, double> _fitnessFunction;
         private readonly Func<Vector, bool> _isFeasible;
@@ -38,7 +38,7 @@ namespace Euclid.Solvers
             Func<Vector, bool> feasabilityFunction,
             int maxIterations,
             int maxStaticIterations,
-            double epsilon = 1e-8, double attractionToParticleBest = 2, double attractionToOverallBest = 2, double velocityInertia = 0.5)
+            double epsilon = 1e-8, double attractionToParticleBest = 2, double attractionToOverallBest = 2, double velocityInertia = 0.5, double shrinkageFactor = 0.5)
         {
             #region Check and initialize the population of agents
             if (initialPopulation.Count() <= 1)
@@ -61,6 +61,7 @@ namespace Euclid.Solvers
             _attractionToOverallBest = attractionToOverallBest;
             _attractionToParticleBest = attractionToParticleBest;
             _velocityInertia = velocityInertia;
+            _shrinkageFactor = shrinkageFactor;
 
             _optimizationType = optimizationType;
 
@@ -219,7 +220,6 @@ namespace Euclid.Solvers
             #endregion
 
             #region Initialize the swarm and bests
-
             Loops.For(0, _swarmSize, parallel, i => { personalBestsValues[i] = _fitnessFunction(swarm[i]); });
 
             overallBestValue = _optimizationType == OptimizationType.Min ? personalBestsValues.Data.Min() : personalBestsValues.Data.Max();
@@ -229,25 +229,28 @@ namespace Euclid.Solvers
             _convergence.Clear();
             _convergence.Add(new Tuple<Vector, double>(overallBest.Clone, overallBestValue));
 
-            Random rnd = new Random(Guid.NewGuid().GetHashCode());
-
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, maxStaticIterations: _maxStaticIterations, gradientEpsilon: _epsilon);
             while (!endCriteria.ShouldStop(overallBestValue))
             {
                 //prepare queue of random numbers
-                double[] randomNumbers = Enumerable.Range(0, 2 * _swarmSize).Select(i => rnd.NextDouble()).ToArray();
+
 
                 #region Move all the particles in the swarm
-                Loops.For(0, _swarmSize, true, i =>
+                Loops.For(0, _swarmSize, parallel, i =>
                 {
                     Vector towardsParticleBest = particleBests[i] - swarm[i],
                         towardsOverallBest = overallBest - swarm[i],
                         inertia = _velocityInertia * velocities[i],
                         newVelocity;
+                    Random rnd = new Random(Guid.NewGuid().GetHashCode());
 
+                    double shrinkage = 1;
                     do
                     {
-                        newVelocity = inertia + Vector.Create(_attractionToParticleBest * randomNumbers[2 * i], towardsParticleBest, _attractionToOverallBest * randomNumbers[2 * i + 1], towardsOverallBest);
+                        newVelocity = shrinkage * Vector.Create(rnd.NextDouble(), inertia,
+                            _attractionToParticleBest * rnd.NextDouble(), towardsParticleBest,
+                            _attractionToOverallBest * rnd.NextDouble(), towardsOverallBest);
+                        shrinkage *= _shrinkageFactor;
                     }
                     while (!_isFeasible(swarm[i] + newVelocity));
 

@@ -1,8 +1,6 @@
 ﻿namespace Euclid.Solvers
 {
-    /// <summary>
-    /// The status of a solver
-    /// </summary>
+    /// <summary>The status of a solver</summary>
     public enum SolverStatus
     {
         /// <summary> The solver did not run </summary>
