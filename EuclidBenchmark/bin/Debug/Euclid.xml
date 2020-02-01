@@ -5042,7 +5042,7 @@
         <member name="T:Euclid.Solvers.ParticleSwarmOptimizer">
             <summary>Particle Swarm Optimization class</summary>
         </member>
-        <member name="M:Euclid.Solvers.ParticleSwarmOptimizer.#ctor(System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Solvers.OptimizationType,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Solvers.ParticleSwarmOptimizer.#ctor(System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Solvers.OptimizationType,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Particle Swarm Optimizer</summary>
             <param name="fitnessFunction">the function to optimize</param>
             <param name="feasabilityFunction">the feasability function</param>
@@ -5183,9 +5183,7 @@
             </summary>
         </member>
         <member name="T:Euclid.Solvers.SolverStatus">
-            <summary>
-            The status of a solver
-            </summary>
+            <summary>The status of a solver</summary>
         </member>
         <member name="F:Euclid.Solvers.SolverStatus.NotRan">
             <summary> The solver did not run </summary>
@@ -5699,6 +5697,12 @@
             <param name="v1">First Vector</param>
             <param name="v2">Second Vector</param>
             <returns>The sum of m1 and m2</returns>
+        </member>
+        <member name="M:Euclid.Vector.Substract(Euclid.Vector,Euclid.Vector)">
+            <summary>Performs a Vector substraction, after going through dimension compatibility verifications.</summary>
+            <param name="v1">First Vector</param>
+            <param name="v2">Second Vector</param>
+            <returns>The difference of m1 and m2</returns>
         </member>
         <member name="M:Euclid.Vector.op_Addition(Euclid.Vector,System.Double)">
             <summary>Adds a scalar to all the coefficients of a <c>Vector</c></summary>

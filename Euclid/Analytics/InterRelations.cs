@@ -100,7 +100,7 @@ namespace Euclid.Analytics
         /// <returns>a dataFrame</returns>
         public static DataFrame<V, double, V> CorrelationMatrix<T, V>(DataFrame<T, double, V> dataFrame1, DataFrame<T, double, V> dataFrame2) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame1.Labels, dataFrame2.Labels,new double[dataFrame2.Columns, dataFrame1.Columns]);
+            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame1.Labels, dataFrame2.Labels, new double[dataFrame2.Columns, dataFrame1.Columns]);
             if (dataFrame1.Rows != dataFrame2.Rows) throw new Exception("Rows do not match");
             int n = dataFrame1.Rows;
 
@@ -164,7 +164,7 @@ namespace Euclid.Analytics
         public static DataFrame<V, double, V> RedundancyMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
         {
             int n = dataFrame.Rows;
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Labels, dataFrame.Labels, new double[n,n]);
+            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
 
             #region Distinct values
             double[][] distincts = new double[dataFrame.Columns][];
@@ -187,6 +187,33 @@ namespace Euclid.Analytics
                 }
             }
             #endregion
+
+            return result;
+        }
+
+        public static double[] Correlogram(double[] dataSeries, int[] lags)
+        {
+            double[] result = new double[lags.Length];
+
+            double avg = 0,
+                variance = 0;
+            int N = dataSeries.Length;
+            for (int i = 0; i < N; i++)
+            {
+                avg += dataSeries[i];
+                variance += dataSeries[i] * dataSeries[i];
+            }
+            avg /= N;
+            variance = variance / N - N * avg * avg;
+
+            for (int l = 0; l < lags.Length; l++)
+            {
+                int lag = lags[l];
+                double sum = 0;
+                for (int i = 0; i < N - lag; i++)
+                    sum += (dataSeries[i] - avg) * (dataSeries[i + lag] - avg);
+                result[l] = sum / ((N - lag) * variance);
+            }
 
             return result;
         }

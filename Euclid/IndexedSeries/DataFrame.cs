@@ -114,9 +114,9 @@ namespace Euclid.IndexedSeries
 
         /// <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
         /// <param name="text">the <c>String</c> content</param>
-        public static DataFrame<T, U, V> Create(string text)
+        public static DataFrame<T, U, V> Create(string text, string rowSeparator, string colSeparator, bool withHeaders)
         {
-            string[] lines = text.Split("\n\r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = text.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             char[] separator = CsvHelper.Separator.ToCharArray();
 
             #region Labels

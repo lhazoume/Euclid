@@ -9,3 +9,12 @@ C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.c
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csproj.CopyComplete
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.exe
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.pdb
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\bin\Debug\EuclidBenchmark.exe
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\bin\Debug\EuclidBenchmark.pdb
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\bin\Debug\Euclid.dll
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\bin\Debug\Euclid.pdb
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\bin\Debug\Euclid.xml
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csprojAssemblyReference.cache
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csproj.CopyComplete
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.exe
+C:\Users\lhazoume\Documents\GitHub\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.pdb
