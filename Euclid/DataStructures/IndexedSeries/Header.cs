@@ -1,10 +1,9 @@
-﻿using Euclid.Objects;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.IndexedSeries
+namespace Euclid.DataStructures.IndexedSeries
 {
     /// <summary>Header class for the IIndexe</summary>
     /// <typeparam name="T">the type of label</typeparam>

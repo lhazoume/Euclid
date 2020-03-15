@@ -1,4 +1,5 @@
-﻿using Euclid.Serialization;
+﻿using Euclid.DataStructures.IndexedSeries;
+using Euclid.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace Euclid.IndexedSeries.Tests
     [TestClass()]
     public class SeriesTests
     {
-        private static int _n = 100;
-        private static DateTime[] _dates = Enumerable.Range(0, _n).Select(i => new DateTime(2000 + i, 6, 1)).ToArray();
-        private static double[] _values = Enumerable.Range(0, _n).Select(i => Convert.ToDouble(i)).ToArray();
+        private static readonly int _n = 100;
+        private static readonly DateTime[] _dates = Enumerable.Range(0, _n).Select(i => new DateTime(2000 + i, 6, 1)).ToArray();
+        private static readonly double[] _values = Enumerable.Range(0, _n).Select(i => Convert.ToDouble(i)).ToArray();
 
         private static Series<DateTime, double, string> BaseSeries(double value)
         {

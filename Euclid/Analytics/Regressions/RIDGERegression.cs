@@ -1,5 +1,5 @@
-﻿using Euclid.Extensions;
-using Euclid.IndexedSeries;
+﻿using Euclid.DataStructures.IndexedSeries;
+using Euclid.Extensions;
 using System;
 
 namespace Euclid.Analytics.Regressions

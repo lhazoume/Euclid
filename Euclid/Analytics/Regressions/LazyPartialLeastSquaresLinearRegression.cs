@@ -1,5 +1,5 @@
 ﻿using Euclid.Arithmetics;
-using Euclid.IndexedSeries;
+using Euclid.DataStructures.IndexedSeries;
 using System;
 using System.Collections.Generic;
 using System.Linq;

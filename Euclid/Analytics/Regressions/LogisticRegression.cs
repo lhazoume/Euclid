@@ -1,4 +1,4 @@
-﻿using Euclid.IndexedSeries;
+﻿using Euclid.DataStructures.IndexedSeries;
 using Euclid.Solvers;
 using System;
 using System.Linq;

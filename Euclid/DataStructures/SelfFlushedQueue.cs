@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Euclid.Objects
+namespace Euclid.DataStructures
 {
     /// <summary>Queue that flushes itself whenever it reaches a given size</summary>
     /// <typeparam name="T">the template type of the data</typeparam>

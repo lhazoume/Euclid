@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace Euclid.IndexedSeries
+namespace Euclid.DataStructures.IndexedSeries
 {
     /// <summary>Class representing a cube of synchronized data</summary>
     /// <typeparam name="T">the legend type</typeparam>

@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Euclid.DataStructures;
 
 namespace Euclid.Objects.Tests
 {
     [TestClass()]
     public class MapTests
     {
-        private static int _n = 100;
-        private static Tuple<string, int>[] _values = Enumerable.Range(0, _n).Select(i => Tuple.Create(i.ToString(), i)).ToArray();
+        private static readonly int _n = 100;
+        private static readonly Tuple<string, int>[] _values = Enumerable.Range(0, _n).Select(i => Tuple.Create(i.ToString(), i)).ToArray();
 
         private static Map<string, int> StandardBuilder()
         {

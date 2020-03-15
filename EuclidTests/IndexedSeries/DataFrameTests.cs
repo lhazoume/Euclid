@@ -1,4 +1,5 @@
-﻿using Euclid.Serialization;
+﻿using Euclid.DataStructures.IndexedSeries;
+using Euclid.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -10,13 +11,13 @@ namespace Euclid.IndexedSeries.Tests
     [TestClass()]
     public class DataFrameTests
     {
-        private static string[] _headers = new string[] { "Col1", "Col2", "Col3" };
-        private static DateTime[] _legends = new DateTime[] { DateTime.Today, DateTime.Today.AddDays(1), DateTime.Today.AddDays(2),
+        private static readonly string[] _headers = new string[] { "Col1", "Col2", "Col3" };
+        private static readonly DateTime[] _legends = new DateTime[] { DateTime.Today, DateTime.Today.AddDays(1), DateTime.Today.AddDays(2),
             DateTime.Today.AddDays(3), DateTime.Today.AddDays(4), DateTime.Today.AddDays(5),
             DateTime.Today.AddDays(6), DateTime.Today.AddDays(7), DateTime.Today.AddDays(8),
             DateTime.Today.AddDays(9), DateTime.Today.AddDays(10), DateTime.Today.AddDays(11) };
 
-        private static double[,] _data = new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 },
+        private static readonly double[,] _data = new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 },
             { 10, 11, 12 }, { 13, 14, 15 }, { 16, 17, 18 },
             { 19, 20, 21 }, { 22, 23, 24 }, { 25, 26, 27 },
             { 28, 29, 30 }, { 31, 32, 33 }, { 34, 35, 36 } };

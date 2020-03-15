@@ -1,9 +1,4 @@
-﻿using Euclid.IndexedSeries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Euclid.Analytics.Clustering
+﻿namespace Euclid.Analytics.Clustering
 {
     /*
     public enum VarType

@@ -1,7 +1,7 @@
 ﻿using Euclid.Serialization;
 using System;
 
-namespace Euclid.IndexedSeries
+namespace Euclid.DataStructures.IndexedSeries
 {
     /// <summary>
     /// Interface for all series : DataFrame, Slice, Series

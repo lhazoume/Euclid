@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.Objects
+namespace Euclid.DataStructures
 {
     /// <summary>A two ways dictionary class</summary>
     /// <typeparam name="T1">the left hand side type</typeparam>

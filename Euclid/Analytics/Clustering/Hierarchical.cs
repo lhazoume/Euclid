@@ -1,11 +1,4 @@
-﻿using Euclid.IndexedSeries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Euclid.Analytics.Clustering
+﻿namespace Euclid.Analytics.Clustering
 {
     /*
     public class Hierarchical<T, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IConvertible

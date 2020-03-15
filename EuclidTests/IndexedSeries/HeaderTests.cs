@@ -1,4 +1,5 @@
-﻿using Euclid.IndexedSeries;
+﻿using Euclid.DataStructures.IndexedSeries;
+using Euclid.IndexedSeries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 

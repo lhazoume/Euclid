@@ -1,4 +1,4 @@
-﻿using Euclid.IndexedSeries;
+﻿using Euclid.DataStructures.IndexedSeries;
 using System;
 
 namespace Euclid.Analytics.Regressions

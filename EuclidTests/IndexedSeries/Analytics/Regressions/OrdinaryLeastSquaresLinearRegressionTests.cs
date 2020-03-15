@@ -1,5 +1,6 @@
 ﻿using Euclid.Analytics;
 using Euclid.Analytics.Regressions;
+using Euclid.DataStructures.IndexedSeries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
