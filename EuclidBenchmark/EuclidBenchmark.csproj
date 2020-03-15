@@ -50,9 +50,6 @@
     <Compile Include="VectorCases.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Euclid\Euclid.csproj">
       <Project>{c685aef9-4e07-40c7-ac2f-ff66c8a3a851}</Project>
       <Name>Euclid</Name>
