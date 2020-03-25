@@ -610,6 +610,9 @@ namespace Euclid.DataStructures.IndexedSeries
             writer.WriteEndElement();
         }
 
+        /// <summary>Buils a <c>DataFrame</c></summary>
+        /// <param name="node">the Xml node</param>
+        /// <returns>a DataFrame</returns>
         public static DataFrame<T, U, V> FromXml(XmlNode node)
         {
             #region Labels and legends

@@ -1,4 +1,3 @@
-C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\EuclidBenchmark.exe.config
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\EuclidBenchmark.exe
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\EuclidBenchmark.pdb
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\Euclid.dll

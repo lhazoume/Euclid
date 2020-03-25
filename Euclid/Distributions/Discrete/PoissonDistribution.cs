@@ -21,7 +21,7 @@ namespace Euclid.Distributions.Discrete
             if (lambda <= 0) throw new ArgumentOutOfRangeException("The lambda should be >0");
             _lambda = lambda;
 
-            _support = Enumerable.Range(0, Convert.ToInt32(_supportWidthInStandardDeviations * Math.Sqrt(_lambda))).Cast<double>().ToArray();
+            _support = Enumerable.Range(0, Convert.ToInt32(_supportWidthInStandardDeviations * Math.Sqrt(_lambda))).Select(i=>Convert.ToDouble(i)).ToArray();
         }
 
         /// <summary>Initializes a new instance of the Poisson distribution</summary>

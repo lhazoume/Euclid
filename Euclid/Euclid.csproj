@@ -76,6 +76,7 @@
     <Compile Include="Analytics\Regressions\Scaling.cs" />
     <Compile Include="Analytics\Tests\KolmogorovSmirnovTest.cs" />
     <Compile Include="Arithmetics\BinomialCoefficients.cs" />
+    <Compile Include="DataStructures\TreeNode.cs" />
     <Compile Include="Extensions\Subsets.cs" />
     <Compile Include="Complex.cs" />
     <Compile Include="Distributions\Continuous\CauchyDistribution.cs" />
@@ -159,9 +160,7 @@
     <Compile Include="Text\SentenceParsing.cs" />
     <Compile Include="Vector.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Objects\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
