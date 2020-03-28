@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidTests", "EuclidTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidBenchmark", "EuclidBenchmark\EuclidBenchmark.csproj", "{AC1CEC78-6AB6-4D6E-948A-26FFDDFAAEC5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarking", "..\..\..\source\repos\Benchmarking\Benchmarking.csproj", "{EBE67DA9-3EA9-43E7-B36D-D208D3988D94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AC1CEC78-6AB6-4D6E-948A-26FFDDFAAEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC1CEC78-6AB6-4D6E-948A-26FFDDFAAEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC1CEC78-6AB6-4D6E-948A-26FFDDFAAEC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBE67DA9-3EA9-43E7-B36D-D208D3988D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBE67DA9-3EA9-43E7-B36D-D208D3988D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBE67DA9-3EA9-43E7-B36D-D208D3988D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBE67DA9-3EA9-43E7-B36D-D208D3988D94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

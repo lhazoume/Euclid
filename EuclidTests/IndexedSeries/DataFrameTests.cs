@@ -66,7 +66,7 @@ namespace Euclid.IndexedSeries.Tests
         public void DataFrameTextConstructorTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
-            DataFrame<DateTime, double, string> altDataFrame = DataFrame<DateTime, double, string>.Create(dataFrame.ToCSV());
+            DataFrame<DateTime, double, string> altDataFrame = DataFrame<DateTime, double, string>.Create(dataFrame.ToCSV(), Environment.NewLine, ";", true);
             Assert.IsNotNull(altDataFrame);
         }
         #endregion

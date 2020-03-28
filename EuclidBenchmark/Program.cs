@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Benchmarking;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EuclidBenchmark
 {
@@ -10,13 +8,13 @@ namespace EuclidBenchmark
     {
         static void Main(string[] args)
         {
-            CaseSet caseSet = Vector();
-            Console.WriteLine(caseSet.Run());
+            CaseSet caseSet = CaseSet();
+            List<CaseResult> results = caseSet.Run();
+            results.ForEach(cr => Console.WriteLine(cr.ToString()));
             Console.ReadLine();
-
         }
 
-        private static CaseSet Vector()
+        private static CaseSet CaseSet()
         {
             List<Case> cases = new List<Case>();
             cases.Add(new Case("MultiplyScalar", 10000000, VectorCases.MultiplyScalar));

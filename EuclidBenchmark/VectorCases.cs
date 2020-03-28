@@ -1,9 +1,4 @@
 ﻿using Euclid;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EuclidBenchmark
 {
@@ -11,8 +6,8 @@ namespace EuclidBenchmark
     {
         public static void MultiplyScalar(int iterations)
         {
-            Vector vector = Vector.Create(10);
-            for(int i = 0; i < iterations;i++)
+            Vector vector = Vector.Create(10, 1.0);
+            for (int i = 0; i < iterations; i++)
             {
                 Vector v = vector * 1.0;
             }
@@ -31,11 +26,9 @@ namespace EuclidBenchmark
         public static void AddVector(int iterations)
         {
             Vector v1 = Vector.Create(10, 1.0),
-                v2 = Vector.Create(10, 2.0);
+                v = Vector.Create(10, 0.0);
             for (int i = 0; i < iterations; i++)
-            {
-                Vector v = v1 + v2;
-            }
+                v += v1;
         }
 
         public static void AddVectorScalar(int iterations)
@@ -48,11 +41,9 @@ namespace EuclidBenchmark
         }
         public static void SubstractVectorScalar(int iterations)
         {
-            Vector vector = Vector.Create(10);
+            Vector v = Vector.Create(10, 0.0);
             for (int i = 0; i < iterations; i++)
-            {
-                Vector v = vector - 1.0;
-            }
+                v -= 1.0;
         }
     }
 }

@@ -43,13 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Case.cs" />
-    <Compile Include="CaseSet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VectorCases.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\source\repos\Benchmarking\Benchmarking.csproj">
+      <Project>{ebe67da9-3ea9-43e7-b36d-d208d3988d94}</Project>
+      <Name>Benchmarking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Euclid\Euclid.csproj">
       <Project>{c685aef9-4e07-40c7-ac2f-ff66c8a3a851}</Project>
       <Name>Euclid</Name>

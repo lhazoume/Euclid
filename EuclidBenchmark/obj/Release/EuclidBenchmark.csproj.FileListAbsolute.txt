@@ -7,3 +7,5 @@ C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark.csproj.CopyComplete
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark.exe
 C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\obj\Release\EuclidBenchmark.pdb
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\Benchmarking.dll
+C:\Users\Luc\Documents\GitHub\Euclid\EuclidBenchmark\bin\Release\Benchmarking.pdb
