@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Euclid.Solvers
+namespace Euclid.Solvers.SingleVariableSolver
 {
     /// <summary>
     /// Finds a root using the Newton-Raphson method
@@ -16,7 +16,7 @@ namespace Euclid.Solvers
             _slopeTolerance,
             _result = 0,
             _error = 0;
-        private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
+        private readonly List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private Func<double, double> _f, _df;
         private int _maxIterations;
         private SolverStatus _status = SolverStatus.NotRan;

@@ -1,4 +1,5 @@
 ﻿using Euclid.Solvers;
+using Euclid.Solvers.SingleVariableSolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace Euclid.Analytics.Tests
         public static bool IsSameDistribution(double[] series1, double[] series2, double alpha)
         {
             double pValue = PValue(series1, series2);
-            RootBracketing rb = new RootBracketing(1, 3, Fn.SupBrownianBridgeCDF, RootBracketingMethod.Dichotomy, 100);
+            Bracketing rb = new Bracketing(1, 3, Fn.SupBrownianBridgeCDF, BracketingMethod.Dichotomy, 100);
             rb.Solve(alpha);
             double cap = rb.Result;
 

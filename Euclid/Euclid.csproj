@@ -146,13 +146,14 @@
     <Compile Include="Solvers\GradientDescent.cs" />
     <Compile Include="Solvers\ISingleVariableSolver.cs" />
     <Compile Include="Solvers\LineSearch.cs" />
-    <Compile Include="Solvers\NewtonRaphson.cs" />
+    <Compile Include="Solvers\SingleVariableSolver\BrentMethod.cs" />
+    <Compile Include="Solvers\SingleVariableSolver\NewtonRaphson.cs" />
     <Compile Include="Solvers\OptimizationType.cs" />
     <Compile Include="Solvers\NelderMead.cs" />
     <Compile Include="Solvers\DifferentialEvolutionOptimizer.cs" />
     <Compile Include="Solvers\ParticleSwarmOptimizer.cs" />
-    <Compile Include="Solvers\RootBracketing.cs" />
-    <Compile Include="Solvers\RootBracketingMethod.cs" />
+    <Compile Include="Solvers\SingleVariableSolver\Bracketing.cs" />
+    <Compile Include="Solvers\SingleVariableSolver\BracketingMethod.cs" />
     <Compile Include="Solvers\SolverStatus.cs" />
     <Compile Include="Fn.cs" />
     <Compile Include="SparseMatrix.cs" />

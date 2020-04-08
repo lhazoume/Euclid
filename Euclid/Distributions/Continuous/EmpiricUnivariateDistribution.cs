@@ -1,6 +1,7 @@
 ﻿using Euclid.Distributions.Continuous.Kernels;
 using Euclid.Histograms;
 using Euclid.Solvers;
+using Euclid.Solvers.SingleVariableSolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -142,7 +143,7 @@ namespace Euclid.Distributions.Continuous
             while (_buckets[i, 1] < p)
                 i++;
 
-            RootBracketing solver = new RootBracketing(_buckets[i - 1, 0], _buckets[i, 0], CumulativeDistribution, RootBracketingMethod.Dichotomy, 10000);
+            Bracketing solver = new Bracketing(_buckets[i - 1, 0], _buckets[i, 0], CumulativeDistribution, BracketingMethod.Dichotomy, 10000);
             solver.Tolerance = 0.0001;
             solver.Solve(p);
             return solver.Result;

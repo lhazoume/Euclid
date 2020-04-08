@@ -1,5 +1,6 @@
 ﻿using Euclid.Histograms;
 using Euclid.Solvers;
+using Euclid.Solvers.SingleVariableSolver;
 using System;
 
 namespace Euclid.Distributions.Continuous
