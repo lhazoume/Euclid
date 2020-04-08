@@ -113,8 +113,8 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
-        /// <param name="text">the <c>String</c> content</param>
-        public static DataFrame<T, U, V> Create(string text, string rowSeparator, string colSeparator, bool withHeaders)
+        /// <param name="text">the serialized version of the data</param>
+        public static DataFrame<T, U, V> Create(string text)
         {
             string[] lines = text.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             char[] separator = CsvHelper.Separator.ToCharArray();

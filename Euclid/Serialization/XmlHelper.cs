@@ -34,6 +34,9 @@ namespace Euclid.Serialization
             return builder.ToString();
         }
 
+        /// <summary>Reads a file to an XMl node </summary>
+        /// <param name="filePath">the target file</param>
+        /// <returns>an <c>XmlNode</c></returns>
         public static XmlNode ReadXml(string filePath)
         {
             XmlDocument doc = new XmlDocument();
@@ -42,10 +45,17 @@ namespace Euclid.Serialization
             return doc;
         }
 
+        /// <summary>Serializes a date to Euclid's specific date format </summary>
+        /// <param name="date">the date</param>
+        /// <returns>a string</returns>
         public static string ToEuclidDateString(this DateTime date)
         {
             return string.Format("YYYYMMDD", date);
         }
+
+        /// <summary>De-serializes a string to a date </summary>
+        /// <param name="text">the text to convert to a date</param>
+        /// <returns>a DateTime</returns>
         public static DateTime FromEuclidDateString(this string text)
         {
             return new DateTime(int.Parse(text.Substring(0, 4)), int.Parse(text.Substring(4, 2)), int.Parse(text.Substring(6, 2)));

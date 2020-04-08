@@ -3,8 +3,12 @@ using System.Text;
 
 namespace Euclid.Serialization
 {
+    /// <summary>uncomplete helper class</summary>
     public static class TextHelper
     {
+        /// <summary>Serializes a TimeSpan</summary>
+        /// <param name="timeSpan">the time span</param>
+        /// <returns>a string</returns>
         public static string ToShortString(this TimeSpan timeSpan)
         {
             StringBuilder stringBuilder = new StringBuilder();

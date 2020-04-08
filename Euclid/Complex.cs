@@ -2,9 +2,7 @@
 
 namespace Euclid
 {
-    /// <summary>
-    /// Standard Complex numbers
-    /// </summary>
+    /// <summary>Represents complex numbers</summary>
     public sealed class Complex
     {
         #region Declarations
@@ -146,20 +144,20 @@ namespace Euclid
         /// <returns>the <c>Complex</c> result of the addition</returns>
         public static Complex operator +(Complex lhs, Complex rhs)
         {
-            return Add(lhs, rhs);
-        }
-
-        public static Complex Add(Complex lhs, Complex rhs)
-        {
             if (lhs == null) throw new ArgumentNullException("lhs", "the left hand side is null");
             if (rhs == null) throw new ArgumentNullException("rhs", "the right hand side is null");
 
             return new Complex(lhs._re + rhs._re, lhs._im + rhs._im);
         }
 
-        public static Complex Add(Complex lhs, double addon)
+
+        /// <summary>Allows to add a scalar to a complex</summary>
+        /// <param name="complex">the complex left hand side</param>
+        /// <param name="addon">the scalar right hand side</param>
+        /// <returns>the <c>Complex</c> result of the addition</returns>
+        private static Complex Add(Complex complex, double addon)
         {
-            return new Complex(lhs._re + addon, lhs._im);
+            return new Complex(complex._re + addon, complex._im);
         }
 
         /// <summary>Allows to add a scalar to a complex</summary>

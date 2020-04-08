@@ -36,6 +36,9 @@ namespace Euclid.Serialization
             return result.ToArray();
         }
 
+        /// <summary>Checks if the data read in the CSV is well formed (i.e. the jagged array is rectangular)</summary>
+        /// <param name="data">the jagged array</param>
+        /// <returns><c>true</c> if all subarrays have the same size</returns>
         public static bool IsWellFormed(string[][] data)
         {
             if (data.Length == 0) return false;

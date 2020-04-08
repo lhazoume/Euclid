@@ -10,9 +10,7 @@ namespace Euclid.Numerics
     /// </summary>
     public static class Differentiator
     {
-        /// <summary>
-        /// First degree numerical differentiation
-        /// </summary>
+        /// <summary> First degree numerical differentiation</summary>
         /// <param name="function">the function to differentiate</param>
         /// <returns>the derivative</returns>
         public static Func<double, double> Differentiate(this Func<double, double> function)

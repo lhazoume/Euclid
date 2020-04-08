@@ -10,7 +10,7 @@ namespace Euclid.Solvers
     public class NewtonRaphson : ISingleVariableSolver
     {
         #region Declarations
-
+        private bool _trackConvergence;
         private double _initialGuess,
             _absoluteTolerance,
             _slopeTolerance,
@@ -20,12 +20,9 @@ namespace Euclid.Solvers
         private Func<double, double> _f, _df;
         private int _maxIterations;
         private SolverStatus _status = SolverStatus.NotRan;
-
         #endregion
 
-        /// <summary>
-        /// Builds a solver using the Newton-Raphson method
-        /// </summary>
+        /// <summary>Builds a solver using the Newton-Raphson method</summary>
         /// <param name="initialGuess">the initial guess</param>
         /// <param name="f">the function to solve for</param>
         /// <param name="df">the derivative of the function to solve for</param>
@@ -35,6 +32,7 @@ namespace Euclid.Solvers
             Func<double, double> df,
             int maxIterations)
         {
+            _trackConvergence = false;
             _initialGuess = initialGuess;
             _absoluteTolerance = Descents.ERR_EPSILON;
             _slopeTolerance = Descents.GRADIENT_EPSILON;
@@ -43,9 +41,7 @@ namespace Euclid.Solvers
             _maxIterations = maxIterations;
         }
 
-        /// <summary>
-        /// Builds a solver using the Newton-Raphson method
-        /// </summary>
+        /// <summary>Builds a solver using the Newton-Raphson method</summary>
         /// <param name="initialGuess">the initial guess</param>
         /// <param name="f">the function to solve for</param>
         /// <param name="maxIterations">the maximum number of iterations</param>
@@ -58,27 +54,21 @@ namespace Euclid.Solvers
         #region Accessors
 
         #region Settables
-        /// <summary>
-        /// Gets and sets the function to solve for
-        /// </summary>
+        /// <summary>Gets and sets the function to solve for</summary>
         public Func<double, double> Function
         {
             get { return _f; }
             set { _f = value; }
         }
 
-        /// <summary>
-        /// Gets and sets the initial guess
-        /// </summary>
+        /// <summary>Gets and sets the initial guess</summary>
         public double InitialGuess
         {
             get { return _initialGuess; }
             set { _initialGuess = value; }
         }
 
-        /// <summary>
-        /// Gets and sets the maximum number of iterations
-        /// </summary>
+        /// <summary>Gets and sets the maximum number of iterations</summary>
         public int MaxIterations
         {
             get { return _maxIterations; }
@@ -92,48 +82,37 @@ namespace Euclid.Solvers
         /// <summary>Gets and sets the tolerance for the target (threshold for target reached)</summary>
         public double AbsoluteTolerance
         {
-            get { return _absoluteTolerance; }
-            set { _absoluteTolerance = value; }
+            get => _absoluteTolerance;
+            set => _absoluteTolerance = value;
         }
 
         /// <summary>Gets and sets the tolerance for the slope (threshold for stationarity)</summary>
         public double SlopeTolerance
         {
-            get { return _slopeTolerance; }
-            set { _slopeTolerance = value; }
+            get => _slopeTolerance;
+            set => _slopeTolerance = value;
         }
 
+        /// <summary>Gets and sets whether the details of the convergence are tracked</summary>
+        public bool TrackConvergence
+        {
+            get => _trackConvergence;
+            set => _trackConvergence = value;
+        }
         #endregion
 
         #region Get
 
-        /// <summary>
-        /// Returns the final error
-        /// </summary>
-        public double Error
-        {
-            get { return _error; }
-        }
+        /// <summary>Returns the final error</summary>
+        public double Error => _error;
 
-        /// <summary>
-        /// The final status of the solver
-        /// </summary>
-        public SolverStatus Status
-        {
-            get { return _status; }
-        }
+        /// <summary>Gets The final status of the solver</summary>
+        public SolverStatus Status => _status;
 
-        /// <summary>
-        /// The result of the solver
-        /// </summary>
-        public double Result
-        {
-            get { return _result; }
-        }
+        /// <summary> Gets the result of the solver</summary>
+        public double Result=> _result; 
 
-        /// <summary>
-        /// The details of the convergence (value, error)
-        /// </summary>
+        /// <summary>Gets the details of the convergence (value, error)</summary>
         public List<Tuple<double, double>> Convergence
         {
             get { return new List<Tuple<double, double>>(_convergence); }
@@ -144,17 +123,13 @@ namespace Euclid.Solvers
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Solve the equation f(x)=0 using the Newton-Raphson method
-        /// </summary>
+        /// <summary>Solves the equation f(x)=0 using the Newton-Raphson method</summary>
         public void Solve()
         {
             Solve(0);
         }
 
-        /// <summary>
-        /// Solve the equation f(x)=target using the Newton-Raphson method
-        /// </summary>
+        /// <summary>Solve the equation f(x)=target using the Newton-Raphson method</summary>
         /// <param name="target">the target</param>
         public void Solve(double target)
         {
@@ -166,7 +141,8 @@ namespace Euclid.Solvers
             _result = _initialGuess;
             _status = SolverStatus.Diverged;
             _error = _f(_result) - target;
-            _convergence.Add(new Tuple<double, double>(_result, _error));
+            if (_trackConvergence)
+                _convergence.Add(new Tuple<double, double>(_result, _error));
 
             double slope = _df(_result);
 
@@ -176,9 +152,10 @@ namespace Euclid.Solvers
 
             while (!endCriteria.ShouldStop(_error, slope))
             {
-                _result = _result - _error / slope;
+                _result -= _error / slope;
                 _error = _f(_result) - target;
-                _convergence.Add(new Tuple<double, double>(_result, _error));
+                if (_trackConvergence)
+                    _convergence.Add(new Tuple<double, double>(_result, _error));
                 slope = _df(_result);
             }
 
