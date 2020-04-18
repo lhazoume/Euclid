@@ -17,6 +17,7 @@ namespace Euclid.Serialization
             if (timeSpan.Minutes != 0) stringBuilder.Append(string.Format("{0:00}m", timeSpan.Minutes));
             if (timeSpan.Seconds != 0) stringBuilder.Append(string.Format("{0:00}s", timeSpan.Seconds));
             if (timeSpan.Milliseconds != 0) stringBuilder.Append(string.Format("{0:000}ms", timeSpan.Milliseconds));
+            if(timeSpan.Ticks% TimeSpan.TicksPerMillisecond !=0) stringBuilder.Append(string.Format("{0:0000}t", timeSpan.Ticks % TimeSpan.TicksPerMillisecond));
             return stringBuilder.ToString();
         }
     }
