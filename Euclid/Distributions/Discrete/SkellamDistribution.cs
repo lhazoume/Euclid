@@ -8,20 +8,19 @@ namespace Euclid.Distributions.Discrete
     public class SkellamDistribution : DiscreteDistribution
     {
         #region Declarations
-        private double _mu1, _mu2;
+        private readonly double _mu1, _mu2;
         private const double _supportWidthInStandardDeviations = 10;
         #endregion
 
 
         private SkellamDistribution(double mu1, double mu2, Random randomSource)
         {
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
 
-            if (mu1 <= 0) throw new ArgumentOutOfRangeException("mu1", "The mu1 should be >0");
+            if (mu1 <= 0) throw new ArgumentOutOfRangeException(nameof(mu1), "The mu1 should be >0");
             _mu1 = mu1;
 
-            if (mu2 <= 0) throw new ArgumentOutOfRangeException("mu2", "The lambda should be >0");
+            if (mu2 <= 0) throw new ArgumentOutOfRangeException(nameof(mu2), "The lambda should be >0");
             _mu2 = mu2;
 
             double lBound = _mu1 - _mu2 - _supportWidthInStandardDeviations * Math.Sqrt(_mu1 + _mu2),
@@ -103,7 +102,7 @@ namespace Euclid.Distributions.Discrete
         public override double InverseCumulativeDistribution(double p)
         {
             if (p <= 0) return 0;
-            if (p >= 1) throw new ArgumentOutOfRangeException("The target probability should <1");
+            if (p >= 1) throw new ArgumentOutOfRangeException(nameof(p), "The target probability should <1");
             int k = 0;
 
             while (CumulativeDistribution(k) < p)

@@ -69,7 +69,7 @@ namespace Euclid.Solvers.SingleVariableSolver
             get { return _maxIterations; }
             set
             {
-                if (value <= 0) throw new ArgumentOutOfRangeException("The maximum number of iterations should be positive");
+                if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value), "The maximum number of iterations should be positive");
                 _maxIterations = value;
             }
         }

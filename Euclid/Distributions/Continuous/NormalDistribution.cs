@@ -8,7 +8,7 @@ namespace Euclid.Distributions.Continuous
     public class NormalDistribution : ContinuousDistribution
     {
         #region Declarations
-        private double _mean, _standardDeviation;
+        private readonly double _mean, _standardDeviation;
         #endregion
 
         #region Constructors
@@ -17,9 +17,7 @@ namespace Euclid.Distributions.Continuous
             _mean = mean;
             if (standardDeviation < 0) throw new ArgumentException("The standard deviation can not be negative");
             _standardDeviation = standardDeviation;
-
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }

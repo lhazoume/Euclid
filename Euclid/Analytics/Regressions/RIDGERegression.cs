@@ -6,8 +6,8 @@ namespace Euclid.Analytics.Regressions
 {
     /// <summary>Performs a RIDGE regression for a given regularization factor</summary>
     /// <typeparam name="T">the legends</typeparam>
-    /// <typeparam name="V">the labels</typeparam>
-    public class RIDGERegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
+    /// <typeparam name="TV">the labels</typeparam>
+    public class RIDGERegression<T, TV> where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
     {
         #region Declarations
         private bool _returnAverageIfFailed;
@@ -16,19 +16,20 @@ namespace Euclid.Analytics.Regressions
         private double _regularization;
         private RegressionStatus _status;
         private LinearModel _linearModel = null;
-        private DataFrame<T, double, V> _x;
-        private Series<T, double, V> _y;
+        private readonly DataFrame<T, double, TV> _x;
+        private readonly Series<T, double, TV> _y;
         #endregion
 
         /// <summary>Builds a RIDGE to regress a <c>Series</c> on a <c>DataFrame</c></summary>
         /// <param name="x">the <c>DataFrame</c></param>
         /// <param name="y">the <c>Series</c></param>
         /// <param name="regularization">the regularization factor</param>
-        public RIDGERegression(DataFrame<T, double, V> x, Series<T, double, V> y, double regularization)
+        public RIDGERegression(DataFrame<T, double, TV> x, Series<T, double, TV> y, double regularization)
         {
-            if (x == null || y == null) throw new ArgumentNullException("the x and y should not be null");
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
-            if (regularization <= 0) throw new ArgumentException("the regularization factor should be positive");
+            if (regularization <= 0) throw new ArgumentOutOfRangeException(nameof(regularization), "the regularization factor should be positive");
 
             _x = x.Clone();
             _y = y.Clone();

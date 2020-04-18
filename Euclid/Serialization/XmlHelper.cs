@@ -22,14 +22,17 @@ namespace Euclid.Serialization
         /// <returns>a string</returns>
         public static string GetXml(this IXmlable xmlable)
         {
+            if (xmlable == null) throw new ArgumentNullException(nameof(xmlable));
+
             StringBuilder builder = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
-            XmlWriter writer = XmlWriter.Create(builder, settings);
-
-            writer.WriteStartDocument();
-            xmlable.ToXml(writer);
-            writer.WriteEndDocument();
-            writer.Flush();
+            using (XmlWriter writer = XmlWriter.Create(builder, settings))
+            {
+                writer.WriteStartDocument();
+                xmlable.ToXml(writer);
+                writer.WriteEndDocument();
+                writer.Flush();
+            }
 
             return builder.ToString();
         }
@@ -58,12 +61,13 @@ namespace Euclid.Serialization
         /// <returns>a DateTime</returns>
         public static DateTime FromEuclidDateString(this string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
             return new DateTime(int.Parse(text.Substring(0, 4)), int.Parse(text.Substring(4, 2)), int.Parse(text.Substring(6, 2)));
         }
     }
     /// <summary>Helps building a list of objects from their serialized representation</summary>
     /// <typeparam name="T">the object type</typeparam>
-    public class BuildList<T> where T : IXmlable
+    public static class BuildList<T> where T : IXmlable
     {
         /// <summary>Builds a list of objects from an XML node list</summary>
         /// <param name="nodeList">the node list</param>
@@ -71,6 +75,8 @@ namespace Euclid.Serialization
         /// <returns>a list of objects</returns>
         public static List<T> FromXmls(XmlNodeList nodeList, Func<XmlNode, T> builder)
         {
+            if (nodeList == null) throw new ArgumentNullException(nameof(nodeList));
+
             List<T> result = new List<T>();
             foreach (XmlNode node in nodeList)
                 result.Add(builder(node));

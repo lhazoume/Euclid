@@ -31,7 +31,7 @@ namespace Euclid.Distributions.Continuous
 
             _values = new double[_n];
             _h = h;
-            _kernel = kernel;
+            _kernel = kernel ?? throw new ArgumentNullException(nameof(kernel));
             _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _sumWeights = 0;
@@ -143,8 +143,7 @@ namespace Euclid.Distributions.Continuous
             while (_buckets[i, 1] < p)
                 i++;
 
-            Bracketing solver = new Bracketing(_buckets[i - 1, 0], _buckets[i, 0], CumulativeDistribution, BracketingMethod.Dichotomy, 10000);
-            solver.Tolerance = 0.0001;
+            Bracketing solver = new Bracketing(_buckets[i - 1, 0], _buckets[i, 0], CumulativeDistribution, BracketingMethod.Dichotomy, 10000) { Tolerance = 0.0001 };
             solver.Solve(p);
             return solver.Result;
         }

@@ -18,7 +18,7 @@ namespace Euclid.Solvers
         private readonly Func<Vector, double> _fitnessFunction;
         private readonly Func<Vector, bool> _isFeasible;
         private Vector _result;
-        private List<Tuple<Vector, double>> _convergence;
+        private readonly List<Tuple<Vector, double>> _convergence;
         #endregion
 
         /// <summary>Builds a Particle Swarm Optimizer</summary>
@@ -42,10 +42,10 @@ namespace Euclid.Solvers
         {
             #region Check and initialize the population of agents
             if (initialPopulation.Count() <= 1)
-                throw new ArgumentOutOfRangeException("initialPopulation", "The swarm size should be at least 2");
+                throw new ArgumentOutOfRangeException(nameof(initialPopulation), "The swarm size should be at least 2");
 
             if (initialPopulation.Any(v => !feasabilityFunction(v)))
-                throw new ArgumentOutOfRangeException("initialPopulation", "Some agents of the initial population are not feasible");
+                throw new ArgumentOutOfRangeException(nameof(initialPopulation), "Some agents of the initial population are not feasible");
 
             _initialPopulation = initialPopulation.ToArray();
             _swarmSize = _initialPopulation.Length;
@@ -57,7 +57,7 @@ namespace Euclid.Solvers
             #endregion
 
             if (attractionToOverallBest < 0 || attractionToParticleBest < 0 || velocityInertia < 0)
-                throw new ArgumentOutOfRangeException("The attraction to overall best, attraction to particle best, velocity's inertia should all be >=0");
+                throw new ArgumentException("The attraction to overall best, attraction to particle best, velocity's inertia should all be >=0");
             _attractionToOverallBest = attractionToOverallBest;
             _attractionToParticleBest = attractionToParticleBest;
             _velocityInertia = velocityInertia;
@@ -66,11 +66,11 @@ namespace Euclid.Solvers
             _optimizationType = optimizationType;
 
             if (epsilon <= 0)
-                throw new ArgumentOutOfRangeException("The epsilon should all be >0");
+                throw new ArgumentOutOfRangeException(nameof(epsilon), "The epsilon should all be >0");
             _epsilon = epsilon;
 
             if (maxIterations <= 0 || maxStaticIterations <= 0)
-                throw new ArgumentOutOfRangeException("The maximum number of iterations and static iterations should both be >0");
+                throw new ArgumentException("The maximum number of iterations and static iterations should both be >0");
             _maxIterations = maxIterations;
             _maxStaticIterations = maxStaticIterations;
 
@@ -98,7 +98,7 @@ namespace Euclid.Solvers
         {
             #region Check and initialize the population of agents
             if (initialPopulation.Count() <= 1)
-                throw new ArgumentOutOfRangeException("initialPopulation", "The swarm size should be at least 2");
+                throw new ArgumentOutOfRangeException(nameof(initialPopulation), "The swarm size should be at least 2");
 
             _initialPopulation = initialPopulation.ToArray();
             _swarmSize = _initialPopulation.Length;
@@ -110,7 +110,7 @@ namespace Euclid.Solvers
             #endregion
 
             if (attractionToOverallBest < 0 || attractionToParticleBest < 0 || velocityInertia < 0)
-                throw new ArgumentOutOfRangeException("The attraction to overall best, attraction to particle best, velocity's inertia should all be >=0");
+                throw new ArgumentException("The attraction to overall best, attraction to particle best, velocity's inertia should all be >=0");
             _attractionToOverallBest = attractionToOverallBest;
             _attractionToParticleBest = attractionToParticleBest;
             _velocityInertia = velocityInertia;
@@ -118,11 +118,11 @@ namespace Euclid.Solvers
             _optimizationType = optimizationType;
 
             if (epsilon <= 0)
-                throw new ArgumentOutOfRangeException("The epsilon should all be >0");
+                throw new ArgumentOutOfRangeException(nameof(epsilon), "The epsilon should all be >0");
             _epsilon = epsilon;
 
             if (maxIterations <= 0 || maxStaticIterations <= 0)
-                throw new ArgumentOutOfRangeException("The maximum number of iterations and static iterations should both be >0");
+                throw new ArgumentException("The maximum number of iterations and static iterations should both be >0");
             _maxIterations = maxIterations;
             _maxStaticIterations = maxStaticIterations;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Euclid.Analytics.ErrorFunctions
 {
@@ -26,6 +27,9 @@ namespace Euclid.Analytics.ErrorFunctions
         /// <returns>the sum of the errors</returns>
         public double Function(List<Vector> x, List<Vector> benchmark)
         {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (benchmark == null) throw new ArgumentNullException(nameof(benchmark));
+
             double sum = 0;
             for (int i = 0; i < x.Count; i++)
                 sum += (x[i] - benchmark[i]).Norm2;

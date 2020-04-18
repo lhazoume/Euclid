@@ -28,6 +28,9 @@ namespace Euclid.Analytics
         /// <param name="succeeded">the status of the regression</param>
         private LinearModel(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, bool succeeded)
         {
+            if (factors == null) throw new ArgumentNullException(nameof(factors));
+            if (correlations == null) throw new ArgumentNullException(nameof(correlations));
+
             _succeeded = succeeded;
 
             _p = factors.Length;
@@ -167,6 +170,8 @@ namespace Euclid.Analytics
         /// <returns>the estimator of the regressed data</returns>
         public double Predict(IList<double> x)
         {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+
             double y = _constant;
             if (_succeeded)
                 for (int i = 0; i < Math.Min(_factors.Size, x.Count); i++)

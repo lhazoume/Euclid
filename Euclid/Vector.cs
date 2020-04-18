@@ -139,6 +139,7 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the multiplication</returns>
         public static Vector operator *(Vector v, double f)
         {
+            if (v == null) throw new ArgumentNullException(nameof(v));
             Vector tmp = new Vector(v._size);
             for (int k = 0; k < v._size; k++)
                 tmp._data[k] = f * v._data[k];
@@ -169,6 +170,8 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the multiplication</returns>
         public static Vector operator *(Matrix m, Vector v)
         {
+            if (m == null) throw new ArgumentNullException(nameof(m));
+            if (v == null) throw new ArgumentNullException(nameof(v));
             if (m.Columns != v.Size) throw new Exception("Wrong dimensions of matrix!");
 
             Vector result = new Vector(m.Rows);
@@ -184,6 +187,8 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the multiplication</returns>
         public static Vector operator *(Vector v, Matrix m)
         {
+            if (m == null) throw new ArgumentNullException(nameof(m));
+            if (v == null) throw new ArgumentNullException(nameof(v));
             if (m.Rows != v.Size) throw new Exception("Wrong dimensions of matrix!");
 
             Vector result = new Vector(m.Columns);
@@ -199,6 +204,9 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
         public static Matrix operator *(Vector v1, Vector v2)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
+
             Matrix result = Matrix.Create(v1._size, v2._size);
             for (int i = 0; i < v1._size; i++)
                 for (int j = 0; j < v2._size; j++)
@@ -216,6 +224,8 @@ namespace Euclid
         /// <returns>The sum of m1 and m2</returns>
         private static Vector Add(Vector v1, Vector v2)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
             if (v1._size != v2._size) throw new ArgumentException("Vectors must have the same dimensions!");
             Vector r = new Vector(v1._size);
             for (int k = 0; k < v1._size; k++)
@@ -229,6 +239,9 @@ namespace Euclid
         /// <returns>The difference of m1 and m2</returns>
         private static Vector Substract(Vector v1, Vector v2)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
+
             if (v1._size != v2._size) throw new ArgumentException("Vectors must have the same dimensions!");
             Vector r = new Vector(v1._size);
             for (int k = 0; k < v1._size; k++)
@@ -242,6 +255,7 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the addition</returns>
         public static Vector operator +(Vector v, double c)
         {
+            if (v == null) throw new ArgumentNullException(nameof(v));
             Vector tmp = new Vector(v._size);
             for (int i = 0; i < v._size; i++)
                 tmp._data[i] = v._data[i] + c;
@@ -263,6 +277,7 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the substraction</returns>
         public static Vector operator -(Vector v, double c)
         {
+            if (v == null) throw new ArgumentNullException(nameof(v));
             Vector tmp = new Vector(v._size);
             for (int i = 0; i < v.Size; i++)
                 tmp._data[i] = v._data[i] - c;
@@ -275,6 +290,7 @@ namespace Euclid
         /// <returns>the <c>Vector</c> result of the substraction</returns>
         public static Vector operator -(double c, Vector v)
         {
+            if (v == null) throw new ArgumentNullException(nameof(v));
             Vector tmp = new Vector(v._size);
             for (int i = 0; i < v.Size; i++)
                 tmp._data[i] = c - v._data[i];
@@ -315,6 +331,8 @@ namespace Euclid
         /// <returns>a double value</returns>
         public static double Scalar(Vector v1, Vector v2)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
             if (v1.Size != v2.Size) throw new ArgumentException("The scalar product of two matrices can only be performed if they are the same size");
 
             double result = 0;
@@ -328,6 +346,8 @@ namespace Euclid
         /// <returns>a <c>Vector</c></returns>
         public static Vector AggregateSum(IList<Vector> vectors)
         {
+            if (vectors == null) throw new ArgumentNullException(nameof(vectors));
+
             if (vectors.Count == 0)
                 return Vector.Create(1, 0.0);
             else if (vectors.Count == 1)
@@ -360,6 +380,9 @@ namespace Euclid
         /// <returns>a double</returns>
         public static double Quadratic(Vector x, Matrix a, Vector y)
         {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (a == null) throw new ArgumentNullException(nameof(a));
+            if (y == null) throw new ArgumentNullException(nameof(y));
             if (a.IsSquare && a.Rows == x.Size && a.Columns == y.Size)
             {
                 double result = 0;
@@ -377,6 +400,8 @@ namespace Euclid
         /// <returns>a <c>Vector</c> containing the Hadamard product</returns>
         public static Vector Hadamard(Vector v1, Vector v2)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
             if (v1.Size != v2.Size) throw new ArgumentException("The Hadamard product of two Vectors can only be performed if they are the same size");
 
             Vector result = new Vector(v1.Size);
@@ -391,6 +416,9 @@ namespace Euclid
         /// <returns>a Vector</returns>
         public static Vector Max(Vector v1, Vector v2)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
+
             if (v1.Size == v2.Size)
             {
                 Vector result = new Vector(v1.Size);
@@ -407,6 +435,10 @@ namespace Euclid
         /// <returns>a Vector</returns>
         public static Vector Min(Vector v1, Vector v2)
         {
+            if (v1 == null)
+                throw new ArgumentNullException(nameof(v1));
+            if (v2 == null)
+                throw new ArgumentNullException(nameof(v2));
             if (v1.Size == v2.Size)
             {
                 Vector result = new Vector(v1.Size);
@@ -424,6 +456,10 @@ namespace Euclid
         /// <returns>a <c>Vector</c></returns>
         public static Vector Bound(Vector lowBound, Vector upBound, Vector x)
         {
+            if (lowBound == null) throw new ArgumentNullException(nameof(lowBound));
+            if (upBound == null) throw new ArgumentNullException(nameof(upBound));
+            if (x == null) throw new ArgumentNullException(nameof(x));
+
             if (lowBound.Size == upBound.Size && x.Size == lowBound.Size)
             {
                 Vector result = new Vector(lowBound.Size);
@@ -442,6 +478,8 @@ namespace Euclid
         /// <returns>a <c>Vector</c> containing the linear combination of the input</returns>
         public static Vector Create(double f1, Vector v1, double f2, Vector v2)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
             if (v1.Size != v2.Size) throw new ArgumentException("Vectors must have the same dimensions!");
             Vector r = new Vector(v1._size);
             for (int k = 0; k < r.Size; k++)
@@ -459,6 +497,10 @@ namespace Euclid
         /// <returns>a <c>Vector</c> containing the linear combination of the input</returns>
         public static Vector Create(double f1, Vector v1, double f2, Vector v2, double f3, Vector v3)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
+            if (v3 == null) throw new ArgumentNullException(nameof(v3));
+
             if (v1.Size != v2.Size || v2.Size != v3.Size) throw new ArgumentException("Vectors must have the same dimensions!");
             Vector r = new Vector(v1._size);
             for (int k = 0; k < r.Size; k++)
@@ -508,6 +550,7 @@ namespace Euclid
         /// <returns></returns>
         public static Vector CreateRandom(int size, ContinuousDistribution distribution)
         {
+            if (distribution == null) throw new ArgumentNullException(nameof(distribution));
             return new Vector(distribution.Sample(size));
         }
 

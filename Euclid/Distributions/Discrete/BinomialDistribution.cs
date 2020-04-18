@@ -17,11 +17,10 @@ namespace Euclid.Distributions.Discrete
         #region Constructors
         private BinomialDistribution(int n, double p, Random randomSource)
         {
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
-            if (p > 1 || p < 0) throw new ArgumentOutOfRangeException("The probability should be in [0,1]");
-            if (n <= 0) throw new ArgumentOutOfRangeException("The number of trials should be >0");
+            if (p > 1 || p < 0) throw new ArgumentOutOfRangeException(nameof(p), "The probability should be in [0,1]");
+            if (n <= 0) throw new ArgumentOutOfRangeException(nameof(n), "The number of trials should be >0");
             _p = p;
             _q = 1 - p;
             _n = n;
@@ -157,7 +156,7 @@ namespace Euclid.Distributions.Discrete
         public static BinomialDistribution Fit(FittingMethod method, double[] sample)
         {
             if (sample.Min() < 0 || sample.Any(x => x != Convert.ToInt32(x)))
-                throw new ArgumentOutOfRangeException("sample");
+                throw new ArgumentOutOfRangeException(nameof(sample));
 
             if (method == FittingMethod.Moments)
             {
@@ -165,8 +164,8 @@ namespace Euclid.Distributions.Discrete
                     v = sample.Average(x => x * x) - m * m,
                     p = 1 - v / m;
                 if (v >= m)
-                    throw new ArgumentOutOfRangeException("sample", "The moments do not match a Binomial distribution");
-                
+                    throw new ArgumentOutOfRangeException(nameof(sample), "The moments do not match a Binomial distribution");
+
                 int n = Convert.ToInt32(m * m / (m - v));
 
                 return new BinomialDistribution(n, p);

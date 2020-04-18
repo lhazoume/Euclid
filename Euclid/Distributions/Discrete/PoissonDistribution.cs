@@ -7,7 +7,7 @@ namespace Euclid.Distributions.Discrete
     public class PoissonDistribution : DiscreteDistribution
     {
         #region Declarations
-        private double _lambda;
+        private readonly double _lambda;
 
         private const double _supportWidthInStandardDeviations = 10;
 
@@ -15,13 +15,12 @@ namespace Euclid.Distributions.Discrete
 
         private PoissonDistribution(double lambda, Random randomSource)
         {
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
-            if (lambda <= 0) throw new ArgumentOutOfRangeException("The lambda should be >0");
+            if (lambda <= 0) throw new ArgumentOutOfRangeException(nameof(lambda), "The lambda should be >0");
             _lambda = lambda;
 
-            _support = Enumerable.Range(0, Convert.ToInt32(_supportWidthInStandardDeviations * Math.Sqrt(_lambda))).Select(i=>Convert.ToDouble(i)).ToArray();
+            _support = Enumerable.Range(0, Convert.ToInt32(_supportWidthInStandardDeviations * Math.Sqrt(_lambda))).Select(i => Convert.ToDouble(i)).ToArray();
         }
 
         /// <summary>Initializes a new instance of the Poisson distribution</summary>
@@ -98,7 +97,7 @@ namespace Euclid.Distributions.Discrete
         public override double InverseCumulativeDistribution(double p)
         {
             if (p <= 0) return 0;
-            if (p >= 1) throw new ArgumentOutOfRangeException("The target probability should <1");
+            if (p >= 1) throw new ArgumentOutOfRangeException(nameof(p), "The target probability should <1");
             int k = 0;
 
             while (CumulativeDistribution(k) < p)
@@ -180,7 +179,7 @@ namespace Euclid.Distributions.Discrete
         /// <param name="method">the fitting method</param>
         public static PoissonDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (sample.Min() < 0) throw new ArgumentOutOfRangeException("The sample can not fit a Poisson law (all data should be>0)");
+            if (sample.Min() < 0) throw new ArgumentOutOfRangeException(nameof(sample), "The sample can not fit a Poisson law (all data should be>0)");
             return new PoissonDistribution(sample.Average());
         }
 

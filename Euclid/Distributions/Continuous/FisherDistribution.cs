@@ -11,7 +11,7 @@ namespace Euclid.Distributions.Continuous
     public class FisherDistribution : ContinuousDistribution
     {
         #region Declarations
-        private double _d1, _d2;
+        private readonly double _d1, _d2;
         #endregion
 
         #region Constructors
@@ -22,9 +22,7 @@ namespace Euclid.Distributions.Continuous
 
             if (d2 <= 0) throw new ArgumentException("The d2 can not be negative");
             _d2 = d2;
-
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(0, double.PositiveInfinity, true, false);
         }
@@ -112,8 +110,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            NewtonRaphson solver = new NewtonRaphson(1, CumulativeDistribution, 100);
-            solver.SlopeTolerance = 1e-10;
+            NewtonRaphson solver = new NewtonRaphson(1, CumulativeDistribution, 100) { SlopeTolerance = 1e-10 };
             solver.Solve(p);
             return solver.Result;
         }

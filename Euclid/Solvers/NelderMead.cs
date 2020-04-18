@@ -17,7 +17,7 @@ namespace Euclid.Solvers
 
         private readonly Vector[] _initialPopulation;
 
-        private List<Tuple<Vector, double>> _convergence = new List<Tuple<Vector, double>>();
+        private readonly List<Tuple<Vector, double>> _convergence = new List<Tuple<Vector, double>>();
         private SolverStatus _status;
 
         private readonly double _alpha, _gamma, _rho, _sigma;
@@ -43,6 +43,9 @@ namespace Euclid.Solvers
             double epsilon = 1e-8,
             double alpha = 1, double gamma = 2, double rho = 0.5, double sigma = 0.5)
         {
+            if (lowerBounds == null) throw new ArgumentNullException(nameof(lowerBounds));
+            if (upperBounds == null) throw new ArgumentNullException(nameof(upperBounds));
+
             #region Bounds and dimension
             if (lowerBounds.Size != upperBounds.Size)
                 throw new RankException("The lower and upper bounds should be the same size");
@@ -53,7 +56,7 @@ namespace Euclid.Solvers
 
             #region Algorithm parameters
             if (alpha < 0 || gamma < 0 || rho < 0 || sigma < 0)
-                throw new ArgumentOutOfRangeException("The alpha, gamma, rho, sigma should all be >=0");
+                throw new ArgumentException("The alpha, gamma, rho, sigma should all be >=0");
             _alpha = alpha;
             _gamma = gamma;
             _rho = rho;
@@ -62,7 +65,7 @@ namespace Euclid.Solvers
 
             #region Epsilon
             if (epsilon <= 0)
-                throw new ArgumentOutOfRangeException("The epsilon should all be >0");
+                throw new ArgumentOutOfRangeException(nameof(epsilon), "The epsilon should all be >0");
             _epsilon = epsilon;
             #endregion
 
@@ -72,7 +75,7 @@ namespace Euclid.Solvers
             _optimizationType = optimizationType;
 
             if (maxIterations <= 0)
-                throw new ArgumentOutOfRangeException("The maximum number of iterations should both be >0");
+                throw new ArgumentOutOfRangeException(nameof(maxIterations), "The maximum number of iterations should both be >0");
             _maxIterations = maxIterations;
         }
 

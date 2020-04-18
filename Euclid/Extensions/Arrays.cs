@@ -13,6 +13,8 @@ namespace Euclid.Extensions
         /// <returns>a shallow copy of data</returns>
         public static T[] Clone<T>(this T[] data)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             T[] result = new T[data.Length];
             for (int i = 0; i < data.Length; i++)
                 result[i] = data[i];
@@ -25,6 +27,8 @@ namespace Euclid.Extensions
         /// <returns>a shallow copy of data</returns>
         public static T[,] Clone<T>(this T[,] data)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             int n = data.GetLength(0),
                 p = data.GetLength(1);
             T[,] result = new T[n, p];
@@ -40,6 +44,8 @@ namespace Euclid.Extensions
         /// <returns>a shallow copy of data</returns>
         public static T[,,] Clone<T>(this T[,,] data)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             int n = data.GetLength(0),
                 p = data.GetLength(1),
                 q = data.GetLength(2);
@@ -71,6 +77,8 @@ namespace Euclid.Extensions
         /// <returns>an array with the transformed data</returns>
         public static T[] Apply<T>(this T[] data, Func<T, T> function)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             T[] result = new T[data.Length];
             for (int i = 0; i < data.Length; i++)
                 result[i] = function(data[i]);
@@ -108,6 +116,8 @@ namespace Euclid.Extensions
         /// <returns>the matching indices</returns>
         public static IEnumerable<int> FindIndices<T>(this IEnumerable<T> items, Func<T, bool> predicate)
         {
+            if (items == null) throw new ArgumentNullException(nameof(items));
+
             int i = 0;
 
             foreach (var item in items)

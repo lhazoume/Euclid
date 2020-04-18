@@ -13,7 +13,7 @@ namespace Euclid.Arithmetics
         /// <returns>the List of subsets</returns>
         public static List<List<T>> AllSubsets<T>(this List<T> data)
         {
-            if (data.Count() == 0)
+            if (!data.Any())
                 return new List<List<T>>() { new List<T>() };
 
             List<T> element = data.Take(1).ToList();
@@ -32,6 +32,8 @@ namespace Euclid.Arithmetics
         /// <returns>the list of subsets</returns>
         public static List<List<T>> SubsetsOfSize<T>(this List<T> data, int subsetSize, int startingIndex = 0)
         {
+            if (data == null) throw new ArgumentOutOfRangeException(nameof(data));
+
             List<List<T>> combinations = new List<List<T>>();
             if (subsetSize <= 0)
                 return combinations;

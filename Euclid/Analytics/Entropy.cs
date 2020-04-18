@@ -4,9 +4,7 @@ using System.Linq;
 
 namespace Euclid.Analytics
 {
-    /// <summary>
-    /// Helper class for entropy calculations
-    /// </summary>
+    /// <summary>Helper class for entropy calculations</summary>
     public static class Entropy
     {
         /// <summary>Entropy is a measure of unpredictability of information content. Here is used Shannon's entropy expressed in nat (base e)</summary>
@@ -14,6 +12,7 @@ namespace Euclid.Analytics
         /// <returns>the entropy in natural bits of information</returns>
         public static double EntropyMetric(int[] occurences)
         {
+            if (occurences == null) throw new ArgumentNullException(nameof(occurences));
             int rows = occurences.Length,
                 totalSum = occurences.Sum();
 
@@ -32,6 +31,8 @@ namespace Euclid.Analytics
         /// <returns></returns>
         public static double InformationGain(List<int[]> occurencesBuckets)
         {
+            if (occurencesBuckets == null) throw new ArgumentNullException(nameof(occurencesBuckets));
+
             if (occurencesBuckets.Count == 0 || occurencesBuckets.Any(b => b.Length != occurencesBuckets[0].Length))
                 return 0;
 
@@ -50,6 +51,8 @@ namespace Euclid.Analytics
         /// <returns> 0 when the variables are independent and 1 when they are totally redundant</returns>
         public static double Redundancy(int[,] occurences)
         {
+            if (occurences == null) throw new ArgumentNullException(nameof(occurences));
+
             int rows = occurences.GetLength(0),
                 cols = occurences.GetLength(1);
             int[] rowOccurences = new int[rows],
@@ -89,6 +92,8 @@ namespace Euclid.Analytics
         /// <returns>the mutual information in natural bits of information</returns>
         public static double MutualInformation(int[,] occurences)
         {
+            if (occurences == null) throw new ArgumentNullException(nameof(occurences));
+
             int rows = occurences.GetLength(0),
                 cols = occurences.GetLength(1);
             int[] rowSums = new int[rows],

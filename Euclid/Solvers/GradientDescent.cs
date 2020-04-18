@@ -15,9 +15,10 @@ namespace Euclid.Solvers
         private readonly double _gradientThreshold;
         private readonly int _maxIterations, _maxLineSearchIterations;
         private int _evaluations;
-        private Vector _initialGuess, _result;
-        private List<Vector> _descentDirections = new List<Vector>();
-        private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
+        private readonly Vector _initialGuess;
+        private Vector _result;
+        private readonly List<Vector> _descentDirections = new List<Vector>();
+        private readonly List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private LineSearch _lineSearch;
         private readonly OptimizationType _optimizationType;
         private readonly int _sign;
@@ -38,6 +39,8 @@ namespace Euclid.Solvers
             Func<Vector, double> function, OptimizationType optimizationType,
             int maxIterations, int maxLineSearchIterations, double gradientNormThreshold = Descents.GRADIENT_EPSILON)
         {
+
+            if (initialGuess == null) throw new ArgumentNullException(nameof(initialGuess));
             _initialGuess = initialGuess.Clone;
             _lineSearch = lineSearch;
             _maxIterations = maxIterations;
@@ -63,6 +66,7 @@ namespace Euclid.Solvers
             Func<Vector, double> function, Func<Vector, Vector> gradient, OptimizationType optimizationType,
             int maxIterations, int maxLineSearchIterations, double gradientNormThreshold = Descents.GRADIENT_EPSILON)
         {
+            if (initialGuess == null) throw new ArgumentNullException(nameof(initialGuess));
             _initialGuess = initialGuess.Clone;
             _lineSearch = lineSearch;
             _maxIterations = maxIterations;
@@ -91,6 +95,7 @@ namespace Euclid.Solvers
             OptimizationType optimizationType,
             int maxIterations, int maxLineSearchIterations, double gradientNormThreshold = Descents.GRADIENT_EPSILON)
         {
+            if (initialGuess == null) throw new ArgumentNullException(nameof(initialGuess));
             _initialGuess = initialGuess.Clone;
             _lineSearch = lineSearch;
             _maxIterations = maxIterations;
@@ -121,7 +126,7 @@ namespace Euclid.Solvers
         public Func<Vector, double> Function
         {
             get { return _function; }
-            set { _function = value ?? throw new ArgumentNullException("function", "the function can not be null"); }
+            set { _function = value ?? throw new ArgumentNullException(nameof(value), "the function can not be null"); }
         }
 
         /// <summary>The final status of the solver</summary>
@@ -346,7 +351,7 @@ namespace Euclid.Solvers
             while (!endCriteria.ShouldStop(_error, gradient.Norm2))
             {
                 double factor = LineSearchBranch(_error, _result, direction, gradient);
-                _result = _result + (factor * direction);
+                _result += factor * direction;
 
                 _error = _function(_result);
                 _evaluations++;
@@ -364,7 +369,6 @@ namespace Euclid.Solvers
         public void OptimizeBFGS()
         {
             _evaluations = 0;
-            if (_function == null) throw new ArgumentNullException("function should not be null");
 
             _convergence.Clear();
 
@@ -387,7 +391,7 @@ namespace Euclid.Solvers
             {
                 double factor = LineSearchBranch(_error, _result, direction, gradient);
                 Vector s = factor * direction;
-                _result = _result + s;
+                _result += s;
 
                 _error = _function(_result);
                 _evaluations++;
@@ -399,7 +403,7 @@ namespace Euclid.Solvers
                 if (sBs != 0) B = -((B * s) * (s * B)) / sBs;
 
                 double ys = Vector.Scalar(y, s);
-                if (ys != 0) B = B + (y * y) / ys;
+                if (ys != 0) B += (y * y) / ys;
 
                 direction = _sign * B.Inverse * gradient;
 
@@ -442,7 +446,7 @@ namespace Euclid.Solvers
                         numerator = Vector.Scalar(direction, gradient),
                         alpha = numerator / denominator;
 
-                    _result = _result - (alpha * direction);
+                    _result -= (alpha * direction);
                     gradient = _gradient(_result);
                     H = _hessian(_result);
                     _evaluations++;
@@ -473,11 +477,9 @@ namespace Euclid.Solvers
             if (Enumerable.Range(0, _initialGuess.Size).Any(i => lowBound[i] >= upBound[i]))
                 throw new Exception("The bounds are not coherent");
 
-            if (_function == null)
-                throw new NullReferenceException("The function should not be null");
+            if (_function == null) throw new NullReferenceException("The function should not be null");
 
-            if (momentum < 0)
-                throw new ArgumentOutOfRangeException("The momentum should not be negative");
+            if (momentum < 0) throw new ArgumentOutOfRangeException(nameof(momentum), "The momentum should not be negative");
             #endregion
 
             _evaluations = 0;
@@ -500,7 +502,7 @@ namespace Euclid.Solvers
             while (!endCriteria.ShouldStop(_error, gradient.Norm2))
             {
                 double factor = LineSearchBranch(_error, _result, direction, gradient);
-                _result = _result + (factor * direction);
+                _result += (factor * direction);
 
                 _error = _function(_result);
                 _evaluations++;

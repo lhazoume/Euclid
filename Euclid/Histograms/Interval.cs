@@ -8,7 +8,7 @@ namespace Euclid.Histograms
     public class Interval : IEquatable<Interval>
     {
         #region Declarations
-        private Bound _lowerBound, _upperBound;
+        private readonly Bound _lowerBound, _upperBound;
         #endregion
 
         #region Constructors
@@ -31,10 +31,8 @@ namespace Euclid.Histograms
         /// <param name="lower">the lower bound</param>
         /// <param name="upper">the upper bound</param>
         public Interval(Bound lower, Bound upper)
-        {
-            _lowerBound = new Bound(lower.Value, lower.IsIncluded);
-            _upperBound = new Bound(upper.Value, upper.IsIncluded);
-        }
+            :this(lower.Value, upper.Value, lower.IsIncluded, upper.IsIncluded)
+        {        }
 
         /// <summary>
         /// Duplicates an <c>Interval</c>

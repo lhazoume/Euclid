@@ -9,16 +9,20 @@ namespace Euclid.Analytics.Regressions
     {
         /// <summary>Displays the regression result as a string</summary>
         /// <typeparam name="T"></typeparam>
-        /// <typeparam name="V"></typeparam>
+        /// <typeparam name="TV"></typeparam>
         /// <param name="dataFrame">the dataframe</param>
         /// <param name="series">the series</param>
         /// <param name="linearModel">the linear model</param>
         /// <param name="format">the format for the coefficients</param>
         /// <returns>a string</returns>
-        public static string Text<T, V>(DataFrame<T, double, V> dataFrame, Series<T, double, V> series, LinearModel linearModel, string format)
+        public static string Text<T, TV>(DataFrame<T, double, TV> dataFrame, Series<T, double, TV> series, LinearModel linearModel, string format)
             where T : IComparable<T>, IEquatable<T>
-            where V : IEquatable<V>, IConvertible
+            where TV : IEquatable<TV>, IConvertible
         {
+            if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
+            if (series == null) throw new ArgumentNullException(nameof(series));
+            if (linearModel == null) throw new ArgumentNullException(nameof(linearModel));
+
             StringBuilder sb = new StringBuilder();
             sb.Append(string.Format("{0}={1}", series.Label.ToString(), string.Format(format, linearModel.Constant)));
             for (int i = 0; i < linearModel.Factors.Size; i++)

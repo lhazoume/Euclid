@@ -27,7 +27,7 @@ namespace Euclid.Numerics
         /// <returns>the derivative</returns>
         public static Func<double, double> Differentiate(this Func<double, double> function, DifferenceForm form, double step)
         {
-            if (function == null) throw new ArgumentNullException("The function should not be null");
+            if (function == null) throw new ArgumentNullException(nameof(function));
             if (step <= 0) throw new ArgumentException("the step should be stricly positive");
             switch (form)
             {
@@ -47,7 +47,7 @@ namespace Euclid.Numerics
         /// <returns>the n-degree derivative</returns>
         public static Func<double, double> Differentiate(this Func<double, double> function, int n, DifferenceForm form, double step)
         {
-            if (function == null) throw new ArgumentNullException("The function should not be null");
+            if (function == null) throw new ArgumentNullException(nameof(function));
             if (step <= 0) throw new ArgumentException("the step should be stricly positive");
             if (n < 1) throw new ArgumentException("the degree should be strictly positive");
 

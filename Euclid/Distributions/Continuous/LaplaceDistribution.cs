@@ -9,7 +9,7 @@ namespace Euclid.Distributions.Continuous
     public class LaplaceDistribution : ContinuousDistribution
     {
         #region Declarations
-        private double _mu, _b;
+        private readonly double _mu, _b;
         #endregion
 
         #region Constructors
@@ -18,8 +18,7 @@ namespace Euclid.Distributions.Continuous
             if (b <= 0) throw new ArgumentException("scale has to be positive");
             _mu = mu;
             _b = b;
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
@@ -138,7 +137,7 @@ namespace Euclid.Distributions.Continuous
         {
             if (Math.Abs(t) * _b < 1)
                 return Math.Exp(_mu * t) / (1 - _b * _b * t * t);
-            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower -in absolute- than the inverse of the scale");
+            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower -in absolute- than the inverse of the scale");
         }
 
         /// <summary>Returns a string that represents this instance</summary>

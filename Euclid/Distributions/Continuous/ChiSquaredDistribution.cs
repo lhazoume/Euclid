@@ -39,7 +39,6 @@ namespace Euclid.Distributions.Continuous
             {
                 double halfK = 0.5 * _freedomDegrees;
                 return halfK + Math.Log(2 * Fn.Gamma(halfK)) + (1 - halfK) * Fn.DiGamma(halfK);
-                throw new NotImplementedException();
             }
         }
 
@@ -144,7 +143,7 @@ namespace Euclid.Distributions.Continuous
         {
             if (t < 0.5)
                 return Math.Pow(1 - 2 * t, -0.5 * _freedomDegrees);
-            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than 0.5");
+            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower than 0.5");
         }
 
         /// <summary>Returns a string that represents this instance</summary>

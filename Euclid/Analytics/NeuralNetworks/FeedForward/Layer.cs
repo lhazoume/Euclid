@@ -45,7 +45,9 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <returns>a <c>Vector</c></returns>
         public Vector Process(Vector input)
         {
-            if (input.Size != _inputSize) throw new ArgumentOutOfRangeException("the inputs' size does not match the layer's characteristics");
+            if (input == null) throw new ArgumentNullException(nameof(input));
+
+            if (input.Size != _inputSize) throw new ArgumentOutOfRangeException(nameof(input), "the inputs' size does not match the layer's characteristics");
             _z = (_weights * input) + _biases;
             _a = _z.Apply(_activation.Function);
             return _a.Clone;
@@ -56,6 +58,8 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <returns>a list of <c>Vector</c></returns>
         public List<Vector> Process(List<Vector> inputs)
         {
+            if (inputs == null) throw new ArgumentNullException(nameof(inputs));
+
             _z = Vector.Create(_layerSize);
             _a = Vector.Create(_layerSize);
 
@@ -81,6 +85,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             get { return _biases; }
             set
             {
+                if (value == null) throw new ArgumentNullException(nameof(value));
                 if (value.Size == _biases.Size)
                     _biases = value.Clone;
             }
@@ -92,6 +97,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             get { return _weights; }
             set
             {
+                if (value == null) throw new ArgumentNullException(nameof(value));
                 if (value.Rows == _weights.Rows && value.Columns == _weights.Columns)
                     _weights = value.Clone;
             }
@@ -168,6 +174,8 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <param name="writer">the XMlWriter</param>
         public void ToXml(XmlWriter writer)
         {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
             writer.WriteElementString("layerSize", _layerSize.ToString());
             writer.WriteElementString("inputSize", _inputSize.ToString());
             writer.WriteElementString("activation", _activation.GetType().Name);
@@ -200,11 +208,16 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <returns>a <c>Layer</c></returns>
         public static Layer Create(Matrix weights, Vector biases, IActivationFunction function)
         {
-            if (weights.Rows != biases.Size) throw new ArgumentException("the matrix and biases' sizes do not match");
-            Layer layer = new Layer(weights.Rows, weights.Columns, function);
+            if (weights == null) throw new ArgumentNullException(nameof(weights));
+            if (biases == null) throw new ArgumentNullException(nameof(biases));
+            if (function == null) throw new ArgumentNullException(nameof(function));
 
-            layer._weights = weights.Clone;
-            layer._biases = biases.Clone;
+            if (weights.Rows != biases.Size) throw new ArgumentException("the matrix and biases' sizes do not match");
+            Layer layer = new Layer(weights.Rows, weights.Columns, function)
+            {
+                _weights = weights.Clone,
+                _biases = biases.Clone
+            };
 
             return layer;
         }
@@ -225,6 +238,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <returns>a <c>Layer</c></returns>
         public static Layer Create(XmlNode node)
         {
+            if (node == null) throw new ArgumentNullException(nameof(node));
             int layerSize = int.Parse(node.SelectSingleNode("layerSize").InnerText),
                 inputSize = int.Parse(node.SelectSingleNode("inputSize").InnerText);
             string activation = node.SelectSingleNode("activation").InnerText;

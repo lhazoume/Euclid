@@ -1,4 +1,5 @@
 ﻿using Euclid.Histograms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,8 @@ namespace Euclid.Helpers
         /// <returns>a set of intervals</returns>
         public static List<Interval> QuantileIntervals(int buckets, IList<double> values, bool open)
         {
+            if (values == null) throw new ArgumentNullException(nameof(values));
+
             List<double> orderedValues = values.OrderBy(d => d).ToList();
             List<Interval> result = new List<Interval>();
 

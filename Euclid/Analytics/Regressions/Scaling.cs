@@ -10,7 +10,7 @@ namespace Euclid.Analytics.Regressions
     public sealed class Scaling
     {
         #region Private Variables
-        private double _intercept, _scalingCoefficient;
+        private  readonly double _intercept, _scalingCoefficient;
         #endregion
 
         #region Constructor
@@ -72,6 +72,8 @@ namespace Euclid.Analytics.Regressions
         /// <returns>a <c>Scaling</c> class</returns>
         public static Scaling CreateZScore(IEnumerable<double> data)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             int n = data.Count();
             double intercept = 0, scaling = 0;
 
@@ -95,7 +97,7 @@ namespace Euclid.Analytics.Regressions
         /// <returns>a <c>Scaling</c> class</returns>
         public static Scaling CreateMinMax(IEnumerable<double> data)
         {
-            int n = data.Count();
+            if (data == null) throw new ArgumentNullException(nameof(data));
             double min = data.First(), max = min;
 
             foreach (double element in data)

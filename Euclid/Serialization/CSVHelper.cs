@@ -41,6 +41,7 @@ namespace Euclid.Serialization
         /// <returns><c>true</c> if all subarrays have the same size</returns>
         public static bool IsWellFormed(string[][] data)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
             if (data.Length == 0) return false;
             return data.All(a => a.Length == data[0].Length);
         }

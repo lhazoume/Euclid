@@ -13,8 +13,8 @@ namespace Euclid
     {
         #region Declarations
 
-        private int _rows, _cols;
-        private double[] _data;
+        private readonly int _rows, _cols;
+        private readonly double[] _data;
         private Matrix _L, _U;
         private int[] _pi;
         private double _detOfP = 1;
@@ -262,18 +262,14 @@ namespace Euclid
         {
             get
             {
-                Matrix m2 = new Matrix(_rows, _cols, 0),
-                    ret = new Matrix(_rows, _cols, 0);
+                Matrix ret = new Matrix(_rows, _cols, 0);
                 if (_rows == 1)
                     ret[0, 0] = 1;
                 else
                 {
                     for (int i = 0; i < _rows; i++)
                         for (int j = 0; j < _rows; j++)
-                        {
-                            m2 = this.SubMatrix(i, j);
-                            ret[i, j] = Expo(i + j) * m2.Determinant;
-                        }
+                            ret[i, j] = Expo(i + j) * this.SubMatrix(i, j).Determinant;
                 }
                 return ret;
             }
@@ -412,14 +408,12 @@ namespace Euclid
             _pi = new int[_rows];
             for (int i = 0; i < _rows; i++) _pi[i] = i;
 
-            double p = 0;
             double pom2;
             int k0 = 0;
-            int pom1 = 0;
 
             for (int k = 0; k < _cols - 1; k++)
             {
-                p = 0;
+                double p = 0;
                 for (int i = k; i < _rows; i++)      // find the row with the biggest pivot
                 {
                     if (Math.Abs(_U[i * _U._cols + k]) > p)
@@ -430,7 +424,7 @@ namespace Euclid
                 }
                 if (p == 0) throw new Exception("The matrix is singular");
 
-                pom1 = _pi[k];
+                int pom1 = _pi[k];
                 _pi[k] = _pi[k0];
                 _pi[k0] = pom1;    // switch two rows in permutation matrix
 
@@ -493,11 +487,11 @@ namespace Euclid
         /// <returns>The matrix without the speficied line and the column</returns>
         private Matrix SubMatrix(int row, int col)
         {
-            int dim = _rows, ld = 0, cd = 0;
+            int dim = _rows, ld = 0;
             Matrix sub = new Matrix(_rows - 1, _cols - 1, 0);
             for (int L = 0; L < dim; L++)
             {
-                cd = 0;
+                int cd = 0;
                 if (L != row)
                 {
                     for (int c = 0; c < dim; c++)
@@ -514,6 +508,7 @@ namespace Euclid
         /// <param name="k">Index of the column to replace</param>
         public void SetCol(Vector v, int k)
         {
+            if (v == null) throw new ArgumentNullException(nameof(v));
             for (int i = 0; i < _rows; i++) _data[i * _cols + k] = v[i];
         }
 
@@ -522,6 +517,7 @@ namespace Euclid
         /// <param name="k">Index of the row to replace</param>
         public void SetRow(Vector v, int k)
         {
+            if (v == null) throw new ArgumentNullException(nameof(v));
             for (int i = 0; i < _cols; i++) _data[k * _cols + i] = v[i];
         }
 
@@ -530,6 +526,7 @@ namespace Euclid
         /// <returns>The solution x of A*x=v</returns>
         public Vector SolveWith(Vector v)
         {
+            if (v == null) throw new ArgumentNullException(nameof(v));
             if (_rows != _cols) throw new Exception("The matrix is not square!");
             if (_rows != v.Size) throw new Exception("Wrong number of results in solution vector!");
             if (_L == null) MakeLU();
@@ -590,6 +587,8 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
         public static Matrix operator *(Matrix m, double f)
         {
+            if (m == null) throw new ArgumentNullException(nameof(m));
+
             Matrix tmp = m.Clone;
             for (int k = 0; k < m.Size; k++)
                 tmp[k] = f * m[k];
@@ -620,6 +619,8 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
         public static Matrix operator *(Matrix m1, Matrix m2)
         {
+            if (m1 == null) throw new ArgumentNullException(nameof(m1));
+            if (m2 == null) throw new ArgumentNullException(nameof(m2));
             if (m1.Columns != m2.Rows) throw new Exception("Wrong dimensions of matrix!");
 
             Matrix result = Create(m1.Rows, m2.Columns);
@@ -636,6 +637,9 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the multiplication</returns>
         public static Matrix operator ^(Matrix m1, Matrix m2)
         {
+            if (m1 == null) throw new ArgumentNullException(nameof(m1));
+            if (m2 == null) throw new ArgumentNullException(nameof(m2));
+
             if (m1.Columns != m2.Rows) throw new Exception("Wrong dimensions of matrix!");
 
             int n = m2._cols,
@@ -666,6 +670,8 @@ namespace Euclid
         /// <returns>The sum of m1 and m2</returns>
         private static Matrix Add(Matrix m1, Matrix m2)
         {
+            if (m1 == null) throw new ArgumentNullException(nameof(m1));
+            if (m2 == null) throw new ArgumentNullException(nameof(m2));
             if (m1.Rows != m2.Rows || m1.Columns != m2.Columns) throw new ArgumentException("Matrices must have the same dimensions!");
             Matrix r = Matrix.Create(m1.Rows, m1.Columns);
             for (int k = 0; k < r.Size; k++)
@@ -681,6 +687,8 @@ namespace Euclid
         /// <returns>the Matrix result of f1*m1 + f2*m2</returns>
         public static Matrix LinearCombination(double f1, Matrix m1, double f2, Matrix m2)
         {
+            if (m1 == null) throw new ArgumentNullException(nameof(m1));
+            if (m2 == null) throw new ArgumentNullException(nameof(m2));
             if (m1.Rows != m2.Rows || m1.Columns != m2.Columns) throw new ArgumentException("Matrices must have the same dimensions!");
             Matrix r = Matrix.Create(m1.Rows, m1.Columns);
             for (int k = 0; k < r.Size; k++)
@@ -694,6 +702,7 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the addition</returns>
         public static Matrix operator +(Matrix m, double c)
         {
+            if (m == null) throw new ArgumentNullException(nameof(m));
             Matrix tmp = m.Clone;
             for (int i = 0; i < m.Size; i++)
                 tmp[i] = m[i] + c;
@@ -706,6 +715,7 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the addition</returns>
         public static Matrix operator +(double c, Matrix m)
         {
+            if (m == null) throw new ArgumentNullException(nameof(m));
             Matrix tmp = m.Clone;
             for (int i = 0; i < m.Size; i++)
                 tmp[i] = m[i] + c;
@@ -718,6 +728,7 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the substraction</returns>
         public static Matrix operator -(Matrix m, double c)
         {
+            if (m == null) throw new ArgumentNullException(nameof(m));
             Matrix tmp = m.Clone;
             for (int i = 0; i < m.Size; i++)
                 tmp[i] = m[i] - c;
@@ -730,6 +741,7 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the substraction</returns>
         public static Matrix operator -(double c, Matrix m)
         {
+            if (m == null) throw new ArgumentNullException(nameof(m));
             Matrix tmp = m.Clone;
             for (int i = 0; i < m.Size; i++)
                 tmp[i] = m[i] - c;
@@ -770,6 +782,7 @@ namespace Euclid
         /// <returns>The matrix, raised to the power pow</returns>
         public static Matrix Power(Matrix matrix, int pow)
         {
+            if (matrix == null) throw new ArgumentNullException(nameof(matrix));
             if (pow == 0) return CreateIdentityMatrix(matrix._rows, matrix._cols);
             if (pow == 1) return matrix.Clone;
             if (pow < 0) return Power(matrix.Inverse, -pow);
@@ -794,6 +807,7 @@ namespace Euclid
         /// <param name="model">the 2d-array of data</param>
         public static Matrix Create(double[,] model)
         {
+            if (model == null) throw new ArgumentNullException(nameof(model));
             Matrix result = new Matrix(model.GetLength(0), model.GetLength(1), 0);
 
             for (int i = 0; i < result.Rows; i++)
@@ -915,11 +929,11 @@ namespace Euclid
         {
             #region Verifications
             Vector reference = vectors.ElementAt(0);
-            for (int i = 1; i < vectors.Count(); i++)
+            for (int i = 1; i < vectors.Length; i++)
                 if (vectors.ElementAt(i).Size != reference.Size)
                     throw new ArgumentException("all the vectors do not have the same size");
             #endregion
-            Matrix result = Matrix.Create(reference.Size, vectors.Count());
+            Matrix result = Matrix.Create(reference.Size, vectors.Length);
             for (int j = 0; j < result.Columns; j++)
             {
                 Vector v = vectors.ElementAt(j);
@@ -938,6 +952,7 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the product</returns>
         public static Matrix TransposeBySelf(Matrix X)
         {
+            if (X == null) throw new ArgumentNullException(nameof(X));
             Matrix result = Matrix.CreateSquare(X.Columns);
 
             #region List the pairs
@@ -970,6 +985,8 @@ namespace Euclid
         /// <returns>the <c>Matrix</c> result of the product</returns>
         public static Matrix FastTransposeBySelf(Matrix X)
         {
+            if (X == null) throw new ArgumentNullException(nameof(X));
+
             Matrix result = Matrix.CreateSquare(X.Columns);
 
             #region List the pairs
@@ -1001,6 +1018,8 @@ namespace Euclid
         /// <returns>a <c>Matrix</c></returns>
         public static Matrix Apply(Matrix m, Func<double, double> func)
         {
+            if (m == null) throw new ArgumentNullException(nameof(m));
+
             Matrix result = Matrix.Create(m._rows, m._cols);
             Parallel.For(0, result.Size, k => { result[k] = func(m._data[k]); });
             return result;
@@ -1028,6 +1047,9 @@ namespace Euclid
         /// <returns>a double value</returns>
         public static double Scalar(Matrix m1, Matrix m2)
         {
+            if (m1 == null) throw new ArgumentNullException(nameof(m1));
+            if (m2 == null) throw new ArgumentNullException(nameof(m2));
+
             if (m1.Rows == m2.Rows && m1.Columns == m2.Columns)
             {
                 double result = 0;

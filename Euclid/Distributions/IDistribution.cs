@@ -1,6 +1,4 @@
-﻿using Euclid.Histograms;
-
-namespace Euclid.Distributions
+﻿namespace Euclid.Distributions
 {
     /// <summary>Interface for all continuous distributions</summary>
     public interface IDistribution

@@ -10,8 +10,8 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
     public class Trainer
     {
         #region declarations
-        private Perceptron _network;
-        private IErrorFunction _errorFunction;
+        private readonly Perceptron _network;
+        private readonly IErrorFunction _errorFunction;
         private List<Tuple<int, double, double>> _convergence;
         #endregion
 
@@ -36,6 +36,11 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             double learningRate,
             int epochs)
         {
+            if (learningX == null) throw new ArgumentNullException(nameof(learningX));
+            if (learningY == null) throw new ArgumentNullException(nameof(learningY));
+            if (validationX == null) throw new ArgumentNullException(nameof(validationX));
+            if (validationY == null) throw new ArgumentNullException(nameof(validationY));
+
             _convergence = new List<Tuple<int, double, double>>();
 
             for (int epoch = 0; epoch < epochs; epoch++)
@@ -73,6 +78,11 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             double learningRate, double momentum,
             int epochs)
         {
+            if (learningX == null) throw new ArgumentNullException(nameof(learningX));
+            if (learningY == null) throw new ArgumentNullException(nameof(learningY));
+            if (validationX == null) throw new ArgumentNullException(nameof(validationX));
+            if (validationY == null) throw new ArgumentNullException(nameof(validationY));
+
             _convergence = new List<Tuple<int, double, double>>();
             List<Tuple<Matrix, Vector>[]> descentDirections = new List<Tuple<Matrix, Vector>[]>();
             for (int epoch = 0; epoch < epochs; epoch++)
@@ -111,6 +121,9 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
             double etaPlus, double etaMinus,
             int epochs)
         {
+            if (learningX == null) throw new ArgumentNullException(nameof(learningX));
+            if (learningY == null) throw new ArgumentNullException(nameof(learningY));
+
             _convergence = new List<Tuple<int, double, double>>();
             List<Tuple<Matrix, Vector>[]> gradients = new List<Tuple<Matrix, Vector>[]> { Empty(_network, 0) },
                 deltas = new List<Tuple<Matrix, Vector>[]> { Empty(_network, 0.01) };

@@ -11,6 +11,9 @@ namespace Euclid.Helpers.Geodesic
         /// <returns>the distance between the points (expressed in meters)</returns>
         public static double SphericalDistance(Coordinates point1, Coordinates point2)
         {
+            if (point1 == null) throw new ArgumentNullException(nameof(point1));
+            if (point2 == null) throw new ArgumentNullException(nameof(point2));
+
             double factor = Math.PI / 180.0;
             double baseRad = point1.Latitude * factor,
                 targetRad = point2.Latitude * factor,
@@ -27,8 +30,9 @@ namespace Euclid.Helpers.Geodesic
         /// <returns>the distance between the points (expressed in meters)</returns>
         public static double EllipsoidDistance(this Ellipsoid ellipsoid, Coordinates point1, Coordinates point2)
         {
-            if (point1 == null) throw new ArgumentNullException("point1", "the point1 is null");
-            if (point2 == null) throw new ArgumentNullException("point2", "the point1 is null");
+            if (ellipsoid == null) throw new ArgumentNullException(nameof(ellipsoid));
+            if (point1 == null) throw new ArgumentNullException(nameof(point1));
+            if (point2 == null) throw new ArgumentNullException(nameof(point2));
 
             double factor = Math.PI / 180.0;
             // get constants

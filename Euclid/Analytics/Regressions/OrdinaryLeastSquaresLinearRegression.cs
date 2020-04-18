@@ -6,8 +6,8 @@ namespace Euclid.Analytics.Regressions
 {
     /// <summary>OrdinaryLeastSquaresLinearRegression class</summary>
     /// <typeparam name="T">the legends' type</typeparam>
-    /// <typeparam name="V">the labels' type</typeparam>
-    public class OrdinaryLeastSquaresLinearRegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
+    /// <typeparam name="TV">the labels' type</typeparam>
+    public class OrdinaryLeastSquaresLinearRegression<T, TV> where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
     {
         #region Declarations
         private bool _returnAverageIfFailed;
@@ -15,16 +15,17 @@ namespace Euclid.Analytics.Regressions
         private bool _computeErr;
         private RegressionStatus _status;
         private LinearModel _linearModel = null;
-        private DataFrame<T, double, V> _x;
-        private Series<T, double, V> _y;
+        private readonly DataFrame<T, double, TV> _x;
+        private readonly Series<T, double, TV> _y;
         #endregion
 
         /// <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
         /// <param name="x">the <c>DataFrame</c></param>
         /// <param name="y">the <c>Series</c></param>
-        public OrdinaryLeastSquaresLinearRegression(DataFrame<T, double, V> x, Series<T, double, V> y)
+        public OrdinaryLeastSquaresLinearRegression(DataFrame<T, double, TV> x, Series<T, double, TV> y)
         {
-            if (x == null || y == null) throw new ArgumentNullException("the x and y should not be null");
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
 
             _x = x.Clone();

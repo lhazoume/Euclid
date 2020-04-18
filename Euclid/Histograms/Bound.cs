@@ -8,8 +8,8 @@ namespace Euclid.Histograms
     public class Bound : IComparable<Bound>, IEquatable<Bound>
     {
         #region Declarations
-        private double _value;
-        private bool _isIncluded;
+        private readonly double _value;
+        private readonly bool _isIncluded;
         #endregion
 
         #region Constructors
@@ -56,8 +56,8 @@ namespace Euclid.Histograms
         public static bool operator ==(Bound b1, Bound b2)
         {
             if (Object.ReferenceEquals(b1, b2)) return true;
-            if ((object)b1 == null && (object)b2 == null) return true;
-            else if ((object)b1 == null || (object)b2 == null) return false;
+            if (b1 is null && b2 is null) return true;
+            else if (b1 is null || b2 is null) return false;
             else return b1._isIncluded == b2._isIncluded && b1._value == b2._value;
         }
 
@@ -78,6 +78,9 @@ namespace Euclid.Histograms
         /// <returns><c>true</c> if b1 is lower, <c>false</c> otherwise</returns>
         public static bool operator <(Bound b1, Bound b2)
         {
+            if (b1 == null) throw new ArgumentNullException(nameof(b1));
+            if (b2 == null) throw new ArgumentNullException(nameof(b2));
+
             return b1._value < b2._value;
         }
 
@@ -87,6 +90,9 @@ namespace Euclid.Histograms
         /// <returns><c>true</c> if b1 is higher, <c>false</c> otherwise</returns>
         public static bool operator >(Bound b1, Bound b2)
         {
+            if (b1 == null) throw new ArgumentNullException(nameof(b1));
+            if (b2 == null) throw new ArgumentNullException(nameof(b2));
+
             return b1._value > b2._value;
         }
 

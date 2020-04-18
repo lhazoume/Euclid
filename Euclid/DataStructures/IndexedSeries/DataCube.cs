@@ -9,36 +9,38 @@ namespace Euclid.DataStructures.IndexedSeries
 {
     /// <summary>Class representing a cube of synchronized data</summary>
     /// <typeparam name="T">the legend type</typeparam>
-    /// <typeparam name="U">the label type</typeparam>
-    /// <typeparam name="V">the layer type</typeparam>
-    /// <typeparam name="W">the data type</typeparam>
-    public class DataCube<T, U, V, W> : IXmlable, ICSVable
+    /// <typeparam name="TU">the label type</typeparam>
+    /// <typeparam name="TV">the layer type</typeparam>
+    /// <typeparam name="TW">the data type</typeparam>
+    public class DataCube<T, TU, TV, TW> : IXmlable, ICSVable
         where T : IComparable<T>, IEquatable<T>
-        where U : IEquatable<U>
-        where V : IEquatable<V>
+        where TU : IEquatable<TU>
+        where TV : IEquatable<TV>
     {
         #region Declarations
-        private Header<T> _legends;
-        private Header<U> _labels;
-        private Header<V> _layers;
-        private readonly W[,,] _data;
+        private readonly Header<T> _legends;
+        private readonly Header<TU> _labels;
+        private readonly Header<TV> _layers;
+        private readonly TW[,,] _data;
         #endregion
 
         #region Constructors
 
-        private DataCube(IList<T> legends, IList<U> labels, IList<V> layers, W[,,] data)
+        private DataCube(IList<T> legends, IList<TU> labels, IList<TV> layers, TW[,,] data)
         {
             _data = Arrays.Clone(data);
             _legends = new Header<T>(legends);
-            _labels = new Header<U>(labels);
-            _layers = new Header<V>(layers);
+            _labels = new Header<TU>(labels);
+            _layers = new Header<TV>(layers);
         }
 
         /// <summary>Builds a <c>DataCube</c> from its serialized form</summary>
         /// <param name="node">the <c>XmlNode</c></param>
         /// <returns>a <c>DataCube</c></returns>
-        public static DataCube<T, U, V, W> Create(XmlNode node)
+        public static DataCube<T, TU, TV, TW> Create(XmlNode node)
         {
+            if (node == null) throw new ArgumentNullException(nameof(node));
+
             XmlNodeList legendNodes = node.SelectNodes("dataFrame/legend"),
                 labelNodes = node.SelectNodes("dataFrame/label"),
                 layerNodes = node.SelectNodes("dataFrame/layer"),
@@ -54,36 +56,36 @@ namespace Euclid.DataStructures.IndexedSeries
             #endregion
 
             #region Labels
-            U[] labels = new U[labelNodes.Count];
+            TU[] labels = new TU[labelNodes.Count];
             foreach (XmlNode label in labelNodes)
             {
                 int index = int.Parse(label.Attributes["index"].Value);
-                labels[index] = label.Attributes["value"].Value.Parse<U>();
+                labels[index] = label.Attributes["value"].Value.Parse<TU>();
             }
             #endregion
 
             #region Layers
-            V[] layers = new V[layerNodes.Count];
+            TV[] layers = new TV[layerNodes.Count];
             foreach (XmlNode layer in layerNodes)
             {
                 int index = int.Parse(layer.Attributes["index"].Value);
-                layers[index] = layer.Attributes["value"].Value.Parse<V>();
+                layers[index] = layer.Attributes["value"].Value.Parse<TV>();
             }
             #endregion
 
             #region Data
-            W[,,] data = new W[legends.Length, labels.Length, layers.Length];
+            TW[,,] data = new TW[legends.Length, labels.Length, layers.Length];
             foreach (XmlNode point in dataNodes)
             {
                 int row = int.Parse(point.Attributes["row"].Value),
                     col = int.Parse(point.Attributes["col"].Value),
                     layer = int.Parse(point.Attributes["layer"].Value);
-                W value = point.Attributes["value"].Value.Parse<W>();
+                TW value = point.Attributes["value"].Value.Parse<TW>();
                 data[row, col, layer] = value;
             }
             #endregion
 
-            return new DataCube<T, U, V, W>(legends, labels, layers, data);
+            return new DataCube<T, TU, TV, TW>(legends, labels, layers, data);
         }
 
         /// <summary>Builds a <c>DataCube</c> </summary>
@@ -92,9 +94,9 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
         /// <returns>a <c>DataCube</c></returns>
-        public static DataCube<T, U, V, W> Create(IList<T> legends, IList<U> labels, IList<V> layers, W[,,] data)
+        public static DataCube<T, TU, TV, TW> Create(IList<T> legends, IList<TU> labels, IList<TV> layers, TW[,,] data)
         {
-            return new DataCube<T, U, V, W>(legends, labels, layers, data);
+            return new DataCube<T, TU, TV, TW>(legends, labels, layers, data);
         }
 
         /// <summary>Builds a <c>DataCube</c></summary>
@@ -102,9 +104,13 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="layers">the layers</param>
         /// <param name="legends">the legends</param>
         /// <returns>a <c>DataCube</c></returns>
-        public static DataCube<T, U, V, W> Create(IList<T> legends, IList<U> labels, IList<V> layers)
+        public static DataCube<T, TU, TV, TW> Create(IList<T> legends, IList<TU> labels, IList<TV> layers)
         {
-            return new DataCube<T, U, V, W>(legends, labels, layers, new W[legends.Count, labels.Count, layers.Count]);
+            if (legends == null) throw new ArgumentNullException(nameof(legends));
+            if (labels == null) throw new ArgumentNullException(nameof(labels));
+            if (layers == null) throw new ArgumentNullException(nameof(layers));
+
+            return new DataCube<T, TU, TV, TW>(legends, labels, layers, new TW[legends.Count, labels.Count, layers.Count]);
         }
 
         #endregion
@@ -117,13 +123,13 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>Returns the labels</summary>
-        public U[] Labels
+        public TU[] Labels
         {
             get { return _labels.Values; }
         }
 
         /// <summary>Returns the layers</summary>
-        public V[] Layers
+        public TV[] Layers
         {
             get { return _layers.Values; }
         }
@@ -147,7 +153,7 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>Gets the data</summary>
-        public W[,,] Data
+        public TW[,,] Data
         {
             get { return _data; }
         }
@@ -157,7 +163,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="j">the column index</param>
         /// <param name="k">the layer index</param>
         /// <returns>a data point</returns>
-        public W this[int i, int j, int k]
+        public TW this[int i, int j, int k]
         {
             get { return _data[i, j, k]; }
             set { _data[i, j, k] = value; }
@@ -168,7 +174,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="u">the label</param>
         /// <param name="v">the layer</param>
         /// <returns>a data point</returns>
-        public W this[T t, U u, V v]
+        public TW this[T t, TU u, TV v]
         {
             get { return _data[_legends[t], _labels[u], _layers[v]]; }
             set { _data[_legends[t], _labels[u], _layers[v]] = value; }
@@ -182,7 +188,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Returns the label rank</summary>
         /// <param name="label">the target label</param>
         /// <returns>an <c>Integer</c></returns>
-        public int GetLabelRank(U label) { return _labels.Contains(label) ? _labels[label] : -1; }
+        public int GetLabelRank(TU label) { return _labels.Contains(label) ? _labels[label] : -1; }
 
         #endregion
 
@@ -192,7 +198,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="label">the label</param>
         /// <param name="layer">the layer</param>
         /// <returns> a <c>Series</c></returns>
-        public Series<T, W, string> GetSeriesAt(U label, V layer)
+        public Series<T, TW, string> GetSeriesAt(TU label, TV layer)
         {
             int labelIndex = _labels[label];
             if (labelIndex == -1) throw new ArgumentException(string.Format("Label [{0}] was not found", label.ToString()));
@@ -200,25 +206,25 @@ namespace Euclid.DataStructures.IndexedSeries
             int layerIndex = _layers[layer];
             if (layerIndex == -1) throw new ArgumentException(string.Format("Layer [{0}] was not found", layer.ToString()));
 
-            W[] result = new W[_legends.Count];
+            TW[] result = new TW[_legends.Count];
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i, labelIndex, layerIndex];
-            return Series<T, W, string>.Create(string.Format("{0}{1}", label.ToString(), layer.ToString()), _legends, result);
+            return Series<T, TW, string>.Create(string.Format("{0}{1}", label.ToString(), layer.ToString()), _legends, result);
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
         /// <returns>an array of <c>Series</c></returns>
-        public Series<T, W, string>[,] GetSeries()
+        public Series<T, TW, string>[,] GetSeries()
         {
-            Series<T, W, string>[,] result = new Series<T, W, string>[_labels.Count, _layers.Count];
+            Series<T, TW, string>[,] result = new Series<T, TW, string>[_labels.Count, _layers.Count];
             for (int k = 0; k < _layers.Count; k++)
                 for (int j = 0; j < _labels.Count; j++)
                 {
-                    W[] data = new W[_legends.Count];
+                    TW[] data = new TW[_legends.Count];
                     for (int i = 0; i < _legends.Count; i++)
                         data[i] = _data[i, j, k];
 
-                    result[j, k] = Series<T, W, string>.Create(string.Format("{0}{1}", _labels.ElementAt(j), _layers.ElementAt(k)), _legends, data);
+                    result[j, k] = Series<T, TW, string>.Create(string.Format("{0}{1}", _labels.ElementAt(j), _layers.ElementAt(k)), _legends, data);
                 }
             return result;
         }
@@ -232,29 +238,29 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets the dataframe for a given label</summary>
         /// <param name="label">the label</param>
         /// <returns>a <c>DataFrame</c></returns>
-        public DataFrame<T, W, V> GetDataFrameForLabel(U label)
+        public DataFrame<T, TW, TV> GetDataFrameForLabel(TU label)
         {
             int labelIndex = _labels[label];
             if (labelIndex == -1) throw new ArgumentException(string.Format("Label [{0}] was not found", label.ToString()));
-            W[,] result = new W[_legends.Count, _layers.Count];
+            TW[,] result = new TW[_legends.Count, _layers.Count];
             for (int i = 0; i < _legends.Count; i++)
                 for (int k = 0; k < _layers.Count; k++)
                     result[i, k] = _data[i, labelIndex, k];
-            return DataFrame<T, W, V>.Create(_layers.ToList(), _legends.ToList(), result);
+            return DataFrame<T, TW, TV>.Create(_layers.ToList(), _legends.ToList(), result);
         }
 
         /// <summary>Gets the dataframe for a given layer</summary>
         /// <param name="layer">the layer</param>
         /// <returns>a <c>DataFrame</c></returns>
-        public DataFrame<T, W, U> GetDataFrameForLayer(V layer)
+        public DataFrame<T, TW, TU> GetDataFrameForLayer(TV layer)
         {
             int layerIndex = _layers[layer];
             if (layerIndex == -1) throw new ArgumentException(string.Format("Layer [{0}] was not found", layer.ToString()));
-            W[,] result = new W[_legends.Count, _layers.Count];
+            TW[,] result = new TW[_legends.Count, _layers.Count];
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     result[i, j] = _data[i, j, layerIndex];
-            return DataFrame<T, W, U>.Create(_labels.ToList(), _legends.ToList(), result);
+            return DataFrame<T, TW, TU>.Create(_labels.ToList(), _legends.ToList(), result);
         }
 
         #endregion
@@ -263,18 +269,18 @@ namespace Euclid.DataStructures.IndexedSeries
 
         /// <summary>Clones the <c>DataCube</c></summary>
         /// <returns>a <c>DataCube</c></returns>
-        public DataCube<T, U, V, W> Clone()
+        public DataCube<T, TU, TV, TW> Clone()
         {
-            return new DataCube<T, U, V, W>(_legends.Values, _labels.Values, _layers.Values, Arrays.Clone(_data));
+            return new DataCube<T, TU, TV, TW>(_legends.Values, _labels.Values, _layers.Values, Arrays.Clone(_data));
         }
 
         #region Apply
 
         /// <summary>Applies a function to all the data</summary>
         /// <param name="function">the function</param>
-        public void ApplyOnData(Func<W, W> function)
+        public void ApplyOnData(Func<TW, TW> function)
         {
-            if (function == null) throw new ArgumentNullException("function", "the function should not be null");
+            if (function == null) throw new ArgumentNullException(nameof(function), "the function should not be null");
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     for (int k = 0; k < _layers.Count; k++)
@@ -285,25 +291,25 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnLegends(Func<T, T> function)
         {
-            if (function == null) throw new ArgumentNullException("function", "the function should not be null");
+            if (function == null) throw new ArgumentNullException(nameof(function), "the function should not be null");
             for (int i = 0; i < _legends.Count; i++)
                 _legends.Rename(_legends.ElementAt(i), function(_legends.ElementAt(i)));
         }
 
         /// <summary>Applies a function to all the labels</summary>
         /// <param name="function">the function</param>
-        public void ApplyOnLabels(Func<U, U> function)
+        public void ApplyOnLabels(Func<TU, TU> function)
         {
-            if (function == null) throw new ArgumentNullException("function", "the function should not be null");
+            if (function == null) throw new ArgumentNullException(nameof(function), "the function should not be null");
             for (int i = 0; i < _labels.Count; i++)
                 _labels.Rename(_labels.ElementAt(i), function(_labels.ElementAt(i)));
         }
 
         /// <summary>Applies a function to all the layers</summary>
         /// <param name="function">the function</param>
-        public void ApplyOnLayers(Func<V, V> function)
+        public void ApplyOnLayers(Func<TV, TV> function)
         {
-            if (function == null) throw new ArgumentNullException("function", "the function should not be null");
+            if (function == null) throw new ArgumentNullException(nameof(function), "the function should not be null");
             for (int i = 0; i < _layers.Count; i++)
                 _layers.Rename(_layers.ElementAt(i), function(_layers.ElementAt(i)));
         }
@@ -331,7 +337,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets the i-th label's value</summary>
         /// <param name="index">the index</param>
         /// <returns>a label</returns>
-        public U GetLabel(int index)
+        public TU GetLabel(int index)
         {
             return _labels.ElementAt(index);
         }
@@ -339,7 +345,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Renames a label</summary>
         /// <param name="oldValue">the old value</param>
         /// <param name="newValue">the new value</param>
-        public void RenameLabel(U oldValue, U newValue)
+        public void RenameLabel(TU oldValue, TU newValue)
         {
             _labels.Rename(oldValue, newValue);
         }
@@ -347,7 +353,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets the i-th layer's value</summary>
         /// <param name="index">the index</param>
         /// <returns>a layer</returns>
-        public V GetLayer(int index)
+        public TV GetLayer(int index)
         {
             return _layers.ElementAt(index);
         }
@@ -355,7 +361,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Renames a layer</summary>
         /// <param name="oldValue">the old value</param>
         /// <param name="newValue">the new value</param>
-        public void RenameLabel(V oldValue, V newValue)
+        public void RenameLabel(TV oldValue, TV newValue)
         {
             _layers.Rename(oldValue, newValue);
         }
@@ -369,6 +375,8 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="writer">the <c>XmlWriter</c></param>
         public void ToXml(XmlWriter writer)
         {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
             writer.WriteStartElement("dataCube");
 
             #region Labels
@@ -441,21 +449,23 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Equality comparer</summary>
         /// <param name="other">the other DataFrame</param>
         /// <returns>true if the data, legends and labels match, false otherwise</returns>
-        public bool Equals(DataCube<T, U, V, W> other)
+        public bool Equals(DataCube<T, TU, TV, TW> other)
         {
-            if (other._labels.Count == _labels.Count && other._labels.Except(_labels).Count() == 0 &&
-                other._legends.Count == _legends.Count && other._legends.Except(_legends).Count() == 0 &&
-                other._layers.Count == _layers.Count && other._layers.Except(_layers).Count() == 0)
+            if (other == null) throw new ArgumentNullException(nameof(other));
+
+            if (other._labels.Count == _labels.Count && !other._labels.Except(_labels).Any() &&
+                other._legends.Count == _legends.Count && !other._legends.Except(_legends).Any() &&
+                other._layers.Count == _layers.Count && !other._layers.Except(_layers).Any())
             {
                 for (int i = 0; i < other.Rows; i++)
                 {
                     T t = other._legends.ElementAt(i);
                     for (int j = 0; j < other.Columns; j++)
                     {
-                        U u = other._labels.ElementAt(j);
+                        TU u = other._labels.ElementAt(j);
                         for (int k = 0; k < other.Depth; k++)
                         {
-                            V v = other._layers.ElementAt(k);
+                            TV v = other._layers.ElementAt(k);
                             if (!other[t, u, v].Equals(this[t, u, v]))
                                 return false;
                         }

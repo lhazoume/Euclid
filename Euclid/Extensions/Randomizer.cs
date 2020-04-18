@@ -55,6 +55,7 @@ namespace Euclid.Extensions
         /// <returns></returns>
         public static List<int> PickRandomNumbers(int fromIncluded, int toExcluded, int numberOfPicks, Random randomNumberGenerator)
         {
+            if (randomNumberGenerator == null) throw new ArgumentNullException(nameof(randomNumberGenerator));
             List<int> result = new List<int>();
 
             while (result.Count < numberOfPicks)
@@ -76,6 +77,8 @@ namespace Euclid.Extensions
         /// <returns>a list of numbers</returns>
         public static List<int> PickRandomNumbers(int fromIncluded, int toExcluded, int numberOfPicks, IEnumerable<int> forbiddenValues, Random randomNumberGenerator)
         {
+            if (randomNumberGenerator == null) throw new ArgumentNullException(nameof(randomNumberGenerator));
+
             List<int> result = new List<int>();
 
             while (result.Count < numberOfPicks)

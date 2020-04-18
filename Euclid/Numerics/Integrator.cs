@@ -15,7 +15,7 @@ namespace Euclid.Numerics
         private double _result = 0,
             _error = 0,
             _a, _b;
-        private List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
+        private readonly List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
         private int _maxIterations;
         private SolverStatus _status = SolverStatus.NotRan;
         #endregion
@@ -146,7 +146,7 @@ namespace Euclid.Numerics
             
             while (!endCriteria.ShouldStop(_error))
             {
-                n = n * 2;
+                n *= 2;
                 previousResult = result;
                 result = Calculate(n);
 
@@ -161,7 +161,6 @@ namespace Euclid.Numerics
 
         private double Calculate(int n)
         {
-            if (_f == null) throw new ArgumentNullException("The function should not be null");
             if (n < 1) throw new ArgumentException("the degree should be strictly positive");
             if (_a == _b) return 0;
 

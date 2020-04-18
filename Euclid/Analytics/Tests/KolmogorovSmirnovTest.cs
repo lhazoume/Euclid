@@ -42,12 +42,15 @@ namespace Euclid.Analytics.Tests
         /// <returns>True if the series appear to be drawn from the same distribution, false otherwise.</returns>
         public static bool IsSameDistribution(double[] series1, double[] series2, double alpha)
         {
+            if (series1 == null) throw new ArgumentNullException(nameof(series1));
+            if (series2 == null) throw new ArgumentNullException(nameof(series2));
+
             double pValue = PValue(series1, series2);
             Bracketing rb = new Bracketing(1, 3, Fn.SupBrownianBridgeCDF, BracketingMethod.Dichotomy, 100);
             rb.Solve(alpha);
             double cap = rb.Result;
 
-            return  pValue <cap;
+            return pValue < cap;
         }
     }
 }

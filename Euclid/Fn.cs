@@ -358,7 +358,7 @@ namespace Euclid
             if ((ax = Math.Abs(x)) < 3.75)
             {
                 y = x / 3.75;
-                y = y * y;
+                y *= y;
                 ans = 1.0 + y * (3.5156229 + y * (3.0899424 + y * (1.2067492
                    + y * (0.2659732 + y * (0.360768e-1 + y * 0.45813e-2)))));
             }
@@ -385,7 +385,7 @@ namespace Euclid
             if ((ax = Math.Abs(x)) < 3.75)
             {
                 y = x / 3.75;
-                y = y * y;
+                y *= y;
                 ans = ax * (0.5 + y * (0.87890594 + y * (0.51498869 + y * (0.15084934
                    + y * (0.2658733e-1 + y * (0.301532e-2 + y * 0.32411e-3))))));
             }
@@ -745,7 +745,7 @@ namespace Euclid
         /// </summary>
         public static double DiGamma(double x)
         {
-            double y = 0;
+            double y;
             double nz = 0.0;
             bool negative = (x <= 0);
 
@@ -764,7 +764,7 @@ namespace Euclid
                 {
                     if (nz > 0.5)
                     {
-                        p = p + 1.0;
+                        p += 1.0;
                         nz = q - p;
                     }
 
@@ -781,9 +781,9 @@ namespace Euclid
                 y = 0.0;
                 int n = (int)Math.Floor(x);
                 for (int i = 1; i <= n - 1; i++)
-                    y = y + 1.0 / i;
+                    y += 1.0 / i;
 
-                y = y - EulerGamma;
+                y -= EulerGamma;
             }
             else
             {
@@ -792,8 +792,8 @@ namespace Euclid
 
                 while (s < 10.0)
                 {
-                    w = w + 1.0 / s;
-                    s = s + 1.0;
+                    w += 1.0 / s;
+                    s += 1.0;
                 }
 
                 if (s < 1.0e17)
@@ -1069,7 +1069,7 @@ namespace Euclid
             {
                 u = (-1) * u * c1 * v;
                 sum += u;
-                v = v * c2;
+                v *= c2;
             }
 
             return 2 * sum;
@@ -1361,7 +1361,7 @@ namespace Euclid
         /// <returns> a <c>double</c></returns>
         public static double InvPhi(double p)
         {
-            if (p < 0 || p > 1) throw new ArgumentOutOfRangeException("p", p, "The probability must be comprised in [0, 1].");
+            if (p < 0 || p > 1) throw new ArgumentOutOfRangeException(nameof(p), "The probability must be comprised in [0, 1].");
             if (p == 0) return double.MinValue;
             if (p == 1) return double.MaxValue;
 

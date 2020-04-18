@@ -9,18 +9,18 @@ namespace Euclid.DataStructures.IndexedSeries
 {
     /// <summary>Class representing a Slice of synchronized data</summary>
     /// <typeparam name="T">the legend type</typeparam>
-    /// <typeparam name="U">the data type</typeparam>
-    /// <typeparam name="V">the label type</typeparam>
-    public class Slice<T, U, V> : IIndexedSeries<T, U, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>
+    /// <typeparam name="TU">the data type</typeparam>
+    /// <typeparam name="TV">the label type</typeparam>
+    public class Slice<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
-        private Header<V> _labels;
-        private U[] _data;
+        private readonly Header<TV> _labels;
+        private TU[] _data;
         private T _legend;
         #endregion
 
         #region Constructors
-        private Slice(Header<V> labels, T legend, IEnumerable<U> data)
+        private Slice(Header<TV> labels, T legend, IEnumerable<TU> data)
         {
             _data = data.ToArray();
             _labels = labels.Clone();
@@ -43,7 +43,7 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>Returns the labels</summary>
-        public V[] Labels
+        public TV[] Labels
         {
             get { return _labels.Values; }
         }
@@ -61,24 +61,24 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary> Gets a deep copy of the data</summary>
-        public U[] Data { get { return Arrays.Clone<U>(_data); } }
+        public TU[] Data { get { return Arrays.Clone<TU>(_data); } }
         #endregion
 
         #region Methods
         /// <summary>Clones the slice</summary>
         /// <returns>a <c>Slice</c></returns>
-        public Slice<T, U, V> Clone()
+        public Slice<T, TU, TV> Clone()
         {
-            return new Slice<T, U, V>(_labels, _legend, _data);
+            return new Slice<T, TU, TV>(_labels, _legend, _data);
         }
 
         /// <summary>Remove the data for a given label</summary>
         /// <param name="label">the label</param>
-        public void RemoveColumnAt(V label)
+        public void RemoveColumnAt(TV label)
         {
             int indexToRemove = _labels[label];
             if (indexToRemove == -1 || _labels.Count == 1) return;
-            U[] newData = new U[_data.Length - 1];
+            TU[] newData = new TU[_data.Length - 1];
 
             for (int j = 0; j < _data.Length; j++)
             {
@@ -93,7 +93,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets and sets the i-th data </summary>
         /// <param name="i">the index</param>
         /// <returns>a data point</returns>
-        public U this[int i]
+        public TU this[int i]
         {
             get { return _data[i]; }
             set { _data[i] = value; }
@@ -102,7 +102,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets and sets the data for a given label</summary>
         /// <param name="v">the target label</param>
         /// <returns>a data point</returns>
-        public U this[V v]
+        public TU this[TV v]
         {
             get { return _data[_labels[v]]; }
             set { _data[_labels[v]] = value; }
@@ -111,11 +111,11 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Adds a data to the slice</summary>
         /// <param name="label">the new label</param>
         /// <param name="value">the new value</param>
-        public void Add(V label, U value)
+        public void Add(TV label, TU value)
         {
             if (_labels.Contains(label)) throw new ArgumentException("The label is already in the slice");
 
-            U[] newData = new U[_data.Length + 1];
+            TU[] newData = new TU[_data.Length + 1];
             _labels.Add(label);
             for (int j = 0; j < _labels.Count; j++)
                 newData[j] = _data[j];
@@ -126,7 +126,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         /// <summary>Applies a function to the data</summary>
         /// <param name="function">the function</param>
-        public void ApplyOnData(Func<U, U> function)
+        public void ApplyOnData(Func<TU, TU> function)
         {
             for (int j = 0; j < _data.Length; j++)
                 _data[j] = function(_data[j]);
@@ -135,7 +135,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets the i-th label's value</summary>
         /// <param name="i">the index</param>
         /// <returns>a label</returns>
-        public V GetLabel(int i)
+        public TV GetLabel(int i)
         {
             return _labels.ElementAt(i);
         }
@@ -143,7 +143,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Sets the i-th label's value</summary>
         /// <param name="oldValue">the old value</param>
         /// <param name="newValue">the new value</param>
-        public void RenameLabel(V oldValue, V newValue)
+        public void RenameLabel(TV oldValue, TV newValue)
         {
             _labels.Rename(oldValue, newValue);
         }
@@ -154,6 +154,8 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="writer">the <c>XmlWriter</c></param>
         public void ToXml(XmlWriter writer)
         {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
             writer.WriteStartElement("slice");
 
             #region Legend
@@ -163,7 +165,7 @@ namespace Euclid.DataStructures.IndexedSeries
             #endregion
 
             #region Data
-            foreach (V v in _labels)
+            foreach (TV v in _labels)
             {
                 writer.WriteStartElement("point");
                 writer.WriteAttributeString("label", v.ToString());
@@ -191,26 +193,28 @@ namespace Euclid.DataStructures.IndexedSeries
         #region Creators
         /// <summary>De-serializes the slice from a Xml node</summary>
         /// <param name="node">the <c>XmlNode</c></param>
-        public static Slice<T, U, V> Create(XmlNode node)
+        public static Slice<T, TU, TV> Create(XmlNode node)
         {
+            if (node == null) throw new ArgumentOutOfRangeException(nameof(node));
+
             XmlNodeList dataNodes = node.SelectNodes("point");
             XmlNode legendNode = node.SelectSingleNode("legend");
 
             T legend = legendNode.Attributes["value"].Value.Parse<T>();
 
             #region Data
-            U[] data = new U[dataNodes.Count];
-            Header<V> labels = new Header<V>();
+            TU[] data = new TU[dataNodes.Count];
+            Header<TV> labels = new Header<TV>();
             for (int i = 0; i < dataNodes.Count; i++)
             {
-                V label = dataNodes[i].Attributes["label"].Value.Parse<V>();
-                U value = dataNodes[i].Attributes["value"].Value.Parse<U>();
+                TV label = dataNodes[i].Attributes["label"].Value.Parse<TV>();
+                TU value = dataNodes[i].Attributes["value"].Value.Parse<TU>();
                 data[i] = value;
                 labels.Add(label);
             }
             #endregion
 
-            return new Slice<T, U, V>(labels, legend, data);
+            return new Slice<T, TU, TV>(labels, legend, data);
         }
 
         /// <summary>Builds a slice from generic enumerable labels and data</summary>
@@ -218,15 +222,19 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="legend">the legend</param>
         /// <param name="data">the data</param>
         /// <returns>a <c>Slice</c></returns>
-        public static Slice<T, U, V> Create(Header<V> labels, T legend, IEnumerable<U> data)
+        public static Slice<T, TU, TV> Create(Header<TV> labels, T legend, IEnumerable<TU> data)
         {
-            return new Slice<T, U, V>(labels, legend, data);
+            if (labels == null) throw new ArgumentNullException(nameof(labels));
+
+            return new Slice<T, TU, TV>(labels, legend, data);
         }
 
         /// <summary>Builds a <c>Slice</c> from its CSV string</summary>
         /// <param name="text">the <c>String</c> content</param>
-        public static Slice<T, U, V> Create(string text)
+        public static Slice<T, TU, TV> Create(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
             string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length != 2) return null;
             string[] header = lines[0].Split(new string[] { CsvHelper.Separator }, StringSplitOptions.RemoveEmptyEntries),
@@ -234,17 +242,17 @@ namespace Euclid.DataStructures.IndexedSeries
             if ((header.Length != content.Length) || (header.Length <= 1)) return null;
             int count = header.Length - 1;
 
-            U[] data = new U[count];
-            Header<V> labels = new Header<V>();
+            TU[] data = new TU[count];
+            Header<TV> labels = new Header<TV>();
             T legend = content[0].Parse<T>();
 
             for (int i = 0; i < count; i++)
             {
-                labels.Add(header[1 + i].Parse<V>());
-                data[i] = content[1 + i].Parse<U>();
+                labels.Add(header[1 + i].Parse<TV>());
+                data[i] = content[1 + i].Parse<TU>();
             }
 
-            return new Slice<T, U, V>(labels, legend, data);
+            return new Slice<T, TU, TV>(labels, legend, data);
         }
         #endregion
     }

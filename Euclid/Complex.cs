@@ -129,6 +129,7 @@ namespace Euclid
         /// <returns>a <c>Complex</c></returns>
         public static Complex Exp(Complex complex)
         {
+            if (complex == null) throw new ArgumentNullException(nameof(complex));
             double f = Math.Exp(complex._re),
                 newRe = Math.Cos(complex._im),
                 newIm = Math.Sin(complex._im);
@@ -144,8 +145,8 @@ namespace Euclid
         /// <returns>the <c>Complex</c> result of the addition</returns>
         public static Complex operator +(Complex lhs, Complex rhs)
         {
-            if (lhs == null) throw new ArgumentNullException("lhs", "the left hand side is null");
-            if (rhs == null) throw new ArgumentNullException("rhs", "the right hand side is null");
+            if (lhs == null) throw new ArgumentNullException(nameof(lhs), "the left hand side is null");
+            if (rhs == null) throw new ArgumentNullException(nameof(rhs), "the right hand side is null");
 
             return new Complex(lhs._re + rhs._re, lhs._im + rhs._im);
         }
@@ -157,6 +158,7 @@ namespace Euclid
         /// <returns>the <c>Complex</c> result of the addition</returns>
         private static Complex Add(Complex complex, double addon)
         {
+            if (complex == null) throw new ArgumentNullException(nameof(complex));
             return new Complex(complex._re + addon, complex._im);
         }
 
@@ -193,6 +195,8 @@ namespace Euclid
         /// <returns>the <c>Complex</c> result of the multiplication</returns>
         public static Complex operator *(Complex lhs, Complex rhs)
         {
+            if (lhs == null) throw new ArgumentNullException(nameof(lhs));
+            if (rhs == null) throw new ArgumentNullException(nameof(rhs));
             return new Complex(lhs._re * rhs._re - lhs._im * rhs._im, lhs._im * rhs._re + rhs._im * lhs._re);
         }
 
@@ -202,6 +206,7 @@ namespace Euclid
         /// <returns>the <c>Complex</c> result of the multiplication</returns>
         public static Complex operator *(Complex complex, double factor)
         {
+            if (complex == null) throw new ArgumentNullException(nameof(complex));
             return new Complex(complex._re * factor, complex._im * factor);
         }
 
@@ -220,6 +225,7 @@ namespace Euclid
         /// <returns>the <c>Complex</c> result of the division</returns>
         public static Complex operator /(Complex numerator, Complex denominator)
         {
+            if (denominator == null) throw new ArgumentNullException(nameof(denominator));
             return numerator * denominator.Conjugate * (1.0 / denominator.SquareModulus());
         }
 
@@ -237,6 +243,7 @@ namespace Euclid
         /// <returns>the opposite complex</returns>
         public static Complex operator -(Complex complex)
         {
+            if (complex == null) throw new ArgumentNullException(nameof(complex));
             return new Complex(-complex._re, -complex._im);
         }
 

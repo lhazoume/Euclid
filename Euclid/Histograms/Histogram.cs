@@ -19,6 +19,7 @@ namespace Euclid.Histograms
         /// <param name="intervals">the initial intervals</param>
         public Histogram(Interval[] intervals)
         {
+            if (intervals == null) throw new ArgumentNullException(nameof(intervals));
             _intervals = new Interval[intervals.Length];
             _items = new int[intervals.Length];
             for (int i = 0; i < _intervals.Length; i++)
@@ -97,12 +98,12 @@ namespace Euclid.Histograms
             if (upperBound <= lowerBound)
                 throw new ArgumentException("The upper bound should be greater than the lower bound");
             if (numberOfIntervals <= 0)
-                throw new ArgumentOutOfRangeException("There can only be a positive number of buckets");
-            
+                throw new ArgumentOutOfRangeException(nameof(numberOfIntervals), "There can only be a positive number of buckets");
+
             Interval[] intervals = new Interval[numberOfIntervals];
             double size = (upperBound - lowerBound) / numberOfIntervals;
             for (int i = 0; i < numberOfIntervals; i++)
-                intervals[i] = new Interval(lowerBound + i * size, lowerBound + (i + 1) * size, i==0, true);
+                intervals[i] = new Interval(lowerBound + i * size, lowerBound + (i + 1) * size, i == 0, true);
             return new Histogram(intervals);
         }
         #endregion

@@ -19,9 +19,7 @@ namespace Euclid.Distributions.Continuous
             if (theta <= 0) throw new ArgumentException("the scale has to be positive");
             _k = k;
             _theta = theta;
-
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(0, double.PositiveInfinity, false, false);
 
@@ -136,7 +134,7 @@ namespace Euclid.Distributions.Continuous
         {
             if (_theta * t < 1)
                 return Math.Pow(1 - _theta * t, -_k);
-            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than the rate");
+            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower than the rate");
         }
 
         /// <summary>Generates a sequence of samples using the Ahrens-Dieter algorithm</summary>

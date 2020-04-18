@@ -13,8 +13,8 @@ namespace Euclid
     {
         #region Declarations
 
-        private int _degree;
-        private double[] _terms;
+        private readonly int _degree;
+        private readonly double[] _terms;
 
         #endregion
 
@@ -38,6 +38,7 @@ namespace Euclid
         /// <param name="terms">the coefficients of the polynomial</param>
         public Polynomial(IList<double> terms)
         {
+            if (terms == null) throw new ArgumentNullException(nameof(terms));
             if (terms.Count == 0)
             {
                 _terms = new double[1];
@@ -127,7 +128,7 @@ namespace Euclid
 
         private static Complex WeierNull(List<Complex> z, int k)
         {
-            if (k < 0 || k >= z.Count) throw new ArgumentOutOfRangeException();
+            if (k < 0 || k >= z.Count) throw new ArgumentOutOfRangeException(nameof(k));
 
             Complex buf = Complex.One;
 
@@ -321,6 +322,7 @@ namespace Euclid
         /// <returns>a <c>Polynomial</c></returns>
         public static Polynomial operator *(Polynomial p, double f)
         {
+            if (p == null) throw new ArgumentNullException(nameof(p));
             Polynomial tmp = p.Clone;
             for (int i = 0; i < p._terms.Length; i++)
                 tmp._terms[i] *= f;
@@ -342,8 +344,8 @@ namespace Euclid
         /// <returns>the <c>Polynomial</c> result of the polynomial</returns>
         public static Polynomial operator *(Polynomial p1, Polynomial p2)
         {
-            int degree = p1.Degree + p2.Degree;
-
+            if (p1 == null) throw new ArgumentNullException(nameof(p1));
+            if (p2 == null) throw new ArgumentNullException(nameof(p2));
             Polynomial r = new Polynomial(0.0);
 
             for (int i = 0; i <= p1.Degree; i++)
@@ -374,6 +376,8 @@ namespace Euclid
         /// <returns>The sum of m1 and m2</returns>
         private static Polynomial Add(Polynomial p1, Polynomial p2)
         {
+            if (p1 == null) throw new ArgumentNullException(nameof(p1));
+            if (p2 == null) throw new ArgumentNullException(nameof(p2));
             double[] newTerms = new double[Math.Max(p1._terms.Length, p2._terms.Length)];
 
             for (int i = 0; i < newTerms.Length; i++)
@@ -390,6 +394,7 @@ namespace Euclid
         /// <returns>the <c>Polynomial</c> result of the adition</returns>
         public static Polynomial operator +(Polynomial p, double c)
         {
+            if (p == null) throw new ArgumentNullException(nameof(p));
             Polynomial tmp = p.Clone;
             p._terms[0] += c;
             return tmp;
@@ -464,6 +469,7 @@ namespace Euclid
         /// <returns>The Polynomial, raised to the power pow</returns>
         public static Polynomial Power(Polynomial p, int pow)
         {
+            if (p == null) throw new ArgumentNullException(nameof(p));
             if (pow == 0) return new Polynomial(new double[] { 1 });
             if (pow == 1) return p.Clone;
             if (pow < 0) throw new ArgumentException("A polynomial can not be raised to a negative power");
@@ -471,7 +477,7 @@ namespace Euclid
             Polynomial tmp = p.Clone;
 
             for (int i = 2; i <= pow; i++)
-                tmp = tmp * p;
+                tmp *= p;
             return tmp;
         }
 

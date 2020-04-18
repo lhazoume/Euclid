@@ -9,13 +9,14 @@ namespace Euclid.Analytics
     {
         /// <summary>Gets the covariance matrix between the series of the dataframe</summary>
         /// <typeparam name="T">the dataframes' legend types</typeparam>
-        /// <typeparam name="V">the dataframes' label types</typeparam>
+        /// <typeparam name="TV">the dataframes' label types</typeparam>
         /// <param name="dataFrame">the underlying data frame</param>
         /// <returns>a dataFrame</returns>
-        public static DataFrame<V, double, V> CovarianceEstimatorMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
+        public static DataFrame<TV, double, TV> CovarianceEstimatorMatrix<T, TV>(DataFrame<T, double, TV> dataFrame) where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>, IComparable<TV>, IConvertible
         {
+            if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
             int n = dataFrame.Rows;
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
 
             #region Averages
             double[] averages = new double[dataFrame.Columns];
@@ -48,13 +49,15 @@ namespace Euclid.Analytics
 
         /// <summary>Gets the correlation matrix between the series of the dataframe</summary>
         /// <typeparam name="T">the dataframes' legend types</typeparam>
-        /// <typeparam name="V">the dataframes' label types</typeparam>
+        /// <typeparam name="TV">the dataframes' label types</typeparam>
         /// <param name="dataFrame">the underlying data frame</param>
         /// <returns>a dataFrame</returns>
-        public static DataFrame<V, double, V> CorrelationMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
+        public static DataFrame<TV, double, TV> CorrelationMatrix<T, TV>(DataFrame<T, double, TV> dataFrame) where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>, IComparable<TV>, IConvertible
         {
+            if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
+
             int n = dataFrame.Rows;
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
 
             #region Averages
             double[] averages = new double[dataFrame.Columns],
@@ -94,13 +97,16 @@ namespace Euclid.Analytics
 
         /// <summary>Gets the cross-correlation between the time series of the input dataframes</summary>
         /// <typeparam name="T">the dataframes' legend types</typeparam>
-        /// <typeparam name="V">the dataframes' label types</typeparam>
+        /// <typeparam name="TV">the dataframes' label types</typeparam>
         /// <param name="dataFrame1">the left hand side dataFrame</param>
         /// <param name="dataFrame2">the right hand side data frame</param>
         /// <returns>a dataFrame</returns>
-        public static DataFrame<V, double, V> CorrelationMatrix<T, V>(DataFrame<T, double, V> dataFrame1, DataFrame<T, double, V> dataFrame2) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
+        public static DataFrame<TV, double, TV> CorrelationMatrix<T, TV>(DataFrame<T, double, TV> dataFrame1, DataFrame<T, double, TV> dataFrame2) where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>, IComparable<TV>, IConvertible
         {
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame1.Labels, dataFrame2.Labels, new double[dataFrame2.Columns, dataFrame1.Columns]);
+            if (dataFrame1 == null) throw new ArgumentNullException(nameof(dataFrame1));
+            if (dataFrame2 == null) throw new ArgumentNullException(nameof(dataFrame2));
+
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame1.Labels, dataFrame2.Labels, new double[dataFrame2.Columns, dataFrame1.Columns]);
             if (dataFrame1.Rows != dataFrame2.Rows) throw new Exception("Rows do not match");
             int n = dataFrame1.Rows;
 
@@ -158,13 +164,14 @@ namespace Euclid.Analytics
 
         /// <summary>Gets the redundancy matrix of the series of the dataframe</summary>
         /// <typeparam name="T">the dataframe's legend types</typeparam>
-        /// <typeparam name="V">the dataframe's label types</typeparam>
+        /// <typeparam name="TV">the dataframe's label types</typeparam>
         /// <param name="dataFrame">the underlying dataFrame</param>
         /// <returns>a dataframe</returns>
-        public static DataFrame<V, double, V> RedundancyMatrix<T, V>(DataFrame<T, double, V> dataFrame) where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>, IComparable<V>, IConvertible
+        public static DataFrame<TV, double, TV> RedundancyMatrix<T, TV>(DataFrame<T, double, TV> dataFrame) where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>, IComparable<TV>, IConvertible
         {
+            if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
             int n = dataFrame.Rows;
-            DataFrame<V, double, V> result = DataFrame<V, double, V>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
 
             #region Distinct values
             double[][] distincts = new double[dataFrame.Columns][];
@@ -193,6 +200,9 @@ namespace Euclid.Analytics
 
         public static double[] Correlogram(double[] dataSeries, int[] lags)
         {
+            if (dataSeries == null) throw new ArgumentNullException(nameof(dataSeries));
+            if (lags == null) throw new ArgumentNullException(nameof(lags));
+
             double[] result = new double[lags.Length];
 
             double avg = 0,

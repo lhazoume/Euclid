@@ -9,7 +9,7 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <typeparam name="T">the type of label</typeparam>
     public class Header<T> : IEnumerable<T>, IEquatable<Header<T>> where T : IEquatable<T>
     {
-        private Map<T, int> _map;
+        private readonly Map<T, int> _map;
 
         #region Constructors
 
@@ -23,6 +23,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="content">the values of the labels</param>
         public Header(IList<T> content)
         {
+            if (content == null) throw new ArgumentNullException(nameof(content));
             _map = new Map<T, int>();
             for (int i = 0; i < content.Count; i++)
                 _map.Add(content[i], i);
@@ -168,7 +169,14 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>true if the headers have the same content, false otherwise</returns>
         public static bool operator ==(Header<T> h1, Header<T> h2)
         {
-            return h1.Equals(h2);
+            if (h1 == null && h2 == null)
+                return true;
+            else if (h1 == null)
+                return false;
+            else if (h2 == null)
+                return false;
+            else
+                return h1.Equals(h2);
         }
 
         /// <summary>Inequality operator</summary>
@@ -177,7 +185,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>true if the headers do not have the same content, false otherwise</returns>
         public static bool operator !=(Header<T> h1, Header<T> h2)
         {
-            return !h1.Equals(h2);
+            return !(h1 == h2);
         }
         #endregion
     }

@@ -9,26 +9,26 @@ namespace Euclid.Analytics.Regressions
     /// Performs a LASSO regression for a given regularization factor
     /// </summary>
     /// <typeparam name="T">the legends</typeparam>
-    /// <typeparam name="V">the labels</typeparam>
-    public class LASSORegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
+    /// <typeparam name="TV">the labels</typeparam>
+    public class LASSORegression<T, TV> where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
     {
         #region Declarations
         private bool _computeErr;
         private double _regularization;
         private RegressionStatus _status;
         private LinearModel _linearModel = null;
-        private DataFrame<T, double, V> _x;
-        private Series<T, double, V> _y;
+        private readonly DataFrame<T, double, TV> _x;
+        private readonly Series<T, double, TV> _y;
         #endregion
 
         /// <summary>Buils a LASSO to regress a <c>Series</c> on a <c>DataFrame</c></summary>
         /// <param name="x">the <c>DataFrame</c></param>
         /// <param name="y">the <c>Series</c></param>
         /// <param name="regularization">the regularization factor</param>
-        public LASSORegression(DataFrame<T, double, V> x, Series<T, double, V> y, double regularization)
+        public LASSORegression(DataFrame<T, double, TV> x, Series<T, double, TV> y, double regularization)
         {
-            if (x == null) throw new ArgumentNullException("x", "the x should not be null");
-            if (y == null) throw new ArgumentNullException("y", "the y should not be null");
+            if (x == null) throw new ArgumentNullException(nameof(x), "the x should not be null");
+            if (y == null) throw new ArgumentNullException(nameof(y), "the y should not be null");
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
             if (regularization <= 0) throw new ArgumentException("the regularization factor should be positive");
 
@@ -176,7 +176,7 @@ namespace Euclid.Analytics.Regressions
             #endregion
 
             #region Rescales the coefficients and the data
-            W = W * Yscaler.ScalingCoefficient;
+            W *= Yscaler.ScalingCoefficient;
             double tXavgW = 0;
             for (int j = 0; j < W.Size; j++)
             {

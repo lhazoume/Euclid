@@ -62,6 +62,8 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <param name="writer">the XML writer</param>
         public void ToXml(XmlWriter writer)
         {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
             writer.WriteStartElement("neuralNetwork");
             for (int i = 0; i < _layers.Length; i++)
             {
@@ -104,15 +106,16 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <returns>a Perceptron network</returns>
         public static Perceptron Create(IActivationFunction function, int inputSize, params int[] layerSizes)
         {
-            if (layerSizes.Length == 0) throw new ArgumentOutOfRangeException("there should be at least one layer");
-            if (inputSize <= 0) throw new ArgumentOutOfRangeException("the input size should be > 0");
+            if (layerSizes.Length == 0) throw new ArgumentOutOfRangeException(nameof(layerSizes), "there should be at least one layer");
+            if (inputSize <= 0) throw new ArgumentOutOfRangeException(nameof(inputSize), "the input size should be > 0");
 
-            List<Layer> layers = new List<Layer>();
-
-            layers.Add(Layer.Create(layerSizes[0], inputSize, function));
+            List<Layer> layers = new List<Layer>
+            {
+                Layer.Create(layerSizes[0], inputSize, function)
+            };
             for (int i = 1; i < layerSizes.Length; i++)
                 layers.Add(Layer.Create(layerSizes[i], layerSizes[i - 1], function));
-            
+
             return new Perceptron(layers);
         }
 
@@ -121,6 +124,8 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <returns>a Perceptron network</returns>
         public static Perceptron Create(XmlNode node)
         {
+            if (node == null) throw new ArgumentNullException(nameof(node));
+
             XmlNodeList layerNodes = node.SelectNodes("neuralNetwork/layer");
             Layer[] layers = new Layer[layerNodes.Count];
 

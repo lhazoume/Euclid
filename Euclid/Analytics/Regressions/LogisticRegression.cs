@@ -7,22 +7,22 @@ namespace Euclid.Analytics.Regressions
 {
     /// <summary>OrdinaryLeastSquaresLinearRegression class</summary>
     /// <typeparam name="T">the legends' type</typeparam>
-    /// <typeparam name="V">the labels' type</typeparam>
-    public class LogisticRegression<T, V> where T : IEquatable<T>, IComparable<T> where V : IEquatable<V>, IConvertible
+    /// <typeparam name="TV">the labels' type</typeparam>
+    public class LogisticRegression<T, TV> where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
     {
         #region Declarations
         private bool _returnAverageIfFailed, _withConstant;
         private RegressionStatus _status;
         private double _finalLogLikelihood = double.MinValue;
         private LogisticModel _logisticModel = null;
-        private DataFrame<T, double, V> _x;
-        private Series<T, double, V> _y;
+        private readonly DataFrame<T, double, TV> _x;
+        private readonly Series<T, double, TV> _y;
         #endregion
 
         /// <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
         /// <param name="x">the <c>DataFrame</c></param>
         /// <param name="y">the <c>Series</c></param>
-        public LogisticRegression(DataFrame<T, double, V> x, Series<T, double, V> y)
+        public LogisticRegression(DataFrame<T, double, TV> x, Series<T, double, TV> y)
         {
             if (x == null || y == null) throw new ArgumentNullException("the x and y should not be null");
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
@@ -76,11 +76,10 @@ namespace Euclid.Analytics.Regressions
 
         private static double Func(Vector theta, Vector[] Xrows, Vector Y)
         {
-            double result = 0,
-                p = 0;
+            double result = 0;
             for (int i = 0; i < Y.Size; i++)
             {
-                p = Fn.LogisticFunction(theta, Xrows[i]);
+                double p = Fn.LogisticFunction(theta, Xrows[i]);
                 result += Y[i] * Math.Log(p) + (1 - Y[i]) * Math.Log(1 - p);
             }
             return result / Y.Size;

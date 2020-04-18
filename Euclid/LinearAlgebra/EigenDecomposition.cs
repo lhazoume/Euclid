@@ -12,7 +12,8 @@ namespace Euclid.LinearAlgebra
         #region Declarations
         private readonly double[] _d;
         private readonly double[] _e;
-        private Matrix _V, _H;
+        private readonly Matrix _V;
+        private Matrix _H;
         #endregion
 
         #region Constructors
@@ -22,6 +23,8 @@ namespace Euclid.LinearAlgebra
         /// <param name="matrix">the <c>Matrix</c> to decompose</param>
         public EigenDecomposition(Matrix matrix)
         {
+            if (matrix == null) throw new ArgumentNullException(nameof(matrix));
+
             int n = matrix.Columns;
             _V = matrix.Clone;
             _d = new double[n];
@@ -175,7 +178,7 @@ namespace Euclid.LinearAlgebra
                     h = 0.0;
 
                 for (int k = 0; k < i; k++)
-                    scale = scale + Math.Abs(_d[k]);
+                    scale += Math.Abs(_d[k]);
 
                 if (scale == 0.0)
                 {
@@ -203,7 +206,7 @@ namespace Euclid.LinearAlgebra
                         g = -g;
 
                     _e[i] = scale * g;
-                    h = h - f * g;
+                    h -= f * g;
                     _d[i - 1] = f - g;
                     for (int j = 0; j < i; j++)
                         _e[j] = 0.0;
@@ -330,7 +333,7 @@ namespace Euclid.LinearAlgebra
                     int iter = 0;
                     do
                     {
-                        iter = iter + 1; // (Could check iteration count here.)
+                        iter += 1; // (Could check iteration count here.)
 
                         // Compute implicit shift
 
@@ -348,7 +351,7 @@ namespace Euclid.LinearAlgebra
                         for (int i = l + 2; i < n; i++)
                             _d[i] -= h;
 
-                        f = f + h;
+                        f += h;
 
                         // Implicit QL transformation.
 
@@ -442,7 +445,7 @@ namespace Euclid.LinearAlgebra
                 // Scale column.
                 double scale = 0.0;
                 for (int i = m; i <= high; i++)
-                    scale = scale + Math.Abs(_H[i, m - 1]);
+                    scale += Math.Abs(_H[i, m - 1]);
 
                 if (scale != 0.0)
                 {
@@ -460,7 +463,7 @@ namespace Euclid.LinearAlgebra
                     if (ort[m] > 0)
                         g = -g;
 
-                    h = h - ort[m] * g;
+                    h -= ort[m] * g;
                     ort[m] = ort[m] - g;
 
                     // Apply Householder similarity transformation
@@ -472,7 +475,7 @@ namespace Euclid.LinearAlgebra
                         for (int i = high; i >= m; i--)
                             f += ort[i] * _H[i, j];
 
-                        f = f / h;
+                        f /= h;
                         for (int i = m; i <= high; i++)
                             _H[i, j] -= f * ort[i];
                     }
@@ -483,7 +486,7 @@ namespace Euclid.LinearAlgebra
                         for (int j = high; j >= m; j--)
                             f += ort[j] * _H[i, j];
 
-                        f = f / h;
+                        f /= h;
                         for (int j = m; j <= high; j++)
                             _H[i, j] -= f * ort[j];
                     }
@@ -553,7 +556,7 @@ namespace Euclid.LinearAlgebra
                 }
 
                 for (int j = Math.Max(i - 1, 0); j < nn; j++)
-                    norm = norm + Math.Abs(_H[i, j]);
+                    norm += Math.Abs(_H[i, j]);
             }
 
             // Outer loop over eigenvalue index
@@ -622,8 +625,8 @@ namespace Euclid.LinearAlgebra
                         p = x / s;
                         q = z / s;
                         r = Math.Sqrt(p * p + q * q);
-                        p = p / r;
-                        q = q / r;
+                        p /= r;
+                        q /= r;
 
                         // Row modification
 
@@ -662,7 +665,7 @@ namespace Euclid.LinearAlgebra
                         _e[n] = -z;
                     }
 
-                    n = n - 2;
+                    n -= 2;
                     iter = 0;
 
                     // No convergence yet
@@ -715,7 +718,7 @@ namespace Euclid.LinearAlgebra
                         }
                     }
 
-                    iter = iter + 1; // (Could check iteration count here.)
+                    iter += 1; // (Could check iteration count here.)
 
                     // Look for two consecutive small sub-diagonal elements
 
@@ -729,9 +732,9 @@ namespace Euclid.LinearAlgebra
                         q = _H[m + 1, m + 1] - z - r - s;
                         r = _H[m + 2, m + 1];
                         s = Math.Abs(p) + Math.Abs(q) + Math.Abs(r);
-                        p = p / s;
-                        q = q / s;
-                        r = r / s;
+                        p /= s;
+                        q /= s;
+                        r /= s;
 
                         if (m == l)
                             break;
@@ -763,9 +766,9 @@ namespace Euclid.LinearAlgebra
                             x = Math.Abs(p) + Math.Abs(q) + Math.Abs(r);
                             if (x != 0.0)
                             {
-                                p = p / x;
-                                q = q / x;
-                                r = r / x;
+                                p /= x;
+                                q /= x;
+                                r /= x;
                             }
                         }
 
@@ -783,12 +786,12 @@ namespace Euclid.LinearAlgebra
                             else if (l != m)
                                 _H[k, k - 1] = -_H[k, k - 1];
 
-                            p = p + s;
+                            p += s;
                             x = p / s;
                             y = q / s;
                             z = r / s;
-                            q = q / p;
-                            r = r / p;
+                            q /= p;
+                            r /= p;
 
                             // Row modification
 
@@ -798,7 +801,7 @@ namespace Euclid.LinearAlgebra
 
                                 if (notlast)
                                 {
-                                    p = p + r * _H[k + 2, j];
+                                    p += r * _H[k + 2, j];
                                     _H[k + 2, j] = _H[k + 2, j] - p * z;
                                 }
 
@@ -815,7 +818,7 @@ namespace Euclid.LinearAlgebra
 
                                 if (notlast)
                                 {
-                                    p = p + z * _H[i, k + 2];
+                                    p += z * _H[i, k + 2];
                                     _H[i, k + 2] = _H[i, k + 2] - p * r;
                                 }
 
@@ -831,7 +834,7 @@ namespace Euclid.LinearAlgebra
 
                                 if (notlast)
                                 {
-                                    p = p + z * _V[i, k + 2];
+                                    p += z * _V[i, k + 2];
                                     _V[i, k + 2] = _V[i, k + 2] - p * r;
                                 }
 
@@ -864,7 +867,7 @@ namespace Euclid.LinearAlgebra
                         w = _H[i, i] - p;
                         r = 0.0;
                         for (int j = l; j <= n; j++)
-                            r = r + _H[i, j] * _H[j, n];
+                            r += _H[i, j] * _H[j, n];
 
                         if (_e[i] < 0.0)
                         {
@@ -930,8 +933,8 @@ namespace Euclid.LinearAlgebra
                         sa = 0.0;
                         for (int j = l; j <= n; j++)
                         {
-                            ra = ra + _H[i, j] * _H[j, n - 1];
-                            sa = sa + _H[i, j] * _H[j, n];
+                            ra += _H[i, j] * _H[j, n - 1];
+                            sa += _H[i, j] * _H[j, n];
                         }
 
                         w = _H[i, i] - p;
@@ -1014,7 +1017,7 @@ namespace Euclid.LinearAlgebra
                 {
                     z = 0.0;
                     for (int k = low; k <= Math.Min(j, high); k++)
-                        z = z + _V[i, k] * _H[k, j];
+                        z += _V[i, k] * _H[k, j];
 
                     _V[i, j] = z;
                 }

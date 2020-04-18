@@ -8,7 +8,7 @@ namespace Euclid.Distributions.Continuous
     public class ExponentialDistribution : ContinuousDistribution
     {
         #region Declarations
-        private double _lambda, _beta;
+        private readonly double _lambda, _beta;
         #endregion
 
         #region Constructors
@@ -17,8 +17,7 @@ namespace Euclid.Distributions.Continuous
             if (lambda <= 0) throw new ArgumentException("λ has to be positive");
             _lambda = lambda;
             _beta = 1 / _lambda;
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
             _support = new Interval(0, double.PositiveInfinity, true, false);
         }
 
@@ -82,7 +81,7 @@ namespace Euclid.Distributions.Continuous
         {
             if (t < _lambda)
                 return _lambda / (_lambda - t);
-            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower than the rate");
+            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower than the rate");
         }
 
         /// <summary> Generates a sequence of samples from the normal distribution using the algorithm</summary>

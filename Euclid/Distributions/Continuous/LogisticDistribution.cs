@@ -18,8 +18,7 @@ namespace Euclid.Distributions.Continuous
             if (s <= 0) throw new ArgumentException("scale has to be positive");
             _s = s;
 
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
@@ -126,7 +125,7 @@ namespace Euclid.Distributions.Continuous
         {
             if (Math.Abs(t) <= _s)
                 return Math.Exp(_mu * t) * Fn.Beta(1 - _s * t, 1 + _s * t);
-            throw new ArgumentOutOfRangeException("t", "The argument of the MGF should be lower -in absolute- than the scale");
+            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower -in absolute- than the scale");
         }
 
         /// <summary>Returns a string that represents this instance</summary>

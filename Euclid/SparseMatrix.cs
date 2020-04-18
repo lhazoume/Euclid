@@ -9,10 +9,10 @@ namespace Euclid
     /// </summary>
     public class SparseMatrix
     {
-        #region Declarations
 
-        private int _rows, _cols;
-        private Dictionary<int, Dictionary<int, double>> _data;
+        #region Declarations
+        private readonly int _cols, _rows;
+        private readonly Dictionary<int, Dictionary<int, double>> _data;
 
         #endregion
 
@@ -27,12 +27,10 @@ namespace Euclid
             _data = new Dictionary<int, Dictionary<int, double>>();
         }
 
-        /// <summary>
-        /// Builds a  sparse matrix filled with the specified value
-        /// </summary>
+        /// <summary> Builds a  sparse matrix filled with the specified value </summary>
         /// <param name="rows">the number of rows</param>
         /// <param name="cols">the number of columns</param>
-        public SparseMatrix Create(int rows, int cols)
+        public static SparseMatrix Create(int rows, int cols)
         {
             return new SparseMatrix(rows, cols);
         }

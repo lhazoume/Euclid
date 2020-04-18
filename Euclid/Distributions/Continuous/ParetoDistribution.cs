@@ -7,8 +7,9 @@ namespace Euclid.Distributions.Continuous
     /// <summary>Pareto distribution class</summary>
     public class ParetoDistribution : ContinuousDistribution
     {
+
         #region Declarations
-        private double _xm, _alpha;
+        private readonly double _alpha, _xm;
         #endregion
 
         #region Constructors
@@ -18,8 +19,7 @@ namespace Euclid.Distributions.Continuous
             if (alpha <= 0) throw new ArgumentException("alpha has to be positive");
             _alpha = alpha;
             _xm = xm;
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(_xm, double.PositiveInfinity, true, false);
         }
@@ -106,7 +106,9 @@ namespace Euclid.Distributions.Continuous
         /// <param name="method">the fitting method</param>
         public static ParetoDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (sample.Min() <= 0) throw new ArgumentOutOfRangeException("sample", "The Pareto Law doesnot allow negative values");
+            if (sample == null) throw new ArgumentNullException(nameof(sample));
+
+            if (sample.Min() <= 0) throw new ArgumentOutOfRangeException(nameof(sample), "The Pareto Law doesnot allow negative values");
 
             if (method == FittingMethod.MaximumLikelihood)
             {
@@ -149,7 +151,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double MomentGeneratingFunction(double t)
         {
-            if (t >= 0) throw new ArgumentException("t should be negative", "t");
+            if (t >= 0) throw new ArgumentException("t should be negative", nameof(t));
 
             return _alpha * Math.Pow(-_xm * t, _alpha) * Fn.IncompleteUpperGamma(-_alpha, -_xm * t);
         }

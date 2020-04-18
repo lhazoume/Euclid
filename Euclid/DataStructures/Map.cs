@@ -31,6 +31,8 @@ namespace Euclid.DataStructures
         /// <param name="values"></param>
         public Map(IEnumerable<Tuple<T1, T2>> values)
         {
+            if (values == null) throw new ArgumentNullException(nameof(values));
+
             foreach (Tuple<T1, T2> tuple in values)
             {
                 _forward.Add(tuple.Item1, tuple.Item2);

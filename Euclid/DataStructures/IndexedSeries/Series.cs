@@ -10,13 +10,13 @@ namespace Euclid.DataStructures.IndexedSeries
 {
     /// <summary>Class representing a Series of data</summary>
     /// <typeparam name="T">the legend type</typeparam>
-    /// <typeparam name="U">the data type</typeparam>
-    /// <typeparam name="V">the label type</typeparam>
-    public class Series<T, U, V> : IIndexedSeries<T, U, V> where T : IComparable<T>, IEquatable<T> where V : IEquatable<V>
+    /// <typeparam name="TU">the data type</typeparam>
+    /// <typeparam name="TV">the label type</typeparam>
+    public class Series<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
-        private V _label;
-        private U[] _data;
+        private TV _label;
+        private TU[] _data;
         private Header<T> _legends;
         #endregion
 
@@ -24,7 +24,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
-        private Series(V label, Header<T> legends, U[] data)
+        private Series(TV label, Header<T> legends, TU[] data)
         {
             _data = Arrays.Clone(data);
             _label = label;
@@ -39,19 +39,19 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>Returns the labels of the <c>Series</c> (in this case, it is the only label)</summary>
-        public V[] Labels
+        public TV[] Labels
         {
-            get { return new V[] { _label }; }
+            get { return new TV[] { _label }; }
         }
 
         /// <summary>Returns the data of the <c>Series</c></summary>
-        public U[] Data
+        public TU[] Data
         {
             get { return Arrays.Clone(_data); }
         }
 
         /// <summary>Gets and sets the label</summary>
-        public V Label
+        public TV Label
         {
             get { return _label; }
             set { _label = value; }
@@ -73,15 +73,15 @@ namespace Euclid.DataStructures.IndexedSeries
         #region Methods
         /// <summary>Clones the <c>Series</c></summary>
         /// <returns>a <c>Series</c></returns>
-        public Series<T, U, V> Clone()
+        public Series<T, TU, TV> Clone()
         {
-            return new Series<T, U, V>(_label, _legends, _data);
+            return new Series<T, TU, TV>(_label, _legends, _data);
         }
 
         /// <summary>Gets and sets the i-th data of the <c>Series</c></summary>
         /// <param name="index">the index</param>
         /// <returns>a data point</returns>
-        public U this[int index]
+        public TU this[int index]
         {
             get { return _data[index]; }
             set { _data[index] = value; }
@@ -90,7 +90,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets and sets the data for a given legend</summary>
         /// <param name="t">the legend</param>
         /// <returns>a data point</returns>
-        public U this[T t]
+        public TU this[T t]
         {
             get { return _data[_legends[t]]; }
             set { _data[_legends[t]] = value; }
@@ -102,7 +102,7 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             int indexToRemove = _legends[t];
             if (indexToRemove == -1 || _legends.Count == 1) return;
-            U[] newData = new U[_data.Length - 1];
+            TU[] newData = new TU[_data.Length - 1];
 
             for (int i = 0; i < _data.Length; i++)
             {
@@ -117,11 +117,11 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Adds a line to the <c>Series</c></summary>
         /// <param name="legend">the new legend</param>
         /// <param name="value">the new data</param>
-        public void Add(T legend, U value)
+        public void Add(T legend, TU value)
         {
             if (_legends.Contains(legend))
                 throw new ArgumentException("The legend is already in the series");
-            U[] newData = new U[_data.Length + 1];
+            TU[] newData = new TU[_data.Length + 1];
             for (int j = 0; j < _data.Length; j++)
                 newData[j] = _data[j];
 
@@ -133,7 +133,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         /// <summary>Removes all the data-points that fit a predicate</summary>
         /// <param name="predicate">the predicate</param>
-        public int Remove(Func<T, U, bool> predicate)
+        public int Remove(Func<T, TU, bool> predicate)
         {
             int linesRemoved = 0,
                 i = 0;
@@ -153,7 +153,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         /// <summary>Applies a function to all the data</summary>
         /// <param name="function">the function</param>
-        public void ApplyOnData(Func<U, U> function)
+        public void ApplyOnData(Func<TU, TU> function)
         {
             for (int i = 0; i < _data.Length; i++)
                 _data[i] = function(_data[i]);
@@ -169,13 +169,13 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Returns the sum of the data passed through a function</summary>
         /// <param name="function">the function</param>
         /// <returns>a scalar</returns>
-        public U Sum(Func<U, U> function)
+        public TU Sum(Func<TU, TU> function)
         {
-            dynamic sum = default(U);
+            dynamic sum = default(TU);
 
             for (int i = 0; i < _data.Length; i++)
                 sum += function(_data[i]);
-            return (U)sum;
+            return (TU)sum;
         }
 
         /// <summary>Gets the i-th legend value</summary>
@@ -197,10 +197,10 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Equality comparer for the Series</summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(Series<T, U, V> other)
+        public bool Equals(Series<T, TU, TV> other)
         {
             if (other != null && other._label.Equals(_label) && other._legends.Count == _legends.Count &&
-                other._legends.Except(_legends).Count() == 0)
+                !other._legends.Except(_legends).Any())
             {
                 for (int i = 0; i < _data.Length; i++)
                     if (!other._data[i].Equals(_data[i]))
@@ -216,6 +216,8 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="writer">the <c>XmlWriter</c></param>
         public void ToXml(XmlWriter writer)
         {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
             writer.WriteStartElement("series");
 
             writer.WriteStartElement("label");
@@ -238,8 +240,10 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a <c>String</c></returns>
         public string ToCSV()
         {
-            List<string> lines = new List<string>();
-            lines.Add(string.Join(CsvHelper.Separator, "x", _label.ToString()));
+            List<string> lines = new List<string>
+            {
+                string.Join(CsvHelper.Separator, "x", _label.ToString())
+            };
             foreach (T t in _legends)
                 lines.Add(string.Join(CsvHelper.Separator, t.ToString(), _data[_legends[t]].ToString()));
             return string.Join(Environment.NewLine, lines);
@@ -251,49 +255,56 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="ts1">the left hand side <c>Series</c></param>
         /// <param name="ts2">the right hand side <c>Series</c></param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> operator +(Series<T, U, V> ts1, Series<T, U, V> ts2)
+        public static Series<T, TU, TV> operator +(Series<T, TU, TV> ts1, Series<T, TU, TV> ts2)
         {
+            if (ts1 == null) throw new ArgumentNullException(nameof(ts1));
+            if (ts2 == null) throw new ArgumentNullException(nameof(ts2));
             if (ts1.Rows != ts2.Rows) throw new Exception("Series length do not match");
             if (ts1._legends != ts2._legends) throw new DataMisalignedException("The series legends do not match");
 
-            U[] data = new U[ts1._data.Length];
+            TU[] data = new TU[ts1._data.Length];
             for (int i = 0; i < ts1._data.Length; i++)
                 data[i] = (dynamic)ts1._data[i] + (dynamic)ts2._data[i];
-            return new Series<T, U, V>(default(V), ts1._legends, data);
+            return new Series<T, TU, TV>(default, ts1._legends, data);
         }
 
         /// <summary>Substracts one <c>Series</c> to another</summary>
         /// <param name="ts1">the left hand side <c>Series</c></param>
         /// <param name="ts2">the right hand side <c>Series</c></param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> operator -(Series<T, U, V> ts1, Series<T, U, V> ts2)
+        public static Series<T, TU, TV> operator -(Series<T, TU, TV> ts1, Series<T, TU, TV> ts2)
         {
+            if (ts1 == null) throw new ArgumentNullException(nameof(ts1));
+            if (ts2 == null) throw new ArgumentNullException(nameof(ts2));
+
             if (ts1.Rows != ts2.Rows) throw new Exception("Series length do not match");
             if (ts1._legends != ts2._legends) throw new DataMisalignedException("The series legends do not match");
 
-            U[] data = new U[ts1._data.Length];
+            TU[] data = new TU[ts1._data.Length];
             for (int i = 0; i < ts1._data.Length; i++)
                 data[i] = (dynamic)ts1._data[i] - ts2._data[i];
-            return new Series<T, U, V>(default(V), ts1._legends, data);
+            return new Series<T, TU, TV>(default, ts1._legends, data);
         }
 
         /// <summary>Multiplies the <c>Series</c> by a factor</summary>
         /// <param name="ts">the <c>Series</c></param>
         /// <param name="factor">the factor </param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> operator *(Series<T, U, V> ts, U factor)
+        public static Series<T, TU, TV> operator *(Series<T, TU, TV> ts, TU factor)
         {
-            U[] data = ts._data;
+            if (ts == null) throw new ArgumentNullException(nameof(ts));
+
+            TU[] data = ts._data;
             for (int i = 0; i < ts._data.Length; i++)
                 data[i] = (dynamic)ts._data[i] * factor;
-            return new Series<T, U, V>(ts._label, ts._legends, data);
+            return new Series<T, TU, TV>(ts._label, ts._legends, data);
         }
 
         /// <summary>Multiplies the <c>Series</c> by a factor</summary>
         /// <param name="factor">the factor</param>
         /// <param name="ts">the <c>Series</c></param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> operator *(U factor, Series<T, U, V> ts)
+        public static Series<T, TU, TV> operator *(TU factor, Series<T, TU, TV> ts)
         {
             return ts * factor;
         }
@@ -302,31 +313,35 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="ts">the <c>Series</c></param>
         /// <param name="factor">the factor</param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> operator /(Series<T, U, V> ts, U factor)
+        public static Series<T, TU, TV> operator /(Series<T, TU, TV> ts, TU factor)
         {
-            U[] data = ts._data;
+            if (ts == null) throw new ArgumentNullException(nameof(ts));
+
+            TU[] data = ts._data;
             for (int i = 0; i < ts._data.Length; i++)
                 data[i] = (dynamic)ts._data[i] / factor;
-            return new Series<T, U, V>(ts._label, ts._legends, data);
+            return new Series<T, TU, TV>(ts._label, ts._legends, data);
         }
 
         /// <summary>Adds a scalar to a <c>Series</c></summary>
         /// <param name="ts">the <c>Series</c></param>
         /// <param name="amount">the number</param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> operator +(Series<T, U, V> ts, U amount)
+        public static Series<T, TU, TV> operator +(Series<T, TU, TV> ts, TU amount)
         {
-            U[] data = ts._data;
+            if (ts == null) throw new ArgumentNullException(nameof(ts));
+
+            TU[] data = ts._data;
             for (int i = 0; i < ts._data.Length; i++)
                 data[i] = (dynamic)ts._data[i] + amount;
-            return new Series<T, U, V>(ts._label, ts._legends, data);
+            return new Series<T, TU, TV>(ts._label, ts._legends, data);
         }
 
         /// <summary>Adds a scalar to a <c>Series</c></summary>
         /// <param name="amount">the scalar</param>
         /// <param name="ts">the <c>Series</c></param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> operator +(U amount, Series<T, U, V> ts)
+        public static Series<T, TU, TV> operator +(TU amount, Series<T, TU, TV> ts)
         {
             return ts + amount;
         }
@@ -335,12 +350,14 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="ts">the <c>Series</c></param>
         /// <param name="amount">the scalar</param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> operator -(Series<T, U, V> ts, U amount)
+        public static Series<T, TU, TV> operator -(Series<T, TU, TV> ts, TU amount)
         {
-            U[] data = ts._data;
+            if (ts == null) throw new ArgumentNullException(nameof(ts));
+
+            TU[] data = ts._data;
             for (int i = 0; i < ts._data.Length; i++)
                 data[i] = (dynamic)ts._data[i] - amount;
-            return new Series<T, U, V>(ts._label, ts._legends, data);
+            return new Series<T, TU, TV>(ts._label, ts._legends, data);
         }
         #endregion
 
@@ -351,58 +368,62 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="legends">the legends</param>
         /// <param name="data">the series</param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> Create(V label, IEnumerable<T> legends, IEnumerable<U> data)
+        public static Series<T, TU, TV> Create(TV label, IEnumerable<T> legends, IEnumerable<TU> data)
         {
-            return new Series<T, U, V>(label, new Header<T>(legends.ToArray()), data.ToArray());
+            return new Series<T, TU, TV>(label, new Header<T>(legends.ToArray()), data.ToArray());
         }
 
         /// <summary>Builds a <c>Series</c> from generic enumerables of legends</summary>
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <returns>a <c>Series</c></returns>
-        public static Series<T, U, V> Create(V label, IEnumerable<T> legends)
+        public static Series<T, TU, TV> Create(TV label, IEnumerable<T> legends)
         {
-            return new Series<T, U, V>(label, new Header<T>(legends.ToArray()), new U[legends.Count()]);
+            return new Series<T, TU, TV>(label, new Header<T>(legends.ToArray()), new TU[legends.Count()]);
         }
 
         /// <summary>Builds a <c>Series</c> from its serialized form</summary>
         /// <param name="node">the <c>XmlNode</c></param>
-        public static Series<T, U, V> Create(XmlNode node)
+        public static Series<T, TU, TV> Create(XmlNode node)
         {
-            V label = node.SelectSingleNode("series/label").Attributes["value"].Value.Parse<V>();
+            if (node == null) throw new ArgumentNullException(nameof(node));
+
+            TV label = node.SelectSingleNode("series/label").Attributes["value"].Value.Parse<TV>();
             Header<T> legends = new Header<T>();
-            List<U> data = new List<U>();
+            List<TU> data = new List<TU>();
 
             XmlNodeList points = node.SelectNodes("series/point");
             foreach (XmlNode pointNode in points)
             {
-                U value = pointNode.Attributes["value"].Value.Parse<U>();
+                TU value = pointNode.Attributes["value"].Value.Parse<TU>();
                 T legend = pointNode.Attributes["legend"].Value.Parse<T>();
                 legends.Add(legend);
                 data.Add(value);
             }
 
-            return new Series<T, U, V>(label, legends, data.ToArray());
+            return new Series<T, TU, TV>(label, legends, data.ToArray());
         }
 
         /// <summary>Builds a <c>Series</c> from a string</summary>
         /// <param name="text">the <c>String</c> content</param>
-        public static Series<T, U, V> Create(string text)
+        public static Series<T, TU, TV> Create(string text)
         {
+            if (text == null) throw new ArgumentOutOfRangeException(nameof(text));
+
             string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length == 0) return null;
 
-            U[] data = new U[lines.Length - 1];
+            TU[] data = new TU[lines.Length - 1];
             Header<T> legends = new Header<T>();
-            V label = lines[0].Split(CsvHelper.Separator.ToCharArray())[1].Parse<V>();
+            TV label = lines[0].Split(CsvHelper.Separator.ToCharArray())[1].Parse<TV>();
             for (int i = 1; i < lines.Length; i++)
             {
                 string[] content = lines[i].Split(CsvHelper.Separator.ToCharArray());
-                data[i - 1] = content[1].Parse<U>();
+                data[i - 1] = content[1].Parse<TU>();
                 legends.Add(content[0].Parse<T>());
             }
 
-            return new Series<T, U, V>(label, legends, data);
+            return new Series<T, TU, TV>(label, legends, data);
         }
         #endregion
     }

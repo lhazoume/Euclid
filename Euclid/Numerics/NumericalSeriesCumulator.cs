@@ -9,11 +9,11 @@ namespace Euclid.Numerics
     {
         #region Declarations
         private long _initialIndex;
-        private Func<long, double> _series;
+        private readonly Func<long, double> _series;
         private double _sum, _tolerance;
         private int _maxIterations, _iterations;
         private NumericalSeriesStatus _status;
-        private List<double> _convergence = new List<double>();
+        private readonly List<double> _convergence = new List<double>();
         #endregion
 
         /// <summary>Builds a cumulative calculator of numerical series</summary>
@@ -50,7 +50,7 @@ namespace Euclid.Numerics
             set
             {
                 if (value <= 0)
-                    throw new ArgumentOutOfRangeException("The maximum number of iterations should be positive");
+                    throw new ArgumentOutOfRangeException(nameof(value), "The maximum number of iterations should be positive");
                 _maxIterations = value;
             }
         }
@@ -63,8 +63,7 @@ namespace Euclid.Numerics
             get { return _tolerance; }
             set
             {
-                if (value <= 0)
-                    throw new ArgumentOutOfRangeException("The tolerance should be positive");
+                if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value), "The tolerance should be positive");
                 _tolerance = value;
             }
         }

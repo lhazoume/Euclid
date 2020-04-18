@@ -23,9 +23,9 @@ namespace Euclid.Analytics.DecisionTree
 
         public DecisionTreeBarrierNode(double barrier, int featureIndex, IDecisionNode greaterOrEqual, IDecisionNode less)
         {
-            if (featureIndex < 0) throw new ArgumentOutOfRangeException("feaureIndex", "The feature index should be positive");
-            if (greaterOrEqual is null) throw new ArgumentNullException("greaterOrEqual", "The greater or equal node is null");
-            if (less is null) throw new ArgumentNullException("less", "The less node is null");
+            if (featureIndex < 0) throw new ArgumentOutOfRangeException(nameof(featureIndex), "The feature index should be positive");
+            if (greaterOrEqual is null) throw new ArgumentNullException(nameof(greaterOrEqual), "The greater or equal node is null");
+            if (less is null) throw new ArgumentNullException(nameof(less), "The less node is null");
 
             _barrier = barrier;
             _featureIndex = featureIndex;
@@ -57,9 +57,9 @@ namespace Euclid.Analytics.DecisionTree
 
         public DecisionTreeEqualNode(double target, int featureIndex, IDecisionNode equal, IDecisionNode different)
         {
-            if (featureIndex < 0) throw new ArgumentOutOfRangeException("feaureIndex", "The feature index should be positive");
-            if (equal is null) throw new ArgumentNullException("equal", "The equal node is null");
-            if (different is null) throw new ArgumentNullException("different", "The different node is null");
+            if (featureIndex < 0) throw new ArgumentOutOfRangeException(nameof(featureIndex), "The feature index should be positive");
+            if (equal is null) throw new ArgumentNullException(nameof(equal), "The equal node is null");
+            if (different is null) throw new ArgumentNullException(nameof(different), "The different node is null");
 
             _target = target;
             _featureIndex = featureIndex;

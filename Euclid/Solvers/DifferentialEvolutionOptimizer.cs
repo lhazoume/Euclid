@@ -36,10 +36,10 @@ namespace Euclid.Solvers
             double crossoverProbability, double differentialWeight)
         {
             if (initialPopulation.Count() <= 4)
-                throw new ArgumentException("The initial population is too small to perform a differential evolution", "initialPopulation");
+                throw new ArgumentException("The initial population is too small to perform a differential evolution", nameof(initialPopulation));
 
             if (initialPopulation.Any(v => !feasabilityFunction(v)))
-                throw new ArgumentOutOfRangeException("initialPopulation", "Some agents of the initial population are not feasible");
+                throw new ArgumentOutOfRangeException(nameof(initialPopulation), "Some agents of the initial population are not feasible");
             _initialPopulation = initialPopulation.ToArray();
             _populationSize = _initialPopulation.Length;
 
@@ -49,16 +49,16 @@ namespace Euclid.Solvers
             _optimizationType = optimizationType;
 
             if (maxIterations <= 0)
-                throw new ArgumentOutOfRangeException("maxIterations", "The maximum number of iterations and static iterations should both be >0");
+                throw new ArgumentOutOfRangeException(nameof(maxIterations), "The maximum number of iterations and static iterations should both be >0");
             _maxIterations = maxIterations;
 
 
             if (crossoverProbability >= 1 || crossoverProbability <= 0)
-                throw new ArgumentOutOfRangeException("crossoverProbability", "The crossover probability should be positive and below 1");
+                throw new ArgumentOutOfRangeException(nameof(crossoverProbability), "The crossover probability should be positive and below 1");
             _crossoverProbability = crossoverProbability;
 
             if (differentialWeight == 0)
-                throw new ArgumentOutOfRangeException("differentialWeight", "The differential weight should not be equal to zero");
+                throw new ArgumentOutOfRangeException(nameof(differentialWeight), "The differential weight should not be equal to zero");
 
             _differentialWeight = differentialWeight;
             _status = SolverStatus.NotRan;

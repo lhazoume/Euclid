@@ -9,6 +9,9 @@ namespace Euclid.Text
         /// <summary>Compute the distance between two strings</summary>
         public static int Levenshtein(string s, string t)
         {
+            if (s == null) throw new ArgumentNullException(nameof(s));
+            if (t == null) throw new ArgumentNullException(nameof(t));
+
             int n = s.Length;
             int m = t.Length;
             int[,] d = new int[n + 1, m + 1];
@@ -38,6 +41,9 @@ namespace Euclid.Text
 
         public static int Characters(string stringA, string stringB)
         {
+            if (stringA == null) throw new ArgumentNullException(nameof(stringA));
+            if (stringB == null) throw new ArgumentNullException(nameof(stringB));
+
             Dictionary<char, int> dictionaryA = stringA.ToCharArray().Distinct().ToDictionary(c => c, c => stringA.Count(ch => ch == c)),
                 dictionaryB = stringB.ToCharArray().Distinct().ToDictionary(c => c, c => stringB.Count(ch => ch == c));
             char[] commonCharacters = dictionaryA.Keys.Intersect(dictionaryB.Keys).ToArray();
@@ -58,12 +64,12 @@ namespace Euclid.Text
          * without the modification. 
          * Winkler's paper used a default value of 0.7
          */
-        private static readonly double mWeightThreshold = 0.7;
+        private const double mWeightThreshold = 0.7;
 
         /* Size of the prefix to be concidered by the Winkler modification. 
          * Winkler's paper used a default value of 4
          */
-        private static readonly int mNumChars = 4;
+        private const int mNumChars = 4;
 
 
         /// <summary>
@@ -90,6 +96,9 @@ namespace Euclid.Text
         /// <returns></returns>
         public static double JaroWrinklerProximity(string aString1, string aString2)
         {
+            if (aString1 == null) throw new ArgumentNullException(nameof(aString1));
+            if (aString2 == null) throw new ArgumentNullException(nameof(aString2));
+
             int lLen1 = aString1.Length;
             int lLen2 = aString2.Length;
             if (lLen1 == 0)
@@ -169,7 +178,7 @@ namespace Euclid.Text
 
         private static void strncat(ref string s, char c)
         {
-            s = s + new string(c, 1);
+            s += new string(c, 1);
         }
 
         private static int strlen(char[] s)
@@ -197,6 +206,8 @@ namespace Euclid.Text
 
         public static string Metaphone(string name)//, int maxLen)
         {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
             string metaph = "";
             int ii, jj, Lng, lastChr;
             bool silent, hard;
