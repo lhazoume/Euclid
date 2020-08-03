@@ -32,13 +32,16 @@ namespace Euclid.Solvers
         /// <param name="attractionToParticleBest">the attraction to particle best factor</param>
         /// <param name="attractionToOverallBest">the attraction to overall best factor</param>
         /// <param name="velocityInertia">the velocity inertia</param>
+        /// <param name="shrinkageFactor">the shrinkage factor</param>
         public ParticleSwarmOptimizer(IEnumerable<Vector> initialPopulation,
             OptimizationType optimizationType,
             Func<Vector, double> fitnessFunction,
             Func<Vector, bool> feasabilityFunction,
             int maxIterations,
             int maxStaticIterations,
-            double epsilon = 1e-8, double attractionToParticleBest = 2, double attractionToOverallBest = 2, double velocityInertia = 0.5, double shrinkageFactor = 0.5)
+            double epsilon = 1e-8,
+            double attractionToParticleBest = 2, double attractionToOverallBest = 2,
+            double velocityInertia = 0.5, double shrinkageFactor = 0.5)
         {
             #region Check and initialize the population of agents
             if (initialPopulation.Count() <= 1)

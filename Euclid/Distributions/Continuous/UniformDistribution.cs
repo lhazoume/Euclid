@@ -8,7 +8,7 @@ namespace Euclid.Distributions.Continuous
     public class UniformDistribution : ContinuousDistribution
     {
         #region Declarations
-        private double _a, _b, _d, _m;
+        private readonly double _a, _b, _d, _m;
         #endregion
 
         #region Constructors
@@ -20,8 +20,7 @@ namespace Euclid.Distributions.Continuous
             _d = _b - _a;
             _m = 0.5 * (_b + _a);
 
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(_a, _b, true, true);
         }

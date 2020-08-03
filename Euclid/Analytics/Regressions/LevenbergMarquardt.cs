@@ -1,8 +1,6 @@
-﻿using Euclid.DataStructures.IndexedSeries;
-using System;
-
-namespace Euclid.Analytics.Regressions
+﻿namespace Euclid.Analytics.Regressions
 {
+    /*
     public class LevenbergMarquardt<T, TV> where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
     {
         #region Variables
@@ -43,4 +41,5 @@ namespace Euclid.Analytics.Regressions
             double lambda;
         }
     }
+    */
 }

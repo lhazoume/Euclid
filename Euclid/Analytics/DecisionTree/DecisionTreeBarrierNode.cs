@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Euclid.Analytics.DecisionTree
+﻿namespace Euclid.Analytics.DecisionTree
 {
+    /*
     public interface IDecisionNode
     {
         double Evaluate(double[] data);
@@ -97,4 +92,6 @@ namespace Euclid.Analytics.DecisionTree
         public int Leaves { get { return 1; } }
         public int Depth { get { return 0; } }
     }
+
+    */
 }

@@ -52,7 +52,6 @@ namespace Euclid
         private const double MINLOG = -7.451332191019412076235E2;
         private const double MAXGAM = 171.624376956302725;
         private const double SQTPI = 2.50662827463100050242E0;
-        private const double SQRTH = 7.07106781186547524401E-1;
         private const double LOGPI = 1.14472988584940017414;
 
         /// <summary>The Euler-Mascheroni constant</summary>
@@ -632,8 +631,8 @@ namespace Euclid
             if ((x == 2.0) || (x == 3.0)) return z;
 
             x -= 2.0;
-            p = polevl(x, P, 6);
-            q = polevl(x, Q, 7);
+            p = EvaluatePolynomial(x, P, 6);
+            q = EvaluatePolynomial(x, Q, 7);
             return z * p / q;
 
         }
@@ -1004,13 +1003,13 @@ namespace Euclid
                             -2.68132617805781232825E-3,
                             3.47222221605458667310E-3,
                             8.33333333333482257126E-2,
-        };
+            };
             double MAXSTIR = 143.01608;
 
             double w = 1.0 / x;
             double y = Math.Exp(x);
 
-            w = 1.0 + w * polevl(w, STIR, 4);
+            w = 1.0 + w * EvaluatePolynomial(w, STIR, 4);
 
             if (x > MAXSTIR)
             {
@@ -1097,26 +1096,7 @@ namespace Euclid
             return IncompleteLowerGamma((double)(k + 1), x);
         }
 
-        /// <summary>Returns the area under the Gaussian probability density function, integrated from minus infinity to a.</summary>
-        /// <param name="a">the upper bound</param>
-        /// <returns>the probability</returns>
-        public static double normal(double a)
-        {
-            double x, y, z;
-
-            x = a * SQRTH;
-            z = Math.Abs(x);
-
-            if (z < SQRTH) y = 0.5 + 0.5 * erf(x);
-            else
-            {
-                y = 0.5 * erfc(z);
-                if (x > 0) y = 1.0 - y;
-            }
-
-            return y;
-        }
-
+        /*
         /// <summary>
         /// Returns the complementary error function of the specified number.
         /// </summary>
@@ -1184,12 +1164,12 @@ namespace Euclid
 
             if (x < 8.0)
             {
-                p = polevl(x, P, 8);
+                p = EvaluatePolynomial(x, P, 8);
                 q = p1evl(x, Q, 8);
             }
             else
             {
-                p = polevl(x, R, 5);
+                p = EvaluatePolynomial(x, R, 5);
                 q = p1evl(x, S, 6);
             }
 
@@ -1232,10 +1212,10 @@ namespace Euclid
 
             if (Math.Abs(x) > 1.0) return (1.0 - erfc(x));
             z = x * x;
-            y = x * polevl(z, T, 4) / p1evl(z, U, 5);
+            y = x * EvaluatePolynomial(z, T, 4) / p1evl(z, U, 5);
             return y;
         }
-
+        */
         #region Gauss Bell functions
 
         /// <summary>Computes the Phi function which is the cumulative distribution for the standard normal distribution</summary>
@@ -1421,7 +1401,7 @@ namespace Euclid
         /// <param name="coef"></param>
         /// <param name="N"></param>
         /// <returns></returns>
-        private static double polevl(double x, double[] coef, int N)
+        private static double EvaluatePolynomial(double x, double[] coef, int N)
         {
             double ans = coef[0];
 
@@ -1521,7 +1501,7 @@ namespace Euclid
                 if (z < 0.0) z = -z;
                 if (x == 2.0) return Math.Log(z);
                 x -= 2.0;
-                p = x * polevl(x, B, 5) / p1evl(x, C, 6);
+                p = x * EvaluatePolynomial(x, B, 5) / p1evl(x, C, 6);
                 return (Math.Log(z) + p);
             }
 
@@ -1538,7 +1518,7 @@ namespace Euclid
                     - 2.7777777777777777777778e-3) * p
                     + 0.0833333333333333333333) / x;
             else
-                q += polevl(p, A, 4) / x;
+                q += EvaluatePolynomial(p, A, 4) / x;
             return q;
         }
 

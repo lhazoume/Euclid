@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Euclid.Text
 {
+    /// <summary>Helps computing string distances</summary>
     public static class Distance
     {
         /// <summary>Compute the distance between two strings</summary>
@@ -39,6 +40,10 @@ namespace Euclid.Text
             return d[n, m];
         }
 
+        /// <summary>Returns the anagram-distance between two strings</summary>
+        /// <param name="stringA">one string</param>
+        /// <param name="stringB"></param>
+        /// <returns></returns>
         public static int Characters(string stringA, string stringB)
         {
             if (stringA == null) throw new ArgumentNullException(nameof(stringA));
@@ -199,11 +204,14 @@ namespace Euclid.Text
                 chars[i] = chars[i + 1];
         }
 
-        private static bool startsWith(char[] chars, char c1, char c2)
+        private static bool StartsWith(char[] chars, char c1, char c2)
         {
             return chars[0] == c1 && chars[1] == c2;
         }
 
+        /// <summary>Computes the metaphone version of a string</summary>
+        /// <param name="name">the string to convert</param>
+        /// <returns>a <c>String</c></returns>
         public static string Metaphone(string name)//, int maxLen)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -240,11 +248,11 @@ namespace Euclid.Text
             //    chrptr1 = nextLTR + (chrptr - excpPAIR);
             //    if (*chrptr1 == ename[1])
             if (
-                startsWith(ename, 'A', 'E') ||
-                startsWith(ename, 'G', 'N') ||
-                startsWith(ename, 'K', 'N') ||
-                startsWith(ename, 'P', 'N') ||
-                startsWith(ename, 'W', 'R')
+                StartsWith(ename, 'A', 'E') ||
+                StartsWith(ename, 'G', 'N') ||
+                StartsWith(ename, 'K', 'N') ||
+                StartsWith(ename, 'P', 'N') ||
+                StartsWith(ename, 'W', 'R')
                 )
                 ShiftLeftByOne(ename, 0);
 
@@ -254,7 +262,7 @@ namespace Euclid.Text
 
             /* get rid of the "h" in "wh" */
             //if (strncmp(ename, "WH", 2) == 0)
-            if (startsWith(ename, 'W', 'H'))
+            if (StartsWith(ename, 'W', 'H'))
                 ShiftLeftByOne(ename, 1);
 
             Lng = strlen(ename);
