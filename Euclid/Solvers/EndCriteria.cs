@@ -10,10 +10,10 @@ namespace Euclid.Solvers
     public class EndCriteria
     {
         #region private vars
-        private int? _maxIterations, _maxStaticIterations;
+        private readonly int? _maxIterations, _maxStaticIterations;
         private int _iterations;
-        private double? _functionEpsilon, _gradientEpsilon;
-        private List<double> _history;
+        private readonly double? _functionEpsilon, _gradientEpsilon;
+        private readonly List<double> _history;
         private SolverStatus _status;
         #endregion
 

@@ -12,7 +12,6 @@ namespace Euclid.Analytics
         #region Declarations
         private readonly double _constant, _r2;
         private readonly Vector _factors;
-        private readonly int _p;
         private readonly bool _succeeded;
         #endregion
 
@@ -27,7 +26,6 @@ namespace Euclid.Analytics
         {
             if (factors == null) throw new ArgumentNullException(nameof(factors));
             _succeeded = succeeded;
-            _p = factors.Length;
             _constant = constant;
             _r2 = r2;
             _factors = Vector.Create(factors);
@@ -52,16 +50,10 @@ namespace Euclid.Analytics
 
         #region Accessors
         /// <summary>Gets the constant term</summary>
-        public double Constant
-        {
-            get { return _succeeded ? _constant : 0; }
-        }
+        public double Constant => _succeeded ? _constant : 0;
 
         /// <summary>Returns the R-squared</summary>
-        public double R2
-        {
-            get { return _r2; }
-        }
+        public double R2 => _r2;
         /// <summary>Gets the linear terms</summary>
         public Vector Factors
         {
@@ -69,10 +61,7 @@ namespace Euclid.Analytics
         }
 
         /// <summary>specifies whether the regression succeeds</summary>
-        public bool Succeeded
-        {
-            get { return _succeeded; }
-        }
+        public bool Succeeded => _succeeded;
         #endregion
 
         #region ToString

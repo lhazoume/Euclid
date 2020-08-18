@@ -9,7 +9,7 @@ namespace Euclid.Distributions.Continuous
     public class WeibullDistribution : ContinuousDistribution
     {
         #region Declarations
-        private double _lambda, _k, _mu, _sigma2, _sigma;
+        private readonly double _lambda, _k, _mu, _sigma2, _sigma;
         #endregion
 
         private WeibullDistribution(double lambda, double k, Random randomSource)
@@ -19,8 +19,7 @@ namespace Euclid.Distributions.Continuous
             _lambda = lambda;
             _k = k;
 
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(0, double.PositiveInfinity, true, false);
 

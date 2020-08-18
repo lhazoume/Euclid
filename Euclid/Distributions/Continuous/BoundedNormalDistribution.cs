@@ -9,7 +9,7 @@ namespace Euclid.Distributions.Continuous
     public class BoundedNormalDistribution : ContinuousDistribution
     {
         #region Declarations
-        private double _mu,
+        private readonly double _mu,
             _sigma, _sigma2,
             _a, _b,
             _alpha, _beta,
@@ -43,8 +43,7 @@ namespace Euclid.Distributions.Continuous
             _dGb = (double.IsNegativeInfinity(_a) ? 0 : (_alpha * _gbAlpha)) - (double.IsPositiveInfinity(_b) ? 0 : (_beta * _gbBeta));
 
             _Z = _phiBeta - _phiAlpha;
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
             _support = new Interval(_a, _b, true, true);
         }
 

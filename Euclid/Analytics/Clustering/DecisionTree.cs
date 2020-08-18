@@ -168,16 +168,10 @@ namespace Euclid.Analytics.Clustering
         #region Accessors
 
         /// <summary>Returns the description of the predicate</summary>
-        public string Description
-        {
-            get { return _description; }
-        }
+        public string Description => _description;
 
         /// <summary>The predicate</summary>
-        public Predicate<TI> Predicate
-        {
-            get { return _predicate; }
-        }
+        public Predicate<TI> Predicate => _predicate;
 
         /// <summary>Returns a clone of the pretty predicate</summary>
         public PrettyPredicate<TI> Clone

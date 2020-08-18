@@ -25,9 +25,7 @@ namespace Euclid.Distributions.Continuous
             _beta = beta;
             _1Beta = 1 / _beta;
             _gamma1Beta = Fn.Gamma(_1Beta);
-
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }

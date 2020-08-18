@@ -9,7 +9,7 @@ namespace Euclid.Distributions.Continuous
     public class LogNormalDistribution : ContinuousDistribution
     {
         #region Declarations
-        private double _mu, _sigma, _sigma2;
+        private readonly double _mu, _sigma, _sigma2;
         #endregion
 
         #region Constructors
@@ -19,8 +19,7 @@ namespace Euclid.Distributions.Continuous
             _sigma = sigma;
             _sigma2 = _sigma * _sigma;
             _mu = mu;
-            if (randomSource == null) throw new ArgumentException("The random source can not be null");
-            _randomSource = randomSource;
+            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
             _support = new Interval(0, double.PositiveInfinity, false, false);
         }
         /// <summary>Builds a log normal distribution</summary>

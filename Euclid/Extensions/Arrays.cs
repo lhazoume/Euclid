@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Euclid.Extensions
 {
@@ -83,6 +84,29 @@ namespace Euclid.Extensions
             for (int i = 0; i < data.Length; i++)
                 result[i] = function(data[i]);
             return result;
+        }
+
+        /// <summary>Returns the index of the nearest value in the array</summary>
+        /// <param name="data">the array to search</param>
+        /// <param name="value">the sought value</param>
+        /// <returns>the index in the array</returns>
+        public static int IndexOfNearest(this double[] data, double value)
+        {
+            if (data.Length == 0) throw new ArgumentOutOfRangeException(nameof(data));
+            int nearestIndex = 0;
+            double shortestDistance = Math.Abs(value - data[nearestIndex]);
+
+            for (int i = 1; i < data.Length; i++)
+            {
+                double currentDistance = Math.Abs(value - data[i]);
+                if (currentDistance < shortestDistance)
+                {
+                    nearestIndex = i;
+                    shortestDistance = currentDistance;
+                }
+            }
+
+            return nearestIndex;
         }
 
         /// <summary>Splits an array into smaller size arrays</summary>

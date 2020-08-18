@@ -107,22 +107,14 @@ namespace Euclid
 
         #region Helpers
         /// <summary>Returns the imaginary number <c>i</c></summary>
-        public static Complex I
-        {
-            get { return new Complex(0, 1); }
-        }
+        public static Complex I => new Complex(0, 1);
+
 
         /// <summary>Returns the complex representation of the real number 1</summary>
-        public static Complex One
-        {
-            get { return new Complex(1, 0); }
-        }
+        public static Complex One => new Complex(1, 0);
 
         /// <summary>Returns a complex with both imaginary and real parts equal to zero</summary>
-        public static Complex Zero
-        {
-            get { return new Complex(0, 0); }
-        }
+        public static Complex Zero => new Complex(0, 0);
 
         /// <summary>Returns a complex from its exponential form </summary>
         /// <param name="complex">the exponential argument</param>

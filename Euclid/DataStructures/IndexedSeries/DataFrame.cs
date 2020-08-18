@@ -159,34 +159,20 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region Accessors
         /// <summary>Returns the legends </summary>
-        public T[] Legends
-        {
-            get { return _legends.Values; }
-        }
+        public T[] Legends => _legends.Values;
 
         /// <summary>Returns the labels </summary>
-        public TV[] Labels
-        {
-            get { return _labels.Values; }
-        }
+        public TV[] Labels => _labels.Values;
 
         /// <summary>Returns the number of columns</summary>
-        public int Columns
-        {
-            get { return _labels.Count; }
-        }
+        public int Columns => _labels.Count;
 
         /// <summary>Returns the number of rows</summary>
-        public int Rows
-        {
-            get { return _legends.Count; }
-        }
+        public int Rows => _legends.Count;
 
         /// <summary>Gets the data</summary>
-        public TU[,] Data
-        {
-            get { return _data; }
-        }
+        public TU[,] Data => _data;
+
 
         /// <summary>Gets and sets the data for the i-th row and j-th column of the <c>DataFrame</c></summary>
         /// <param name="i">the row index</param>

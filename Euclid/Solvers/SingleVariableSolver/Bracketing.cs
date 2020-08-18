@@ -98,22 +98,13 @@ namespace Euclid.Solvers.SingleVariableSolver
 
         #region Get
         /// <summary>Returns the final error</summary>
-        public double Error
-        {
-            get { return _error; }
-        }
+        public double Error=> _error;
 
         /// <summary>The result of the solver</summary>
-        public double Result
-        {
-            get { return _result; }
-        }
+        public double Result => _result; 
 
         /// <summary>The final status of the solver</summary>
-        public SolverStatus Status
-        {
-            get { return _status; }
-        }
+        public SolverStatus Status=> _status;
 
         /// <summary>Gets the details of the convergence (value, error) </summary>
         public List<Tuple<double, double>> Convergence

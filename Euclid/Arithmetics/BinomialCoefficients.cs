@@ -3,8 +3,8 @@
     /// <summary>Binomial coefficients class</summary>
     public class BinomialCoefficients
     {
-        private int[] _coefficients;
-        private int _degree;
+        private readonly int[] _coefficients;
+        private readonly int _degree;
 
         /// <summary>Calculates all the binomial coefficients for a given degree</summary>
         /// <param name="n">the degree</param>

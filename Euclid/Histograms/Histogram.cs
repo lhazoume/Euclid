@@ -58,14 +58,15 @@ namespace Euclid.Histograms
         #region Add
         /// <summary>Tabulates the value into to this instance</summary>
         /// <param name="value">the value</param>
-        public void Tabulate(double value)
+        /// <param name="occurences">the number of occurences of the value</param>
+        public void Tabulate(double value, int occurences = 1)
         {
             int i = 0;
             while (i < _intervals.Length)
             {
                 if (_intervals[i].Contains(value))
                 {
-                    _items[i]++;
+                    _items[i] += occurences;
                     break;
                 }
                 i++;
@@ -76,11 +77,9 @@ namespace Euclid.Histograms
         /// <param name="values">the value</param>
         public void Tabulate(IEnumerable<double> values)
         {
-            double[] data = values.ToArray();
-            Array.Sort(data);
-            //TODO  : tabulate smartly
-            foreach (double value in values)
-                Tabulate(value);
+            IEnumerable<IGrouping<double, double>> groups = values.GroupBy(d => d);
+            foreach (IGrouping<double, double> group in groups)
+                Tabulate(group.Key, group.Count());
         }
         #endregion
 

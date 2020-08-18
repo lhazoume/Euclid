@@ -48,8 +48,7 @@ namespace Euclid.Distributions.Discrete
             get { return _randomSource; }
             set
             {
-                if (value == null) throw new ArgumentException("The random source can not be null");
-                _randomSource = value;
+                _randomSource = value ?? throw new ArgumentException("The random source can not be null");
             }
         }
         #endregion

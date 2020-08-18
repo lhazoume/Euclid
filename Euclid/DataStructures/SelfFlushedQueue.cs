@@ -10,7 +10,7 @@ namespace Euclid.DataStructures
         private readonly int _maximumSize, _checkFrequency;
         private readonly Queue<T> _queue;
         private readonly object _lock = new object();
-        private Flush _flush;
+        private readonly Flush _flush;
         private int _ctr;
         #endregion
 
