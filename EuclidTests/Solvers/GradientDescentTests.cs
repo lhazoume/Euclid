@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Euclid.Optimizers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Euclid.Solvers.Tests
 {

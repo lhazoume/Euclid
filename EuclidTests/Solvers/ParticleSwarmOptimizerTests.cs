@@ -1,4 +1,5 @@
 ﻿using Euclid.Distributions.Continuous;
+using Euclid.Optimizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;

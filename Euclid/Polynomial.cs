@@ -227,27 +227,15 @@ namespace Euclid
 
         #region Accessors
 
-        /// <summary>
-        /// Accesses the terms of the polynomial
-        /// </summary>
+        /// <summary>Accesses the terms of the polynomial</summary>
         /// <param name="i">the index</param>
         /// <returns>a term of the polynomial</returns>
-        public double this[int i]
-        {
-            get { return i < _terms.Length ? _terms[i] : 0; }
-        }
+        public double this[int i] => i < _terms.Length ? _terms[i] : 0;
 
-        /// <summary>
-        /// Returns the polynomial's degree
-        /// </summary>
-        public int Degree
-        {
-            get { return _degree; }
-        }
+        /// <summary>Returns the polynomial's degree</summary>
+        public int Degree => _degree;
 
-        /// <summary>
-        /// Returns the derivative polynomial (one degree less)
-        /// </summary>
+        /// <summary>Returns the derivative polynomial (one degree less)</summary>
         public Polynomial Derivative
         {
             get
@@ -306,10 +294,7 @@ namespace Euclid
         /// <summary>
         /// Returns a deep copy of the polynomial
         /// </summary>
-        public Polynomial Clone
-        {
-            get { return new Polynomial(_terms); }
-        }
+        public Polynomial Clone => new Polynomial(_terms);
 
         #endregion
 

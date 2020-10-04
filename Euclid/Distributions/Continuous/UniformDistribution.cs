@@ -25,15 +25,17 @@ namespace Euclid.Distributions.Continuous
             _support = new Interval(_a, _b, true, true);
         }
 
-        /// <summary>
-        /// Builds a Uniform distribution
-        /// </summary>
+        /// <summary>Builds a Uniform distribution</summary>
         /// <param name="a">the support's lower bound</param>
         /// <param name="b">the support's upper bound</param>
         public UniformDistribution(double a, double b)
             : this(a, b, new Random(Guid.NewGuid().GetHashCode()))
         { }
 
+        /// <summary>Builds a standard Uniform distribution </summary>
+        public UniformDistribution()
+            : this(0, 1)
+        { }
         #endregion
 
         #region Accessors

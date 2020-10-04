@@ -1136,11 +1136,8 @@ namespace Euclid
 
 
             double[] q = { 1.28426009614491121e00, 4.68238212480865118e-1, 6.59881378689285515e-2, 3.78239633202758244e-3, 7.29751555083966205e-5 };
-            if (y <= thrsh)
+            if (y <= thrsh) // Evaluate  anorm  for  |X| <= 0.66291
             {
-                //
-                // Evaluate  anorm  for  |X| <= 0.66291
-                //
                 xsq = zero;
                 if (y > double.Epsilon) xsq = x * x;
                 xnum = a[4] * xsq;
@@ -1154,11 +1151,7 @@ namespace Euclid
                 double temp = result;
                 result = half + temp;
             }
-
-            //
-            // Evaluate  anorm  for 0.66291 <= |X| <= sqrt(32)
-            //
-            else if (y <= root32)
+            else if (y <= root32)   // Evaluate  anorm  for 0.66291 <= |X| <= sqrt(32)
             {
                 xnum = c[8] * y;
                 xden = y;
@@ -1177,11 +1170,7 @@ namespace Euclid
                     result = ccum;
                 }
             }
-
-            //
-            // Evaluate  anorm  for |X| > sqrt(32)
-            //
-            else
+            else if (y < 28) // Evaluate  anorm  for sqrt(32) < |X| <28
             {
                 xsq = one / (x * x);
                 xnum = p[5] * xsq;
@@ -1200,6 +1189,15 @@ namespace Euclid
                 if (x > zero)
                     result = ccum;
             }
+            else //Evaluate anorm for |X| >= 28
+            {
+                double tiny = 8.12387e-173;
+                if (x < 0)
+                    return tiny;
+                else
+                    return 1 - tiny;
+            }
+
 
             if (result < min)
                 result = 0.0e0;

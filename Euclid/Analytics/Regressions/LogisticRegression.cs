@@ -1,4 +1,5 @@
 ﻿using Euclid.DataStructures.IndexedSeries;
+using Euclid.Optimizers;
 using Euclid.Solvers;
 using System;
 using System.Linq;
@@ -54,22 +55,13 @@ namespace Euclid.Analytics.Regressions
 
         #region Get
         /// <summary>Returns the result <c>LinearModel</c></summary>
-        public LogisticModel LogisticModel
-        {
-            get { return _logisticModel; }
-        }
+        public LogisticModel LogisticModel => _logisticModel;
 
         /// <summary>Gets the regression's final status</summary>
-        public RegressionStatus Status
-        {
-            get { return _status; }
-        }
+        public RegressionStatus Status => _status;
 
         /// <summary>Returns the final log-likelihood of the regression</summary>
-        public double LogLikelihood
-        {
-            get { return _finalLogLikelihood; }
-        }
+        public double LogLikelihood => _finalLogLikelihood;
         #endregion
 
         #endregion

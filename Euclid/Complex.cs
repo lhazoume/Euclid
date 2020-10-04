@@ -45,16 +45,11 @@ namespace Euclid
         }
 
         /// <summary>The conjugate number of the <c>Complex</c></summary>
-        public Complex Conjugate
-        {
-            get { return new Complex(_re, -_im); }
-        }
+        public Complex Conjugate => new Complex(_re, -_im);
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Returns the modulus of the <c>Complex</c>
-        /// </summary>
+        /// <summary>Returns the modulus of the <c>Complex</c></summary>
         /// <returns>the modulus of the complex</returns>
         public double Modulus()
         {

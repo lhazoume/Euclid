@@ -38,28 +38,16 @@ namespace Euclid
 
         #region Accessors
         /// <summary>Returns the number of columns of the <c>Matrix</c></summary>
-        public int Columns
-        {
-            get { return _cols; }
-        }
+        public int Columns => _cols;
 
         /// <summary>Returns the number of rows of the <c>Matrix</c></summary>
-        public int Rows
-        {
-            get { return _rows; }
-        }
+        public int Rows => _rows;
 
         /// <summary>Specifies whether the <c>Matrix</c> is square</summary>
-        public bool IsSquare
-        {
-            get { return (_rows == _cols); }
-        }
+        public bool IsSquare => (_rows == _cols);
 
         /// <summary>Returns the number of non zero values in the <c>SparseMatrix</c></summary>
-        public int CountNonZeros
-        {
-            get { return _data.Sum(d => d.Value.Count); }
-        }
+        public int CountNonZeros => _data.Sum(d => d.Value.Count);
 
         /// <summary>Allows reading and modifying the coefficients of the <c>Matrix</c></summary>
         /// <param name="i">the row</param>

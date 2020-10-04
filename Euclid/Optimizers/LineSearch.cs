@@ -1,8 +1,6 @@
-﻿namespace Euclid.Solvers
+﻿namespace Euclid.Optimizers
 {
-    /// <summary>
-    /// Line search methods used for the gradient descent
-    /// </summary>
+    /// <summary>Line search methods used for the gradient descent</summary>
     public enum LineSearch
     {
         /// <summary>Naïve line search by dividing the alpha until the functional is lowered</summary>

@@ -45,16 +45,10 @@ namespace Euclid
 
         #region Accessors
         /// <summary>Returns the Vector's size</summary>
-        public int Size
-        {
-            get { return _size; }
-        }
+        public int Size => _size;
 
         /// <summary>Gets the Vector's components</summary>
-        public double[] Data
-        {
-            get { return _data; }
-        }
+        public double[] Data => _data;
 
         /// <summary>Gets a component of the Vector</summary>
         /// <param name="i">the index</param>
@@ -66,10 +60,7 @@ namespace Euclid
         }
 
         /// <summary>Returns a deep copy of the Vector</summary>
-        public Vector Clone
-        {
-            get { return new Vector(_data); }
-        }
+        public Vector Clone => new Vector(_data);
         #endregion
 
         #region Norms and sums
@@ -87,21 +78,10 @@ namespace Euclid
         }
 
         /// <summary>Returns the square root of the sum of squares</summary>
-        public double Norm2
-        {
-            get { return Math.Sqrt(this.SumOfSquares); }
-        }
+        public double Norm2 => Math.Sqrt(this.SumOfSquares);
 
         /// <summary>Returns the largest value of the <c>Matrix</c> in absolute value</summary>
-        public double NormSup
-        {
-            get
-            {
-                double result = 0;
-                foreach (double x in _data) result = Math.Max(result, Math.Abs(x));
-                return result;
-            }
-        }
+        public double NormSup => _data.Max(Math.Abs);
 
         /// <summary>Returns the sum of the squared values</summary>
         public double SumOfSquares
@@ -116,16 +96,7 @@ namespace Euclid
         }
 
         /// <summary>Returns the sum of the values</summary>
-        public double Sum
-        {
-            get
-            {
-                double result = 0;
-                for (int k = 0; k < _data.Length; k++)
-                    result += _data[k];
-                return result;
-            }
-        }
+        public double Sum => _data.Sum();
 
         #endregion
 

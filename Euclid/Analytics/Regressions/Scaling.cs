@@ -10,7 +10,7 @@ namespace Euclid.Analytics.Regressions
     public sealed class Scaling
     {
         #region Private Variables
-        private  readonly double _intercept, _scalingCoefficient;
+        private readonly double _intercept, _scalingCoefficient;
         #endregion
 
         #region Constructor
@@ -23,16 +23,10 @@ namespace Euclid.Analytics.Regressions
 
         #region Accessors
         /// <summary>Gets the intercept of the Scaling</summary>
-        public double Intercept
-        {
-            get { return _intercept; }
-        }
+        public double Intercept => _intercept;
 
         /// <summary>Gets the scaling coefficient of the Scaling</summary>
-        public double ScalingCoefficient
-        {
-            get { return _scalingCoefficient; }
-        }
+        public double ScalingCoefficient => _scalingCoefficient;
         #endregion
 
         #region Methods

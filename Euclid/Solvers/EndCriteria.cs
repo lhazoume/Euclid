@@ -70,10 +70,7 @@ namespace Euclid.Solvers
         }
 
         /// <summary>Gets the current status of the optimization controlled by this end criteria</summary>
-        public SolverStatus Status
-        {
-            get { return _status; }
-        }
+        public SolverStatus Status => _status;
 
         private bool BelowFunctionEpsilon(double value)
         {

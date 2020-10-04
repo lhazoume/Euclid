@@ -78,79 +78,36 @@ namespace Euclid.Analytics
 
         #region Accessors
         /// <summary>Gets the constant term</summary>
-        public double Constant
-        {
-            get { return _succeeded ? _constant : 0; }
-        }
+        public double Constant => _succeeded ? _constant : 0;
 
         /// <summary>Gets the linear terms</summary>
-        public Vector Factors
-        {
-            get { return _succeeded ? _factors : Vector.Create(0.0); }
-        }
+        public Vector Factors => _succeeded ? _factors : Vector.Create(0.0);
 
         /// <summary>Gets the correlations between the explanatory variables and the regressand </summary>
-        public Vector Correlations
-        {
-            get { return _succeeded ? _correlations : Vector.Create(0.0); }
-        }
+        public Vector Correlations => _succeeded ? _correlations : Vector.Create(0.0);
 
         /// <summary>Gets the sample size</summary>
-        public int SampleSize
-        {
-            get { return _n; }
-        }
+        public int SampleSize => _n;
 
         /// <summary>Gets the R² on the sample data</summary>
-        public double R2
-        {
-            get { return _succeeded ? _ssr / _sst : 0; }
-        }
+        public double R2 => _succeeded ? _ssr / _sst : 0;
 
-        /// <summary>
-        /// Gets the adjusted R² on the sample data
-        /// </summary>
-        public double AdjustedR2
-        {
-            get
-            {
-                if (_succeeded)
-                    return _sst == 0 ? 0 : 1 - _sse * (_n - 1) / (_sst * (_n - _factors.Data.Count(f => f != 0) - 1));
-                return 0;
-            }
-        }
+        /// <summary>Gets the adjusted R² on the sample data</summary>
+        public double AdjustedR2=>_succeeded ?
+            _sst == 0 ? 0 : 1 - _sse * (_n - 1) / (_sst * (_n - _factors.Data.Count(f => f != 0) - 1)):
+            0;
 
-        /// <summary>
-        /// specifies whether the regression succeeds
-        /// </summary>
-        public bool Succeeded
-        {
-            get { return _succeeded; }
-        }
+        /// <summary>Specifies whether the regression succeeds</summary>
+        public bool Succeeded => _succeeded;
 
-        /// <summary>
-        /// Gets the sum of squares due to error
-        /// </summary>
-        public double SSE
-        {
-            get { return _sse; }
-        }
+        /// <summary>Gets the sum of squares due to error</summary>
+        public double SSE => _sse;
 
-        /// <summary>
-        /// Gets the sum of squares due to the regression
-        /// </summary>
-        public double SSR
-        {
-            get { return _ssr; }
-        }
+        /// <summary>Gets the sum of squares due to the regression</summary>
+        public double SSR => _ssr;
 
-        /// <summary>
-        /// Gets the total sum of squares
-        /// </summary>
-        public double SST
-        {
-            get { return _sst; }
-        }
+        /// <summary>Gets the total sum of squares</summary>
+        public double SST => _sst;
         #endregion
 
         #region ToString
@@ -163,9 +120,7 @@ namespace Euclid.Analytics
         #endregion
 
         #region IPredictor
-        /// <summary>
-        /// Returns the estimator for the given set of data
-        /// </summary>
+        /// <summary>Returns the estimator for the given set of data</summary>
         /// <param name="x">the set of regressors</param>
         /// <returns>the estimator of the regressed data</returns>
         public double Predict(IList<double> x)
@@ -179,9 +134,7 @@ namespace Euclid.Analytics
             return y;
         }
 
-        /// <summary>
-        /// Returns the estimator for the given set of data
-        /// </summary>
+        /// <summary>Returns the estimator for the given set of data</summary>
         /// <param name="x">the set of regressors</param>
         /// <returns>the estimator of the regressed data</returns>
         public double Predict(Vector x)

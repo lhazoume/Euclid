@@ -55,22 +55,13 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets the index associated with a label</summary>
         /// <param name="t">the label</param>
         /// <returns>an integer</returns>
-        public int this[T t]
-        {
-            get { return _map.Forward(t); }
-        }
+        public int this[T t] => _map.Forward(t);
 
         /// <summary>Gets the number of labels in the header</summary>
-        public int Count
-        {
-            get { return _map.Count; }
-        }
+        public int Count => _map.Count;
 
         /// <summary>Gets the labels</summary>
-        public T[] Values
-        {
-            get { return _map.Rights.OrderBy(i => i).Select(i => _map.Backward(i)).ToArray(); }
-        }
+        public T[] Values => _map.Rights.OrderBy(i => i).Select(i => _map.Backward(i)).ToArray();
         #endregion
 
         #region Methods

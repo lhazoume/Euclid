@@ -1,6 +1,7 @@
 ﻿using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Euclid.Numerics
 {
@@ -91,34 +92,16 @@ namespace Euclid.Numerics
         /// <summary>
         /// Returns the error of the integration
         /// </summary>
-        public double Error
-        {
-            get { return _error; }
-        }
-        
-        /// <summary>
-        /// Returns the status of the solver after the integration process
-        /// </summary>
-        public SolverStatus Status
-        {
-            get { return _status; }
-        }
+        public double Error => _error;
 
-        /// <summary>
-        /// Returns the integral value of the function
-        /// </summary>
-        public double Result
-        {
-            get { return _result; }
-        }
+        /// <summary>Returns the status of the solver after the integration process</summary>
+        public SolverStatus Status => _status;
 
-        /// <summary>
-        /// Returns the details of the convergence sequence (integral and error)
-        /// </summary>
-        public List<Tuple<double, double>> Convergence
-        {
-            get { return new List<Tuple<double, double>>(_convergence); }
-        }
+        /// <summary>Returns the integral value of the function</summary>
+        public double Result => _result;
+
+        /// <summary>Returns the details of the convergence sequence (integral and error)</summary>
+        public List<Tuple<double, double>> Convergence => _convergence.ToList();
 
         #endregion
 
@@ -143,7 +126,7 @@ namespace Euclid.Numerics
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, functionEpsilon: Descents.GRADIENT_EPSILON);
 
             _convergence.Add(new Tuple<double, double>(result, _error));
-            
+
             while (!endCriteria.ShouldStop(_error))
             {
                 n *= 2;

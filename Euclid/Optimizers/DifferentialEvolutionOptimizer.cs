@@ -1,9 +1,10 @@
 ﻿using Euclid.Extensions;
+using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.Solvers
+namespace Euclid.Optimizers
 {
     /// <summary>Optimizes a function on a space using Differential Evolution</summary>
     public class DifferentialEvolutionOptimizer
@@ -83,34 +84,28 @@ namespace Euclid.Solvers
         #region Optimization params
 
         /// <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
-        public int MaxIterations { get { return _maxIterations; } }
+        public int MaxIterations => _maxIterations;
 
         /// <summary>Gets the current status of the optimization process</summary>
-        public SolverStatus Status { get { return _status; } }
+        public SolverStatus Status => _status;
 
         /// <summary>Gets the type of optimization performed (min or max)</summary>
-        public OptimizationType OptimizationType { get { return _optimizationType; } }
+        public OptimizationType OptimizationType => _optimizationType;
 
         #endregion
 
         #region DE params
         /// <summary>Returns the crossover probability</summary>
-        public double CrossoverProbability { get { return _crossoverProbability; } }
+        public double CrossoverProbability => _crossoverProbability;
 
         /// <summary>Returns the differential weight</summary>
-        public double DifferentialWeight { get { return _differentialWeight; } }
+        public double DifferentialWeight => _differentialWeight;
 
         /// <summary>The result of the solver</summary>
-        public Vector Result
-        {
-            get { return _result; }
-        }
+        public Vector Result => _result;
 
         /// <summary>Gets the details of the convergence (Vector, error)</summary>
-        public List<Tuple<Vector, double>> Convergence
-        {
-            get { return new List<Tuple<Vector, double>>(_convergence); }
-        }
+        public List<Tuple<Vector, double>> Convergence => _convergence.ToList();
         #endregion
 
         /// <summary>Optimizes the fitness function using Differential Evolution</summary>

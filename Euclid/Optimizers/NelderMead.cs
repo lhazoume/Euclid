@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Euclid.Solvers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Euclid.Solvers
+namespace Euclid.Optimizers
 {
     /// <summary>Nelder-Mead optimization class</summary>
     public class NelderMead
@@ -95,80 +96,44 @@ namespace Euclid.Solvers
         }
 
         /// <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
-        public int MaxIterations
-        {
-            get { return _maxIterations; }
-        }
+        public int MaxIterations => _maxIterations;
 
         /// <summary>Gets the current status of the optimization process</summary>
-        public SolverStatus Status
-        {
-            get { return _status; }
-        }
+        public SolverStatus Status => _status;
 
         /// <summary>Gets the type of optimization performed (min or max)</summary>
-        public OptimizationType OptimizationType
-        {
-            get { return _optimizationType; }
-        }
+        public OptimizationType OptimizationType => _optimizationType;
 
         #endregion
 
-        #region PSO params
+        #region Nelder Mead params
 
         /// <summary> Returns the problem's dimension</summary>
-        public int Dimension
-        {
-            get { return _dimension; }
-        }
+        public int Dimension => _dimension;
 
         /// <summary>Gets the lower bounds of the space</summary>
-        public Vector LowerBound
-        {
-            get { return _lowerBound; }
-        }
+        public Vector LowerBound => _lowerBound;
 
         /// <summary>Gets the upper bounds of the space</summary>
-        public Vector UpperBound
-        {
-            get { return _upperBound; }
-        }
+        public Vector UpperBound => _upperBound;
 
         /// <summary>Returns the reflexion coefficient</summary>
-        public double Alpha
-        {
-            get { return _alpha; }
-        }
+        public double Alpha => _alpha;
 
         /// <summary>Returns the expansion coefficient</summary>
-        public double Gamma
-        {
-            get { return _gamma; }
-        }
+        public double Gamma => _gamma;
 
         /// <summary>Returns the contraction coefficient</summary>
-        public double Rho
-        {
-            get { return _rho; }
-        }
+        public double Rho => _rho;
 
         /// <summary>Returns the shrink coefficient</summary>
-        public double Sigma
-        {
-            get { return _sigma; }
-        }
+        public double Sigma => _sigma;
 
         /// <summary>The result of the solver</summary>
-        public Vector Result
-        {
-            get { return _result; }
-        }
+        public Vector Result => _result;
 
         /// <summary>Gets the details of the convergence (Vector, error)</summary>
-        public List<Tuple<Vector, double>> Convergence
-        {
-            get { return new List<Tuple<Vector, double>>(_convergence); }
-        }
+        public List<Tuple<Vector, double>> Convergence => _convergence.ToList();
         #endregion
 
         /// <summary>Minimizes the function using the Nelder Mead algorithm</summary>

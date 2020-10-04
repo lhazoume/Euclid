@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Euclid.Solvers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.Solvers
+namespace Euclid.Optimizers
 {
     /// <summary>Class used to perform a gradient descent on any multivariate function</summary>
     public class GradientDescent
@@ -130,52 +131,28 @@ namespace Euclid.Solvers
         }
 
         /// <summary>The final status of the solver</summary>
-        public SolverStatus Status
-        {
-            get { return _status; }
-        }
+        public SolverStatus Status => _status;
 
         /// <summary> Returns the final value of the function</summary>
-        public double Error
-        {
-            get { return _error; }
-        }
+        public double Error => _error;
 
         /// <summary>The result of the solver</summary>
-        public Vector Result
-        {
-            get { return _result; }
-        }
+        public Vector Result => _result;
 
         /// <summary>Gets the details of the convergence (gradient norm, error)</summary>
-        public List<Tuple<double, double>> Convergence
-        {
-            get { return new List<Tuple<double, double>>(_convergence); }
-        }
+        public List<Tuple<double, double>> Convergence => _convergence.ToList();
 
         /// <summary>Gets the number of times the function was evaluated </summary>
-        public int Evaluations
-        {
-            get { return _evaluations; }
-        }
+        public int Evaluations => _evaluations;
 
         /// <summary>Gets the maximum number of iterations </summary>
-        public int MaxIterations
-        {
-            get { return _maxIterations; }
-        }
+        public int MaxIterations => _maxIterations;
 
         /// <summary>Gets the maxium number of iterations in the line search </summary>
-        public int MaxLineSearchIterations
-        {
-            get { return _maxLineSearchIterations; }
-        }
+        public int MaxLineSearchIterations => _maxLineSearchIterations;
 
         /// <summary>Gets the optimization type</summary>
-        public OptimizationType OptimizationType
-        {
-            get { return _optimizationType; }
-        }
+        public OptimizationType OptimizationType => _optimizationType;
 
         #endregion
 

@@ -54,11 +54,9 @@ namespace Euclid.Analytics
 
         /// <summary>Returns the R-squared</summary>
         public double R2 => _r2;
+
         /// <summary>Gets the linear terms</summary>
-        public Vector Factors
-        {
-            get { return _succeeded ? _factors : Vector.Create(0.0); }
-        }
+        public Vector Factors => _succeeded ? _factors : Vector.Create(0.0);
 
         /// <summary>specifies whether the regression succeeds</summary>
         public bool Succeeded => _succeeded;

@@ -33,28 +33,16 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         /// <summary>Gets a layer of the perceptron</summary>
         /// <param name="index">the layer's index</param>
         /// <returns>a Layer</returns>
-        public Layer this[int index]
-        {
-            get { return _layers[index]; }
-        }
+        public Layer this[int index] => _layers[index];
 
         /// <summary>Gets the number of layers in the network</summary>
-        public int LayerCount
-        {
-            get { return _layers.Length; }
-        }
+        public int LayerCount => _layers.Length;
 
         /// <summary>Gets the number of parameters (i.e. freedom degrees) of the network</summary>
-        public int Parameters
-        {
-            get { return _layers.Sum(l => l.Parameters); }
-        }
+        public int Parameters => _layers.Sum(l => l.Parameters);
 
         /// <summary>Gets the size of the input data expected by the network</summary>
-        public int InputSize
-        {
-            get { return _layers[0].InputSize; }
-        }
+        public int InputSize => _layers[0].InputSize;
         #endregion
 
         #region Methods

@@ -126,47 +126,26 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
 
         #region Accessors
         /// <summary>Gets a deep copy of the Layer</summary>
-        public Layer Clone
-        {
-            get { return new Layer(_weights, _biases, _activation); }
-        }
+        public Layer Clone => new Layer(_weights, _biases, _activation);
 
         /// <summary>Gets the number of parameters of the Layer</summary>
-        public int Parameters
-        {
-            get { return _layerSize * (_inputSize + 1); }
-        }
+        public int Parameters => _layerSize * (_inputSize + 1);
 
         /// <summary>Gets the number of neurons in the Layer</summary>
-        public int LayerSize
-        {
-            get { return _layerSize; }
-        }
+        public int LayerSize => _layerSize;
 
         /// <summary>Gets the input size of the Layer</summary>
-        public int InputSize
-        {
-            get { return _inputSize; }
-        }
+        public int InputSize => _inputSize;
 
         /// <summary>Gets the activation function of the Layer</summary>
-        public IActivationFunction Function
-        {
-            get { return _activation; }
-        }
+        public IActivationFunction Function => _activation;
 
 
         /// <summary>Gets the linear output of the layer before activation</summary>
-        public Vector A
-        {
-            get { return _a; }
-        }
+        public Vector A => _a;
 
         /// <summary>Gets the outputs of the layer's processing</summary>
-        public Vector Z
-        {
-            get { return _z; }
-        }
+        public Vector Z => _z;
         #endregion
 
         #region IXmlable

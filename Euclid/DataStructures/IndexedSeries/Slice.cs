@@ -30,10 +30,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region Accessors
         /// <summary>Gets the legends. Inherited (in this case, the legend is packaged into an array)</summary>
-        public T[] Legends
-        {
-            get { return new T[] { _legend }; }
-        }
+        public T[] Legends => new T[] { _legend };
 
         /// <summary>Gets and sets the legend</summary>
         public T Legend
@@ -43,22 +40,13 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>Returns the labels</summary>
-        public TV[] Labels
-        {
-            get { return _labels.Values; }
-        }
+        public TV[] Labels => _labels.Values;
 
         /// <summary>Returns the number of columns</summary>
-        public int Columns
-        {
-            get { return _labels.Count; }
-        }
+        public int Columns => _labels.Count;
 
         /// <summary>Returns the number of rows</summary>
-        public int Rows
-        {
-            get { return 1; }
-        }
+        public int Rows => 1;
 
         /// <summary> Gets a deep copy of the data</summary>
         public TU[] Data { get { return Arrays.Clone<TU>(_data); } }

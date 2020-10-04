@@ -107,52 +107,28 @@ namespace Euclid.Distributions.Continuous
         #region Accessors
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's entropy </summary>
-        public override double Entropy
-        {
-            get { return Math.Log(Math.E * _beta); }
-        }
+        public override double Entropy => Math.Log(Math.E * _beta);
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return _beta; }
-        }
+        public override double Mean => _beta;
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return _beta * Math.Log(2); }
-        }
+        public override double Median => _beta * Math.Log(2);
 
         /// <summary>Gets the distribution's mode </summary>
-        public override double Mode
-        {
-            get { return 0; }
-        }
+        public override double Mode => 0;
 
         /// <summary> Gets the distribution's mode</summary>
-        public override double Skewness
-        {
-            get { return 2; }
-        }
+        public override double Skewness => 2;
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _beta * _beta; }
-        }
+        public override double Variance => _beta * _beta;
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return _beta; }
-        }
+        public override double StandardDeviation => _beta;
         #endregion
     }
 }

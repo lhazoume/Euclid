@@ -27,15 +27,9 @@
         /// <summary>Returns the binomial coefficient for a given index</summary>
         /// <param name="index">the index</param>
         /// <returns>an <c>int</c></returns>
-        public int this[int index]
-        {
-            get { return _coefficients[index]; }
-        }
+        public int this[int index] => _coefficients[index];
 
         /// <summary>Gets all the binomial coefficients</summary>
-        public int[] Coefficients
-        {
-            get { return _coefficients; }
-        }
+        public int[] Coefficients => _coefficients;
     }
 }

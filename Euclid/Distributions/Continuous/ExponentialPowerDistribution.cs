@@ -42,52 +42,28 @@ namespace Euclid.Distributions.Continuous
         #region Accessors
 
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get { return _1Beta - Math.Log(_beta / (2 * _alpha * _gamma1Beta)); }
-        }
+        public override double Entropy => _1Beta - Math.Log(_beta / (2 * _alpha * _gamma1Beta));
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return _mu; }
-        }
+        public override double Mean => _mu;
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return _mu; }
-        }
+        public override double Median => _mu;
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode
-        {
-            get { return _mu; }
-        }
+        public override double Mode => _mu;
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness
-        {
-            get { return 0.0; }
-        }
+        public override double Skewness => 0.0;
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return _alpha * Math.Sqrt(Fn.Gamma(3 / _beta) / _gamma1Beta); }
-        }
+        public override double StandardDeviation => _alpha * Math.Sqrt(Fn.Gamma(3 / _beta) / _gamma1Beta);
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _alpha * _alpha * Fn.Gamma(3 / _beta) / _gamma1Beta; }
-        }
+        public override double Variance => _alpha * _alpha * Fn.Gamma(3 / _beta) / _gamma1Beta;
 
         #endregion
 

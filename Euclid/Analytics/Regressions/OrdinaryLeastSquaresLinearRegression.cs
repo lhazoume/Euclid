@@ -62,21 +62,11 @@ namespace Euclid.Analytics.Regressions
         #endregion
 
         #region Get
-        /// <summary>
-        /// Gets the result <c>LinearModel</c>
-        /// </summary>
-        public LinearModel LinearModel
-        {
-            get { return _linearModel; }
-        }
+        /// <summary>Gets the result <c>LinearModel</c></summary>
+        public LinearModel LinearModel => _linearModel;
 
-        /// <summary>
-        /// Gets the regression's final status
-        /// </summary>
-        public RegressionStatus Status
-        {
-            get { return _status; }
-        }
+        /// <summary>Gets the regression's final status</summary>
+        public RegressionStatus Status => _status;
         #endregion
 
         #endregion

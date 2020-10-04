@@ -1,6 +1,7 @@
 ﻿using Euclid.Histograms;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -77,15 +78,19 @@ namespace Euclid.Distributions.Continuous
         public override double[] Sample(int numberOfPoints)
         {
             double[] result = new double[numberOfPoints];
-            for (int i = 0; i < numberOfPoints / 2; i++)
+            Parallel.For(0, numberOfPoints / 2, i =>
             {
-                double u = 1.0 - _randomSource.NextDouble(),
-                    v = _randomSource.NextDouble(),
-                    x = Math.Sqrt(-2 * Math.Log(u)) * Math.Cos(2 * Math.PI * v),
-                    y = Math.Sqrt(-2 * Math.Log(u)) * Math.Sin(2 * Math.PI * v);
+                double u, v;
+                lock (_randomSource)
+                {
+                    u = 1.0 - _randomSource.NextDouble();
+                    v = _randomSource.NextDouble();
+                }
+                double x = Math.Sqrt(-2 * Math.Log(u)) * Math.Cos(2 * Math.PI * v),
+                   y = Math.Sqrt(-2 * Math.Log(u)) * Math.Sin(2 * Math.PI * v);
                 result[2 * i] = _mean + _standardDeviation * x;
                 result[2 * i + 1] = _mean + _standardDeviation * y;
-            }
+            });
 
             if (numberOfPoints % 2 == 1)
             {
@@ -101,7 +106,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Evaluates the moment-generating function for a given t</summary>
         /// <param name="t">the argument</param>
         /// <returns>a double</returns>
-        public override  double MomentGeneratingFunction(double t)
+        public override double MomentGeneratingFunction(double t)
         {
             return Math.Exp(_mean * t + 0.5 * Math.Pow(_standardDeviation * t, 2));
         }

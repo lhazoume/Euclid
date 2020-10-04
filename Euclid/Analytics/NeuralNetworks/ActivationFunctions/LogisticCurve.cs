@@ -25,15 +25,9 @@ namespace Euclid.Analytics.NeuralNetworks.ActivationFunctions
         }
 
         /// <summary>The maximum value of the activation function</summary>
-        public double Max
-        {
-            get { return +1; }
-        }
+        public double Max => +1;
 
         /// <summary>The minimum value of the activation function</summary>
-        public double Min
-        {
-            get { return 0; }
-        }
+        public double Min => 0;
     }
 }

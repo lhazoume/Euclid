@@ -43,16 +43,11 @@ namespace Euclid.DataStructures
 
         #region Enumerators
         /// <summary>Gets an enumerator for the left hand side</summary>
-        public IEnumerator<T1> ForwardEnumerator
-        {
-            get { return _forward.Keys.GetEnumerator(); }
-        }
+        public IEnumerator<T1> ForwardEnumerator => _forward.Keys.GetEnumerator();
+
 
         /// <summary>Gets an enumerator for the right hand side </summary>
-        public IEnumerator<T2> BackwardEnumerator
-        {
-            get { return _backward.Keys.GetEnumerator(); }
-        }
+        public IEnumerator<T2> BackwardEnumerator => _backward.Keys.GetEnumerator();
         #endregion
 
         #region Add / remove
@@ -149,24 +144,15 @@ namespace Euclid.DataStructures
         }
 
         /// <summary>Gets the left hand side keys</summary>
-        public T1[] Lefts
-        {
-            get { return _forward.Keys.ToArray(); }
-        }
+        public T1[] Lefts => _forward.Keys.ToArray();
 
         /// <summary>Gets the right hand side keys</summary>
-        public T2[] Rights
-        {
-            get { return _backward.Keys.ToArray(); }
-        }
+        public T2[] Rights => _backward.Keys.ToArray();
 
         #endregion
 
         /// <summary>Gets the number of pairs in the map</summary>
-        public int Count
-        {
-            get { return _forward.Count; }
-        }
+        public int Count => _forward.Count;
 
         /// <summary>Gets a deep copy of the map</summary>
         public Map<T1, T2> Clone()

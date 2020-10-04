@@ -1,6 +1,7 @@
 ﻿using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Euclid.Numerics
 {
@@ -73,28 +74,16 @@ namespace Euclid.Numerics
         #region Get
 
         /// <summary>Gets the number of interations of the cumulator</summary>
-        public int Iterations
-        {
-            get { return _iterations; }
-        }
+        public int Iterations => _iterations;
 
         /// <summary>Gets the cumulated sum of the series</summary>
-        public double Sum
-        {
-            get { return _sum; }
-        }
+        public double Sum => _sum;
 
         /// <summary>Gets the final status of the cumulator</summary>
-        public NumericalSeriesStatus Status
-        {
-            get { return _status; }
-        }
+        public NumericalSeriesStatus Status => _status;
 
         /// <summary>Gets the details of the convergence (value)</summary>
-        public List<double> Convergence
-        {
-            get { return new List<double>(_convergence); }
-        }
+        public List<double> Convergence => _convergence.ToList();
 
         #endregion
 

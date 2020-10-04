@@ -1,9 +1,10 @@
 ﻿using Euclid.Extensions;
+using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.Solvers
+namespace Euclid.Optimizers
 {
     /// <summary>Particle Swarm Optimization class</summary>
     public class ParticleSwarmOptimizer
@@ -13,7 +14,8 @@ namespace Euclid.Solvers
         private readonly int _swarmSize, _maxIterations, _maxStaticIterations;
         private SolverStatus _status;
         private readonly OptimizationType _optimizationType;
-        private readonly double _attractionToParticleBest, _attractionToOverallBest, _velocityInertia, _shrinkageFactor;
+        private readonly double _attractionToParticleBest, _attractionToOverallBest,
+            _velocityInertia, _shrinkageFactor;
         private double _epsilon;
         private readonly Func<Vector, double> _fitnessFunction;
         private readonly Func<Vector, bool> _isFeasible;
@@ -97,7 +99,8 @@ namespace Euclid.Solvers
             Func<Vector, double> fitnessFunction,
             int maxIterations,
             int maxStaticIterations,
-            double epsilon = 1e-8, double attractionToParticleBest = 2, double attractionToOverallBest = 2, double velocityInertia = 0.5)
+            double epsilon = 1e-8, double attractionToParticleBest = 2,
+            double attractionToOverallBest = 2, double velocityInertia = 0.5)
         {
             #region Check and initialize the population of agents
             if (initialPopulation.Count() <= 1)
@@ -133,6 +136,7 @@ namespace Euclid.Solvers
             _convergence = new List<Tuple<Vector, double>>();
             _status = SolverStatus.NotRan;
         }
+
         #region Optimization params
 
         /// <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
@@ -149,64 +153,37 @@ namespace Euclid.Solvers
         }
 
         /// <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
-        public int MaxIterations
-        {
-            get { return _maxIterations; }
-        }
+        public int MaxIterations => _maxIterations;
 
         /// <summary>Gets the maximum number of stationary iterations allowed to the optimization process</summary>
-        public int MaxStaticIterations
-        {
-            get { return _maxStaticIterations; }
-        }
+        public int MaxStaticIterations => _maxStaticIterations;
 
         /// <summary>Gets the current status of the optimization process</summary>
-        public SolverStatus Status
-        {
-            get { return _status; }
-        }
+        public SolverStatus Status => _status;
 
         /// <summary>Gets the type of optimization performed (min or max)</summary>
-        public OptimizationType OptimizationType { get { return _optimizationType; } }
+        public OptimizationType OptimizationType => _optimizationType;
 
         #endregion
 
         #region PSO params
         /// <summary> Gets the size of the swarm</summary>
-        public int SwarmSize
-        {
-            get { return _swarmSize; }
-        }
+        public int SwarmSize => _swarmSize;
 
         /// <summary>Gets the inertia applied to the velocity</summary>
-        public double VelocityInertia
-        {
-            get { return _velocityInertia; }
-        }
+        public double VelocityInertia => _velocityInertia;
 
         /// <summary>Gets the attraction to particle best</summary>
-        public double AttractionToParticleBest
-        {
-            get { return _attractionToParticleBest; }
-        }
+        public double AttractionToParticleBest => _attractionToParticleBest;
 
         /// <summary>Gets the attraction to overall best</summary>
-        public double AttractionToOverallBest
-        {
-            get { return _attractionToOverallBest; }
-        }
+        public double AttractionToOverallBest => _attractionToOverallBest;
 
         /// <summary>The result of the solver</summary>
-        public Vector Result
-        {
-            get { return _result; }
-        }
+        public Vector Result => _result;
 
         /// <summary>Gets the details of the convergence (Vector, error)</summary>
-        public List<Tuple<Vector, double>> Convergence
-        {
-            get { return new List<Tuple<Vector, double>>(_convergence); }
-        }
+        public List<Tuple<Vector, double>> Convergence => _convergence.ToList();
         #endregion
 
         /// <summary>Minimizes the function using Particle Swarm Optimization</summary>
@@ -232,7 +209,10 @@ namespace Euclid.Solvers
             _convergence.Clear();
             _convergence.Add(new Tuple<Vector, double>(overallBest.Clone, overallBestValue));
 
-            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, maxStaticIterations: _maxStaticIterations, gradientEpsilon: _epsilon);
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations,
+                maxStaticIterations: _maxStaticIterations,
+                gradientEpsilon: _epsilon);
+
             while (!endCriteria.ShouldStop(overallBestValue))
             {
                 //prepare queue of random numbers

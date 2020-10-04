@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Euclid.Solvers
+namespace Euclid.Optimizers
 {
     /// <summary>Analytically differentiable function</summary>
     public class Function
@@ -20,16 +20,10 @@ namespace Euclid.Solvers
         }
 
         /// <summary>Returns the value function</summary>
-        public Func<Vector, double> Value
-        {
-            get { return _value; }
-        }
+        public Func<Vector, double> Value => _value;
 
         /// <summary>Returns the gradient function</summary>
-        public Func<Vector, Vector> Gradient
-        {
-            get { return _gradient; }
-        }
+        public Func<Vector, Vector> Gradient => _gradient;
 
         #region Operators
         /// <summary>Builds a function made of the product of a function and a scalar</summary>

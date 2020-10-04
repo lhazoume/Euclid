@@ -70,22 +70,13 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return _mu + (_gbAlpha - _gbBeta) * _sigma / _Z; }
-        }
+        public override double Mean => _mu + (_gbAlpha - _gbBeta) * _sigma / _Z;
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return _mu + _sigma * Fn.InvPhi(0.5 * (_phiBeta + _phiAlpha)); }
-        }
+        public override double Median => _mu + _sigma * Fn.InvPhi(0.5 * (_phiBeta + _phiAlpha));
 
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode
@@ -118,16 +109,10 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return Math.Sqrt(Variance); }
-        }
+        public override double StandardDeviation => Math.Sqrt(Variance);
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _sigma2 * (1 + _dGb / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2)); }
-        }
+        public override double Variance => _sigma2 * (1 + _dGb / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2));
         #endregion
 
         #region Methods

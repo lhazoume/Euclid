@@ -33,22 +33,13 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region Accessors
         /// <summary>Returns the legends of the <c>Series</c></summary>
-        public T[] Legends
-        {
-            get { return _legends.Values; }
-        }
+        public T[] Legends => _legends.Values;
 
         /// <summary>Returns the labels of the <c>Series</c> (in this case, it is the only label)</summary>
-        public TV[] Labels
-        {
-            get { return new TV[] { _label }; }
-        }
+        public TV[] Labels => new TV[] { _label };
 
         /// <summary>Returns the data of the <c>Series</c></summary>
-        public TU[] Data
-        {
-            get { return Arrays.Clone(_data); }
-        }
+        public TU[] Data => Arrays.Clone(_data);
 
         /// <summary>Gets and sets the label</summary>
         public TV Label
@@ -58,16 +49,10 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>Returns the number of columns of the <c>Series</c> (in this case, it is one)</summary>
-        public int Columns
-        {
-            get { return 1; }
-        }
+        public int Columns => 1;
 
         /// <summary>Returns the number of rows of the <c>Series</c></summary>
-        public int Rows
-        {
-            get { return _data.Length; }
-        }
+        public int Rows => _data.Length;
         #endregion
 
         #region Methods

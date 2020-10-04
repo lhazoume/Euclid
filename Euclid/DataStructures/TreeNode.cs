@@ -68,16 +68,10 @@ namespace Euclid.DataStructures
 
         #region Information
         /// <summary>Indicates if the current node is the root node</summary>
-        public bool IsRoot
-        {
-            get { return _parent == null; }
-        }
+        public bool IsRoot => _parent == null;
 
         /// <summary>Indicates if the current node is a leaf node</summary>
-        public bool IsLeaf
-        {
-            get { return _left == null && _right == null; }
-        }
+        public bool IsLeaf=> _left == null && _right == null; 
         #endregion
 
         #region Builders

@@ -1,4 +1,4 @@
-﻿namespace Euclid.Solvers
+﻿namespace Euclid.Optimizers
 {
     /// <summary>The type of optimization</summary>
     public enum OptimizationType

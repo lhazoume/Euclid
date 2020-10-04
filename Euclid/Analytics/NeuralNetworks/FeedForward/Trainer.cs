@@ -203,10 +203,7 @@ namespace Euclid.Analytics.NeuralNetworks.FeedForward
         }
 
         /// <summary>The history of training and validation errors, epoch by epoch</summary>
-        public List<Tuple<int, double, double>> Convergence
-        {
-            get { return _convergence; }
-        }
+        public List<Tuple<int, double, double>> Convergence => _convergence.ToList();
 
         #region Calculate gradient
 
