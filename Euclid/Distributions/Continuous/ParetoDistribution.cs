@@ -36,16 +36,10 @@ namespace Euclid.Distributions.Continuous
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get { return Math.Log((_xm / _alpha) * Math.Exp(1 + 1 / _alpha)); }
-        }
+        public override double Entropy => Math.Log((_xm / _alpha) * Math.Exp(1 + 1 / _alpha));
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean
@@ -58,16 +52,10 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return _xm * Math.Pow(2, 1 / _alpha); }
-        }
+        public override double Median => _xm * Math.Pow(2, 1 / _alpha);
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode
-        {
-            get { return _xm; }
-        }
+        public override double Mode => _xm;
 
         /// <summary>Gets the distribution's skewness</summary>
         public override double Skewness

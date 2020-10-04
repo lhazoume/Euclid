@@ -44,46 +44,25 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return _d2 > 2 ? _d2 / (_d2 - 2) : double.NaN; }
-        }
+        public override double Mean => _d2 > 2 ? _d2 / (_d2 - 2) : double.NaN;
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return InverseCumulativeDistribution(0.5); }
-        }
+        public override double Median => InverseCumulativeDistribution(0.5);
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode
-        {
-            get { return _d1 > 2 ? (_d1 - 2) * _d2 / (_d1 * (_d2 + 2)) : double.NaN; }
-        }
+        public override double Mode => _d1 > 2 ? (_d1 - 2) * _d2 / (_d1 * (_d2 + 2)) : double.NaN;
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness
-        {
-            get { return _d2 > 6 ? (2 * _d1 + _d2 - 2) / (_d2 - 6) * Math.Sqrt(8 * (_d2 - 4) / (_d1 * (_d1 + _d2 - 2))) : double.NaN; }
-        }
+        public override double Skewness => _d2 > 6 ? (2 * _d1 + _d2 - 2) / (_d2 - 6) * Math.Sqrt(8 * (_d2 - 4) / (_d1 * (_d1 + _d2 - 2))) : double.NaN;
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return _d2 > 4 ? _d2 / (_d2 - 2) * Math.Sqrt(2 * (_d1 + _d2 - 2) / (_d1 * (_d2 - 4))) : double.NaN; }
-        }
+        public override double StandardDeviation => _d2 > 4 ? _d2 / (_d2 - 2) * Math.Sqrt(2 * (_d1 + _d2 - 2) / (_d1 * (_d2 - 4))) : double.NaN;
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _d2 > 4 ? 2 * Math.Pow(_d2 / (_d2 - 2), 2) * (_d1 + _d2 - 2) / (_d1 * (_d2 - 4)) : double.NaN; }
-        }
+        public override double Variance => _d2 > 4 ? 2 * Math.Pow(_d2 / (_d2 - 2), 2) * (_d1 + _d2 - 2) / (_d1 * (_d2 - 4)) : double.NaN;
 
         #endregion
 

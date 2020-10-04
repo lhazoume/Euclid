@@ -38,57 +38,28 @@ namespace Euclid.Distributions.Discrete
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get { return 0.5 * Math.Log(2 * Math.PI * Math.E * _n * _p * _q); }
-        }
+        public override double Entropy => 0.5 * Math.Log(2 * Math.PI * Math.E * _n * _p * _q);
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return _n * _p; }
-        }
+        public override double Mean => _n * _p;
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get
-            {
-                double floor = Math.Floor(_n * _p),
-                    ceiling = Math.Ceiling(_n * _p);
-                return 0.5 * (floor + ceiling);
-            }
-        }
+        public override double Median=> 0.5 * (Math.Floor(_n * _p) + Math.Ceiling(_n * _p));
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode
-        {
-            get { return 0.5 * (Math.Floor((_n + 1) * _p) + Math.Ceiling((_n + 1) * _p) - 1); }
-        }
+        public override double Mode => 0.5 * (Math.Floor((_n + 1) * _p) + Math.Ceiling((_n + 1) * _p) - 1);
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness
-        {
-            get { return (1 - 2 * _p) / Math.Sqrt(_n * _p * _q); }
-        }
+        public override double Skewness => (1 - 2 * _p) / Math.Sqrt(_n * _p * _q);
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return Math.Sqrt(_n * _p * _q); }
-        }
+        public override double StandardDeviation => Math.Sqrt(_n * _p * _q);
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _n * _p * _q; }
-        }
+        public override double Variance => _n * _p * _q;
 
         /// <summary>Gets the distribution's support</summary>
-        public override double[] Support
-        {
-            get { return Enumerable.Range(0, _n + 1).Select(d => Convert.ToDouble(d)).ToArray(); }
-        }
+        public override double[] Support => Enumerable.Range(0, _n + 1).Select(d => Convert.ToDouble(d)).ToArray();
         #endregion
 
         #region Methods

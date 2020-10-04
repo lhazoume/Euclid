@@ -120,9 +120,7 @@ namespace Euclid.LinearAlgebra
             }
         }
 
-        /// <summary>
-        /// Returns an array of pairs of eigen values and eigen vectors
-        /// </summary>
+        /// <summary>Returns an array of pairs of eigen values and eigen vectors</summary>
         public Tuple<double, Vector>[] RealEigenPairs
         {
             get

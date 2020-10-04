@@ -1,7 +1,7 @@
 ﻿namespace Euclid.Arithmetics
 {
     /// <summary>Binomial coefficients class</summary>
-    public class BinomialCoefficients
+    public sealed class BinomialCoefficients
     {
         private readonly int[] _coefficients;
         private readonly int _degree;

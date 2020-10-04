@@ -53,10 +53,7 @@ namespace Euclid.Analytics.Clustering
         }
 
         /// <summary>Clones the node</summary>
-        public IDecisionNode<TI, TA> Clone
-        {
-            get { return new DecisionNode<TI, TA>(_predicate.Clone, _true.Clone, _false.Clone); }
-        }
+        public IDecisionNode<TI, TA> Clone => new DecisionNode<TI, TA>(_predicate.Clone, _true.Clone, _false.Clone);
 
         /// <summary>Returns the tree subpart if the predicate is met </summary>
         public IDecisionNode<TI, TA> True
@@ -73,16 +70,10 @@ namespace Euclid.Analytics.Clustering
         }
 
         /// <summary>Returns the depth of the node</summary>
-        public int Depth
-        {
-            get { return 1 + Math.Max(_true.Depth, _false.Depth); }
-        }
+        public int Depth => 1 + Math.Max(_true.Depth, _false.Depth);
 
         /// <summary>Counts the children of the node</summary>
-        public int Children
-        {
-            get { return 2 + _false.Children + _true.Children; }
-        }
+        public int Children => 2 + _false.Children + _true.Children;
 
         #endregion
 
@@ -119,22 +110,12 @@ namespace Euclid.Analytics.Clustering
         }
 
         /// <summary>Clones the node</summary>
-        public IDecisionNode<TI, TA> Clone
-        {
-            get { return new DecisionLeaf<TI, TA>(_answer); }
-        }
-
+        public IDecisionNode<TI, TA> Clone => new DecisionLeaf<TI, TA>(_answer);
         /// <summary>Returns the depth of the node</summary>
-        public int Depth
-        {
-            get { return 0; }
-        }
+        public int Depth => 0;
 
         /// <summary>Counts the children of the node</summary>
-        public int Children
-        {
-            get { return 0; }
-        }
+        public int Children => 0;
         #endregion
 
         /// <summary>Evaluates the answer for a given input</summary>
@@ -174,10 +155,7 @@ namespace Euclid.Analytics.Clustering
         public Predicate<TI> Predicate => _predicate;
 
         /// <summary>Returns a clone of the pretty predicate</summary>
-        public PrettyPredicate<TI> Clone
-        {
-            get { return new PrettyPredicate<TI>(_description, _predicate); }
-        }
+        public PrettyPredicate<TI> Clone => new PrettyPredicate<TI>(_description, _predicate);
         #endregion
     }
 }

@@ -29,12 +29,7 @@ namespace Euclid.Distributions.Continuous.Kernels
             if (x >= 1) return 1;
             return 0.5 * (1 + Math.Sin(x * Math.PI * 0.5));
         }
-        /// <summary>
-        /// Returns the integral of t^2*K(t)
-        /// </summary>
-        public double Variance
-        {
-            get { return 1 - 8 * Math.Pow(Math.PI, -2); }
-        }
+        /// <summary>Returns the integral of t^2*K(t)</summary>
+        public double Variance => 1 - 8 * Math.Pow(Math.PI, -2);
     }
 }

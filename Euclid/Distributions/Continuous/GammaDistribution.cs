@@ -37,56 +37,28 @@ namespace Euclid.Distributions.Continuous
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get { return _k + Math.Log(_theta) + Math.Log(Fn.Gamma(_k)) + (1 - _k) * Fn.DiGamma(_k); }
-        }
+        public override double Entropy => _k + Math.Log(_theta) + Math.Log(Fn.Gamma(_k)) + (1 - _k) * Fn.DiGamma(_k);
 
         /// <summary>Gets the distribution's support </summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's mean </summary>
-        public override double Mean
-        {
-            get { return _k * _theta; }
-        }
+        public override double Mean => _k * _theta;
 
         /// <summary>Gets the distribution's median </summary>
-        public override double Median
-        {
-            get { return InverseCumulativeDistribution(0.5); ; }
-        }
+        public override double Median => InverseCumulativeDistribution(0.5);
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode
-        {
-            get
-            {
-                if (_k >= 1) return (_k - 1) * _theta;
-                else return double.NaN;
-            }
-        }
+        public override double Mode => _k >= 1 ? (_k - 1) * _theta : double.NaN;
 
         /// <summary>Gets the distribution's skewness </summary>
-        public override double Skewness
-        {
-            get { return 2 / Math.Sqrt(_k); }
-        }
+        public override double Skewness => 2 / Math.Sqrt(_k);
 
         /// <summary>Gets the distribution's standard deviation </summary>
-        public override double StandardDeviation
-        {
-            get { return _theta * Math.Sqrt(_k); }
-        }
+        public override double StandardDeviation => _theta * Math.Sqrt(_k);
 
         /// <summary>Gets the distribution's variance </summary>
-        public override double Variance
-        {
-            get { return _k * _theta * _theta; }
-        }
+        public override double Variance => _k * _theta * _theta;
         #endregion
 
         #region Methods

@@ -39,22 +39,19 @@ namespace Euclid.Distributions.Discrete
         #region Accessors
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean { get { return _mu1 - _mu2; } }
+        public override double Mean => _mu1 - _mu2;
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness { get { return (_mu1 - _mu2) * Math.Pow(_mu1 + _mu2, 1.5); } }
+        public override double Skewness => (_mu1 - _mu2) * Math.Pow(_mu1 + _mu2, 1.5);
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation { get { return Math.Sqrt(_mu1 + _mu2); } }
+        public override double StandardDeviation => Math.Sqrt(_mu1 + _mu2);
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance { get { return _mu1 + _mu2; } }
+        public override double Variance => _mu1 + _mu2;
 
         /// <summary>Gets the distribution's support</summary>
-        public override double[] Support
-        {
-            get { return _support.ToArray(); }
-        }
+        public override double[] Support => _support.ToArray();
 
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode
@@ -69,10 +66,7 @@ namespace Euclid.Distributions.Discrete
         }
 
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get { return _support.Select(x => ProbabilityDensity(x)).Select(p => -p * Math.Log(p)).Sum(); }
-        }
+        public override double Entropy => _support.Select(x => ProbabilityDensity(x)).Select(p => -p * Math.Log(p)).Sum();
 
         /// <summary>Gets the distribution's median</summary>
         public override double Median

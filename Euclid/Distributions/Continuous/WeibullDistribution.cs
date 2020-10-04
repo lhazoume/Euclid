@@ -39,22 +39,13 @@ namespace Euclid.Distributions.Continuous
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get { return Fn.EulerGamma * (1 - 1 / _k) + Math.Log(_lambda / _k) + 1; }
-        }
+        public override double Entropy => Fn.EulerGamma * (1 - 1 / _k) + Math.Log(_lambda / _k) + 1;
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return _mu; }
-        }
+        public override double Mean => _mu;
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return _lambda * Math.Pow(Math.Log(2), 1 / _k); }
-        }
+        public override double Median => _lambda * Math.Pow(Math.Log(2), 1 / _k);
 
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode
@@ -68,28 +59,16 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness
-        {
-            get { return Fn.Gamma(1 + 3 / _k) * Math.Pow(_lambda / _sigma, 3) - 3 * _mu / _sigma - Math.Pow(_mu / _sigma, 3); }
-        }
+        public override double Skewness => Fn.Gamma(1 + 3 / _k) * Math.Pow(_lambda / _sigma, 3) - 3 * _mu / _sigma - Math.Pow(_mu / _sigma, 3);
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return _sigma; }
-        }
+        public override double StandardDeviation => _sigma;
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _sigma2; }
-        }
+        public override double Variance => _sigma2;
         #endregion
 
         #region Methods

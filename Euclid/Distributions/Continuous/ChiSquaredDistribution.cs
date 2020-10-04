@@ -43,58 +43,25 @@ namespace Euclid.Distributions.Continuous
         }
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
-        /// <summary>
-        /// Gets the distribution's mean
-        /// </summary>
-        public override double Mean
-        {
-            get { return _freedomDegrees; }
-        }
+        /// <summary>Gets the distribution's mean</summary>
+        public override double Mean => _freedomDegrees;
 
-        /// <summary>
-        /// Gets the distribution's median
-        /// </summary>
-        public override double Median
-        {
-            get { return _freedomDegrees * Math.Pow(1 - 2 / (9 * _freedomDegrees), 3); }
-        }
+        /// <summary>Gets the distribution's median</summary>
+        public override double Median => _freedomDegrees * Math.Pow(1 - 2 / (9 * _freedomDegrees), 3);
 
-        /// <summary>
-        /// Gets the distribution's mode
-        /// </summary>
-        public override double Mode
-        {
-            get { return Math.Max(_freedomDegrees - 2, 0); }
-        }
+        /// <summary>Gets the distribution's mode</summary>
+        public override double Mode => Math.Max(_freedomDegrees - 2, 0);
 
-        /// <summary>
-        /// Gets the distribution's skewness
-        /// </summary>
-        public override double Skewness
-        {
-            get { return Math.Sqrt(8 / _freedomDegrees); }
-        }
+        /// <summary>Gets the distribution's skewness</summary>
+        public override double Skewness => Math.Sqrt(8 / _freedomDegrees);
 
-        /// <summary>
-        /// Gets the dsitribution's standard deviation
-        /// </summary>
-        public override double StandardDeviation
-        {
-            get { return Math.Sqrt(2 * _freedomDegrees); }
-        }
+        /// <summary>Gets the dsitribution's standard deviation</summary>
+        public override double StandardDeviation => Math.Sqrt(2 * _freedomDegrees);
 
-        /// <summary>
-        /// Gets the distribution's variance
-        /// </summary>
-        public override double Variance
-        {
-            get { return 2 * _freedomDegrees; }
-        }
+        /// <summary>Gets the distribution's variance</summary>
+        public override double Variance => 2 * _freedomDegrees;
 
         #endregion
 

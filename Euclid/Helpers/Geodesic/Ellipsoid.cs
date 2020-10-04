@@ -32,21 +32,12 @@
         #endregion
 
         /// <summary>Gets the semi-major axis of the ellipsoid</summary>
-        public double EquatorialRadius
-        {
-            get { return _equatorialRadius; }
-        }
+        public double EquatorialRadius => _equatorialRadius;
 
         /// <summary>Gets the semi-minor axis of the ellipsoid</summary>
-        public double PolarRadius
-        {
-            get { return _polarRadius; }
-        }
+        public double PolarRadius => _polarRadius;
 
         /// <summary>Gets the flattening of the ellipsoid</summary>
-        public double Flattening
-        {
-            get { return _flattening; }
-        }
+        public double Flattening => _flattening;
     }
 }

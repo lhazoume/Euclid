@@ -30,12 +30,7 @@ namespace Euclid.Distributions.Continuous.Kernels
             return 0.75 * x * (1 - x * x / 3) + 0.5;
         }
 
-        /// <summary>
-        /// Returns the integral of t^2*K(t)
-        /// </summary>
-        public double Variance
-        {
-            get { return 1.0 / 5.0; }
-        }
+        /// <summary>Returns the integral of t^2*K(t)</summary>
+        public double Variance => 1.0 / 5.0;
     }
 }

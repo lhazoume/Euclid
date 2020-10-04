@@ -29,21 +29,11 @@ namespace Euclid.Histograms
         #endregion
 
         #region Accessors
-        /// <summary>
-        /// Gets the bound's value
-        /// </summary>
-        public double Value
-        {
-            get { return _value; }
-        }
+        /// <summary>Gets the bound's value</summary>
+        public double Value=> _value; 
 
-        /// <summary>
-        /// Gets the bound's status
-        /// </summary>
-        public bool IsIncluded
-        {
-            get { return _isIncluded; }
-        }
+        /// <summary>Gets the bound's status</summary>
+        public bool IsIncluded=>_isIncluded; 
         #endregion
 
         #region Operators

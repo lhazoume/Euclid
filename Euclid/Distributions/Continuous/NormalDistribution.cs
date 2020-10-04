@@ -123,52 +123,28 @@ namespace Euclid.Distributions.Continuous
         #region Accessors
 
         /// <summary>Gets the entropy of the normal distribution</summary>
-        public override double Entropy
-        {
-            get { return Math.Log(_standardDeviation * Math.Sqrt(2 * Math.PI * Math.E)); }
-        }
+        public override double Entropy => Math.Log(_standardDeviation * Math.Sqrt(2 * Math.PI * Math.E));
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the mean(μ) of the normal distribution</summary>
-        public override double Mean
-        {
-            get { return _mean; }
-        }
+        public override double Mean => _mean;
 
         /// <summary>Gets the median of the normal distribution</summary>
-        public override double Median
-        {
-            get { return _mean; }
-        }
+        public override double Median => _mean;
 
         /// <summary>Gets the mode of the normal distribution</summary>
-        public override double Mode
-        {
-            get { return _mean; }
-        }
+        public override double Mode => _mean;
 
         /// <summary>Gets the skewness of the normal distribution</summary>
-        public override double Skewness
-        {
-            get { return 0; }
-        }
+        public override double Skewness => 0;
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return _standardDeviation; }
-        }
+        public override double StandardDeviation => _standardDeviation;
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _standardDeviation * _standardDeviation; }
-        }
+        public override double Variance => _standardDeviation * _standardDeviation;
         #endregion
     }
 }

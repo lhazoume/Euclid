@@ -45,22 +45,13 @@ namespace Euclid
 
         #region Accessors
         /// <summary>Returns the number of columns of the <c>Matrix</c></summary>
-        public virtual int Columns
-        {
-            get { return _cols; }
-        }
+        public virtual int Columns => _cols;
 
         /// <summary>Returns the number of rows of the <c>Matrix</c></summary>
-        public int Rows
-        {
-            get { return _rows; }
-        }
+        public int Rows => _rows;
 
         /// <summary>Specifies whether the <c>Matrix</c> is square</summary>
-        public bool IsSquare
-        {
-            get { return (_rows == _cols); }
-        }
+        public bool IsSquare => (_rows == _cols);
 
         /// <summary>Specifies whether the <c>Matrix</c> is square and symmetric</summary>
         public bool IsSymetric
@@ -77,16 +68,10 @@ namespace Euclid
         }
 
         /// <summary>Returns the number of values in the <c>Matrix</c></summary>
-        public int Size
-        {
-            get { return _data.Length; }
-        }
+        public int Size => _data.Length;
 
         /// <summary>Returns the data of the matrix as a array of double with the rows one after the other</summary>
-        public double[] Data
-        {
-            get { return _data; }
-        }
+        public double[] Data => _data;
 
         /// <summary>Gets the matrix' data as a 2d-array</summary>
         public double[,] Array
@@ -318,16 +303,10 @@ namespace Euclid
         }
 
         /// <summary>Returns the symmetric part of the <c>Matrix</c> ( 1/2 . (A^T + A))</summary>
-        public Matrix SymmetricPart
-        {
-            get { return 0.5 * (this + this.Transpose); }
-        }
+        public Matrix SymmetricPart => 0.5 * (this + this.Transpose);
 
         /// <summary>Returns the symmetric part of the <c>Matrix</c> (1/2 . (A - A^T))</summary>
-        public Matrix AntiSymmetricPart
-        {
-            get { return 0.5 * (this - this.Transpose); }
-        }
+        public Matrix AntiSymmetricPart => 0.5 * (this - this.Transpose);
 
         #region Norms and sums
 
@@ -338,15 +317,7 @@ namespace Euclid
         public double Norm2 => Math.Sqrt(this.SumOfSquares);
 
         /// <summary>Returns the largest value of the <c>Matrix</c> in absolute value</summary>
-        public double NormSup
-        {
-            get
-            {
-                double result = 0;
-                foreach (double x in _data) result = Math.Max(result, Math.Abs(x));
-                return result;
-            }
-        }
+        public double NormSup => _data.Max(Math.Abs);
 
         /// <summary>Returns the sum of the squared values</summary>
         public double SumOfSquares

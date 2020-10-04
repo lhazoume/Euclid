@@ -85,25 +85,22 @@ namespace Euclid.Distributions.Continuous
         #region Accessors
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median { get { return InverseCumulativeDistribution(0.5); } }
+        public override double Median => InverseCumulativeDistribution(0.5);
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean { get { return _m1; } }
+        public override double Mean => _m1;
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode { get { return _values[Array.IndexOf(_weights, _weights.Max())]; } }
+        public override double Mode => _values[Array.IndexOf(_weights, _weights.Max())];
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation { get { return Math.Sqrt(Variance); } }
+        public override double StandardDeviation => Math.Sqrt(Variance);
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _m2 - _m1 * _m1; }
-        }
+        public override double Variance => _m2 - _m1 * _m1;
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support { get { return _support; } }
+        public override Interval Support => _support;
 
 
 

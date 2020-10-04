@@ -31,52 +31,28 @@ namespace Euclid.Distributions.Discrete
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get { return 0.5 * Math.Log(2 * Math.PI * Math.E * _lambda) - 1 / (12 * _lambda) - 1 / (24 * _lambda * _lambda); }
-        }
+        public override double Entropy => 0.5 * Math.Log(2 * Math.PI * Math.E * _lambda) - 1 / (12 * _lambda) - 1 / (24 * _lambda * _lambda);
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return _lambda; }
-        }
+        public override double Mean => _lambda;
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return Math.Round(_lambda + 1.0 / 3.0 - 0.02 / _lambda); }
-        }
+        public override double Median => Math.Round(_lambda + 1.0 / 3.0 - 0.02 / _lambda);
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode
-        {
-            get { return Math.Round(_lambda); }
-        }
+        public override double Mode => Math.Round(_lambda);
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness
-        {
-            get { return 1 / Math.Sqrt(_lambda); }
-        }
+        public override double Skewness => 1 / Math.Sqrt(_lambda);
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return Math.Sqrt(_lambda); }
-        }
+        public override double StandardDeviation => Math.Sqrt(_lambda);
 
         /// <summary>Gets the distribution's variance</summary>
-        public override double Variance
-        {
-            get { return _lambda; }
-        }
+        public override double Variance => _lambda;
 
         /// <summary>Gets the distribution's support</summary>
-        public override double[] Support
-        {
-            get { return _support.ToArray(); }
-        }
+        public override double[] Support => _support.ToArray();
         #endregion
 
         #region Methods

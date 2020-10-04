@@ -12,9 +12,7 @@ namespace Euclid.Histograms
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Builds an interval
-        /// </summary>
+        /// <summary>Builds an interval</summary>
         /// <param name="lowerBound">the interval's lower bound</param>
         /// <param name="upperBound">the interval's upper bound</param>
         /// <param name="lowerIncluded">the lower bound's status </param>
@@ -25,14 +23,12 @@ namespace Euclid.Histograms
             _upperBound = new Bound(upperBound, upperIncluded);
         }
 
-        /// <summary>
-        /// Builds an interval
-        /// </summary>
+        /// <summary>Builds an interval</summary>
         /// <param name="lower">the lower bound</param>
         /// <param name="upper">the upper bound</param>
         public Interval(Bound lower, Bound upper)
-            :this(lower.Value, upper.Value, lower.IsIncluded, upper.IsIncluded)
-        {        }
+            : this(lower.Value, upper.Value, lower.IsIncluded, upper.IsIncluded)
+        { }
 
         /// <summary>
         /// Duplicates an <c>Interval</c>
@@ -45,22 +41,12 @@ namespace Euclid.Histograms
 
         #region Accessors
         /// <summary>Gets the interval's lower bound</summary>
-        public Bound LowerBound
-        {
-            get { return _lowerBound; }
-        }
+        public Bound LowerBound => _lowerBound;
 
         /// <summary>Gets the interval's upper bound</summary>
-        public Bound UpperBound
-        {
-            get { return _upperBound; }
-        }
-
+        public Bound UpperBound => _upperBound;
         /// <summary>Gets a deep copy of the interval</summary>
-        public Interval Clone
-        {
-            get { return new Interval(this); }
-        }
+        public Interval Clone => new Interval(_lowerBound, _upperBound);
         #endregion
 
         #region Methods

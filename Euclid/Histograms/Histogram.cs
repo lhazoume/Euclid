@@ -29,30 +29,18 @@ namespace Euclid.Histograms
 
         #region Accessors
         /// <summary>Gets the number of intervals</summary>
-        public int Count
-        {
-            get { return _intervals.Length; }
-        }
+        public int Count => _intervals.Length;
 
         /// <summary>Gets the total number of items in the histogram</summary>
-        public int TotalItems
-        {
-            get { return _items.Sum(); }
-        }
+        public int TotalItems => _items.Sum();
 
         /// <summary>Gets the intervals</summary>
-        public Interval[] Intervals
-        {
-            get { return _intervals; }
-        }
+        public Interval[] Intervals => _intervals;
 
         /// <summary>Gets the number of items in the i-th bucket</summary>
         /// <param name="bucket">the bucket's index</param>
         /// <returns>an int</returns>
-        public int this[int bucket]
-        {
-            get { return _items[bucket]; }
-        }
+        public int this[int bucket] => _items[bucket];
         #endregion
 
         #region Add

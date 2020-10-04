@@ -32,52 +32,28 @@ namespace Euclid.Distributions.Continuous
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get { return Math.Log(_sigma * Math.Exp(_mu + 0.5) * Math.Sqrt(2 * Math.PI)); }
-        }
+        public override double Entropy => Math.Log(_sigma * Math.Exp(_mu + 0.5) * Math.Sqrt(2 * Math.PI));
 
         /// <summary>Gets the distribution's support</summary>
-        public override Interval Support
-        {
-            get { return _support; }
-        }
+        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean
-        {
-            get { return Math.Exp(_mu + 0.5 * _sigma2); }
-        }
+        public override double Mean => Math.Exp(_mu + 0.5 * _sigma2);
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median
-        {
-            get { return Math.Exp(_mu); }
-        }
+        public override double Median => Math.Exp(_mu);
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode
-        {
-            get { return Math.Exp(_mu - _sigma2); }
-        }
+        public override double Mode => Math.Exp(_mu - _sigma2);
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness
-        {
-            get { return (Math.Exp(_sigma2) + 2) * Math.Sqrt(Math.Exp(_sigma2) - 1); }
-        }
+        public override double Skewness => (Math.Exp(_sigma2) + 2) * Math.Sqrt(Math.Exp(_sigma2) - 1);
 
         /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation
-        {
-            get { return Math.Sqrt(Variance); }
-        }
+        public override double StandardDeviation => Math.Sqrt(Variance);
 
         /// <summary>Gets the distributions's variance</summary>
-        public override double Variance
-        {
-            get { return (Math.Exp(_sigma2) - 1) * Math.Exp(2 * _mu + _sigma2); }
-        }
+        public override double Variance => (Math.Exp(_sigma2) - 1) * Math.Exp(2 * _mu + _sigma2);
         #endregion
 
         #region Methods

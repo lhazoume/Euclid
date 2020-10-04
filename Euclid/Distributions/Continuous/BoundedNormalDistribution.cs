@@ -61,13 +61,7 @@ namespace Euclid.Distributions.Continuous
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy
-        {
-            get
-            {
-                return Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + _dGb / (2 * _Z);
-            }
-        }
+        public override double Entropy => Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + _dGb / (2 * _Z);
 
         /// <summary>Gets the distribution's support</summary>
         public override Interval Support => _support;
