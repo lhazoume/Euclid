@@ -142,6 +142,9 @@
     <Compile Include="Numerics\NumericalSeriesStatus.cs" />
     <Compile Include="DataStructures\SelfFlushedQueue.cs" />
     <Compile Include="DataStructures\Map.cs" />
+    <Compile Include="Numerics\PartialDifferentialEquations\BivariatePDE.cs" />
+    <Compile Include="Numerics\PartialDifferentialEquations\BivariateGridConfiguration.cs" />
+    <Compile Include="Numerics\PartialDifferentialEquations\UnivariatePDE.cs" />
     <Compile Include="Optimizers\SimulatedAnnealing.cs" />
     <Compile Include="Optimizers\GaussianHillClimb1D.cs" />
     <Compile Include="Polynomial.cs" />

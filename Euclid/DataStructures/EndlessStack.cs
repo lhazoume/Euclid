@@ -9,8 +9,8 @@ namespace Euclid.DataStructures
     {
         #region Variables
         private readonly Func<int, IEnumerable<T>> _refiller;
-        private int _refillSize;
-        private Stack<T> _stack;
+        private readonly int _refillSize;
+        private readonly Stack<T> _stack;
         #endregion
 
         /// <summary>Builds an endless stack</summary>

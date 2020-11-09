@@ -3,12 +3,9 @@ using System.Collections.Generic;
 
 namespace Euclid.LinearAlgebra
 {
-    /// <summary>
-    /// Class used to diagonalize symmetric matrices
-    /// </summary>
+    /// <summary>Class used to diagonalize symmetric matrices</summary>
     public class EigenDecomposition
     {
-
         #region Declarations
         private readonly double[] _d;
         private readonly double[] _e;
@@ -17,9 +14,7 @@ namespace Euclid.LinearAlgebra
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initiates the class
-        /// </summary>
+        /// <summary>Initiates the class</summary>
         /// <param name="matrix">the <c>Matrix</c> to decompose</param>
         public EigenDecomposition(Matrix matrix)
         {
@@ -34,9 +29,7 @@ namespace Euclid.LinearAlgebra
         #endregion
 
         #region Accessors
-        /// <summary>
-        /// Returns the <c>Complex</c> eigen values of the matrix
-        /// </summary>
+        /// <summary>Returns the <c>Complex</c> eigen values of the matrix</summary>
         public Complex[] EigenValues
         {
             get
@@ -49,9 +42,7 @@ namespace Euclid.LinearAlgebra
             }
         }
 
-        /// <summary>
-        /// Returns the real eigen values of the matrix
-        /// </summary>
+        /// <summary>Returns the real eigen values of the matrix</summary>
         public double[] RealEigenValues
         {
             get
@@ -65,9 +56,7 @@ namespace Euclid.LinearAlgebra
             }
         }
 
-        /// <summary>
-        /// Returns the diagonal <c>Matrix</c> which is the diagonalized form of the initial matrix
-        /// </summary>
+        /// <summary>Returns the diagonal <c>Matrix</c> which is the diagonalized form of the initial matrix</summary>
         public Matrix DiagonalMatrix
         {
             get
@@ -91,9 +80,7 @@ namespace Euclid.LinearAlgebra
             }
         }
 
-        /// <summary>
-        /// Returns an array of all the eigen vectors of the matrix
-        /// </summary>
+        /// <summary>Returns an array of all the eigen vectors of the matrix</summary>
         public Vector[] EigenVectors
         {
             get
@@ -105,9 +92,7 @@ namespace Euclid.LinearAlgebra
             }
         }
 
-        /// <summary>
-        /// Returns an array of the eigen vectors attached to the real eigen values of the matrix
-        /// </summary>
+        /// <summary>Returns an array of the eigen vectors attached to the real eigen values of the matrix</summary>
         public Vector[] RealEigenVectors
         {
             get
@@ -135,9 +120,7 @@ namespace Euclid.LinearAlgebra
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Tridiagonalizes the matrix and then diagonalize it in the complex space
-        /// </summary>
+        /// <summary>Tridiagonalizes the matrix and then diagonalize it in the complex space</summary>
         private void Solve()
         {
             if (_V.IsSymetric)
@@ -153,9 +136,7 @@ namespace Euclid.LinearAlgebra
             }
         }
 
-        /// <summary>
-        /// Symmetric Householder reduction to tridiagonal form.
-        /// </summary>
+        /// <summary>Symmetric Householder reduction to tridiagonal form.</summary>
         private void SymmetricTridiagonalize()
         {
             // This is derived from the Algol procedures tred2 by
@@ -292,9 +273,7 @@ namespace Euclid.LinearAlgebra
             _e[0] = 0.0;
         }
 
-        /// <summary>
-        /// Symmetric tridiagonal QL algorithm.
-        /// </summary>
+        /// <summary>Symmetric tridiagonal QL algorithm</summary>
         private void SymmetricDiagonalize()
         {
             // This is derived from the Algol procedures tql2, by
@@ -422,9 +401,7 @@ namespace Euclid.LinearAlgebra
             }
         }
 
-        /// <summary>
-        /// Nonsymmetric reduction to Hessenberg form.
-        /// </summary>
+        /// <summary>Nonsymmetric reduction to Hessenberg form</summary>
         private void NonsymmetricReduceToHessenberg()
         {
             // This is derived from the Algol procedures orthes and ortran,
@@ -522,9 +499,7 @@ namespace Euclid.LinearAlgebra
             }
         }
 
-        /// <summary>
-        /// Nonsymmetric reduction from Hessenberg to real Schur form.
-        /// </summary>
+        /// <summary>Nonsymmetric reduction from Hessenberg to real Schur form</summary>
         private void NonsymmetricReduceHessenberToRealSchur()
         {
             // This is derived from the Algol procedure hqr2,
@@ -1020,10 +995,6 @@ namespace Euclid.LinearAlgebra
                     _V[i, j] = z;
                 }
         }
-        #endregion
-
-        #region New
-
         #endregion
     }
 }

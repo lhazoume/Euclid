@@ -151,5 +151,17 @@ namespace Euclid.Extensions
                 i++;
             }
         }
+
+        /// <summary>Checks if an array is sorted</summary>
+        /// <typeparam name="T">the template type</typeparam>
+        /// <param name="data">the input array</param>
+        /// <returns><c>true</c> is the array is sorted, <c>false</c> otherwise</returns>
+        public static bool IsSorted<T>(this T[] data) where T : IComparable<T>
+        {
+            for (int i = 1; i < data.Length; i++)
+                if (data[i - 1].CompareTo(data[i]) > 0)
+                    return false;
+            return true;
+        }
     }
 }

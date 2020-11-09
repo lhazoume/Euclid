@@ -642,6 +642,27 @@ namespace Euclid
             return r;
         }
 
+        /// <summary>Builds a Matrix as a linear combination of matrices</summary>
+        /// <param name="factors">the factors</param>
+        /// <param name="matrices">the matrices</param>
+        /// <returns>the Matrix result of Sum i  fi*mi</returns>
+        public static Matrix LinearCombination(double[] factors, Matrix[] matrices)
+        {
+            if (factors.Length != matrices.Length) throw new ArgumentException("the matrices do not match the factors");
+            if (matrices.Any(m => m is null)) throw new ArgumentNullException(nameof(matrices));
+            if (matrices.Any(m => m.Size != matrices[0].Size)) throw new ArgumentException("Matrices must have the same dimensions!");
+
+            Matrix r = Matrix.Create(matrices[0].Rows, matrices[0].Columns);
+            Parallel.For(0, r.Size, k =>
+            {
+                for (int i = 0; i < factors.Length; i++)
+                    r[k] += factors[i] * matrices[i][k];
+            });
+
+
+            return r;
+        }
+
         /// <summary>Adds a scalar to all the coefficients of a <c>Matrix</c></summary>
         /// <param name="m">the left hand side <c>Matrix</c></param>
         /// <param name="c">the scalar</param>
@@ -975,7 +996,7 @@ namespace Euclid
         /// <param name="m1">the left hand side</param>
         /// <param name="m2">the right hand side</param>
         /// <returns>a <c>Matrix</c> containing the Hadamard product</returns>
-        private static Matrix Hadamard(Matrix m1, Matrix m2)
+        public static Matrix Hadamard(Matrix m1, Matrix m2)
         {
             if (m1.Rows == m2.Rows && m1.Columns == m2.Columns)
             {
@@ -1006,6 +1027,21 @@ namespace Euclid
             throw new ArgumentException("The scalar product of two matrices can only be performed if they are the same size");
         }
 
+        /// <summary>Returns the point-to-point maximum between two matrices</summary>
+        /// <param name="m1">the left hand side</param>
+        /// <param name="m2">the right hand side</param>
+        /// <returns>a <c>Matrix</c></returns>
+        public static Matrix Max(Matrix m1, Matrix m2)
+        {
+            if (m1 == null) throw new ArgumentNullException(nameof(m1));
+            if (m2 == null) throw new ArgumentNullException(nameof(m2));
+            if (m1.Rows != m2.Rows || m1.Columns != m2.Columns) throw new ArgumentException("Matrices must have the same dimensions!");
+            Matrix r = Matrix.Create(m1.Rows, m1.Columns);
+            for (int k = 0; k < r.Size; k++)
+                r[k] = Math.Max(m1[k], m2[k]);
+            return r;
+        }
+
         #endregion
 
         #region Interface Implementations
@@ -1015,8 +1051,7 @@ namespace Euclid
         public bool Equals(Matrix other)
         {
             // Reject equality when the argument is null or has a different shape.
-            if (other == null)
-                return false;
+            if (other is null) return false;
             if (_cols != other._cols || _rows != other._rows)
                 return false;
 

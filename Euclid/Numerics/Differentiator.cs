@@ -37,9 +37,7 @@ namespace Euclid.Numerics
             }
         }
 
-        /// <summary>
-        /// High degree numerical differentiation
-        /// </summary>
+        /// <summary> High degree numerical differentiation</summary>
         /// <param name="function">the function to differentiate</param>
         /// <param name="n">the degree</param>
         /// <param name="form">the differentiation form</param>
