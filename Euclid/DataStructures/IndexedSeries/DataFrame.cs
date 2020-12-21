@@ -127,7 +127,7 @@ namespace Euclid.DataStructures.IndexedSeries
             char[] separator = CsvHelper.Separator.ToCharArray();
 
             #region Labels
-            string[] labelStrings = lines[0].Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            string[] labelStrings = lines[0].Split(separator, StringSplitOptions.None);
             labelStrings = labelStrings.SubArray(1, labelStrings.Length - 1);
             int cols = labelStrings.Length;
 
@@ -143,7 +143,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
             for (int i = 0; i < rows; i++)
             {
-                string[] lineSplit = lines[1 + i].Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                string[] lineSplit = lines[1 + i].Split(separator, StringSplitOptions.None);
 
                 legends[i] = lineSplit[0].Parse<T>();
 

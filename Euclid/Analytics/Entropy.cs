@@ -116,7 +116,7 @@ namespace Euclid.Analytics
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < cols; j++)
                     if (occurences[i, j] != 0)
-                        result += occurences[i, j] * Math.Log(occurences[i, j] * totalSum * 1.0 / (rowSums[i] * columnSums[j]));
+                        result += occurences[i, j] * Math.Log((occurences[i, j] * 1.0 * totalSum) / (rowSums[i] * 1.0 * columnSums[j]));
             result /= totalSum;
             #endregion
 
