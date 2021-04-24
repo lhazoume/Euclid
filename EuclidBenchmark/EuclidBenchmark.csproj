@@ -48,8 +48,8 @@
     <Compile Include="VectorCases.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\source\repos\Benchmarking\Benchmarking.csproj">
-      <Project>{ebe67da9-3ea9-43e7-b36d-d208d3988d94}</Project>
+    <ProjectReference Include="..\Benchmarking\Benchmarking.csproj">
+      <Project>{c6da9c79-9068-4fc3-a9cf-570238e22f4b}</Project>
       <Name>Benchmarking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Euclid\Euclid.csproj">

@@ -1,0 +1,12 @@
+C:\Users\Luc\source\repos\Benchmarking\bin\Release\netstandard2.0\Benchmarking.deps.json
+C:\Users\Luc\source\repos\Benchmarking\bin\Release\netstandard2.0\Benchmarking.dll
+C:\Users\Luc\source\repos\Benchmarking\bin\Release\netstandard2.0\Benchmarking.pdb
+C:\Users\Luc\source\repos\Benchmarking\bin\Release\netstandard2.0\Euclid.dll
+C:\Users\Luc\source\repos\Benchmarking\bin\Release\netstandard2.0\Euclid.pdb
+C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.csprojAssemblyReference.cache
+C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.csproj.CoreCompileInputs.cache
+C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.AssemblyInfoInputs.cache
+C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.AssemblyInfo.cs
+C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.csproj.CopyComplete
+C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.dll
+C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.pdb
