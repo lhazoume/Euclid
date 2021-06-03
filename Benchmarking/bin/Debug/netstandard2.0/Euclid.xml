@@ -1659,10 +1659,9 @@
             <summary>Queue that flushes itself whenever it reaches a given size</summary>
             <typeparam name="T">the template type of the data</typeparam>
         </member>
-        <member name="M:Euclid.DataStructures.SelfFlushedQueue`1.#ctor(System.Int32,System.Int32,Euclid.DataStructures.SelfFlushedQueue{`0}.Flush)">
+        <member name="M:Euclid.DataStructures.SelfFlushedQueue`1.#ctor(System.Int32,Euclid.DataStructures.SelfFlushedQueue{`0}.Flush)">
             <summary>Builds a <c>SelfFlushedQueue</c></summary>
             <param name="maximumSize">the maximum size of the Queue</param>
-            <param name="checkFrequency">the check frequency</param>
             <param name="flushCallBack">the method to use of the flushed data</param>
         </member>
         <member name="M:Euclid.DataStructures.SelfFlushedQueue`1.Add(`0)">
@@ -3801,6 +3800,81 @@
         <member name="M:Euclid.LinearAlgebra.EigenDecomposition.NonsymmetricReduceHessenberToRealSchur">
             <summary>Nonsymmetric reduction from Hessenberg to real Schur form</summary>
         </member>
+        <member name="M:Euclid.Logging.LogContainer.Add(Euclid.Logging.LogRecord)">
+            <summary>Adds a record to the logger</summary>
+            <param name="record">the <c>LogRecord</c> to add</param>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.Debug(System.String,System.String)">
+            <summary>Adds a debug record</summary>
+            <param name="context">the log context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.Info(System.String,System.String)">
+            <summary>Adds an info record</summary>
+            <param name="context">the log context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.Warning(System.String,System.String)">
+            <summary>Adds a warning record</summary>
+            <param name="context">the log context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.Error(System.String,System.String)">
+            <summary>Adds an error record</summary>
+            <param name="context">the log context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.Fatal(System.String,System.String)">
+            <summary>Adds a fatal record</summary>
+            <param name="context">the log context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="P:Euclid.Logging.LogContainer.Records">
+            <summary>Returns the logs</summary>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.Clear">
+            <summary>Clears the log</summary>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.Remove(Euclid.Logging.Level)">
+            <summary>Removes the logs by the level</summary>
+            <param name="level">the sought level</param>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.RemoveBefore(System.DateTime)">
+            <summary>Removes the logs by date </summary>
+            <param name="dateTime">the cut-off date time</param>
+        </member>
+        <member name="E:Euclid.Logging.LogContainer.DataChanged">
+            <summary>Event handler</summary>
+        </member>
+        <member name="M:Euclid.Logging.FileLogger.Add(Euclid.Logging.LogRecord)">
+            <summary>Adds a record to the logger</summary>
+            <param name="record">the <c>LogRecord</c> to add</param>
+        </member>
+        <member name="T:Euclid.Logging.LogRecord">
+            <summary>Log record class</summary>
+        </member>
+        <member name="M:Euclid.Logging.LogRecord.#ctor(System.String,Euclid.Logging.Level,System.String)">
+            <summary>Builds a log record</summary>
+            <param name="context">the logging context</param>
+            <param name="level">the level</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="P:Euclid.Logging.LogRecord.TimeStamp">
+            <summary>Returns the log's timestamp</summary>
+        </member>
+        <member name="P:Euclid.Logging.LogRecord.Level">
+            <summary>Returns the level</summary>
+        </member>
+        <member name="P:Euclid.Logging.LogRecord.Context">
+            <summary>Returns the context</summary>
+        </member>
+        <member name="P:Euclid.Logging.LogRecord.Message">
+            <summary>Returns the log's message</summary>
+        </member>
+        <member name="M:Euclid.Logging.LogRecord.ToString">
+            <summary>Serializes the record</summary>
+            <returns>a <c>String</c></returns>
+        </member>
         <member name="T:Euclid.Matrix">
             <summary>
             Matrix of double
@@ -4399,6 +4473,48 @@
             <param name="t">the time index</param>
             <returns>the convexity vector</returns>
         </member>
+        <member name="T:Euclid.Optimizers.PatternSearch">
+            <summary>Pattern search class</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.PatternSearch.#ctor(Euclid.Vector,Euclid.Vector,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double)">
+            <summary>Builds a Particle Swarm Optimizer</summary>
+            <param name="fitnessFunction">the function to optimize</param>
+            <param name="feasabilityFunction">the feasability function</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="initialPoint">the initial point</param>
+            <param name="shocks">the shocks' values</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+            <param name="maxStaticIterations">the maximum number of static iterations</param>
+            <param name="epsilon">the convergence threshold</param>
+            <param name="shrinkageFactor">the shrinkage factor</param>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.Epsilon">
+            <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.MaxIterations">
+            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.MaxStaticIterations">
+            <summary>Gets the maximum number of stationary iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.Status">
+            <summary>Gets the current status of the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.OptimizationType">
+            <summary>Gets the type of optimization performed (min or max)</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.ShrinkageFactor">
+            <summary>Gets the shrinkage factor</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.Result">
+            <summary>The result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.Convergence">
+            <summary>Gets the details of the convergence (Vector, error)</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.PatternSearch.Optimize(System.Boolean)">
+            <summary>Optimizes the function using Pattern Search</summary>
+        </member>
         <member name="T:Euclid.Optimizers.SimulatedAnnealing">
             <summary>Simulated annealing optimization class </summary>
         </member>
@@ -4436,12 +4552,11 @@
         <member name="T:Euclid.Optimizers.GaussianHillClimb1D">
             <summary>Gaussian hill-climbing optimization  algorithm for a 1D function</summary>
         </member>
-        <member name="M:Euclid.Optimizers.GaussianHillClimb1D.#ctor(System.Double,System.Func{System.Double,System.Double},Euclid.Optimizers.OptimizationType,System.Double,System.Double,System.Double,System.Double,System.Int32)">
+        <member name="M:Euclid.Optimizers.GaussianHillClimb1D.#ctor(System.Double,System.Func{System.Double,System.Double},System.Func{System.Double,System.Boolean},Euclid.Optimizers.OptimizationType,System.Double,System.Double,System.Int32)">
             <summary>Builds a solver using the simulated annealing method</summary>
             <param name="initialGuess">the initial guess</param>
-            <param name="f">the function to solve for</param>
-            <param name="lowerBound">the lower bound of the searching scope</param>
-            <param name="upperBound">the upper bound of the searching scope</param>
+            <param name="fitness">the function to solve for</param>
+            <param name="feasibility">the feasibility function</param>
             <param name="sigma0">the initial standard deviation</param>
             <param name="gamma">the cooling down speed</param>
             <param name="iterations">the maximum number of iterations</param>
@@ -4450,7 +4565,7 @@
         <member name="M:Euclid.Optimizers.GaussianHillClimb1D.#ctor(System.Double,System.Func{System.Double,System.Double},Euclid.Optimizers.OptimizationType,System.Double,System.Double,System.Double,System.Int32)">
             <summary>Builds a solver using the simulated annealing method</summary>
             <param name="initialGuess">the initial guess</param>
-            <param name="f">the function to solve for</param>
+            <param name="fitness">the function to solve for</param>
             <param name="optimizationType">the optimization type</param>
             <param name="lowerBound">the lower bound of the searching scope</param>
             <param name="upperBound">the upper bound of the searching scope</param>
@@ -4870,8 +4985,8 @@
         <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Convergence">
             <summary>Gets the details of the convergence (Vector, error)</summary>
         </member>
-        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.Solve(System.Boolean)">
-            <summary>Minimizes the function using Particle Swarm Optimization</summary>
+        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.Optimize(System.Boolean)">
+            <summary>Optimizes the function using Particle Swarm Optimization</summary>
         </member>
         <member name="T:Euclid.Polynomial">
             <summary>

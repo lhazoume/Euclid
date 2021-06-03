@@ -71,11 +71,11 @@
         }
       }
     },
-    "C:\\Users\\Utilisateur\\Source\\Repos\\Euclid\\Euclid\\Euclid.csproj": {
+    "C:\\Users\\Utilisateur\\source\\repos\\Euclid\\Euclid\\Euclid.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\Utilisateur\\Source\\Repos\\Euclid\\Euclid\\Euclid.csproj",
+        "projectUniqueName": "C:\\Users\\Utilisateur\\source\\repos\\Euclid\\Euclid\\Euclid.csproj",
         "projectName": "Euclid",
-        "projectPath": "C:\\Users\\Utilisateur\\Source\\Repos\\Euclid\\Euclid\\Euclid.csproj"
+        "projectPath": "C:\\Users\\Utilisateur\\source\\repos\\Euclid\\Euclid\\Euclid.csproj"
       },
       "frameworks": {
         "net452": {}

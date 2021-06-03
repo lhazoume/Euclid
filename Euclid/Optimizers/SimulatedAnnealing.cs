@@ -57,15 +57,15 @@ namespace Euclid.Optimizers
         /// <summary>Gets and sets the function to solve for</summary>
         public Func<Vector, double> Function
         {
-            get { return _f; }
-            set { _f = value; }
+            get => _f;
+            set => _f = value;
         }
 
         /// <summary>Gets and sets the initial guess</summary>
         public Vector InitialGuess
         {
-            get { return _initialGuess; }
-            set { _initialGuess = value; }
+            get => _initialGuess;
+            set => _initialGuess = value;
         }
 
         /// <summary>Gets and sets the maximum number of iterations</summary>

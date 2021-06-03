@@ -49,10 +49,7 @@ namespace Euclid.Optimizers
             if (initialPopulation.Count() <= 1)
                 throw new ArgumentOutOfRangeException(nameof(initialPopulation), "The swarm size should be at least 2");
 
-            if (initialPopulation.Any(v => !feasabilityFunction(v)))
-                throw new ArgumentOutOfRangeException(nameof(initialPopulation), "Some agents of the initial population are not feasible");
-
-            _initialPopulation = initialPopulation.ToArray();
+            _initialPopulation = initialPopulation.Where(feasabilityFunction).ToArray();
             _swarmSize = _initialPopulation.Length;
             #endregion
 
@@ -186,8 +183,8 @@ namespace Euclid.Optimizers
         public List<Tuple<Vector, double>> Convergence => _convergence.ToList();
         #endregion
 
-        /// <summary>Minimizes the function using Particle Swarm Optimization</summary>
-        public void Solve(bool parallel)
+        /// <summary>Optimizes the function using Particle Swarm Optimization</summary>
+        public void Optimize(bool parallel)
         {
             #region Define the general vars
             int sign = _optimizationType == OptimizationType.Min ? -1 : 1;
@@ -241,7 +238,7 @@ namespace Euclid.Optimizers
                     swarm[i] += newVelocity;
 
                     double value = _fitnessFunction(swarm[i]);
-                    if (Math.Sign(value - personalBestsValues[i]) == sign)
+                    if (!double.IsInfinity(value) && Math.Sign(value - personalBestsValues[i]) == sign)
                     {
                         particleBests[i] = swarm[i].Clone;
                         personalBestsValues[i] = value;
@@ -250,12 +247,12 @@ namespace Euclid.Optimizers
                 #endregion
 
                 #region Find the overall best
-                for (int i = 0; i < _swarmSize; i++)
-                    if (Math.Sign(personalBestsValues[i] - overallBestValue) == sign)
-                    {
-                        overallBest = swarm[i].Clone;
-                        overallBestValue = personalBestsValues[i];
-                    }
+                double currentOverallBest = _optimizationType == OptimizationType.Min ? personalBestsValues.Data.Min() : personalBestsValues.Data.Max();
+                if (Math.Sign(currentOverallBest - overallBestValue) == sign)
+                {
+                    overallBestValue = currentOverallBest;
+                    overallBest = swarm[Array.IndexOf(personalBestsValues.Data, currentOverallBest)].Clone;
+                }
                 #endregion
 
                 _convergence.Add(new Tuple<Vector, double>(overallBest.Clone, overallBestValue));

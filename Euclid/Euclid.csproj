@@ -133,6 +133,12 @@
     <Compile Include="DataStructures\IndexedSeries\Header.cs" />
     <Compile Include="DataStructures\IndexedSeries\Slice.cs" />
     <Compile Include="LinearAlgebra\EigenDecomposition.cs" />
+    <Compile Include="Logging\LogContainer.cs" />
+    <Compile Include="Logging\FileLogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\LogRecord.cs" />
+    <Compile Include="Logging\Level.cs" />
+    <Compile Include="Logging\Session.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Numerics\DifferenceForm.cs" />
     <Compile Include="Numerics\Differentiator.cs" />
@@ -145,6 +151,7 @@
     <Compile Include="Numerics\PartialDifferentialEquations\BivariatePDE.cs" />
     <Compile Include="Numerics\PartialDifferentialEquations\BivariateGridConfiguration.cs" />
     <Compile Include="Numerics\PartialDifferentialEquations\UnivariatePDE.cs" />
+    <Compile Include="Optimizers\PatternSearch.cs" />
     <Compile Include="Optimizers\SimulatedAnnealing.cs" />
     <Compile Include="Optimizers\GaussianHillClimb1D.cs" />
     <Compile Include="Polynomial.cs" />

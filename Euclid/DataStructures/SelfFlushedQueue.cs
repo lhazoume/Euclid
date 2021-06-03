@@ -7,24 +7,20 @@ namespace Euclid.DataStructures
     public class SelfFlushedQueue<T>
     {
         #region Declarations
-        private readonly int _maximumSize, _checkFrequency;
+        private readonly int _maximumSize;
         private readonly Queue<T> _queue;
         private readonly object _lock = new object();
         private readonly Flush _flush;
-        private int _ctr;
         #endregion
 
         /// <summary>Builds a <c>SelfFlushedQueue</c></summary>
         /// <param name="maximumSize">the maximum size of the Queue</param>
-        /// <param name="checkFrequency">the check frequency</param>
         /// <param name="flushCallBack">the method to use of the flushed data</param>
-        public SelfFlushedQueue(int maximumSize, int checkFrequency, Flush flushCallBack)
+        public SelfFlushedQueue(int maximumSize, Flush flushCallBack)
         {
             _maximumSize = maximumSize;
-            _checkFrequency = checkFrequency;
-            _queue = new Queue<T>(_maximumSize + _checkFrequency);
+            _queue = new Queue<T>(_maximumSize);
             _flush = flushCallBack;
-            _ctr = 0;
         }
 
         /// <summary>Adds an item to the queue</summary>
@@ -33,14 +29,9 @@ namespace Euclid.DataStructures
         {
             lock (_lock)
             {
-                _ctr++;
                 _queue.Enqueue(t);
-                if (_ctr % _checkFrequency == 0)
-                    if (_queue.Count >= _maximumSize)
-                    {
-                        _ctr = 0;
-                        ForceFlush();
-                    }
+                if (_queue.Count >= _maximumSize)
+                    ForceFlush();
             }
         }
 
