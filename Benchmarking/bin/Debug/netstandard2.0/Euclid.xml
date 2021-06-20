@@ -3942,6 +3942,9 @@
         <member name="P:Euclid.Matrix.CoMatrix">
             <summary>Returns the co-matrix of the current matrix</summary>
         </member>
+        <member name="P:Euclid.Matrix.CholeskyLower">
+            <summary>Returns the lower Cholesky factor</summary>
+        </member>
         <member name="P:Euclid.Matrix.Trace">
             <summary>Returns the trace of the <c>Matrix</c></summary>
         </member>

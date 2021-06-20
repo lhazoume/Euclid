@@ -260,6 +260,30 @@ namespace Euclid
             }
         }
 
+        /// <summary>Returns the lower Cholesky factor</summary>
+        public Matrix CholeskyLower
+        {
+            get
+            {
+                if (_rows != _cols)
+                    return null;
+
+                Matrix ret = new Matrix(_rows, _rows, 0);
+                for (int r = 0; r < _rows; r++)
+                    for (int c = 0; c <= r; c++)
+                    {
+                        double sum = 0;
+
+                        for (int j = 0; j < c; j++)
+                            sum += ret[r, j] * ret[c, j];
+
+                        ret[r, c] = c == r ? Math.Sqrt(this[r, c] - sum) : 1.0 / ret[c, c] * (this[r, c] - sum);
+                    }
+
+                return ret;
+            }
+        }
+
         #endregion
 
         /// <summary>Returns the trace of the <c>Matrix</c></summary>
