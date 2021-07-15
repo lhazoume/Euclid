@@ -98,6 +98,25 @@ namespace Euclid
         /// <summary>Returns the sum of the values</summary>
         public double Sum => _data.Sum();
 
+        /// <summary>Builds a Vector as a linear combination of vectors</summary>
+        /// <param name="factors">the factors</param>
+        /// <param name="vectors">the vectors</param>
+        /// <returns>the Vector result of Sum i  fi*mi</returns>
+        public static Vector LinearCombination(double[] factors, Vector[] vectors)
+        {
+            if (factors.Length != vectors.Length) throw new ArgumentException("the vectors do not match the factors");
+            if (vectors.Any(m => m is null)) throw new ArgumentNullException(nameof(vectors));
+            if (vectors.Any(m => m.Size != vectors[0].Size)) throw new ArgumentException("Vectors must have the same dimensions!");
+
+            Vector r = Vector.Create(vectors[0].Size);
+            Parallel.For(0, r.Size, k =>
+            {
+                for (int i = 0; i < factors.Length; i++)
+                    r[k] += factors[i] * vectors[i][k];
+            });
+
+            return r;
+        }
         #endregion
 
         #region Operators

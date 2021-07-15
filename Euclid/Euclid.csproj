@@ -138,7 +138,6 @@
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\LogRecord.cs" />
     <Compile Include="Logging\Level.cs" />
-    <Compile Include="Logging\Session.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Numerics\DifferenceForm.cs" />
     <Compile Include="Numerics\Differentiator.cs" />
@@ -148,6 +147,7 @@
     <Compile Include="Numerics\NumericalSeriesStatus.cs" />
     <Compile Include="DataStructures\SelfFlushedQueue.cs" />
     <Compile Include="DataStructures\Map.cs" />
+    <Compile Include="Numerics\PartialDifferentialEquations\UnivariateGridConfiguration.cs" />
     <Compile Include="Numerics\PartialDifferentialEquations\BivariatePDE.cs" />
     <Compile Include="Numerics\PartialDifferentialEquations\BivariateGridConfiguration.cs" />
     <Compile Include="Numerics\PartialDifferentialEquations\UnivariatePDE.cs" />

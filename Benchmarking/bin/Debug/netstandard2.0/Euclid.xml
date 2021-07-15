@@ -3846,9 +3846,44 @@
         <member name="E:Euclid.Logging.LogContainer.DataChanged">
             <summary>Event handler</summary>
         </member>
+        <member name="T:Euclid.Logging.FileLogger">
+            <summary>Represents a logger that dumps itself into a file</summary>
+        </member>
+        <member name="M:Euclid.Logging.FileLogger.#ctor(System.Int32,System.String,Euclid.Logging.Level,Euclid.Logging.Level)">
+            <summary>Builds a file logger</summary>
+            <param name="maxRecords">the maximum number of logs before dumping to a file</param>
+            <param name="pathFormat">the general format of the file path</param>
+            <param name="minLevel">the minimum level needed to be logged</param>
+            <param name="maxLevel">the maximum level needed to be logged</param>
+        </member>
         <member name="M:Euclid.Logging.FileLogger.Add(Euclid.Logging.LogRecord)">
             <summary>Adds a record to the logger</summary>
             <param name="record">the <c>LogRecord</c> to add</param>
+        </member>
+        <member name="M:Euclid.Logging.FileLogger.Debug(System.String,System.String)">
+            <summary>Adds a debug line to the log</summary>
+            <param name="context">the logging context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="M:Euclid.Logging.FileLogger.Info(System.String,System.String)">
+            <summary>Adds an information line to the log</summary>
+            <param name="context">the logging context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="M:Euclid.Logging.FileLogger.Warning(System.String,System.String)">
+            <summary>Adds a warning line to the log</summary>
+            <param name="context">the logging context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="M:Euclid.Logging.FileLogger.Error(System.String,System.String)">
+            <summary>Adds a error line to the log</summary>
+            <param name="context">the logging context</param>
+            <param name="message">the message</param>
+        </member>
+        <member name="M:Euclid.Logging.FileLogger.Fatal(System.String,System.String)">
+            <summary>Adds a fatal line to the log</summary>
+            <param name="context">the logging context</param>
+            <param name="message">the message</param>
         </member>
         <member name="T:Euclid.Logging.LogRecord">
             <summary>Log record class</summary>
@@ -3874,6 +3909,27 @@
         <member name="M:Euclid.Logging.LogRecord.ToString">
             <summary>Serializes the record</summary>
             <returns>a <c>String</c></returns>
+        </member>
+        <member name="T:Euclid.Logging.Level">
+            <summary>Represents the level for a log record</summary>
+        </member>
+        <member name="F:Euclid.Logging.Level.Off">
+            <summary>No log level</summary>
+        </member>
+        <member name="F:Euclid.Logging.Level.Debug">
+            <summary>Debug</summary>
+        </member>
+        <member name="F:Euclid.Logging.Level.Info">
+            <summary>Information</summary>
+        </member>
+        <member name="F:Euclid.Logging.Level.Warn">
+            <summary>Warning</summary>
+        </member>
+        <member name="F:Euclid.Logging.Level.Error">
+            <summary>Error</summary>
+        </member>
+        <member name="F:Euclid.Logging.Level.Fatal">
+            <summary>Fatal</summary>
         </member>
         <member name="T:Euclid.Matrix">
             <summary>
@@ -4382,6 +4438,32 @@
         <member name="F:Euclid.Numerics.NumericalSeriesStatus.IterationExceeded">
             <summary>The cumulator exceeded its maximum number of iterations</summary>
         </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration">
+            <summary>Represents a grid configuration for univariate PDEs</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Builds a univariate EDP grid configuration</summary>
+            <param name="tBuckets">the time buckets</param>
+            <param name="xBuckets">the x-buckets</param>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeCount">
+            <summary>Returns the number of time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeBuckets">
+            <summary>Returns the time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeIncrements">
+            <summary>Returns the time increments</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XCount">
+            <summary>Returns the number of X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XBuckets">
+            <summary>Returns the X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XIncrements">
+            <summary>Returns the X increments</summary>
+        </member>
         <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE">
             <summary>Represents a bivariate partial derivative equation</summary>
         </member>
@@ -4466,15 +4548,27 @@
         <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YIncrements">
             <summary>Returns the Y increments</summary>
         </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Derivative(System.Int32)">
-            <summary>Returns the numerical x-derivative on a grid</summary>
-            <param name="t">the time index</param>
-            <returns>the derivative vector</returns>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Value(System.Int32,System.Int32)">
+            <summary>Returns the grid value for a given date, x index</summary>
+            <param name="t">the date index</param>
+            <param name="xIndex">the x index</param>
+            <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Convexity(System.Int32)">
-            <summary>Returns the numerical x-convexity on a grid</summary>
-            <param name="t">the time index</param>
-            <returns>the convexity vector</returns>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(System.Double,System.Double,System.Double,Euclid.Vector)">
+            <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
+            <param name="t">the date index</param>
+            <returns>a set of <c>Vector</c></returns>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Item(System.Int32)">
+            <summary>Sets the grid value for a given date</summary>
+            <param name="t">the date index</param>
+            <param name="value">the value grid</param>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.ExerciceFrontier(Euclid.Matrix,Euclid.Matrix)">
+            <summary>Computes the exercice frontier</summary>
+            <param name="expected">the expected value matrix</param>
+            <param name="intrinsic">the intrinsic value matrix</param>
+            <returns>a <c>Matrix</c></returns>
         </member>
         <member name="T:Euclid.Optimizers.PatternSearch">
             <summary>Pattern search class</summary>
@@ -5934,6 +6028,12 @@
         </member>
         <member name="P:Euclid.Vector.Sum">
             <summary>Returns the sum of the values</summary>
+        </member>
+        <member name="M:Euclid.Vector.LinearCombination(System.Double[],Euclid.Vector[])">
+            <summary>Builds a Vector as a linear combination of vectors</summary>
+            <param name="factors">the factors</param>
+            <param name="vectors">the vectors</param>
+            <returns>the Vector result of Sum i  fi*mi</returns>
         </member>
         <member name="M:Euclid.Vector.op_Multiply(Euclid.Vector,System.Double)">
             <summary>Multiplies a <c>Vector</c> by a scalar</summary>
