@@ -43,7 +43,7 @@ namespace Euclid.Solvers.Tests
                 OptimizationType.Min,
                 Rosenbrock,
                 100, 10);
-            pso.Solve(false);
+            pso.Optimize(false);
 
             Assert.IsTrue(Rosenbrock(pso.Result) < 1e-5);
         }
@@ -58,7 +58,7 @@ namespace Euclid.Solvers.Tests
                 OptimizationType.Min,
                 Rastrigin,
                 10000, 100);
-            pso.Solve(false);
+            pso.Optimize(false);
 
             Assert.IsTrue(Rastrigin(pso.Result) < 1e-5);
         }

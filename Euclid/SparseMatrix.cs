@@ -13,7 +13,6 @@ namespace Euclid
         #region Declarations
         private readonly int _cols, _rows;
         private readonly Dictionary<int, Dictionary<int, double>> _data;
-
         #endregion
 
         #region Constructors

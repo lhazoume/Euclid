@@ -10,3 +10,16 @@ C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.A
 C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.csproj.CopyComplete
 C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.dll
 C:\Users\Luc\source\repos\Benchmarking\obj\Release\netstandard2.0\Benchmarking.pdb
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\bin\Release\netstandard2.0\Benchmarking.deps.json
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\bin\Release\netstandard2.0\Benchmarking.dll
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\bin\Release\netstandard2.0\Benchmarking.pdb
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\bin\Release\netstandard2.0\Euclid.dll
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\bin\Release\netstandard2.0\Euclid.pdb
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Release\netstandard2.0\Benchmarking.csproj.AssemblyReference.cache
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Release\netstandard2.0\Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Release\netstandard2.0\Benchmarking.AssemblyInfoInputs.cache
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Release\netstandard2.0\Benchmarking.AssemblyInfo.cs
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Release\netstandard2.0\Benchmarking.csproj.CoreCompileInputs.cache
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Release\netstandard2.0\Benchmarking.csproj.CopyComplete
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Release\netstandard2.0\Benchmarking.dll
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Release\netstandard2.0\Benchmarking.pdb

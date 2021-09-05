@@ -11,7 +11,7 @@ namespace Euclid.Optimizers
     {
         private readonly int _dimension, _maxIterations;
 
-        private readonly Vector _lowerBound, _upperBound;
+        private readonly Func<Vector, bool> _feasibility;
         private Vector _result;
         private readonly Func<Vector, double> _function;
         private readonly OptimizationType _optimizationType;
@@ -36,7 +36,7 @@ namespace Euclid.Optimizers
         /// <param name="gamma">the expansion coefficient</param>
         /// <param name="rho">the contaction coefficient</param>
         /// <param name="sigma">the shrink coefficient</param>
-        public NelderMead(Vector lowerBounds, Vector upperBounds,
+        public NelderMead(Func<Vector, bool> feasibility,
             Func<Vector, double> function,
             Vector[] initialSimplex,
             OptimizationType optimizationType,
@@ -44,15 +44,8 @@ namespace Euclid.Optimizers
             double epsilon = 1e-8,
             double alpha = 1, double gamma = 2, double rho = 0.5, double sigma = 0.5)
         {
-            if (lowerBounds == null) throw new ArgumentNullException(nameof(lowerBounds));
-            if (upperBounds == null) throw new ArgumentNullException(nameof(upperBounds));
-
             #region Bounds and dimension
-            if (lowerBounds.Size != upperBounds.Size)
-                throw new RankException("The lower and upper bounds should be the same size");
-            _lowerBound = lowerBounds.Clone;
-            _upperBound = upperBounds.Clone;
-            _dimension = _lowerBound.Size;
+            _dimension = initialSimplex[0].Size;
             #endregion
 
             #region Algorithm parameters
@@ -71,6 +64,7 @@ namespace Euclid.Optimizers
             #endregion
 
             _function = function;
+            _feasibility = feasibility;
             _initialPopulation = initialSimplex.ToArray();
             _status = SolverStatus.NotRan;
             _optimizationType = optimizationType;
@@ -110,12 +104,6 @@ namespace Euclid.Optimizers
 
         /// <summary> Returns the problem's dimension</summary>
         public int Dimension => _dimension;
-
-        /// <summary>Gets the lower bounds of the space</summary>
-        public Vector LowerBound => _lowerBound;
-
-        /// <summary>Gets the upper bounds of the space</summary>
-        public Vector UpperBound => _upperBound;
 
         /// <summary>Returns the reflexion coefficient</summary>
         public double Alpha => _alpha;
@@ -170,12 +158,18 @@ namespace Euclid.Optimizers
 
                 _convergence.Add(new Tuple<Vector, double>(simplex[0].Vector.Clone, simplex[0].Value));
                 if (Math.Abs(_function(centroid) - simplex[0].Value) < _epsilon)
-                {
                     break;
-                }
 
                 #region Reflection
-                Vector reflectionPoint = Vector.Bound(_lowerBound, _upperBound, Vector.Create(1 + _alpha, centroid, -_alpha, simplex[_dimension].Vector));
+                Vector reflectionPoint;
+                double currentAlpha = _alpha;
+                do
+                {
+                    reflectionPoint = Vector.Create(1 + currentAlpha, centroid, -currentAlpha, simplex[_dimension].Vector);
+                    currentAlpha /= 2;
+                }
+                while (!_feasibility(reflectionPoint));
+
                 double reflectionValue = _function(reflectionPoint);
                 if (simplex[0].Value <= reflectionValue & reflectionValue < simplex[_dimension - 1].Value)
                 {
@@ -190,7 +184,15 @@ namespace Euclid.Optimizers
                 #region Expansion
                 if (reflectionValue < simplex[0].Value)
                 {
-                    Vector expansionPoint = Vector.Bound(_lowerBound, _upperBound, Vector.Create(1 - _gamma, centroid, _gamma, reflectionPoint));
+                    Vector expansionPoint;
+                    double currentGamma = _gamma;
+                    do
+                    {
+                        expansionPoint = Vector.Create(1 - currentGamma, centroid, currentGamma, reflectionPoint);
+                        currentGamma /= 2;
+                    }
+                    while (!_feasibility(expansionPoint));
+
                     double expansionValue = _function(expansionPoint);
                     simplex[_dimension].Vector = expansionValue < reflectionValue ? expansionPoint : reflectionPoint;
                     simplex[_dimension].Value = expansionValue < reflectionValue ? expansionValue : reflectionValue;
@@ -201,7 +203,15 @@ namespace Euclid.Optimizers
                 #endregion
 
                 #region Contraction
-                Vector contractionPoint = Vector.Bound(_lowerBound, _upperBound, Vector.Create(1 - _rho, centroid, _rho, simplex[_dimension].Vector));
+                Vector contractionPoint;
+                double currentRho = _rho;
+                do
+                {
+                    contractionPoint = Vector.Create(1 - currentRho, centroid, currentRho, simplex[_dimension].Vector);
+                    currentRho /= 2;
+                }
+                while (!_feasibility(contractionPoint));
+
                 double contractionValue = _function(contractionPoint);
                 if (contractionValue < simplex[_dimension].Value)
                 {
@@ -216,10 +226,19 @@ namespace Euclid.Optimizers
                 #region Shrink
                 Vector bestPoint = simplex[0].Vector;
                 Parallel.For(1, _dimension + 1, s =>
-                  {
-                      simplex[s].Vector = Vector.Bound(_lowerBound, _upperBound, Vector.Create(1 - _sigma, bestPoint, _sigma, simplex[s].Vector));
-                      simplex[s].Value = _function(simplex[s].Vector);
-                  });
+                {
+                    Vector finalPoint;
+                    double currentSigma = _sigma;
+                    do
+                    {
+                        finalPoint = Vector.Create(1 - currentSigma, bestPoint, currentSigma, simplex[s].Vector);
+                        currentSigma /= 2;
+                    }
+                    while (!_feasibility(finalPoint));
+
+                    simplex[s].Vector = finalPoint;
+                    simplex[s].Value = _function(simplex[s].Vector);
+                });
 
                 #endregion
 

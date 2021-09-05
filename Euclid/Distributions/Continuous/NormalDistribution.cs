@@ -78,27 +78,37 @@ namespace Euclid.Distributions.Continuous
         public override double[] Sample(int numberOfPoints)
         {
             double[] result = new double[numberOfPoints];
-            Parallel.For(0, numberOfPoints / 2, i =>
-            {
-                double u, v;
-                lock (_randomSource)
-                {
-                    u = 1.0 - _randomSource.NextDouble();
-                    v = _randomSource.NextDouble();
-                }
-                double x = Math.Sqrt(-2 * Math.Log(u)) * Math.Cos(2 * Math.PI * v),
-                   y = Math.Sqrt(-2 * Math.Log(u)) * Math.Sin(2 * Math.PI * v);
-                result[2 * i] = _mean + _standardDeviation * x;
-                result[2 * i + 1] = _mean + _standardDeviation * y;
-            });
+            int processorCount = Environment.ProcessorCount;
 
-            if (numberOfPoints % 2 == 1)
+            #region Initialize the seeds
+            int[] seeds = new int[processorCount];
+            for (int p = 0; p < processorCount; p++)
+                seeds[p] = _randomSource.Next();
+            int buckets = numberOfPoints / processorCount + (numberOfPoints % processorCount == 0 ? 0 : 1);
+            buckets += buckets % 2 == 0 ? 0 : 1;
+            #endregion
+
+            Parallel.For(0, processorCount, p =>
             {
-                double u = 1.0 - _randomSource.NextDouble(),
-                    v = _randomSource.NextDouble(),
-                    x = Math.Sqrt(-2 * Math.Log(u)) * Math.Cos(2 * Math.PI * v);
-                result[numberOfPoints - 1] = _mean + _standardDeviation * x;
-            }
+                Random rnd = new Random(seeds[p]);
+                for (int b = 0; b < buckets / 2; b++)
+                {
+                    int ix = p * buckets + 2 * b;
+                    double u = 1.0 - rnd.NextDouble(),
+                        v = rnd.NextDouble(),
+                        x = Math.Sqrt(-2 * Math.Log(u)) * Math.Cos(2 * Math.PI * v),
+                        y = Math.Sqrt(-2 * Math.Log(u)) * Math.Sin(2 * Math.PI * v);
+                    if (ix >= numberOfPoints)
+                        break;
+                    else
+                        result[ix] = _mean + _standardDeviation * x;
+                    if (ix + 1 >= numberOfPoints)
+                        break;
+                    else
+                        result[ix + 1] = _mean + _standardDeviation * y;
+                }
+
+            });
 
             return result;
         }
@@ -121,7 +131,6 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
-
         /// <summary>Gets the entropy of the normal distribution</summary>
         public override double Entropy => Math.Log(_standardDeviation * Math.Sqrt(2 * Math.PI * Math.E));
 

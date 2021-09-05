@@ -60,5 +60,30 @@ namespace Euclid.Numerics
                 default: return x => indexes.Sum(i => (1 - 2 * (i % 2)) * pt[i] * function(x + (n - 2 * i) * step / 2)) / Math.Pow(step, n);
             }
         }
+
+        public static Matrix Hessian(Func<Vector, double> func, Vector center, Vector bump)
+        {
+            if (bump.Size != center.Size || bump.Data.Any(d => d <= 0))
+                throw new ArgumentException("bump sign irrelevant", nameof(bump));
+            int n = center.Size;
+            Matrix result = Matrix.Create(n, n);
+            double refValue = func(center);
+
+            for (int i = 0; i < n; i++)
+            {
+                Vector iBump = Vector.ExtractIthDimension(bump, i);
+                result[i, i] = (func(center + iBump) + func(center - iBump) - 2 * refValue) / Math.Pow(bump[i], 2);
+
+                for (int j = i + 1; j < n; j++)
+                {
+                    Vector jBump = Vector.ExtractIthDimension(bump, j);
+                    result[i, j] = (func(center + iBump + jBump) + func((center - iBump) - jBump)
+                        - func((center + iBump) - jBump) - func((center + jBump) - iBump)) / (4 * bump[i] * bump[j]);
+                    result[j, i] = result[i, j];
+                }
+            }
+            return result;
+
+        }
     }
 }

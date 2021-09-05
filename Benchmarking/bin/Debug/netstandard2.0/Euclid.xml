@@ -3557,18 +3557,17 @@
         <member name="P:Euclid.Helpers.Geodesic.Ellipsoid.Flattening">
             <summary>Gets the flattening of the ellipsoid</summary>
         </member>
-        <member name="T:Euclid.Helpers.Geodesic.Helper">
-            <summary>Used to calculate distances on the surface of earth</summary>
-        </member>
-        <member name="M:Euclid.Helpers.Geodesic.Helper.SphericalDistance(Euclid.Helpers.Geodesic.Coordinates,Euclid.Helpers.Geodesic.Coordinates)">
+        <member name="M:Euclid.Helpers.Geodesic.Ellipsoid.EllipsoidDistance(Euclid.Helpers.Geodesic.Coordinates,Euclid.Helpers.Geodesic.Coordinates)">
             <summary>Calculates the distance (in meters) between two Coordinates</summary>
             <param name="point1">The first point</param>
             <param name="point2">The second point</param>
             <returns>the distance between the points (expressed in meters)</returns>
         </member>
-        <member name="M:Euclid.Helpers.Geodesic.Helper.EllipsoidDistance(Euclid.Helpers.Geodesic.Ellipsoid,Euclid.Helpers.Geodesic.Coordinates,Euclid.Helpers.Geodesic.Coordinates)">
+        <member name="T:Euclid.Helpers.Geodesic.Helper">
+            <summary>Used to calculate distances on the surface of earth</summary>
+        </member>
+        <member name="M:Euclid.Helpers.Geodesic.Helper.SphericalDistance(Euclid.Helpers.Geodesic.Coordinates,Euclid.Helpers.Geodesic.Coordinates)">
             <summary>Calculates the distance (in meters) between two Coordinates</summary>
-            <param name="ellipsoid">The ellipsoid representation of the Earth</param>
             <param name="point1">The first point</param>
             <param name="point2">The second point</param>
             <returns>the distance between the points (expressed in meters)</returns>
@@ -4915,7 +4914,7 @@
         <member name="T:Euclid.Optimizers.NelderMead">
             <summary>Nelder-Mead optimization class</summary>
         </member>
-        <member name="M:Euclid.Optimizers.NelderMead.#ctor(Euclid.Vector,Euclid.Vector,System.Func{Euclid.Vector,System.Double},Euclid.Vector[],Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Optimizers.NelderMead.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},Euclid.Vector[],Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Nelder Mead optimizer</summary>
             <param name="lowerBounds">the lower bounds of the space</param>
             <param name="upperBounds">the upper bounds of the space</param>
@@ -4943,12 +4942,6 @@
         </member>
         <member name="P:Euclid.Optimizers.NelderMead.Dimension">
             <summary> Returns the problem's dimension</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.LowerBound">
-            <summary>Gets the lower bounds of the space</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.UpperBound">
-            <summary>Gets the upper bounds of the space</summary>
         </member>
         <member name="P:Euclid.Optimizers.NelderMead.Alpha">
             <summary>Returns the reflexion coefficient</summary>
@@ -5017,7 +5010,7 @@
         <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.Convergence">
             <summary>Gets the details of the convergence (Vector, error)</summary>
         </member>
-        <member name="M:Euclid.Optimizers.DifferentialEvolutionOptimizer.Optimize">
+        <member name="M:Euclid.Optimizers.DifferentialEvolutionOptimizer.Optimize(System.Boolean)">
             <summary>Optimizes the fitness function using Differential Evolution</summary>
         </member>
         <member name="T:Euclid.Optimizers.ParticleSwarmOptimizer">

@@ -3,6 +3,7 @@ using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Euclid.Optimizers
 {
@@ -14,7 +15,7 @@ namespace Euclid.Optimizers
         private readonly int _populationSize, _maxIterations;
         private readonly OptimizationType _optimizationType;
         private readonly Func<Vector, double> _fitnessFunction;
-        private readonly Func<Vector, bool> _isFeasable;
+        private readonly Func<Vector, bool> _isFeasible;
         private readonly List<Tuple<Vector, double>> _convergence;
         private readonly double _crossoverProbability, _differentialWeight;
         private Vector _result;
@@ -44,7 +45,7 @@ namespace Euclid.Optimizers
             _initialPopulation = initialPopulation.ToArray();
             _populationSize = _initialPopulation.Length;
 
-            _isFeasable = feasabilityFunction;
+            _isFeasible = feasabilityFunction;
             _fitnessFunction = fitnessFunction;
 
             _optimizationType = optimizationType;
@@ -109,7 +110,7 @@ namespace Euclid.Optimizers
         #endregion
 
         /// <summary>Optimizes the fitness function using Differential Evolution</summary>
-        public void Optimize()
+        public void Optimize(bool isParallel)
         {
             #region Define the general vars
             int sign = _optimizationType == OptimizationType.Min ? -1 : 1;
@@ -118,46 +119,93 @@ namespace Euclid.Optimizers
             #endregion
 
             _convergence.Clear();
-            Random rnd = new Random(Guid.NewGuid().GetHashCode());
 
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations);
             double fitnessOptimum;
             int optimumIndex = 0;
+
+            Random rnd = new Random(Guid.NewGuid().GetHashCode());
             while (!endCriteria.ShouldStop())
             {
-
-                for (int k = 0; k < _populationSize; k++)
+                if (isParallel)
                 {
-                    Vector x = population[k];
+                    Vector[] newPopulation = new Vector[_populationSize];
 
-                    #region Pick neighbours
-                    List<int> agentsIndices = Randomizer.PickRandomNumbers(0, _populationSize, 3, new int[] { k }, rnd);
-                    Vector a = population[agentsIndices[0]],
-                        b = population[agentsIndices[1]],
-                        c = population[agentsIndices[2]];
-                    #endregion
-
-                    #region Build alternative agent
-                    Vector y = Vector.Create(x.Size);
-                    do
+                    int[] seeds = Enumerable.Range(0, _populationSize).Select(i => rnd.Next()).ToArray();
+                    Parallel.For(0, _populationSize, k =>
                     {
-                        for (int i = 0; i < x.Size; i++)
-                            y[i] = rnd.NextDouble() < _crossoverProbability ?
-                                a[i] + _differentialWeight * (b[i] - c[i]) :
-                                x[i];
-                    }
-                    while (!_isFeasable(y));
-                    #endregion
+                        Random localRnd = new Random(seeds[k]);
+                        Vector x = population[k];
 
-                    #region Proceed replacement if relevant
-                    double newFitness = _fitnessFunction(y);
-                    if ((_optimizationType == OptimizationType.Min && newFitness < fitnesses[k])
-                        || (_optimizationType == OptimizationType.Max && newFitness > fitnesses[k]))
+                        #region Pick neighbours
+                        List<int> agentsIndices = Randomizer.PickRandomNumbers(0, _populationSize, 3, new int[] { k }, localRnd);
+                        Vector a = population[agentsIndices[0]],
+                            b = population[agentsIndices[1]],
+                            c = population[agentsIndices[2]];
+                        #endregion
+
+                        #region Build alternative agent
+                        Vector y = Vector.Create(x.Size);
+                        do
+                        {
+                            for (int i = 0; i < x.Size; i++)
+                                y[i] = localRnd.NextDouble() < _crossoverProbability ?
+                                    a[i] + _differentialWeight * (b[i] - c[i]) :
+                                    x[i];
+                        }
+                        while (!_isFeasible(y));
+                        #endregion
+
+                        #region Proceed replacement if relevant
+                        double newFitness = _fitnessFunction(y);
+                        if ((_optimizationType == OptimizationType.Min && newFitness < fitnesses[k])
+                            || (_optimizationType == OptimizationType.Max && newFitness > fitnesses[k]))
+                        {
+                            newPopulation[k] = y;
+                            fitnesses[k] = newFitness;
+                        }
+                        else
+                            newPopulation[k] = x;
+                        #endregion
+                    });
+
+                    population = newPopulation;
+                }
+                else
+                {
+                    for (int k = 0; k < _populationSize; k++)
                     {
-                        population[k] = y;
-                        fitnesses[k] = newFitness;
+                        Vector x = population[k];
+
+                        #region Pick neighbours
+                        List<int> agentsIndices = Randomizer.PickRandomNumbers(0, _populationSize, 3, new int[] { k }, rnd);
+                        Vector a = population[agentsIndices[0]],
+                            b = population[agentsIndices[1]],
+                            c = population[agentsIndices[2]];
+                        #endregion
+
+                        #region Build alternative agent
+                        Vector y = Vector.Create(x.Size);
+                        do
+                        {
+                            for (int i = 0; i < x.Size; i++)
+                                y[i] = rnd.NextDouble() < _crossoverProbability ?
+                                    a[i] + _differentialWeight * (b[i] - c[i]) :
+                                    x[i];
+                        }
+                        while (!_isFeasible(y));
+                        #endregion
+
+                        #region Proceed replacement if relevant
+                        double newFitness = _fitnessFunction(y);
+                        if ((_optimizationType == OptimizationType.Min && newFitness < fitnesses[k])
+                            || (_optimizationType == OptimizationType.Max && newFitness > fitnesses[k]))
+                        {
+                            population[k] = y;
+                            fitnesses[k] = newFitness;
+                        }
+                        #endregion
                     }
-                    #endregion
                 }
 
                 #region Find best and fill convergence serie

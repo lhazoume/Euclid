@@ -315,6 +315,13 @@ namespace Euclid
 
         #endregion
 
+        public static Vector ExtractIthDimension(Vector vector, int dimension)
+        {
+            Vector result = Create(vector.Size);
+            result[dimension] = vector[dimension];
+            return result;
+        }
+
         /// <summary>Returns the scalar product of the Vectors</summary>
         /// <param name="v1">the left hand side</param>
         /// <param name="v2">the right hand side</param>

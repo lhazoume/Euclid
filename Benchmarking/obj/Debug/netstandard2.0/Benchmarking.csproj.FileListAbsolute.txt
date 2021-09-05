@@ -37,3 +37,4 @@ C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benc
 C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.CopyComplete
 C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.dll
 C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.pdb
+C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
