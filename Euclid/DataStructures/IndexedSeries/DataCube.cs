@@ -235,7 +235,7 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             int layerIndex = _layers[layer];
             if (layerIndex == -1) throw new ArgumentException(string.Format("Layer [{0}] was not found", layer.ToString()));
-            TW[,] result = new TW[_legends.Count, _layers.Count];
+            TW[,] result = new TW[_legends.Count, _labels.Count];
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     result[i, j] = _data[i, j, layerIndex];
