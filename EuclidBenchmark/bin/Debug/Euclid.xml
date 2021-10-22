@@ -851,6 +851,115 @@
             <param name="data">the data to scale</param>
             <returns>a <c>Scaling</c> class</returns>
         </member>
+        <member name="T:Euclid.Analytics.Statistics.StatisticalFns">
+            <summary>
+            Collection of statistical functions
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.StatisticalFns.Percentile(System.Collections.Generic.IEnumerable{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>
+            Compute percentile(s) over a collection of data
+            </summary>
+            <param name="values">Collection of data</param>
+            <param name="percentiles">Percentiles</param>
+            <returns>Percentiles values</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.StatisticalFns.Describe(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>
+            Compute the descriptive statistics from the serie 
+            </summary>
+            <param name="values">Serie of data</param>
+            <returns>A statistical summary of the numeric data</returns>
+        </member>
+        <member name="T:Euclid.Analytics.Statistics.SummaryStatistics">
+            <summary>
+            Class which encapsulate a glossary of statistics
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Min">
+            <summary>
+            Minimum
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Average">
+            <summary>
+            Average
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Max">
+            <summary>
+            Maximum
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Stdev">
+            <summary>
+            Standard deviation (Pearson)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Euclid.Analytics.Statistics.SummaryStatistics.Range" -->
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Median">
+            <summary>
+            Median
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Percentile10">
+            <summary>
+            Percentile 10%
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Percentile90">
+            <summary>
+            Percentile 90%
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Skewness">
+            <summary>
+            Measure of asymmetry
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Kurtosis">
+            <summary>
+            Measure of the tailedness
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Sum">
+            <summary>
+            Sum of element(s)
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Count">
+            <summary>
+            Number of element(s)
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.SummaryStatistics.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.SummaryStatistics.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double,System.Double)">
+            <summary>
+            Constructor of SummaryStatistics
+            </summary>
+            <param name="min">Minimum</param>
+            <param name="average">Average</param>
+            <param name="max">Maximum</param>
+            <param name="stdev">Standard deviation</param>
+            <param name="range">Range</param>
+            <param name="percentile10">Percentile 10%</param>
+            <param name="median">Median</param>
+            <param name="percentile90">Percentile 90%</param>
+            <param name="count">Nb of elements</param>
+            <param name="skewness">Skewness</param>
+            <param name="kurtosis">Kurtosis</param>
+            <param name="sum">Sum of elements</param>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.SummaryStatistics.ToString">
+            <summary>
+            Print main statistics from the summary
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Euclid.Analytics.Tests.KolmogorovSmirnovTest">
             <summary> Helps testing empiric distribution adequacy using Kolmogorov-Smirnov</summary>
         </member>
@@ -1505,6 +1614,11 @@
         <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetLabelRank(`2)">
             <summary>Returns the label rank</summary>
             <param name="label">the target label</param>
+            <returns>an <c>Integer</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetLabelRank(`0)">
+            <summary>Returns the legend rank</summary>
+            <param name="legend">the target legend</param>
             <returns>an <c>Integer</c></returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetSeriesAt(`2)">
