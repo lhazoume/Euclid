@@ -960,6 +960,95 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Euclid.Analytics.Statistics.Tests.ANOVA">
+            <summary>
+            Class which descibes Analysis of variance: ANOVA
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.Tests.ANOVA.Data">
+            <summary>
+            Two-dimensional arrays of double
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.Tests.ANOVA.F">
+            <summary>
+            F-Statistics
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.Tests.ANOVA.Ssb">
+            <summary>
+            Sum of squares between groups
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.Tests.ANOVA.Msb">
+            <summary>
+            Mean square between groups
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.Tests.ANOVA.Ssw">
+            <summary>
+            Sum of squares within groups
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.Tests.ANOVA.Msw">
+            <summary>
+            Mean square within groups
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.Tests.ANOVA.DF">
+            <summary>
+            Degree of fredom
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Statistics.Tests.ANOVA.Pvalue">
+            <summary>
+            Probability that all population means are equal 
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.#ctor(System.Double[][])">
+            <summary>
+            Constructor for ANOVA's object
+            </summary>
+            <param name="data">Sample</param>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.RunOneWay">
+            <summary>
+            Run ANOVA computation for one factor
+            </summary>
+            <returns>True computation done with sucess else an error has been raised</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.FstatOneWay">
+            <summary>
+            Compute the F-statisics for One way ANONVA method
+            </summary>
+            <returns>F-Statistics</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.LogGammaByLanczosAlgorithm(System.Double)">
+            <summary>
+            Log gamma approximation by using Lanczos algorithm
+            </summary>
+            <param name="x">value</param>
+            <returns>approximation</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.BetaInc(System.Double,System.Double,System.Double)">
+            <summary>
+            Imcomplete beta approximation by using Lanczos algorithm
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="x"></param>
+            <returns>Imcomplete beta approximation</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Analytics.Statistics.Tests.ANOVA.BetaIncCf(System.Double,System.Double,System.Double)" -->
+        <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.PF(System.Double,System.Double,System.Double)">
+            <summary>
+            Approximate lower tail of F-dist (area from 0.0 to x) equivalent to the R pf() function only accurate to about 3 decimals
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="x"></param>
+            <returns>Probability</returns>
+        </member>
         <member name="T:Euclid.Analytics.Tests.KolmogorovSmirnovTest">
             <summary> Helps testing empiric distribution adequacy using Kolmogorov-Smirnov</summary>
         </member>
