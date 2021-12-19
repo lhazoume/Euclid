@@ -877,60 +877,38 @@
             </summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Min">
-            <summary>
-            Minimum
-            </summary>
+            <summary>Returns the minimum</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Average">
-            <summary>
-            Average
-            </summary>
+            <summary>Returns the average</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Max">
-            <summary>
-            Maximum
-            </summary>
+            <summary>Returns the maximum</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Stdev">
-            <summary>
-            Standard deviation (Pearson)
-            </summary>
+            <summary>Standard deviation (Pearson)</summary>
         </member>
         <!-- Badly formed XML comment ignored for member "P:Euclid.Analytics.Statistics.SummaryStatistics.Range" -->
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Median">
-            <summary>
-            Median
-            </summary>
+            <summary>Median</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Percentile10">
-            <summary>
-            Percentile 10%
-            </summary>
+            <summary>Percentile 10%</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Percentile90">
-            <summary>
-            Percentile 90%
-            </summary>
+            <summary>Percentile 90%</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Skewness">
-            <summary>
-            Measure of asymmetry
-            </summary>
+            <summary>Measure of asymmetry</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Kurtosis">
-            <summary>
-            Measure of the tailedness
-            </summary>
+            <summary>Measure of the tailedness</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Sum">
-            <summary>
-            Sum of element(s)
-            </summary>
+            <summary>Sum of element(s)</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Count">
-            <summary>
-            Number of element(s)
-            </summary>
+            <summary>Number of element(s)</summary>
         </member>
         <member name="M:Euclid.Analytics.Statistics.SummaryStatistics.#ctor">
             <summary>
@@ -938,9 +916,7 @@
             </summary>
         </member>
         <member name="M:Euclid.Analytics.Statistics.SummaryStatistics.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double,System.Double)">
-            <summary>
-            Constructor of SummaryStatistics
-            </summary>
+            <summary>Builds a <c>SummaryStatistics</c></summary>
             <param name="min">Minimum</param>
             <param name="average">Average</param>
             <param name="max">Maximum</param>
@@ -4087,6 +4063,38 @@
             <param name="context">the logging context</param>
             <param name="message">the message</param>
         </member>
+        <member name="T:Euclid.Logging.ILogger">
+            <summary>Represents a logger object</summary>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Add(Euclid.Logging.LogRecord)">
+            <summary>Adds a log to the logger</summary>
+            <param name="record">the log record</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Debug(System.String,System.String)">
+            <summary>Adds an debug information to the logger</summary>
+            <param name="context">the debug info's context</param>
+            <param name="message">the debug info message</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Info(System.String,System.String)">
+            <summary>Adds an information to the logger</summary>
+            <param name="context">the info's context</param>
+            <param name="message">the info message</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Warning(System.String,System.String)">
+            <summary>Adds a warning to the logger</summary>
+            <param name="context">the warning's context</param>
+            <param name="message">the warning message</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Error(System.String,System.String)">
+            <summary>Adds an error to the logger</summary>
+            <param name="context">the error's context</param>
+            <param name="message">the error message</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Fatal(System.String,System.String)">
+            <summary>Adds a fatal error to the logger</summary>
+            <param name="context">the fatal error's context</param>
+            <param name="message">the fatal error's message</param>
+        </member>
         <member name="T:Euclid.Logging.LogRecord">
             <summary>Log record class</summary>
         </member>
@@ -4482,9 +4490,7 @@
             <summary>the central-rule</summary>
         </member>
         <member name="T:Euclid.Numerics.Differentiator">
-            <summary>
-            Numeric differentiation class
-            </summary>
+            <summary>Numeric differentiation class</summary>
         </member>
         <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double})">
             <summary> First degree numerical differentiation</summary>
@@ -4492,9 +4498,7 @@
             <returns>the derivative</returns>
         </member>
         <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double},Euclid.Numerics.DifferenceForm,System.Double)">
-            <summary>
-            First degree numerical differentiation
-            </summary>
+            <summary>First degree numerical differentiation</summary>
             <param name="function">the function to differentiate</param>
             <param name="form">the differentiation form</param>
             <param name="step">the differentiation step</param>
@@ -4505,8 +4509,14 @@
             <param name="function">the function to differentiate</param>
             <param name="n">the degree</param>
             <param name="form">the differentiation form</param>
-            <param name="step">the differentiation degree</param>
+            <param name="step">the differentiation step</param>
             <returns>the n-degree derivative</returns>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Hessian(System.Func{Euclid.Vector,System.Double},Euclid.Vector)">
+            <summary> High degree numerical differentiation</summary>
+            <param name="function">the function to differentiate</param>
+            <param name="bump">the differentiation step</param>
+            <returns>the hessian matrix</returns>
         </member>
         <member name="T:Euclid.Numerics.IntegrationForm">
             <summary>
