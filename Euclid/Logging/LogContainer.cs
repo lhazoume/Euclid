@@ -4,12 +4,16 @@ using System.Linq;
 
 namespace Euclid.Logging
 {
+    /// <summary>Log container class for display, organized for event handling</summary>
     public class LogContainer : ILogger
     {
         private readonly List<LogRecord> _records;
         private readonly Level _minLevel, _maxLevel;
         private EventHandler _dataChanged;
 
+        /// <summary>Builds a log container aimed at catching the records for a given range of levels</summary>
+        /// <param name="minLevel">the minimun level</param>
+        /// <param name="maxLevel">the maximum level</param>
         public LogContainer(Level minLevel, Level maxLevel)
         {
             if (maxLevel < minLevel)

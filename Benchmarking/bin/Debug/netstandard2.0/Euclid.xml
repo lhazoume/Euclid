@@ -888,7 +888,9 @@
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Stdev">
             <summary>Standard deviation (Pearson)</summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:Euclid.Analytics.Statistics.SummaryStatistics.Range" -->
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Range">
+            <summary>Distance between Min and Max</summary>
+        </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Median">
             <summary>Median</summary>
         </member>
@@ -1015,7 +1017,13 @@
             <param name="x"></param>
             <returns>Imcomplete beta approximation</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Analytics.Statistics.Tests.ANOVA.BetaIncCf(System.Double,System.Double,System.Double)" -->
+        <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.BetaIncCf(System.Double,System.Double,System.Double)">
+            <summary> Approximate Incomplete Beta computed by continued fraction (Handbook of Mathematical Functions: with Formulas, Graphs, and Mathematical Tables, A &amp; S 26.5.8)</summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="x"></param>
+            <returns>Approximate Incomplete Beta</returns>
+        </member>
         <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.PF(System.Double,System.Double,System.Double)">
             <summary>
             Approximate lower tail of F-dist (area from 0.0 to x) equivalent to the R pf() function only accurate to about 3 decimals
@@ -3777,20 +3785,16 @@
             <summary>Gets the bound's status</summary>
         </member>
         <member name="M:Euclid.Histograms.Bound.op_Equality(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
-            <summary>
-            Checks the equality between two bounds (reference equality then null coincidence, then content coincidence)
-            </summary>
+            <summary>Checks the equality between two bounds (reference equality then null coincidence, then content coincidence)</summary>
             <param name="b1">the left hand side <c>Bound</c></param>
             <param name="b2">the right hand side <c>Bound</c></param>
-            <returns>a bool</returns>
+            <returns>true if equal, false otherwise</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.op_Inequality(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
-            <summary>
-            Checks the inequality between two bounds (based on the equal comparer)
-            </summary>
-            <param name="b1"></param>
-            <param name="b2"></param>
-            <returns></returns>
+            <summary>Checks the inequality between two bounds (based on the equal comparer)</summary>
+            <param name="b1">the left hand side <c>Bound</c></param>
+            <param name="b2">the right hand side <c>Bound</c></param>
+            <returns>false if equal, true otherwise</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.op_LessThan(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
             <summary>Compares two Bounds</summary>
@@ -3821,23 +3825,17 @@
             <returns><c>true</c> if b1 is greater or equal, <c>false</c> otherwise</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.Equals(Euclid.Histograms.Bound)">
-            <summary>
-            Checks the equality to another <c>Bound</c>
-            </summary>
+            <summary>Checks the equality to another <c>Bound</c></summary>
             <param name="other">the other <c>Bound</c></param>
             <returns>a bool</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.Equals(System.Object)">
-            <summary>
-            Checks the equality to an object (inherited from IEquatable)
-            </summary>
+            <summary>Checks the equality to an object (inherited from IEquatable)</summary>
             <param name="other">the object </param>
             <returns>a bool</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.GetHashCode">
-            <summary>
-            Returns this instance's hashcode
-            </summary>
+            <summary>Returns this instance's hashcode</summary>
             <returns>an int</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.CompareTo(Euclid.Histograms.Bound)">
@@ -4768,7 +4766,6 @@
         </member>
         <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(System.Double,System.Double,System.Double,Euclid.Vector)">
             <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
-            <param name="t">the date index</param>
             <returns>a set of <c>Vector</c></returns>
         </member>
         <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Item(System.Int32)">
@@ -5129,8 +5126,6 @@
         </member>
         <member name="M:Euclid.Optimizers.NelderMead.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},Euclid.Vector[],Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Nelder Mead optimizer</summary>
-            <param name="lowerBounds">the lower bounds of the space</param>
-            <param name="upperBounds">the upper bounds of the space</param>
             <param name="function">the function to optimize</param>
             <param name="optimizationType">the optimization type</param>
             <param name="initialSimplex">the initial population</param>

@@ -73,7 +73,7 @@ namespace Euclid.Analytics.Statistics.Tests
 
                 return true;
             }
-            catch (Exception ex) { return false; }
+            catch (Exception) { return false; }
             
         }
 
@@ -174,9 +174,7 @@ namespace Euclid.Analytics.Statistics.Tests
                 return 1.0 - bt * BetaIncCf(b, a, 1.0 - x) / b;
         }
 
-        /// <summary>
-        /// Approximate Incomplete Beta computed by continued fraction (Handbook of Mathematical Functions: with Formulas, Graphs, and Mathematical Tables, A & S 26.5.8)
-        /// </summary>
+        /// <summary> Approximate Incomplete Beta computed by continued fraction (Handbook of Mathematical Functions: with Formulas, Graphs, and Mathematical Tables, A &amp; S 26.5.8)</summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="x"></param>

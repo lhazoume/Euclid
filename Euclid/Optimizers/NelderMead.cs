@@ -25,8 +25,6 @@ namespace Euclid.Optimizers
         private double _epsilon;
 
         /// <summary>Builds a Nelder Mead optimizer</summary>
-        /// <param name="lowerBounds">the lower bounds of the space</param>
-        /// <param name="upperBounds">the upper bounds of the space</param>
         /// <param name="function">the function to optimize</param>
         /// <param name="optimizationType">the optimization type</param>
         /// <param name="initialSimplex">the initial population</param>

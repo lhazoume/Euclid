@@ -41,7 +41,7 @@ namespace Euclid.Logging
         /// <returns>a <c>String</c></returns>
         public override string ToString()
         {
-            return $"[{_context}][{_level}][{_timeStamp.ToString("ddMMyy HHmmss")}] {_message}"; ;
+            return $"[{_context}][{_level}][{_timeStamp:ddMMyy HHmmss}] {_message}"; ;
         }
     }
 }

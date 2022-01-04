@@ -17,7 +17,7 @@
         /// <summary>Standard deviation (Pearson)</summary>
         public double Stdev { get; private set; }
 
-        /// <summary>Distance between Min && Max</summary>
+        /// <summary>Distance between Min and Max</summary>
         public double Range { get; private set; }
 
         /// <summary>Median</summary>

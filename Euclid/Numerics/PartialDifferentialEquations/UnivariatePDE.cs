@@ -31,7 +31,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
 
 
         /// <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
-        /// <param name="t">the date index</param>
         /// <returns>a set of <c>Vector</c></returns>
         public Vector Retropropagate(double upP, double midP, double dnP, Vector value)
         {

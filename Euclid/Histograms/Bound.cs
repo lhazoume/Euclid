@@ -30,33 +30,29 @@ namespace Euclid.Histograms
 
         #region Accessors
         /// <summary>Gets the bound's value</summary>
-        public double Value=> _value; 
+        public double Value => _value;
 
         /// <summary>Gets the bound's status</summary>
-        public bool IsIncluded=>_isIncluded; 
+        public bool IsIncluded => _isIncluded;
         #endregion
 
         #region Operators
-        /// <summary>
-        /// Checks the equality between two bounds (reference equality then null coincidence, then content coincidence)
-        /// </summary>
+        /// <summary>Checks the equality between two bounds (reference equality then null coincidence, then content coincidence)</summary>
         /// <param name="b1">the left hand side <c>Bound</c></param>
         /// <param name="b2">the right hand side <c>Bound</c></param>
-        /// <returns>a bool</returns>
+        /// <returns>true if equal, false otherwise</returns>
         public static bool operator ==(Bound b1, Bound b2)
         {
-            if (Object.ReferenceEquals(b1, b2)) return true;
+            if (ReferenceEquals(b1, b2)) return true;
             if (b1 is null && b2 is null) return true;
             else if (b1 is null || b2 is null) return false;
             else return b1._isIncluded == b2._isIncluded && b1._value == b2._value;
         }
 
-        /// <summary>
-        /// Checks the inequality between two bounds (based on the equal comparer)
-        /// </summary>
-        /// <param name="b1"></param>
-        /// <param name="b2"></param>
-        /// <returns></returns>
+        /// <summary>Checks the inequality between two bounds (based on the equal comparer)</summary>
+        /// <param name="b1">the left hand side <c>Bound</c></param>
+        /// <param name="b2">the right hand side <c>Bound</c></param>
+        /// <returns>false if equal, true otherwise</returns>
         public static bool operator !=(Bound b1, Bound b2)
         {
             return !(b1 == b2);
@@ -110,9 +106,7 @@ namespace Euclid.Histograms
         #endregion
 
         #region IEquatable
-        /// <summary>
-        /// Checks the equality to another <c>Bound</c>
-        /// </summary>
+        /// <summary>Checks the equality to another <c>Bound</c></summary>
         /// <param name="other">the other <c>Bound</c></param>
         /// <returns>a bool</returns>
         public bool Equals(Bound other)
@@ -120,9 +114,7 @@ namespace Euclid.Histograms
             return this == other;
         }
 
-        /// <summary>
-        /// Checks the equality to an object (inherited from IEquatable)
-        /// </summary>
+        /// <summary>Checks the equality to an object (inherited from IEquatable)</summary>
         /// <param name="other">the object </param>
         /// <returns>a bool</returns>
         public override bool Equals(object other)
@@ -130,9 +122,7 @@ namespace Euclid.Histograms
             return this == (Bound)other;
         }
 
-        /// <summary>
-        /// Returns this instance's hashcode
-        /// </summary>
+        /// <summary>Returns this instance's hashcode</summary>
         /// <returns>an int</returns>
         public override int GetHashCode()
         {
