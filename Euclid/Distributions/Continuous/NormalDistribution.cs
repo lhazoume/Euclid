@@ -13,7 +13,7 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private NormalDistribution(double mean, double standardDeviation, Random randomSource)
+        public NormalDistribution(double mean, double standardDeviation, Random randomSource)
         {
             _mean = mean;
             if (standardDeviation < 0) throw new ArgumentException("The standard deviation can not be negative");
@@ -94,10 +94,10 @@ namespace Euclid.Distributions.Continuous
                 for (int b = 0; b < buckets / 2; b++)
                 {
                     int ix = p * buckets + 2 * b;
-                    double u = 1.0 - rnd.NextDouble(),
-                        v = rnd.NextDouble(),
-                        x = Math.Sqrt(-2 * Math.Log(u)) * Math.Cos(2 * Math.PI * v),
-                        y = Math.Sqrt(-2 * Math.Log(u)) * Math.Sin(2 * Math.PI * v);
+                    double r = Math.Sqrt(-2 * Math.Log(1.0 - rnd.NextDouble())),
+                        t = 2 * Math.PI * rnd.NextDouble(),
+                        x = r * Math.Cos(t),
+                        y = r * Math.Sin(t);
                     if (ix >= numberOfPoints)
                         break;
                     else

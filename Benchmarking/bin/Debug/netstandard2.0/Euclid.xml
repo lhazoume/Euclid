@@ -3976,6 +3976,14 @@
         <member name="M:Euclid.LinearAlgebra.EigenDecomposition.NonsymmetricReduceHessenberToRealSchur">
             <summary>Nonsymmetric reduction from Hessenberg to real Schur form</summary>
         </member>
+        <member name="T:Euclid.Logging.LogContainer">
+            <summary>Log container class for display, organized for event handling</summary>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.#ctor(Euclid.Logging.Level,Euclid.Logging.Level)">
+            <summary>Builds a log container aimed at catching the records for a given range of levels</summary>
+            <param name="minLevel">the minimun level</param>
+            <param name="maxLevel">the maximum level</param>
+        </member>
         <member name="M:Euclid.Logging.LogContainer.Add(Euclid.Logging.LogRecord)">
             <summary>Adds a record to the logger</summary>
             <param name="record">the <c>LogRecord</c> to add</param>
@@ -5126,6 +5134,7 @@
         </member>
         <member name="M:Euclid.Optimizers.NelderMead.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},Euclid.Vector[],Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Nelder Mead optimizer</summary>
+            <param name="feasibility">the feasibility function</param>
             <param name="function">the function to optimize</param>
             <param name="optimizationType">the optimization type</param>
             <param name="initialSimplex">the initial population</param>

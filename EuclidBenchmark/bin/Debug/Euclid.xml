@@ -877,60 +877,40 @@
             </summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Min">
-            <summary>
-            Minimum
-            </summary>
+            <summary>Returns the minimum</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Average">
-            <summary>
-            Average
-            </summary>
+            <summary>Returns the average</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Max">
-            <summary>
-            Maximum
-            </summary>
+            <summary>Returns the maximum</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Stdev">
-            <summary>
-            Standard deviation (Pearson)
-            </summary>
+            <summary>Standard deviation (Pearson)</summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:Euclid.Analytics.Statistics.SummaryStatistics.Range" -->
+        <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Range">
+            <summary>Distance between Min and Max</summary>
+        </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Median">
-            <summary>
-            Median
-            </summary>
+            <summary>Median</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Percentile10">
-            <summary>
-            Percentile 10%
-            </summary>
+            <summary>Percentile 10%</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Percentile90">
-            <summary>
-            Percentile 90%
-            </summary>
+            <summary>Percentile 90%</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Skewness">
-            <summary>
-            Measure of asymmetry
-            </summary>
+            <summary>Measure of asymmetry</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Kurtosis">
-            <summary>
-            Measure of the tailedness
-            </summary>
+            <summary>Measure of the tailedness</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Sum">
-            <summary>
-            Sum of element(s)
-            </summary>
+            <summary>Sum of element(s)</summary>
         </member>
         <member name="P:Euclid.Analytics.Statistics.SummaryStatistics.Count">
-            <summary>
-            Number of element(s)
-            </summary>
+            <summary>Number of element(s)</summary>
         </member>
         <member name="M:Euclid.Analytics.Statistics.SummaryStatistics.#ctor">
             <summary>
@@ -938,9 +918,7 @@
             </summary>
         </member>
         <member name="M:Euclid.Analytics.Statistics.SummaryStatistics.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double,System.Double)">
-            <summary>
-            Constructor of SummaryStatistics
-            </summary>
+            <summary>Builds a <c>SummaryStatistics</c></summary>
             <param name="min">Minimum</param>
             <param name="average">Average</param>
             <param name="max">Maximum</param>
@@ -1039,7 +1017,13 @@
             <param name="x"></param>
             <returns>Imcomplete beta approximation</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Analytics.Statistics.Tests.ANOVA.BetaIncCf(System.Double,System.Double,System.Double)" -->
+        <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.BetaIncCf(System.Double,System.Double,System.Double)">
+            <summary> Approximate Incomplete Beta computed by continued fraction (Handbook of Mathematical Functions: with Formulas, Graphs, and Mathematical Tables, A &amp; S 26.5.8)</summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <param name="x"></param>
+            <returns>Approximate Incomplete Beta</returns>
+        </member>
         <member name="M:Euclid.Analytics.Statistics.Tests.ANOVA.PF(System.Double,System.Double,System.Double)">
             <summary>
             Approximate lower tail of F-dist (area from 0.0 to x) equivalent to the R pf() function only accurate to about 3 decimals
@@ -3801,20 +3785,16 @@
             <summary>Gets the bound's status</summary>
         </member>
         <member name="M:Euclid.Histograms.Bound.op_Equality(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
-            <summary>
-            Checks the equality between two bounds (reference equality then null coincidence, then content coincidence)
-            </summary>
+            <summary>Checks the equality between two bounds (reference equality then null coincidence, then content coincidence)</summary>
             <param name="b1">the left hand side <c>Bound</c></param>
             <param name="b2">the right hand side <c>Bound</c></param>
-            <returns>a bool</returns>
+            <returns>true if equal, false otherwise</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.op_Inequality(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
-            <summary>
-            Checks the inequality between two bounds (based on the equal comparer)
-            </summary>
-            <param name="b1"></param>
-            <param name="b2"></param>
-            <returns></returns>
+            <summary>Checks the inequality between two bounds (based on the equal comparer)</summary>
+            <param name="b1">the left hand side <c>Bound</c></param>
+            <param name="b2">the right hand side <c>Bound</c></param>
+            <returns>false if equal, true otherwise</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.op_LessThan(Euclid.Histograms.Bound,Euclid.Histograms.Bound)">
             <summary>Compares two Bounds</summary>
@@ -3845,23 +3825,17 @@
             <returns><c>true</c> if b1 is greater or equal, <c>false</c> otherwise</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.Equals(Euclid.Histograms.Bound)">
-            <summary>
-            Checks the equality to another <c>Bound</c>
-            </summary>
+            <summary>Checks the equality to another <c>Bound</c></summary>
             <param name="other">the other <c>Bound</c></param>
             <returns>a bool</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.Equals(System.Object)">
-            <summary>
-            Checks the equality to an object (inherited from IEquatable)
-            </summary>
+            <summary>Checks the equality to an object (inherited from IEquatable)</summary>
             <param name="other">the object </param>
             <returns>a bool</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.GetHashCode">
-            <summary>
-            Returns this instance's hashcode
-            </summary>
+            <summary>Returns this instance's hashcode</summary>
             <returns>an int</returns>
         </member>
         <member name="M:Euclid.Histograms.Bound.CompareTo(Euclid.Histograms.Bound)">
@@ -4002,6 +3976,14 @@
         <member name="M:Euclid.LinearAlgebra.EigenDecomposition.NonsymmetricReduceHessenberToRealSchur">
             <summary>Nonsymmetric reduction from Hessenberg to real Schur form</summary>
         </member>
+        <member name="T:Euclid.Logging.LogContainer">
+            <summary>Log container class for display, organized for event handling</summary>
+        </member>
+        <member name="M:Euclid.Logging.LogContainer.#ctor(Euclid.Logging.Level,Euclid.Logging.Level)">
+            <summary>Builds a log container aimed at catching the records for a given range of levels</summary>
+            <param name="minLevel">the minimun level</param>
+            <param name="maxLevel">the maximum level</param>
+        </member>
         <member name="M:Euclid.Logging.LogContainer.Add(Euclid.Logging.LogRecord)">
             <summary>Adds a record to the logger</summary>
             <param name="record">the <c>LogRecord</c> to add</param>
@@ -4086,6 +4068,38 @@
             <summary>Adds a fatal line to the log</summary>
             <param name="context">the logging context</param>
             <param name="message">the message</param>
+        </member>
+        <member name="T:Euclid.Logging.ILogger">
+            <summary>Represents a logger object</summary>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Add(Euclid.Logging.LogRecord)">
+            <summary>Adds a log to the logger</summary>
+            <param name="record">the log record</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Debug(System.String,System.String)">
+            <summary>Adds an debug information to the logger</summary>
+            <param name="context">the debug info's context</param>
+            <param name="message">the debug info message</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Info(System.String,System.String)">
+            <summary>Adds an information to the logger</summary>
+            <param name="context">the info's context</param>
+            <param name="message">the info message</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Warning(System.String,System.String)">
+            <summary>Adds a warning to the logger</summary>
+            <param name="context">the warning's context</param>
+            <param name="message">the warning message</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Error(System.String,System.String)">
+            <summary>Adds an error to the logger</summary>
+            <param name="context">the error's context</param>
+            <param name="message">the error message</param>
+        </member>
+        <member name="M:Euclid.Logging.ILogger.Fatal(System.String,System.String)">
+            <summary>Adds a fatal error to the logger</summary>
+            <param name="context">the fatal error's context</param>
+            <param name="message">the fatal error's message</param>
         </member>
         <member name="T:Euclid.Logging.LogRecord">
             <summary>Log record class</summary>
@@ -4482,9 +4496,7 @@
             <summary>the central-rule</summary>
         </member>
         <member name="T:Euclid.Numerics.Differentiator">
-            <summary>
-            Numeric differentiation class
-            </summary>
+            <summary>Numeric differentiation class</summary>
         </member>
         <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double})">
             <summary> First degree numerical differentiation</summary>
@@ -4492,9 +4504,7 @@
             <returns>the derivative</returns>
         </member>
         <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double},Euclid.Numerics.DifferenceForm,System.Double)">
-            <summary>
-            First degree numerical differentiation
-            </summary>
+            <summary>First degree numerical differentiation</summary>
             <param name="function">the function to differentiate</param>
             <param name="form">the differentiation form</param>
             <param name="step">the differentiation step</param>
@@ -4505,8 +4515,14 @@
             <param name="function">the function to differentiate</param>
             <param name="n">the degree</param>
             <param name="form">the differentiation form</param>
-            <param name="step">the differentiation degree</param>
+            <param name="step">the differentiation step</param>
             <returns>the n-degree derivative</returns>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Hessian(System.Func{Euclid.Vector,System.Double},Euclid.Vector)">
+            <summary> High degree numerical differentiation</summary>
+            <param name="function">the function to differentiate</param>
+            <param name="bump">the differentiation step</param>
+            <returns>the hessian matrix</returns>
         </member>
         <member name="T:Euclid.Numerics.IntegrationForm">
             <summary>
@@ -4758,7 +4774,6 @@
         </member>
         <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(System.Double,System.Double,System.Double,Euclid.Vector)">
             <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
-            <param name="t">the date index</param>
             <returns>a set of <c>Vector</c></returns>
         </member>
         <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Item(System.Int32)">
@@ -5119,8 +5134,7 @@
         </member>
         <member name="M:Euclid.Optimizers.NelderMead.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},Euclid.Vector[],Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Nelder Mead optimizer</summary>
-            <param name="lowerBounds">the lower bounds of the space</param>
-            <param name="upperBounds">the upper bounds of the space</param>
+            <param name="feasibility">the feasibility function</param>
             <param name="function">the function to optimize</param>
             <param name="optimizationType">the optimization type</param>
             <param name="initialSimplex">the initial population</param>
