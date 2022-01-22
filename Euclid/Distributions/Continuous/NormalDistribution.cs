@@ -13,6 +13,10 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
+        /// <summary>Builds a normal distribution</summary>
+        /// <param name="mean">the distribution's mean</param>
+        /// <param name="standardDeviation">the distributions's standard deviation</param>
+        /// <param name="randomSource">the random source</param>
         public NormalDistribution(double mean, double standardDeviation, Random randomSource)
         {
             _mean = mean;

@@ -2819,6 +2819,12 @@
         <member name="T:Euclid.Distributions.Continuous.NormalDistribution">
             <summary>Normal distribution class</summary>
         </member>
+        <member name="M:Euclid.Distributions.Continuous.NormalDistribution.#ctor(System.Double,System.Double,System.Random)">
+            <summary>Builds a normal distribution</summary>
+            <param name="mean">the distribution's mean</param>
+            <param name="standardDeviation">the distributions's standard deviation</param>
+            <param name="randomSource">the random source</param>
+        </member>
         <member name="M:Euclid.Distributions.Continuous.NormalDistribution.#ctor">
             <summary>Builds a standard normal distribution</summary>
         </member>
@@ -4417,6 +4423,14 @@
             <param name="values">the values of the diagonals and sub-diagonals</param>
             <returns>a square matrix</returns>
         </member>
+        <member name="M:Euclid.Matrix.CreateTridiagonalMatrix(System.Int32,System.Double,System.Double,System.Double)">
+            <summary>Builds a square tridiagonal matrix</summary>
+            <param name="size">the size of the matrix</param>
+            <param name="diagonal">the value on the matrix's diagonal</param>
+            <param name="upper">the value on the matrix's first super diagonal</param>
+            <param name="lower">the value on the matrix's first sub diagonal</param>
+            <returns>a square matrix</returns>
+        </member>
         <member name="M:Euclid.Matrix.CreateDiagonalMatrix(System.Double[])">
             <summary>Creates a diagonal matrix</summary>
             <param name="values">the values to be set on the diagonal</param>
@@ -4480,6 +4494,18 @@
         <member name="M:Euclid.Matrix.ToString">
             <summary>Returns a string that represents the matrix</summary>
             <returns>a string that represents the matrix</returns>
+        </member>
+        <member name="T:Euclid.Numerics.FiniteDifferenceScheme">
+            <summary>Represents a finite difference scheme</summary>
+        </member>
+        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.Implicit">
+            <summary>Implicit scheme</summary>
+        </member>
+        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.Explicit">
+            <summary>Explicit scheme</summary>
+        </member>
+        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.CrankNicholson">
+            <summary>Crank Nicholson scheme</summary>
         </member>
         <member name="T:Euclid.Numerics.DifferenceForm">
             <summary>
@@ -4766,26 +4792,32 @@
         <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YIncrements">
             <summary>Returns the Y increments</summary>
         </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE">
+            <summary>Represents a one-dimensional PDE</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration)">
+            <summary>Builds a univariate PDE (1D)</summary>
+            <param name="configuration">the grid configuration</param>
+        </member>
         <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Value(System.Int32,System.Int32)">
             <summary>Returns the grid value for a given date, x index</summary>
             <param name="t">the date index</param>
             <param name="xIndex">the x index</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(System.Double,System.Double,System.Double,Euclid.Vector)">
-            <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
-            <returns>a set of <c>Vector</c></returns>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(Euclid.Matrix,System.Int32,System.Int32)">
+            <summary>
+            Retropropagates for the given index to the previous step
+            using the given matrix representation of the PDE operator
+            </summary>
+            <param name="operatorMatrix">the operator matrix</param>
+            <param name="anteriorIndex">the index <b>to</b> which the data is retropropagated</param>
+            <param name="posteriorIndex">the index <b>from</b> which the data is retropropagated</param>
         </member>
         <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Item(System.Int32)">
             <summary>Sets the grid value for a given date</summary>
             <param name="t">the date index</param>
             <param name="value">the value grid</param>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.ExerciceFrontier(Euclid.Matrix,Euclid.Matrix)">
-            <summary>Computes the exercice frontier</summary>
-            <param name="expected">the expected value matrix</param>
-            <param name="intrinsic">the intrinsic value matrix</param>
-            <returns>a <c>Matrix</c></returns>
         </member>
         <member name="T:Euclid.Optimizers.PatternSearch">
             <summary>Pattern search class</summary>
@@ -6239,12 +6271,6 @@
         <member name="P:Euclid.Vector.Sum">
             <summary>Returns the sum of the values</summary>
         </member>
-        <member name="M:Euclid.Vector.LinearCombination(System.Double[],Euclid.Vector[])">
-            <summary>Builds a Vector as a linear combination of vectors</summary>
-            <param name="factors">the factors</param>
-            <param name="vectors">the vectors</param>
-            <returns>the Vector result of Sum i  fi*mi</returns>
-        </member>
         <member name="M:Euclid.Vector.op_Multiply(Euclid.Vector,System.Double)">
             <summary>Multiplies a <c>Vector</c> by a scalar</summary>
             <param name="v">the left hand side <c>Vector</c></param>
@@ -6347,7 +6373,7 @@
         </member>
         <member name="M:Euclid.Vector.Apply(System.Func{System.Double,System.Double})">
             <summary>Applies a function on the fields on a Vector</summary>
-            <param name="method"></param>
+            <param name="method">the function to apply</param>
             <returns>a Vector</returns>
         </member>
         <member name="M:Euclid.Vector.Quadratic(Euclid.Vector,Euclid.Matrix,Euclid.Vector)">
@@ -6381,6 +6407,18 @@
             <param name="upBound">the upper bounds</param>
             <param name="x">the vector to bound</param>
             <returns>a <c>Vector</c></returns>
+        </member>
+        <member name="M:Euclid.Vector.ExtractIthDimension(Euclid.Vector,System.Int32)">
+            <summary>Builds a vector set at zero, except for the sought dimension</summary>
+            <param name="vector">the input vector</param>
+            <param name="dimension">the sought dimension</param>
+            <returns>a <c>Vector</c></returns>
+        </member>
+        <member name="M:Euclid.Vector.LinearCombination(System.Double[],Euclid.Vector[])">
+            <summary>Builds a Vector as a linear combination of vectors</summary>
+            <param name="factors">the factors</param>
+            <param name="vectors">the vectors</param>
+            <returns>the Vector result of Sum i  fi*mi</returns>
         </member>
         <member name="M:Euclid.Vector.Create(System.Double,Euclid.Vector,System.Double,Euclid.Vector)">
             <summary>Creates a Vector made from the linear combination of two vectors</summary>

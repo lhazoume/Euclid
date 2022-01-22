@@ -142,6 +142,7 @@
     <Compile Include="Logging\LogRecord.cs" />
     <Compile Include="Logging\Level.cs" />
     <Compile Include="Matrix.cs" />
+    <Compile Include="Numerics\FiniteDifferenceScheme.cs" />
     <Compile Include="Numerics\DifferenceForm.cs" />
     <Compile Include="Numerics\Differentiator.cs" />
     <Compile Include="Numerics\IntegrationForm.cs" />
