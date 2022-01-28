@@ -198,6 +198,10 @@ namespace Euclid.Analytics
             return result;
         }
 
+        /// <summary>Returns the auto-correlogram for a data series (</summary>
+        /// <param name="dataSeries">the input data series</param>
+        /// <param name="lags">the lags for which the correlogram is calculated</param>
+        /// <returns>an array of <c>double</c></returns>
         public static double[] Correlogram(double[] dataSeries, int[] lags)
         {
             if (dataSeries == null) throw new ArgumentNullException(nameof(dataSeries));
