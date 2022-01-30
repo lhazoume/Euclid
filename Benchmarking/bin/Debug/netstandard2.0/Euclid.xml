@@ -243,6 +243,12 @@
             <param name="dataFrame">the underlying dataFrame</param>
             <returns>a dataframe</returns>
         </member>
+        <member name="M:Euclid.Analytics.InterRelations.Correlogram(System.Double[],System.Int32[])">
+            <summary>Returns the auto-correlogram for a data series (</summary>
+            <param name="dataSeries">the input data series</param>
+            <param name="lags">the lags for which the correlogram is calculated</param>
+            <returns>an array of <c>double</c></returns>
+        </member>
         <member name="T:Euclid.Analytics.LogisticModel">
             <summary>
             Stores the metrics of a logistic regression and allows prediction
@@ -3765,6 +3771,9 @@
             <param name="point2">The second point</param>
             <returns>the distance between the points (expressed in meters)</returns>
         </member>
+        <member name="T:Euclid.Helpers.Quantilizer">
+            <summary>Static helper for the quantilisation of time series</summary>
+        </member>
         <member name="M:Euclid.Helpers.Quantilizer.QuantileIntervals(System.Int32,System.Collections.Generic.IList{System.Double},System.Boolean)">
             <summary>Builds the empirical quantiles from a given set of datas</summary>
             <param name="buckets">the number of buckets (ie for quartiles, should be 4 though there are only 3 quartiles)</param>
@@ -4822,7 +4831,7 @@
         <member name="T:Euclid.Optimizers.PatternSearch">
             <summary>Pattern search class</summary>
         </member>
-        <member name="M:Euclid.Optimizers.PatternSearch.#ctor(Euclid.Vector,Euclid.Vector,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double)">
+        <member name="M:Euclid.Optimizers.PatternSearch.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},Euclid.Vector,Euclid.Vector,Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double)">
             <summary>Builds a Particle Swarm Optimizer</summary>
             <param name="fitnessFunction">the function to optimize</param>
             <param name="feasabilityFunction">the feasability function</param>
@@ -4938,111 +4947,6 @@
         </member>
         <member name="M:Euclid.Optimizers.GaussianHillClimb1D.Optimize">
             <summary>Optimizes the function</summary>
-        </member>
-        <member name="T:Euclid.Optimizers.Function">
-            <summary>Analytically differentiable function</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.#ctor(System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector})">
-            <summary>Builds an analytically differentiable function</summary>
-            <param name="value">the value function</param>
-            <param name="gradient">the gradient</param>
-        </member>
-        <member name="P:Euclid.Optimizers.Function.Value">
-            <summary>Returns the value function</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.Function.Gradient">
-            <summary>Returns the gradient function</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Multiply(Euclid.Optimizers.Function,System.Double)">
-            <summary>Builds a function made of the product of a function and a scalar</summary>
-            <param name="func">the function</param>
-            <param name="factor">the scalar</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Multiply(System.Double,Euclid.Optimizers.Function)">
-            <summary>Builds a function made of the product of a function and a scalar</summary>
-            <param name="func">the function</param>
-            <param name="factor">the scalar</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Addition(Euclid.Optimizers.Function,System.Double)">
-            <summary>Builds a function made of the addition of a function and a scalar</summary>
-            <param name="func">the function</param>
-            <param name="qty">the scalar</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Addition(System.Double,Euclid.Optimizers.Function)">
-            <summary>Builds a function made of the addition of a function and a scalar</summary>
-            <param name="func">the function</param>
-            <param name="qty">the scalar</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Subtraction(Euclid.Optimizers.Function,System.Double)">
-            <summary>Builds a function made of the substraction of a scalar to a function</summary>
-            <param name="func">the function</param>
-            <param name="qty">the scalar</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Subtraction(System.Double,Euclid.Optimizers.Function)">
-            <summary>Builds a function made of the substraction of a function to a scalar</summary>
-            <param name="func">the function</param>
-            <param name="qty">the scalar</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Division(Euclid.Optimizers.Function,System.Double)">
-            <summary>Builds a function made of the division of a function by a scalar</summary>
-            <param name="func">the function</param>
-            <param name="dividor">the dividor</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Addition(Euclid.Optimizers.Function,Euclid.Optimizers.Function)">
-            <summary>Builds a function made of the addition of two functions</summary>
-            <param name="lhs">the left-hand side function</param>
-            <param name="rhs">the right-hand side function</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Subtraction(Euclid.Optimizers.Function,Euclid.Optimizers.Function)">
-            <summary>Builds a function made of the substraction of two functions</summary>
-            <param name="lhs">the left-hand side function</param>
-            <param name="rhs">the right-hand side function</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.op_Division(Euclid.Optimizers.Function,Euclid.Optimizers.Function)">
-            <summary>Builds a function made of the division of two functions</summary>
-            <param name="lhs">the left-hand side function</param>
-            <param name="rhs">the right-hand side function</param>
-            <returns>a <c>Function</c> </returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.Power(Euclid.Optimizers.Function,System.Double)">
-            <summary>Elevates a function to a power</summary>
-            <param name="func">the function</param>
-            <param name="pow">the power</param>
-            <returns>a Function</returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.Sqrt(Euclid.Optimizers.Function)">
-            <summary>Applies square root to a Function</summary>
-            <param name="func">the function</param>
-            <returns>a Function</returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.Exp(Euclid.Optimizers.Function)">
-            <summary>Applies exponential to a Function</summary>
-            <param name="func">the function</param>
-            <returns>a Function</returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.Log(Euclid.Optimizers.Function)">
-            <summary>Applies Log to a Function</summary>
-            <param name="func">the function</param>
-            <returns>a Function</returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.Scalar(Euclid.Vector)">
-            <summary>Builds a function operating a scalar product vs the given vector</summary>
-            <param name="alt">the vector</param>
-            <returns>a Function</returns>
-        </member>
-        <member name="M:Euclid.Optimizers.Function.Quadratic(Euclid.Matrix)">
-            <summary>Builds a function operating a quadratic product over a given vector</summary>
-            <param name="a">the matrix</param>
-            <returns>a <c>Function</c></returns>
         </member>
         <member name="T:Euclid.Optimizers.GradientDescent">
             <summary>Class used to perform a gradient descent on any multivariate function</summary>
@@ -5164,7 +5068,7 @@
         <member name="T:Euclid.Optimizers.NelderMead">
             <summary>Nelder-Mead optimization class</summary>
         </member>
-        <member name="M:Euclid.Optimizers.NelderMead.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},Euclid.Vector[],Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Optimizers.NelderMead.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Nelder Mead optimizer</summary>
             <param name="feasibility">the feasibility function</param>
             <param name="function">the function to optimize</param>
@@ -5265,10 +5169,10 @@
         <member name="T:Euclid.Optimizers.ParticleSwarmOptimizer">
             <summary>Particle Swarm Optimization class</summary>
         </member>
-        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.#ctor(System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Particle Swarm Optimizer</summary>
-            <param name="fitnessFunction">the function to optimize</param>
-            <param name="feasabilityFunction">the feasability function</param>
+            <param name="function">the function to optimize</param>
+            <param name="feasability">the feasability function</param>
             <param name="optimizationType">the optimization type</param>
             <param name="initialPopulation">a generator of seed vectors</param>
             <param name="maxIterations">the maximum number of iterations</param>
@@ -5279,9 +5183,9 @@
             <param name="velocityInertia">the velocity inertia</param>
             <param name="shrinkageFactor">the shrinkage factor</param>
         </member>
-        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.#ctor(System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Func{Euclid.Vector,System.Double},System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.#ctor(System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
             <summary>Builds a Particle Swarm Optimizer</summary>
-            <param name="fitnessFunction">the function to optimize</param>
+            <param name="function">the function to optimize</param>
             <param name="optimizationType">the optimization type</param>
             <param name="initialPopulation">a generator of seed vectors</param>
             <param name="maxIterations">the maximum number of iterations</param>
@@ -5843,6 +5747,111 @@
         </member>
         <member name="F:Euclid.Solvers.SolverStatus.Diverged">
             <summary> The solver diverged </summary>
+        </member>
+        <member name="T:Euclid.Function">
+            <summary>Analytically differentiable function</summary>
+        </member>
+        <member name="M:Euclid.Function.#ctor(System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector})">
+            <summary>Builds an analytically differentiable function</summary>
+            <param name="value">the value function</param>
+            <param name="gradient">the gradient</param>
+        </member>
+        <member name="P:Euclid.Function.Value">
+            <summary>Returns the value function</summary>
+        </member>
+        <member name="P:Euclid.Function.Gradient">
+            <summary>Returns the gradient function</summary>
+        </member>
+        <member name="M:Euclid.Function.op_Multiply(Euclid.Function,System.Double)">
+            <summary>Builds a function made of the product of a function and a scalar</summary>
+            <param name="func">the function</param>
+            <param name="factor">the scalar</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Multiply(System.Double,Euclid.Function)">
+            <summary>Builds a function made of the product of a function and a scalar</summary>
+            <param name="func">the function</param>
+            <param name="factor">the scalar</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Addition(Euclid.Function,System.Double)">
+            <summary>Builds a function made of the addition of a function and a scalar</summary>
+            <param name="func">the function</param>
+            <param name="qty">the scalar</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Addition(System.Double,Euclid.Function)">
+            <summary>Builds a function made of the addition of a function and a scalar</summary>
+            <param name="func">the function</param>
+            <param name="qty">the scalar</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Subtraction(Euclid.Function,System.Double)">
+            <summary>Builds a function made of the substraction of a scalar to a function</summary>
+            <param name="func">the function</param>
+            <param name="qty">the scalar</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Subtraction(System.Double,Euclid.Function)">
+            <summary>Builds a function made of the substraction of a function to a scalar</summary>
+            <param name="func">the function</param>
+            <param name="qty">the scalar</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Division(Euclid.Function,System.Double)">
+            <summary>Builds a function made of the division of a function by a scalar</summary>
+            <param name="func">the function</param>
+            <param name="dividor">the dividor</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Addition(Euclid.Function,Euclid.Function)">
+            <summary>Builds a function made of the addition of two functions</summary>
+            <param name="lhs">the left-hand side function</param>
+            <param name="rhs">the right-hand side function</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Subtraction(Euclid.Function,Euclid.Function)">
+            <summary>Builds a function made of the substraction of two functions</summary>
+            <param name="lhs">the left-hand side function</param>
+            <param name="rhs">the right-hand side function</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.op_Division(Euclid.Function,Euclid.Function)">
+            <summary>Builds a function made of the division of two functions</summary>
+            <param name="lhs">the left-hand side function</param>
+            <param name="rhs">the right-hand side function</param>
+            <returns>a <c>Function</c> </returns>
+        </member>
+        <member name="M:Euclid.Function.Power(Euclid.Function,System.Double)">
+            <summary>Elevates a function to a power</summary>
+            <param name="func">the function</param>
+            <param name="pow">the power</param>
+            <returns>a Function</returns>
+        </member>
+        <member name="M:Euclid.Function.Sqrt(Euclid.Function)">
+            <summary>Applies square root to a Function</summary>
+            <param name="func">the function</param>
+            <returns>a Function</returns>
+        </member>
+        <member name="M:Euclid.Function.Exp(Euclid.Function)">
+            <summary>Applies exponential to a Function</summary>
+            <param name="func">the function</param>
+            <returns>a Function</returns>
+        </member>
+        <member name="M:Euclid.Function.Log(Euclid.Function)">
+            <summary>Applies Log to a Function</summary>
+            <param name="func">the function</param>
+            <returns>a Function</returns>
+        </member>
+        <member name="M:Euclid.Function.Scalar(Euclid.Vector)">
+            <summary>Builds a function operating a scalar product vs the given vector</summary>
+            <param name="alt">the vector</param>
+            <returns>a Function</returns>
+        </member>
+        <member name="M:Euclid.Function.Quadratic(Euclid.Matrix)">
+            <summary>Builds a function operating a quadratic product over a given vector</summary>
+            <param name="a">the matrix</param>
+            <returns>a <c>Function</c></returns>
         </member>
         <member name="T:Euclid.Fn">
              This class contains physical constants and special functions not found
@@ -6458,6 +6467,12 @@
             <param name="size">the Vector's size</param>
             <param name="value">the value for all components</param>
             <returns>a Vector</returns>
+        </member>
+        <member name="M:Euclid.Vector.CreateBaseVector(System.Int32,System.Int32)">
+            <summary>Creates a vector that is equal to zero (0.0) everywhere and one (1.0) for the given index</summary>
+            <param name="size">the vector's size</param>
+            <param name="index">the index of the non zero value</param>
+            <returns>a <c>Vector</c></returns>
         </member>
         <member name="M:Euclid.Vector.CreateRandom(System.Int32,Euclid.Distributions.Continuous.ContinuousDistribution)">
             <summary>Creates a Vector full of random variables  </summary>

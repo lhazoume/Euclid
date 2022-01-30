@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Euclid.Optimizers
+namespace Euclid
 {
     /// <summary>Analytically differentiable function</summary>
     public class Function
@@ -9,6 +9,8 @@ namespace Euclid.Optimizers
         private readonly Func<Vector, double> _value;
         private readonly Func<Vector, Vector> _gradient;
         #endregion
+
+        #region Constructor
 
         /// <summary>Builds an analytically differentiable function</summary>
         /// <param name="value">the value function</param>
@@ -19,11 +21,17 @@ namespace Euclid.Optimizers
             _gradient = gradient;
         }
 
+        #endregion
+
+        #region Accessors
+
         /// <summary>Returns the value function</summary>
         public Func<Vector, double> Value => _value;
 
         /// <summary>Returns the gradient function</summary>
         public Func<Vector, Vector> Gradient => _gradient;
+        
+        #endregion
 
         #region Operators
         /// <summary>Builds a function made of the product of a function and a scalar</summary>

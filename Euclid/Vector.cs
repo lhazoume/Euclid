@@ -541,6 +541,21 @@ namespace Euclid
             return new Vector(size, value);
         }
 
+        /// <summary>Creates a vector that is equal to zero (0.0) everywhere and one (1.0) for the given index</summary>
+        /// <param name="size">the vector's size</param>
+        /// <param name="index">the index of the non zero value</param>
+        /// <returns>a <c>Vector</c></returns>
+        public static Vector CreateBaseVector(int size, int index)
+        {
+            if (index < 0 || index >= size)
+            {
+                Vector result = new Vector(size, 0);
+                result[index] = 1;
+                return result;
+            }
+            throw new ArgumentOutOfRangeException(nameof(index));
+        }
+
         /// <summary>Creates a Vector full of random variables  </summary>
         /// <param name="size">the vector's size</param>
         /// <param name="distribution">the distribution</param>

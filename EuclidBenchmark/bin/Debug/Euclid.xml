@@ -243,6 +243,12 @@
             <param name="dataFrame">the underlying dataFrame</param>
             <returns>a dataframe</returns>
         </member>
+        <member name="M:Euclid.Analytics.InterRelations.Correlogram(System.Double[],System.Int32[])">
+            <summary>Returns the auto-correlogram for a data series (</summary>
+            <param name="dataSeries">the input data series</param>
+            <param name="lags">the lags for which the correlogram is calculated</param>
+            <returns>an array of <c>double</c></returns>
+        </member>
         <member name="T:Euclid.Analytics.LogisticModel">
             <summary>
             Stores the metrics of a logistic regression and allows prediction
@@ -3764,6 +3770,9 @@
             <param name="point1">The first point</param>
             <param name="point2">The second point</param>
             <returns>the distance between the points (expressed in meters)</returns>
+        </member>
+        <member name="T:Euclid.Helpers.Quantilizer">
+            <summary>Static helper for the quantilisation of time series</summary>
         </member>
         <member name="M:Euclid.Helpers.Quantilizer.QuantileIntervals(System.Int32,System.Collections.Generic.IList{System.Double},System.Boolean)">
             <summary>Builds the empirical quantiles from a given set of datas</summary>

@@ -170,7 +170,7 @@
     <Compile Include="Serialization\XmlHelper.cs" />
     <Compile Include="Solvers\Descents.cs" />
     <Compile Include="Solvers\EndCriteria.cs" />
-    <Compile Include="Optimizers\Function.cs" />
+    <Compile Include="Function.cs" />
     <Compile Include="Optimizers\GradientDescent.cs" />
     <Compile Include="Solvers\ISingleVariableSolver.cs" />
     <Compile Include="Optimizers\LineSearch.cs" />

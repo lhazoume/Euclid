@@ -38,13 +38,15 @@ namespace Euclid.Optimizers
         /// <param name="rho">the contaction coefficient</param>
         /// <param name="sigma">the shrink coefficient</param>
         public NelderMead(Func<Vector, bool> feasibility,
-            Func<Vector, double> function, Vector[] initialSimplex,
-            OptimizationType optimizationType, int maxIterations,
+            Func<Vector, double> function,
+            IEnumerable<Vector> initialSimplex,
+            OptimizationType optimizationType,
+            int maxIterations,
             double epsilon = 1e-8, double alpha = 1, double gamma = 2,
             double rho = 0.5, double sigma = 0.5)
         {
             #region Bounds and dimension
-            _dimension = initialSimplex[0].Size;
+            _dimension = initialSimplex.ElementAt(0).Size;
             #endregion
 
             #region Algorithm parameters
@@ -99,7 +101,7 @@ namespace Euclid.Optimizers
 
         #endregion
 
-        #region Nelder Mead params
+        #region Accessors
 
         /// <summary> Returns the problem's dimension</summary>
         public int Dimension => _dimension;
