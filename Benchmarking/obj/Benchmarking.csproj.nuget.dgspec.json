@@ -67,7 +67,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -75,7 +75,12 @@
       "restore": {
         "projectUniqueName": "C:\\Users\\Utilisateur\\source\\repos\\Euclid\\Euclid\\Euclid.csproj",
         "projectName": "Euclid",
-        "projectPath": "C:\\Users\\Utilisateur\\source\\repos\\Euclid\\Euclid\\Euclid.csproj"
+        "projectPath": "C:\\Users\\Utilisateur\\source\\repos\\Euclid\\Euclid\\Euclid.csproj",
+        "frameworks": {
+          "net452": {
+            "projectReferences": {}
+          }
+        }
       },
       "frameworks": {
         "net452": {}
