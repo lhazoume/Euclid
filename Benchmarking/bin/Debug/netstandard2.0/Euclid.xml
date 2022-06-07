@@ -4,34 +4,14 @@
         <name>Euclid</name>
     </assembly>
     <members>
-        <member name="T:Euclid.Analytics.Entropy">
-            <summary>Helper class for entropy calculations</summary>
+        <member name="M:Euclid.Analytics.Clustering.KMeans`1.#ctor(System.Func{System.Collections.Generic.IEnumerable{`0},`0},System.Func{`0,`0,System.Double},System.Int32)">
+            TODO: harden this function
         </member>
-        <member name="M:Euclid.Analytics.Entropy.EntropyMetric(System.Int32[])">
-            <summary>Entropy is a measure of unpredictability of information content. Here is used Shannon's entropy expressed in nat (base e)</summary>
-            <param name="occurences">the occurences in each bucket</param>
-            <returns>the entropy in natural bits of information</returns>
-        </member>
-        <member name="M:Euclid.Analytics.Entropy.InformationGain(System.Collections.Generic.List{System.Int32[]})">
-            <summary>Change in information entropy from a prior state that takes some more information</summary>
-            <param name="occurencesBuckets">the occurences in each bucket</param>
-            <returns></returns>
-        </member>
-        <member name="M:Euclid.Analytics.Entropy.Redundancy(System.Int32[0:,0:])">
-            <summary>Redundancy of information in the pair of variables</summary>
-            <param name="occurences">the occurences in each bucket</param>
-            <returns> 0 when the variables are independent and 1 when they are totally redundant</returns>
-        </member>
-        <member name="M:Euclid.Analytics.Entropy.Uncertainty(System.Int32[0:,0:],System.Int32[])">
-            <summary>The uncertainty coefficient measures the validity of a classification</summary>
-            <param name="occurences">the occurences in each cross bucket</param>
-            <param name="normalizerOccurences">the normalizing variable occurence</param>
-            <returns>the fraction of additional information</returns>
-        </member>
-        <member name="M:Euclid.Analytics.Entropy.MutualInformation(System.Int32[0:,0:])">
-            <summary>Mutual information measures the amount of information that can be obtained about one random variable by observing another</summary>
-            <param name="occurences">the occurences in each bucket</param>
-            <returns>the mutual information in natural bits of information</returns>
+        <member name="M:Euclid.Analytics.Clustering.KMeans`1.Cluster(System.Collections.Generic.IList{`0},System.Int32)">
+            <summary>Provides the centroïds for the </summary>
+            <param name="data">the data to cluster</param>
+            <param name="numberOfClasses">the target number of classes</param>
+            <returns>an Enumerable of centroïds</returns>
         </member>
         <member name="T:Euclid.Analytics.Clustering.IDecisionNode`2">
             <summary>Interface for decision tree node</summary>
@@ -129,6 +109,35 @@
         </member>
         <member name="P:Euclid.Analytics.Clustering.PrettyPredicate`1.Clone">
             <summary>Returns a clone of the pretty predicate</summary>
+        </member>
+        <member name="T:Euclid.Analytics.Entropy">
+            <summary>Helper class for entropy calculations</summary>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.EntropyMetric(System.Int32[])">
+            <summary>Entropy is a measure of unpredictability of information content. Here is used Shannon's entropy expressed in nat (base e)</summary>
+            <param name="occurences">the occurences in each bucket</param>
+            <returns>the entropy in natural bits of information</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.InformationGain(System.Collections.Generic.List{System.Int32[]})">
+            <summary>Change in information entropy from a prior state that takes some more information</summary>
+            <param name="occurencesBuckets">the occurences in each bucket</param>
+            <returns></returns>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.Redundancy(System.Int32[0:,0:])">
+            <summary>Redundancy of information in the pair of variables</summary>
+            <param name="occurences">the occurences in each bucket</param>
+            <returns> 0 when the variables are independent and 1 when they are totally redundant</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.Uncertainty(System.Int32[0:,0:],System.Int32[])">
+            <summary>The uncertainty coefficient measures the validity of a classification</summary>
+            <param name="occurences">the occurences in each cross bucket</param>
+            <param name="normalizerOccurences">the normalizing variable occurence</param>
+            <returns>the fraction of additional information</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Entropy.MutualInformation(System.Int32[0:,0:])">
+            <summary>Mutual information measures the amount of information that can be obtained about one random variable by observing another</summary>
+            <param name="occurences">the occurences in each bucket</param>
+            <returns>the mutual information in natural bits of information</returns>
         </member>
         <member name="T:Euclid.Analytics.ErrorFunctions.ManhattanError">
             <summary>
