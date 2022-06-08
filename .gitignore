@@ -16,3 +16,6 @@ EuclidTests/obj
 *.ide-shm
 *.ide-wal
 *.lastcodeanalysissucceeded
+*.json
+*.v2
+*.props

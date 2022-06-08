@@ -38,3 +38,16 @@ C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benc
 C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.dll
 C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.pdb
 C:\Users\lhazoume\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
+D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Benchmarking.deps.json
+D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Benchmarking.dll
+D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Benchmarking.pdb
+D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.dll
+D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.pdb
+D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.xml
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csprojAssemblyReference.cache
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.AssemblyInfoInputs.cache
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.AssemblyInfo.cs
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.CoreCompileInputs.cache
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.CopyComplete
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.dll
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.pdb
