@@ -877,6 +877,28 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>Builds a square tridiagonal matrix</summary>
+        /// <param name="size">the size of the matrix</param>
+        /// <param name="diagonal">the value on the matrix's diagonal</param>
+        /// <param name="upper">the value on the matrix's first super diagonal</param>
+        /// <param name="lower">the value on the matrix's first sub diagonal</param>
+        /// <returns>a square matrix</returns>
+        public static Matrix CreateTridiagonalMatrix(int size, double diagonal, double upper, double lower)
+        {
+            Matrix result = Create(size, size);
+
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                {
+                    int k = i * size + j;
+                    if (i == j) result[k] = diagonal;
+                    if (j == i - 1) result[k] = lower;
+                    if (j == i + 1) result[k] = upper;
+                }
+
+            return result;
+        }
+
         /// <summary>Creates a diagonal matrix</summary>
         /// <param name="values">the values to be set on the diagonal</param>
         /// <returns>a <c>Matrix</c> </returns>

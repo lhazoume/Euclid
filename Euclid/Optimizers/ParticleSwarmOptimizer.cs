@@ -24,8 +24,8 @@ namespace Euclid.Optimizers
         #endregion
 
         /// <summary>Builds a Particle Swarm Optimizer</summary>
-        /// <param name="fitnessFunction">the function to optimize</param>
-        /// <param name="feasabilityFunction">the feasability function</param>
+        /// <param name="function">the function to optimize</param>
+        /// <param name="feasability">the feasability function</param>
         /// <param name="optimizationType">the optimization type</param>
         /// <param name="initialPopulation">a generator of seed vectors</param>
         /// <param name="maxIterations">the maximum number of iterations</param>
@@ -35,10 +35,10 @@ namespace Euclid.Optimizers
         /// <param name="attractionToOverallBest">the attraction to overall best factor</param>
         /// <param name="velocityInertia">the velocity inertia</param>
         /// <param name="shrinkageFactor">the shrinkage factor</param>
-        public ParticleSwarmOptimizer(IEnumerable<Vector> initialPopulation,
+        public ParticleSwarmOptimizer(Func<Vector, bool> feasability,
+            Func<Vector, double> function,
+            IEnumerable<Vector> initialPopulation,
             OptimizationType optimizationType,
-            Func<Vector, double> fitnessFunction,
-            Func<Vector, bool> feasabilityFunction,
             int maxIterations,
             int maxStaticIterations,
             double epsilon = 1e-8,
@@ -49,13 +49,13 @@ namespace Euclid.Optimizers
             if (initialPopulation.Count() <= 1)
                 throw new ArgumentOutOfRangeException(nameof(initialPopulation), "The swarm size should be at least 2");
 
-            _initialPopulation = initialPopulation.Where(feasabilityFunction).ToArray();
+            _initialPopulation = initialPopulation.Where(feasability).ToArray();
             _swarmSize = _initialPopulation.Length;
             #endregion
 
             #region Feasibility and fitness
-            _isFeasible = feasabilityFunction;
-            _fitnessFunction = fitnessFunction;
+            _isFeasible = feasability;
+            _fitnessFunction = function;
             #endregion
 
             if (attractionToOverallBest < 0 || attractionToParticleBest < 0 || velocityInertia < 0)
@@ -76,13 +76,13 @@ namespace Euclid.Optimizers
             _maxIterations = maxIterations;
             _maxStaticIterations = maxStaticIterations;
 
-            _fitnessFunction = fitnessFunction;
+            _fitnessFunction = function;
             _convergence = new List<Tuple<Vector, double>>();
             _status = SolverStatus.NotRan;
         }
 
         /// <summary>Builds a Particle Swarm Optimizer</summary>
-        /// <param name="fitnessFunction">the function to optimize</param>
+        /// <param name="function">the function to optimize</param>
         /// <param name="optimizationType">the optimization type</param>
         /// <param name="initialPopulation">a generator of seed vectors</param>
         /// <param name="maxIterations">the maximum number of iterations</param>
@@ -91,9 +91,9 @@ namespace Euclid.Optimizers
         /// <param name="attractionToParticleBest">the attraction to particle best factor</param>
         /// <param name="attractionToOverallBest">the attraction to overall best factor</param>
         /// <param name="velocityInertia">the velocity inertia</param>
-        public ParticleSwarmOptimizer(IEnumerable<Vector> initialPopulation,
-            OptimizationType optimizationType,
-            Func<Vector, double> fitnessFunction,
+        public ParticleSwarmOptimizer(Func<Vector, double> function, 
+            IEnumerable<Vector> initialPopulation,
+            OptimizationType optimizationType,            
             int maxIterations,
             int maxStaticIterations,
             double epsilon = 1e-8, double attractionToParticleBest = 2,
@@ -109,7 +109,7 @@ namespace Euclid.Optimizers
 
             #region Feasibility and fitness
             _isFeasible = v => true;
-            _fitnessFunction = fitnessFunction;
+            _fitnessFunction = function;
             #endregion
 
             if (attractionToOverallBest < 0 || attractionToParticleBest < 0 || velocityInertia < 0)
@@ -129,7 +129,7 @@ namespace Euclid.Optimizers
             _maxIterations = maxIterations;
             _maxStaticIterations = maxStaticIterations;
 
-            _fitnessFunction = fitnessFunction;
+            _fitnessFunction = function;
             _convergence = new List<Tuple<Vector, double>>();
             _status = SolverStatus.NotRan;
         }

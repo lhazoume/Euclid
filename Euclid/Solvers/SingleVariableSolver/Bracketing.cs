@@ -98,13 +98,13 @@ namespace Euclid.Solvers.SingleVariableSolver
 
         #region Get
         /// <summary>Returns the final error</summary>
-        public double Error=> _error;
+        public double Error => _error;
 
         /// <summary>The result of the solver</summary>
-        public double Result => _result; 
+        public double Result => _result;
 
         /// <summary>The final status of the solver</summary>
-        public SolverStatus Status=> _status;
+        public SolverStatus Status => _status;
 
         /// <summary>Gets the details of the convergence (value, error) </summary>
         public List<Tuple<double, double>> Convergence
@@ -130,14 +130,16 @@ namespace Euclid.Solvers.SingleVariableSolver
             _convergence.Clear();
 
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations);
+            double fu = _f(_upperBound) - target,
+                fl = _f(_lowerBound) - target,
+                fm;
             while (!endCriteria.ShouldStop(_error))
             {
-                double fu = _f(_upperBound) - target,
-                    fl = _f(_lowerBound) - target,
-                    m = _method == BracketingMethod.Dichotomy ?
+                double m = _method == BracketingMethod.Dichotomy ?
                         0.5 * (_upperBound + _lowerBound) :
-                        _upperBound - fu * (_upperBound - _lowerBound) / (fu - fl),
-                    _error = _f(m) - target;
+                        _upperBound - fu * (_upperBound - _lowerBound) / (fu - fl);
+                fm = _f(m) - target;
+                _error = fm;
                 if (_trackConvergence)
                     _convergence.Add(new Tuple<double, double>(m, _error));
 
@@ -156,9 +158,16 @@ namespace Euclid.Solvers.SingleVariableSolver
                 }
 
                 if (Math.Sign(_error) == Math.Sign(fl))
+                {
                     _lowerBound = m;
+                    fl = fm;
+                }
                 else
+                {
                     _upperBound = m;
+                    fu = fm;
+                }
+
             }
             _status = endCriteria.Status;
             _result = 0.5 * (_upperBound + _lowerBound);

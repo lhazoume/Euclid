@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analytics\Clustering\KMeans.cs" />
     <Compile Include="Analytics\DecisionTree\DecisionTreeBarrierNode.cs" />
     <Compile Include="Analytics\Entropy.cs" />
     <Compile Include="Analytics\Clustering\ClusteringContext.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Logging\LogRecord.cs" />
     <Compile Include="Logging\Level.cs" />
     <Compile Include="Matrix.cs" />
+    <Compile Include="Numerics\FiniteDifferenceScheme.cs" />
     <Compile Include="Numerics\DifferenceForm.cs" />
     <Compile Include="Numerics\Differentiator.cs" />
     <Compile Include="Numerics\IntegrationForm.cs" />
@@ -169,7 +171,7 @@
     <Compile Include="Serialization\XmlHelper.cs" />
     <Compile Include="Solvers\Descents.cs" />
     <Compile Include="Solvers\EndCriteria.cs" />
-    <Compile Include="Optimizers\Function.cs" />
+    <Compile Include="Function.cs" />
     <Compile Include="Optimizers\GradientDescent.cs" />
     <Compile Include="Solvers\ISingleVariableSolver.cs" />
     <Compile Include="Optimizers\LineSearch.cs" />

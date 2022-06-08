@@ -9,6 +9,7 @@ namespace Euclid.Optimizers
     /// <summary>Nelder-Mead optimization class</summary>
     public class NelderMead
     {
+        #region Variables
         private readonly int _dimension, _maxIterations;
 
         private readonly Func<Vector, bool> _feasibility;
@@ -23,10 +24,10 @@ namespace Euclid.Optimizers
 
         private readonly double _alpha, _gamma, _rho, _sigma;
         private double _epsilon;
+        #endregion
 
         /// <summary>Builds a Nelder Mead optimizer</summary>
-        /// <param name="lowerBounds">the lower bounds of the space</param>
-        /// <param name="upperBounds">the upper bounds of the space</param>
+        /// <param name="feasibility">the feasibility function</param>
         /// <param name="function">the function to optimize</param>
         /// <param name="optimizationType">the optimization type</param>
         /// <param name="initialSimplex">the initial population</param>
@@ -38,14 +39,14 @@ namespace Euclid.Optimizers
         /// <param name="sigma">the shrink coefficient</param>
         public NelderMead(Func<Vector, bool> feasibility,
             Func<Vector, double> function,
-            Vector[] initialSimplex,
+            IEnumerable<Vector> initialSimplex,
             OptimizationType optimizationType,
             int maxIterations,
-            double epsilon = 1e-8,
-            double alpha = 1, double gamma = 2, double rho = 0.5, double sigma = 0.5)
+            double epsilon = 1e-8, double alpha = 1, double gamma = 2,
+            double rho = 0.5, double sigma = 0.5)
         {
             #region Bounds and dimension
-            _dimension = initialSimplex[0].Size;
+            _dimension = initialSimplex.ElementAt(0).Size;
             #endregion
 
             #region Algorithm parameters
@@ -100,7 +101,7 @@ namespace Euclid.Optimizers
 
         #endregion
 
-        #region Nelder Mead params
+        #region Accessors
 
         /// <summary> Returns the problem's dimension</summary>
         public int Dimension => _dimension;

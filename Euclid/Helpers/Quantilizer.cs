@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Euclid.Helpers
 {
+    /// <summary>Static helper for the quantilisation of time series</summary>
     public static class Quantilizer
     {
         /// <summary>Builds the empirical quantiles from a given set of datas</summary>

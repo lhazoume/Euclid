@@ -66,16 +66,7 @@ namespace Euclid
         #region Norms and sums
 
         /// <summary>Returns the sum of the absolute values</summary>
-        public double Norm1
-        {
-            get
-            {
-                double result = 0;
-                for (int k = 0; k < _data.Length; k++)
-                    result += Math.Abs(_data[k]);
-                return result;
-            }
-        }
+        public double Norm1 => _data.Sum(d => Math.Abs(d));
 
         /// <summary>Returns the square root of the sum of squares</summary>
         public double Norm2 => Math.Sqrt(this.SumOfSquares);
@@ -98,25 +89,6 @@ namespace Euclid
         /// <summary>Returns the sum of the values</summary>
         public double Sum => _data.Sum();
 
-        /// <summary>Builds a Vector as a linear combination of vectors</summary>
-        /// <param name="factors">the factors</param>
-        /// <param name="vectors">the vectors</param>
-        /// <returns>the Vector result of Sum i  fi*mi</returns>
-        public static Vector LinearCombination(double[] factors, Vector[] vectors)
-        {
-            if (factors.Length != vectors.Length) throw new ArgumentException("the vectors do not match the factors");
-            if (vectors.Any(m => m is null)) throw new ArgumentNullException(nameof(vectors));
-            if (vectors.Any(m => m.Size != vectors[0].Size)) throw new ArgumentException("Vectors must have the same dimensions!");
-
-            Vector r = Vector.Create(vectors[0].Size);
-            Parallel.For(0, r.Size, k =>
-            {
-                for (int i = 0; i < factors.Length; i++)
-                    r[k] += factors[i] * vectors[i][k];
-            });
-
-            return r;
-        }
         #endregion
 
         #region Operators
@@ -315,13 +287,6 @@ namespace Euclid
 
         #endregion
 
-        public static Vector ExtractIthDimension(Vector vector, int dimension)
-        {
-            Vector result = Create(vector.Size);
-            result[dimension] = vector[dimension];
-            return result;
-        }
-
         /// <summary>Returns the scalar product of the Vectors</summary>
         /// <param name="v1">the left hand side</param>
         /// <param name="v2">the right hand side</param>
@@ -337,6 +302,9 @@ namespace Euclid
                 result += v1[k] * v2[k];
             return result;
         }
+        #endregion
+
+        #region Static transformers or aggregators
 
         /// <summary>Aggregates a list of <c>Vector</c></summary>
         /// <param name="vectors">the vectors to sum</param>
@@ -363,7 +331,7 @@ namespace Euclid
         }
 
         /// <summary>Applies a function on the fields on a Vector</summary>
-        /// <param name="method"></param>
+        /// <param name="method">the function to apply</param>
         /// <returns>a Vector</returns>
         public Vector Apply(Func<double, double> method)
         {
@@ -467,6 +435,41 @@ namespace Euclid
             throw new RankException("The vectors have different sizes.");
         }
 
+        /// <summary>Builds a vector set at zero, except for the sought dimension</summary>
+        /// <param name="vector">the input vector</param>
+        /// <param name="dimension">the sought dimension</param>
+        /// <returns>a <c>Vector</c></returns>
+        public static Vector ExtractIthDimension(Vector vector, int dimension)
+        {
+            Vector result = Create(vector.Size);
+            result[dimension] = vector[dimension];
+            return result;
+        }
+
+        /// <summary>Builds a Vector as a linear combination of vectors</summary>
+        /// <param name="factors">the factors</param>
+        /// <param name="vectors">the vectors</param>
+        /// <returns>the Vector result of Sum i  fi*mi</returns>
+        public static Vector LinearCombination(double[] factors, Vector[] vectors)
+        {
+            if (factors.Length != vectors.Length) throw new ArgumentException("the vectors do not match the factors");
+            if (vectors.Any(m => m is null)) throw new ArgumentNullException(nameof(vectors));
+            if (vectors.Any(m => m.Size != vectors[0].Size)) throw new ArgumentException("Vectors must have the same dimensions!");
+
+            Vector r = Vector.Create(vectors[0].Size);
+            Parallel.For(0, r.Size, k =>
+            {
+                for (int i = 0; i < factors.Length; i++)
+                    r[k] += factors[i] * vectors[i][k];
+            });
+
+            return r;
+        }
+
+        #endregion
+
+        #region Create
+
         /// <summary>Creates a Vector made from the linear combination of two vectors</summary>
         /// <param name="f1">the left hand side factor</param>
         /// <param name="v1">the left hand side vector</param>
@@ -504,9 +507,6 @@ namespace Euclid
                 r[k] = f1 * v1[k] + f2 * v2[k] + f3 * v3[k];
             return r;
         }
-        #endregion
-
-        #region Create
 
         /// <summary>Creates a Vector from a set of data</summary>
         /// <param name="data">the data set</param>
@@ -539,6 +539,21 @@ namespace Euclid
         public static Vector Create(int size, double value)
         {
             return new Vector(size, value);
+        }
+
+        /// <summary>Creates a vector that is equal to zero (0.0) everywhere and one (1.0) for the given index</summary>
+        /// <param name="size">the vector's size</param>
+        /// <param name="index">the index of the non zero value</param>
+        /// <returns>a <c>Vector</c></returns>
+        public static Vector CreateBaseVector(int size, int index)
+        {
+            if (index < 0 || index >= size)
+            {
+                Vector result = new Vector(size, 0);
+                result[index] = 1;
+                return result;
+            }
+            throw new ArgumentOutOfRangeException(nameof(index));
         }
 
         /// <summary>Creates a Vector full of random variables  </summary>
