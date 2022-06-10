@@ -14,13 +14,13 @@ namespace Euclid.DataStructures.IndexedSeries
     public class Slice<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
-        private readonly Header<TV> _labels;
+        private readonly IHeader<TV> _labels;
         private TU[] _data;
         private T _legend;
         #endregion
 
         #region Constructors
-        private Slice(Header<TV> labels, T legend, IEnumerable<TU> data)
+        private Slice(IHeader<TV> labels, T legend, IEnumerable<TU> data)
         {
             _data = data.ToArray();
             _labels = labels.Clone();

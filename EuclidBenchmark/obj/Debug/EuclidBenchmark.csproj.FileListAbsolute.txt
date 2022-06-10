@@ -42,6 +42,7 @@ C:\Users\lhazoume\source\repos\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.
 C:\Users\lhazoume\source\repos\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csproj.CopyComplete
 C:\Users\lhazoume\source\repos\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.exe
 C:\Users\lhazoume\source\repos\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.pdb
+D:\IT\Github\Euclid\EuclidBenchmark\bin\Debug\EuclidBenchmark.exe.config
 D:\IT\Github\Euclid\EuclidBenchmark\bin\Debug\EuclidBenchmark.exe
 D:\IT\Github\Euclid\EuclidBenchmark\bin\Debug\EuclidBenchmark.pdb
 D:\IT\Github\Euclid\EuclidBenchmark\bin\Debug\Benchmarking.dll
@@ -49,7 +50,8 @@ D:\IT\Github\Euclid\EuclidBenchmark\bin\Debug\Euclid.dll
 D:\IT\Github\Euclid\EuclidBenchmark\bin\Debug\Benchmarking.pdb
 D:\IT\Github\Euclid\EuclidBenchmark\bin\Debug\Euclid.pdb
 D:\IT\Github\Euclid\EuclidBenchmark\bin\Debug\Euclid.xml
-D:\IT\Github\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csprojAssemblyReference.cache
+D:\IT\Github\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csproj.AssemblyReference.cache
+D:\IT\Github\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csproj.SuggestedBindingRedirects.cache
 D:\IT\Github\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csproj.CoreCompileInputs.cache
 D:\IT\Github\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.csproj.CopyComplete
 D:\IT\Github\Euclid\EuclidBenchmark\obj\Debug\EuclidBenchmark.exe

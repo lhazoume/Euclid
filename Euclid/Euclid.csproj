@@ -123,6 +123,10 @@
     <Compile Include="Arithmetics\BinomialCoefficients.cs" />
     <Compile Include="DataStructures\CachedFunction.cs" />
     <Compile Include="DataStructures\EndlessStack.cs" />
+    <Compile Include="DataStructures\IndexedSeries\IHeader.cs" />
+    <Compile Include="DataStructures\IndexedSeries\SortedHeader.cs" />
+    <Compile Include="DataStructures\IndexedSeries\TimeDataFrame.cs" />
+    <Compile Include="DataStructures\SortedMap.cs" />
     <Compile Include="DataStructures\TreeNode.cs" />
     <Compile Include="Extensions\Subsets.cs" />
     <Compile Include="Complex.cs" />

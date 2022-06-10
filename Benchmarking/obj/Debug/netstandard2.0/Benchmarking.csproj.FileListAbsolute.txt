@@ -44,7 +44,8 @@ D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Benchmarking.pdb
 D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.dll
 D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.pdb
 D:\IT\Github\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.xml
-D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csprojAssemblyReference.cache
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.AssemblyReference.cache
+D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
 D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.AssemblyInfoInputs.cache
 D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.AssemblyInfo.cs
 D:\IT\Github\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.CoreCompileInputs.cache

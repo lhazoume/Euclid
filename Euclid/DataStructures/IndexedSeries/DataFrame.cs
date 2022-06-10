@@ -14,13 +14,13 @@ namespace Euclid.DataStructures.IndexedSeries
     public class DataFrame<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
-        private readonly Header<TV> _labels;
-        private readonly Header<T> _legends;
-        private TU[,] _data;
+        protected IHeader<TV> _labels;
+        protected IHeader<T> _legends;
+        protected TU[,] _data;
         #endregion
 
         #region Constructors
-        private DataFrame(IList<TV> labels, IList<T> legends, TU[,] data)
+        protected DataFrame(IList<TV> labels, IList<T> legends, TU[,] data)
         {
             _data = Arrays.Clone(data);
             _labels = new Header<TV>(labels);
@@ -382,7 +382,7 @@ namespace Euclid.DataStructures.IndexedSeries
         public Slice<T, TU, TV> GetSliceAt(T legend)
         {
             int index = _legends[legend];
-            if (index == -1) throw new ArgumentException(string.Format("Legend [{0}] was not found", legend.ToString()));
+            if (index == -1) throw new ArgumentException($"Legend [{legend.ToString()}] was not found");
             TU[] result = new TU[_labels.Count];
             for (int j = 0; j < _labels.Count; j++)
                 result[j] = _data[index, j];

@@ -17,14 +17,14 @@ namespace Euclid.DataStructures.IndexedSeries
         #region Declarations
         private TV _label;
         private TU[] _data;
-        private Header<T> _legends;
+        private IHeader<T> _legends;
         #endregion
 
         /// <summary>Builds a <c>Series</c></summary>
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
-        private Series(TV label, Header<T> legends, TU[] data)
+        private Series(TV label, IHeader<T> legends, TU[] data)
         {
             _data = Arrays.Clone(data);
             _label = label;
