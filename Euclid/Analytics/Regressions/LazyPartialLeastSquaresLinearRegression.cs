@@ -33,7 +33,7 @@ namespace Euclid.Analytics.Regressions
             if (y == null) throw new ArgumentNullException(nameof(y));
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
 
-            _x = x.Clone();
+            _x = x.Clone<DataFrame<T, double, TV>>();
             _y = y.Clone();
             _returnAverageIfFailed = false;
             _withConstant = true;

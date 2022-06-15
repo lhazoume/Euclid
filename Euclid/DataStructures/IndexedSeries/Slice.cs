@@ -210,7 +210,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="legend">the legend</param>
         /// <param name="data">the data</param>
         /// <returns>a <c>Slice</c></returns>
-        public static Slice<T, TU, TV> Create(Header<TV> labels, T legend, IEnumerable<TU> data)
+        public static Slice<T, TU, TV> Create(IHeader<TV> labels, T legend, IEnumerable<TU> data)
         {
             if (labels == null) throw new ArgumentNullException(nameof(labels));
 

@@ -225,7 +225,7 @@ namespace Euclid.DataStructures.IndexedSeries
             for (int i = 0; i < _legends.Count; i++)
                 for (int k = 0; k < _layers.Count; k++)
                     result[i, k] = _data[i, labelIndex, k];
-            return DataFrame<T, TW, TV>.Create(_layers.ToList(), _legends.ToList(), result);
+            return DataFrame<T, TW, TV>.Create<DataFrame<T, TW, TV>>(_layers.ToList(), _legends.ToList(), result);
         }
 
         /// <summary>Gets the dataframe for a given layer</summary>
@@ -239,7 +239,7 @@ namespace Euclid.DataStructures.IndexedSeries
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     result[i, j] = _data[i, j, layerIndex];
-            return DataFrame<T, TW, TU>.Create(_labels.ToList(), _legends.ToList(), result);
+            return DataFrame<T, TW, TU>.Create<DataFrame<T, TW, TU>>(_labels.ToList(), _legends.ToList(), result);
         }
 
         #endregion

@@ -123,6 +123,7 @@
     <Compile Include="Arithmetics\BinomialCoefficients.cs" />
     <Compile Include="DataStructures\CachedFunction.cs" />
     <Compile Include="DataStructures\EndlessStack.cs" />
+    <Compile Include="DataStructures\IndexedSeries\IDataFrame.cs" />
     <Compile Include="DataStructures\IndexedSeries\IHeader.cs" />
     <Compile Include="DataStructures\IndexedSeries\SortedHeader.cs" />
     <Compile Include="DataStructures\IndexedSeries\TimeDataFrame.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Optimizers\GaussianHillClimb1D.cs" />
     <Compile Include="Polynomial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\BinarySearch.cs" />
     <Compile Include="Serialization\CsvHelper.cs" />
     <Compile Include="Serialization\IXmlable.cs" />
     <Compile Include="Serialization\ICSVable.cs" />

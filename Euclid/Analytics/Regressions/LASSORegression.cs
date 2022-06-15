@@ -32,7 +32,7 @@ namespace Euclid.Analytics.Regressions
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
             if (regularization <= 0) throw new ArgumentException("the regularization factor should be positive");
 
-            _x = x.Clone();
+            _x = x.Clone<DataFrame<T, double, TV>>();
             _y = y.Clone();
             _computeErr = true;
             _regularization = regularization;
