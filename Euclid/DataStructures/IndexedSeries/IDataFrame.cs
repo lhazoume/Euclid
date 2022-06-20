@@ -206,7 +206,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region Accessors
         /// <summary>Returns the legends </summary>
-        public T[] Legends => _legends.Values;
+        public virtual T[] Legends => _legends.Values;
 
         /// <summary>Returns the labels </summary>
         public TV[] Labels => _labels.Values;

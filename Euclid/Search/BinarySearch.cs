@@ -21,7 +21,7 @@ namespace Euclid.Search
         /// <param name="startRange">The starting index of the range to search</param>
         /// <param name="endRange">The ending index of the range to search</param>
         /// <returns>The first index that satisfying the predicate else -1</returns>
-        public static int FindFirstIndexOf<T>(this IReadOnlyList<T> items, Predicate<T> predicate, uint? startRange = null, uint? endRange = null)
+        public static int FindFirstIndexOf<T>(this IReadOnlyList<T> items, Func<T, bool> predicate, uint? startRange = null, uint? endRange = null)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Euclid.Search
                 if (endRange.HasValue && endRange.Value >= items.Count) throw new Exception($"End range [{endRange}] is superior or equal to the size of the collection [{N}]!");
                 if (startRange.HasValue && endRange.HasValue && endRange < startRange) throw new Exception($"Start range [{startRange}] is superior to the end range [{endRange}]!");
                 int left = startRange.HasValue ? (int)startRange.Value : 0,
-                right = endRange.HasValue ? (int) endRange.Value : N;
+                right = endRange.HasValue ? (int) endRange.Value : N - 1;
 
                 if (predicate(items[left])) return left;
                 if (!predicate(items[right])) return -1;
@@ -59,7 +59,7 @@ namespace Euclid.Search
         /// <param name="startRange">The starting index of the range to search</param>
         /// <param name="endRange">The ending index of the range to search</param>
         /// <returns>The first index that satisfying the predicate else -1</returns>
-        public static int FindLastIndexOf<T>(this IReadOnlyList<T> items, Predicate<T> predicate, uint? startRange = null, uint? endRange = null)
+        public static int FindLastIndexOf<T>(this IReadOnlyList<T> items, Func<T, bool> predicate, uint? startRange = null, uint? endRange = null)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Euclid.Search
                 if (endRange.HasValue && endRange.Value >= items.Count) throw new Exception($"End range [{endRange}] is superior or equal to the size of the collection [{N}]!");
                 if (startRange.HasValue && endRange.HasValue && endRange < startRange) throw new Exception($"Start range [{startRange}] is superior to the end range [{endRange}]!");
                 int left = startRange.HasValue ? (int)startRange.Value : 0,
-                right = endRange.HasValue ? (int)endRange.Value : N;
+                right = endRange.HasValue ? (int)endRange.Value : N - 1;
 
                 if (predicate(items[right])) return right;
 

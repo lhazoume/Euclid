@@ -11,7 +11,7 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="TU">the data type</typeparam>
     /// <typeparam name="TV">the label type</typeparam>
-    public class Slice<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
+    public class Slice<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
         private readonly IHeader<TV> _labels;
