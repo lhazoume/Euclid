@@ -194,23 +194,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\aymer\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\lucha\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\IT\\Github\\Euclid\\Benchmarking\\Benchmarking.csproj",
+      "projectUniqueName": "C:\\Users\\lucha\\source\\repos\\Euclid\\Benchmarking\\Benchmarking.csproj",
       "projectName": "Benchmarking",
-      "projectPath": "D:\\IT\\Github\\Euclid\\Benchmarking\\Benchmarking.csproj",
-      "packagesPath": "C:\\Users\\aymer\\.nuget\\packages\\",
-      "outputPath": "D:\\IT\\Github\\Euclid\\Benchmarking\\obj\\",
+      "projectPath": "C:\\Users\\lucha\\source\\repos\\Euclid\\Benchmarking\\Benchmarking.csproj",
+      "packagesPath": "C:\\Users\\lucha\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lucha\\source\\repos\\Euclid\\Benchmarking\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\aymer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lucha\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -218,16 +214,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "D:\\IT\\Github\\Nuggets": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://dotnet.myget.org/F/dotnet-corefxlab/api/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netstandard2.0": {
           "targetAlias": "netstandard2.0",
           "projectReferences": {
-            "D:\\IT\\Github\\Euclid\\Euclid\\Euclid.csproj": {
-              "projectPath": "D:\\IT\\Github\\Euclid\\Euclid\\Euclid.csproj"
+            "C:\\Users\\lucha\\source\\repos\\Euclid\\Euclid\\Euclid.csproj": {
+              "projectPath": "C:\\Users\\lucha\\source\\repos\\Euclid\\Euclid\\Euclid.csproj"
             }
           }
         }
@@ -259,7 +253,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

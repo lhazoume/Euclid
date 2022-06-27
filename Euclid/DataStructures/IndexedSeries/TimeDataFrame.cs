@@ -2,18 +2,11 @@
 using Euclid.Search;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace Euclid.DataStructures.IndexedSeries
 {
 #warning TimeDataFrame => Initialize mthd from abstraction IDataFrame could be avoid by using abstract static method but required C#9
-    /// <summary>
-    /// Class representing a DataFrame of synchronized data ordered by time 
-    /// </summary>
-    /// <typeparam name="DateTime">The legend type</typeparam>
+    /// <summary>Class representing a DataFrame of synchronized data ordered by time </summary>
     /// <typeparam name="TU">The data type</typeparam>
     /// <typeparam name="TV">The lable type</typeparam>
     public class TimeDataFrame<TU, TV> : IDataFrame<DateTime, TU, TV> where TV : IEquatable<TV>

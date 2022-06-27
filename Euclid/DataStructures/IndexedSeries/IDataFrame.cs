@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Euclid.DataStructures.IndexedSeries
@@ -160,9 +158,7 @@ namespace Euclid.DataStructures.IndexedSeries
             return Create<TY>(series.Select(s => s.Label).ToList(), series.ElementAt(0).Legends, data);
         }
 
-        /// <summary>
-        /// Builds a <c>DataFrame</c> from a CSV string
-        /// </summary>
+        /// <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
         /// <typeparam name="TY">IDataFrame implementation</typeparam>
         /// <param name="text">the serialized version of the data</param>
         /// <returns>Instance</returns>
