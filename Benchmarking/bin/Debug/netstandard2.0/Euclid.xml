@@ -1235,7 +1235,7 @@
             <param name="label">the target label</param>
             <returns>an <c>Integer</c></returns>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetLabelRank(`0)">
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetLegendRank(`0)">
             <summary>Returns the legend rank</summary>
             <param name="legend">the target legend</param>
             <returns>an <c>Integer</c></returns>

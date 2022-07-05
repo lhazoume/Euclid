@@ -251,7 +251,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Returns the legend rank</summary>
         /// <param name="legend">the target legend</param>
         /// <returns>an <c>Integer</c></returns>
-        public int GetLabelRank(T legend) { return _legends.Contains(legend) ? _legends[legend] : -1; }
+        public int GetLegendRank(T legend) { return _legends.Contains(legend) ? _legends[legend] : -1; }
         #endregion
 
         #region Series
