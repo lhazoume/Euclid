@@ -47,7 +47,7 @@ namespace Euclid.DataStructures.IndexedSeries
         protected override void Initialize(IList<TV> labels, IList<DateTime> legends, TU[,] data)
         {
             _data = Arrays.Clone(data);
-            _labels = new Header<TV>(labels);
+            _labels = new SortedHeader<TV>(labels);
             _legends = new SortedHeader<DateTime>(legends);
             _timestamps = _legends.Values;
         }

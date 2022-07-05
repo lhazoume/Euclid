@@ -1120,36 +1120,427 @@
             <summary>Reads and delete an item from the top of the stack (refills if needed)</summary>
             <returns>the top element</returns>
         </member>
-        <member name="T:Euclid.DataStructures.TreeNode`1">
-            <summary>Represents a tree node</summary>
-            <typeparam name="T">The value type</typeparam>
+        <member name="T:Euclid.DataStructures.IndexedSeries.IDataFrame`3">
+            <summary>Class representing a template of DataFrame of synchronized data</summary>
+            <typeparam name="T">the legend type</typeparam>
+            <typeparam name="TU">the data type</typeparam>
+            <typeparam name="TV">the label type</typeparam>
         </member>
-        <member name="P:Euclid.DataStructures.TreeNode`1.Value">
-            <summary>Gets and sets the node's value</summary>
+        <member name="F:Euclid.DataStructures.IndexedSeries.IDataFrame`3._labels">
+            <summary>
+            Columns variable
+            </summary>
         </member>
-        <member name="P:Euclid.DataStructures.TreeNode`1.Left">
-            <summary>Gets and sets the left node</summary>
+        <member name="F:Euclid.DataStructures.IndexedSeries.IDataFrame`3._legends">
+            <summary>
+            Row variable
+            </summary>
         </member>
-        <member name="P:Euclid.DataStructures.TreeNode`1.Right">
-            <summary>Gets and sets the right node</summary>
+        <member name="F:Euclid.DataStructures.IndexedSeries.IDataFrame`3._data">
+            <summary>
+            Matrix of data
+            </summary>
         </member>
-        <member name="P:Euclid.DataStructures.TreeNode`1.Parent">
-            <summary>Gets and sets the parent node</summary>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.#ctor(Euclid.DataStructures.IndexedSeries.IHeader{`2},Euclid.DataStructures.IndexedSeries.IHeader{`0},`1[0:,0:])">
+            <summary>
+            Hidden constructor
+            </summary>
+            <param name="labels">header of labels</param>
+            <param name="legends">header of legends</param>
+            <param name="data">data</param>
         </member>
-        <member name="P:Euclid.DataStructures.TreeNode`1.Leaves">
-            <summary>Returns all the leaves</summary>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.#ctor">
+            <summary>
+            public constructor
+            </summary>
         </member>
-        <member name="P:Euclid.DataStructures.TreeNode`1.IsRoot">
-            <summary>Indicates if the current node is the root node</summary>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Create``1(System.Xml.XmlNode)">
+            <summary>
+            Builds a <c>DataFrame</c> from its serialized form
+            </summary>
+            <typeparam name="TY">IDataFrame implementation</typeparam>
+            <param name="node">the <c>XmlNode</c></param>
+            <returns>Instance</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
-        <member name="P:Euclid.DataStructures.TreeNode`1.IsLeaf">
-            <summary>Indicates if the current node is a leaf node</summary>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Create``1(System.Collections.Generic.IList{`2},System.Collections.Generic.IList{`0},`1[0:,0:])">
+            <summary>
+            Create an instance of IDataFrame
+            </summary>
+            <typeparam name="TY">Generic type</typeparam>
+            <param name="labels">labels</param>
+            <param name="legends">legends</param>
+            <param name="data">data</param>
+            <returns>Instance</returns>
         </member>
-        <member name="M:Euclid.DataStructures.TreeNode`1.BuildRoot(Euclid.DataStructures.TreeNode{`0},Euclid.DataStructures.TreeNode{`0})">
-            <summary>Builds a root tree node</summary>
-            <param name="left">the left child node</param>
-            <param name="right">the right child node</param>
-            <returns>a tree node</returns>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Create``1(System.Collections.Generic.IList{`2},System.Collections.Generic.IList{`0})">
+            <summary>Builds a <c>DataFrame</c></summary>
+            <typeparam name="TY">IDataFrame implementation</typeparam>
+            <param name="labels">the labels</param>
+            <param name="legends">the legends</param>
+            <returns>a <c>DataFrame</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Create``1(System.Collections.Generic.IEnumerable{Euclid.DataStructures.IndexedSeries.Slice{`0,`1,`2}})">
+            <summary>
+            Builds a <c>DataFrame</c>
+            </summary>
+            <typeparam name="TY">IDataFrame implementation</typeparam>
+            <param name="slices">Slices</param>
+            <returns>Instance</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Create``1(System.Collections.Generic.IEnumerable{Euclid.DataStructures.IndexedSeries.Series{`0,`1,`2}})">
+            <summary>
+            Builds a <c>DataFrame</c>
+            </summary>
+            <typeparam name="TY">IDataFrame implementation</typeparam>
+            <param name="series">Series</param>
+            <returns>Instance</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Create``1(System.String)">
+            <summary>
+            Builds a <c>DataFrame</c> from a CSV string
+            </summary>
+            <typeparam name="TY">IDataFrame implementation</typeparam>
+            <param name="text">the serialized version of the data</param>
+            <returns>Instance</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Legends">
+            <summary>Returns the legends </summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Labels">
+            <summary>Returns the labels </summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Columns">
+            <summary>Returns the number of columns</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Rows">
+            <summary>Returns the number of rows</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Data">
+            <summary>Gets the data</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Item(System.Int32,System.Int32)">
+            <summary>Gets and sets the data for the i-th row and j-th column of the <c>DataFrame</c></summary>
+            <param name="i">the row index</param>
+            <param name="j">the column index</param>
+            <returns>a data point</returns>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Item(`0,`2)">
+            <summary>Gets and sets the data for a given legend and a given label</summary>
+            <param name="t">the legend</param>
+            <param name="v">the label</param>
+            <returns>a data point</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetLabelRank(`2)">
+            <summary>Returns the label rank</summary>
+            <param name="label">the target label</param>
+            <returns>an <c>Integer</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetLabelRank(`0)">
+            <summary>Returns the legend rank</summary>
+            <param name="legend">the target legend</param>
+            <returns>an <c>Integer</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetSeriesAt(`2)">
+            <summary> Gets the data-point column of the given label</summary>
+            <param name="label">the label</param>
+            <returns> a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetSeriesAt(`2,System.Func{`0,System.Boolean})">
+            <summary> Gets the data-point column of the given label</summary>
+            <param name="label">the label</param>
+            <param name="predicate">legend predicate</param>
+            <returns> a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetSeries">
+            <summary> Gets all the data as an array of <c>Series</c></summary>
+            <returns>an array of <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.AddSeries(`2,`1[])">
+            <summary> Adds a column to the <c>DataFrame</c></summary>
+            <param name="label">the new column's label</param>
+            <param name="column">the new column's data</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.AddSeries(`2)">
+            <summary>Adds an empty column to the <c>DataFrame</c></summary>
+            <param name="label">the new column's label</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.TakeSeries(`2)">
+            <summary>Takes a <c>Series</c> from the DataFrame thereby removing it from the DataFrame</summary>
+            <param name="label">the label of the <c>Series</c> to take</param>
+            <returns> a <c>Series</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.RemoveSeriesAt(`2)">
+            <summary>Remove the data for a given label</summary>
+            <param name="label">the label</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ExtractByLabels``1(System.Func{`2,System.Boolean})">
+            <summary>Extracts the part of the DataFrame whose labels obeys the predicate</summary>
+            <param name="predicate">the predicate on the labels</param>
+            <returns>a DataFrame</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetSliceAt(`0)">
+            <summary>Gets the data-point row of the given legend</summary>
+            <param name="legend">the legend</param>
+            <returns>a <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetSlices">
+            <summary>Gets all the data as an array of <c>Slice</c></summary>
+            <returns>an array of <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.AddSlice(`0,`1[])">
+            <summary> Adds a slice to the <c>DataFrame</c></summary>
+            <param name="legend">the new slice's legend</param>
+            <param name="slice">the new slice's data</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.AddSlice(`0)">
+            <summary>Adds an empty slice to the <c>DataFrame</c></summary>
+            <param name="legend">the new slice's legend</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.TakeSlice(`0)">
+            <summary>Takes a <c>Slice</c> from the DataFrame thereby removing it from the DataFrame</summary>
+            <param name="legend">the legend of the <c>Slice</c> to take</param>
+            <returns> a <c>Slice</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.RemoveSliceAt(`0)">
+            <summary>Removes the row for a given legend</summary>
+            <param name="legend">the legend</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ExtractByLegend``1(System.Func{`0,System.Boolean})">
+            <summary>Extracts the part of the DataFrame whose legends obeys the predicate</summary>
+            <param name="predicate">the predicate on the legends</param>
+            <returns>a DataFrame</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Clone``1">
+            <summary>Clones the <c>DataFrame</c></summary>
+            <returns>a <c>DataFrame</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ApplyOnData(System.Func{`1,`1})">
+            <summary>Applies a function to all the data</summary>
+            <param name="function">the function</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ApplyOnLegends(System.Func{`0,`0})">
+            <summary>Applies a function to all the legends</summary>
+            <param name="function">the function</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ApplyOnLabels(System.Func{`2,`2})">
+            <summary>Applies a function to all the labels</summary>
+            <param name="function">the function</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetLegend(System.Int32)">
+            <summary>Gets the i-th legend value</summary>
+            <param name="index">the index</param>
+            <returns>a legend value</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.RenameLegend(`0,`0)">
+            <summary>Renames a legend</summary>
+            <param name="oldValue">the old legend value</param>
+            <param name="newValue">the new legend value</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetLabel(System.Int32)">
+            <summary>Gets the i-th label's value</summary>
+            <param name="index">the index</param>
+            <returns>a label</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.RenameLabel(`2,`2)">
+            <summary>Renames a label</summary>
+            <param name="oldValue">the old value</param>
+            <param name="newValue">the new value</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ToXml(System.Xml.XmlWriter)">
+            <summary>Serializes the <c>DataFrame</c> to Xml </summary>
+            <param name="writer">the <c>XmlWriter</c></param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.FromXml``1(System.Xml.XmlNode)">
+            <summary>Buils a <c>DataFrame</c></summary>
+            <param name="node">the Xml node</param>
+            <returns>a DataFrame</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ToCSV">
+            <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
+            <returns>a <c>String</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Equals(Euclid.DataStructures.IndexedSeries.IDataFrame{`0,`1,`2})">
+            <summary>Equality comparer</summary>
+            <param name="other">the other DataFrame</param>
+            <returns>true if the data, legends and labels match, false otherwise</returns>
+        </member>
+        <member name="T:Euclid.DataStructures.IndexedSeries.IHeader`1">
+            <summary>
+            Abstract Header class for the IIndexe
+            </summary>
+            <typeparam name="T">the type of label</typeparam>
+        </member>
+        <member name="F:Euclid.DataStructures.IndexedSeries.IHeader`1._map">
+            <summary>
+            map field
+            </summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IHeader`1.Item(`0)">
+            <summary>Gets the index associated with a label</summary>
+            <param name="t">the label</param>
+            <returns>an integer</returns>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IHeader`1.Count">
+            <summary>Gets the number of labels in the header</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.IHeader`1.Values">
+            <summary>Gets the labels</summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.GetEnumerator">
+            <summary>Gets an enumerator of the labels</summary>
+            <returns>a IEnumerator</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.Clone">
+            <summary>Clones the header</summary>
+            <returns>a Header</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.Remove(`0)">
+            <summary>Removes a label from the header</summary>
+            <param name="t">the label</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.Add(`0)">
+            <summary>Adds a label to the header</summary>
+            <param name="t">the label</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.AddRange(`0[])">
+            <summary>Adds a range of values to the header</summary>
+            <param name="ts">the values</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.Rename(`0,`0)">
+            <summary>Renames a label</summary>
+            <param name="oldValue">the old value of the label</param>
+            <param name="newValue">the new value of the label</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.ElementAt(System.Int32)">
+            <summary>Returns the label at a given index</summary>
+            <param name="index">the index</param>
+            <returns>a label</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.Contains(`0)">
+            <summary>Checks if the header contains a given label</summary>
+            <param name="t">the target label</param>
+            <returns>true if the label is in the header, false otherwise</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.Equals(System.Object)">
+            <summary>Overriden generic Equals</summary>
+            <param name="obj">the compared object</param>
+            <returns>true if obj matches this object, false otherwise</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.GetHashCode">
+            <summary>Returns a hash code</summary>
+            <returns>an <c>Integer</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.Equals(Euclid.DataStructures.IndexedSeries.IHeader{`0})">
+            <summary>Equality comparer</summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.op_Equality(Euclid.DataStructures.IndexedSeries.IHeader{`0},Euclid.DataStructures.IndexedSeries.IHeader{`0})">
+            <summary>Equality operator</summary>
+            <param name="h1">the left-hand-side header</param>
+            <param name="h2">the right-hand-side header</param>
+            <returns>true if the headers have the same content, false otherwise</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IHeader`1.op_Inequality(Euclid.DataStructures.IndexedSeries.IHeader{`0},Euclid.DataStructures.IndexedSeries.IHeader{`0})">
+            <summary>Inequality operator</summary>
+            <param name="h1">the left-hand-side header</param>
+            <param name="h2">the right-hand-side header</param>
+            <returns>true if the headers do not have the same content, false otherwise</returns>
+        </member>
+        <member name="T:Euclid.DataStructures.IndexedSeries.SortedHeader`1">
+            <summary>
+            Sorted Header class for the IIndexe
+            </summary>
+            <typeparam name="T">the type of label</typeparam>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.SortedHeader`1.#ctor">
+            <summary>Standard builder</summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.SortedHeader`1.#ctor(System.Collections.Generic.IList{`0})">
+            <summary>Builds a zero-indexed header</summary>
+            <param name="content">the values of the labels</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.SortedHeader`1.#ctor(Euclid.DataStructures.IMap{`0,System.Int32})">
+            <summary> Builds a header from a two-way dictionary</summary>
+            <param name="map">the map</param>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.SortedHeader`1.Values">
+            <summary>Gets the labels</summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.SortedHeader`1.Clone">
+            <summary>Clones the header</summary>
+            <returns>a Header</returns>
+        </member>
+        <member name="T:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2">
+            <summary>
+            Class representing a DataFrame of synchronized data ordered by time 
+            </summary>
+            <typeparam name="DateTime">The legend type</typeparam>
+            <typeparam name="TU">The data type</typeparam>
+            <typeparam name="TV">The lable type</typeparam>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.#ctor(Euclid.DataStructures.IndexedSeries.IHeader{`1},Euclid.DataStructures.IndexedSeries.IHeader{System.DateTime},`0[0:,0:])">
+            <summary>
+            Protected constructor
+            </summary>
+            <param name="labels">Labels, serie of generic type</param>
+            <param name="legends">Legends, serie of datetime type</param>
+            <param name="data">Matric of generic type</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.#ctor">
+            <summary>
+            public constructor
+            </summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.Initialize(System.Collections.Generic.IList{`1},System.Collections.Generic.IList{System.DateTime},`0[0:,0:])">
+            <summary>
+            Initialize TimeDataFrame instance
+            </summary>
+            <param name="labels">labels</param>
+            <param name="legends">legends</param>
+            <param name="data">data</param>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.Chunks">
+            <summary>
+            returns the chunk used for building index
+            </summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.Legends">
+            <summary>
+            returns the values of legend
+            </summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.IntradayChunk">
+            <summary>
+            Precise if the chunk has intraday granularity
+            </summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.BuildIndex(System.Collections.Generic.IEnumerable{System.DateTime},System.Boolean)">
+            <summary>
+            Build index for searching into the time series
+            </summary>
+            <param name="chunks">Chunk of time</param>
+            <param name="intraday">Precise if index is intraday or extraday</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.FindFirstIndexOf(System.Func{System.DateTime,System.Boolean},System.Nullable{System.DateTime})">
+            <summary>
+            Find first index of a predicate by using binary search + indexes
+            </summary>
+            <param name="predicate">Predicate</param>
+            <param name="chunk">Chunk value</param>
+            <returns>index of the target else -1</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.FindLastIndexOf(System.Func{System.DateTime,System.Boolean},System.Nullable{System.DateTime})">
+            <summary>
+            Find last index of a predicate by using binary search + indexes
+            </summary>
+            <param name="predicate">Predicate</param>
+            <param name="chunk">Chunk value</param>
+            <returns>index of the target else -1</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <member name="T:Euclid.DataStructures.IndexedSeries.DataCube`4">
             <summary>Class representing a cube of synchronized data</summary>
@@ -1312,21 +1703,9 @@
             <summary>Builds a zero-indexed header</summary>
             <param name="content">the values of the labels</param>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.#ctor(Euclid.DataStructures.Map{`0,System.Int32})">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.#ctor(Euclid.DataStructures.IMap{`0,System.Int32})">
             <summary> Builds a header from a two-way dictionary</summary>
             <param name="map">the map</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.GetEnumerator">
-            <summary>Gets an enumerator of the labels</summary>
-            <returns>a IEnumerator</returns>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.Header`1.Item(`0)">
-            <summary>Gets the index associated with a label</summary>
-            <param name="t">the label</param>
-            <returns>an integer</returns>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.Header`1.Count">
-            <summary>Gets the number of labels in the header</summary>
         </member>
         <member name="P:Euclid.DataStructures.IndexedSeries.Header`1.Values">
             <summary>Gets the labels</summary>
@@ -1334,59 +1713,6 @@
         <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.Clone">
             <summary>Clones the header</summary>
             <returns>a Header</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.Remove(`0)">
-            <summary>Removes a label from the header</summary>
-            <param name="t">the label</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.Add(`0)">
-            <summary>Adds a label to the header</summary>
-            <param name="t">the label</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.AddRange(`0[])">
-            <summary>Adds a range of values to the header</summary>
-            <param name="ts">the values</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.Rename(`0,`0)">
-            <summary>Renames a label</summary>
-            <param name="oldValue">the old value of the label</param>
-            <param name="newValue">the new value of the label</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.ElementAt(System.Int32)">
-            <summary>Returns the label at a given index</summary>
-            <param name="index">the index</param>
-            <returns>a label</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.Contains(`0)">
-            <summary>Checks if the header contains a given label</summary>
-            <param name="t">the target label</param>
-            <returns>true if the label is in the header, false otherwise</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.Equals(System.Object)">
-            <summary>Overriden generic Equals</summary>
-            <param name="obj">the compared object</param>
-            <returns>true if obj matches this object, false otherwise</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.GetHashCode">
-            <summary>Returns a hash code</summary>
-            <returns>an <c>Integer</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.Equals(Euclid.DataStructures.IndexedSeries.Header{`0})">
-            <summary>Equality comparer</summary>
-            <param name="other"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.op_Equality(Euclid.DataStructures.IndexedSeries.Header{`0},Euclid.DataStructures.IndexedSeries.Header{`0})">
-            <summary>Equality operator</summary>
-            <param name="h1">the left-hand-side header</param>
-            <param name="h2">the right-hand-side header</param>
-            <returns>true if the headers have the same content, false otherwise</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Header`1.op_Inequality(Euclid.DataStructures.IndexedSeries.Header{`0},Euclid.DataStructures.IndexedSeries.Header{`0})">
-            <summary>Inequality operator</summary>
-            <param name="h1">the left-hand-side header</param>
-            <param name="h2">the right-hand-side header</param>
-            <returns>true if the headers do not have the same content, false otherwise</returns>
         </member>
         <member name="T:Euclid.DataStructures.IndexedSeries.Slice`3">
             <summary>Class representing a Slice of synchronized data</summary>
@@ -1461,7 +1787,7 @@
             <summary>De-serializes the slice from a Xml node</summary>
             <param name="node">the <c>XmlNode</c></param>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Slice`3.Create(Euclid.DataStructures.IndexedSeries.Header{`2},`0,System.Collections.Generic.IEnumerable{`1})">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Slice`3.Create(Euclid.DataStructures.IndexedSeries.IHeader{`2},`0,System.Collections.Generic.IEnumerable{`1})">
             <summary>Builds a slice from generic enumerable labels and data</summary>
             <param name="labels">the labels</param>
             <param name="legend">the legend</param>
@@ -1478,7 +1804,7 @@
             <typeparam name="TU">the data type</typeparam>
             <typeparam name="TV">the label type</typeparam>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.#ctor(`2,Euclid.DataStructures.IndexedSeries.Header{`0},`1[])">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.#ctor(`2,Euclid.DataStructures.IndexedSeries.IHeader{`0},`1[])">
             <summary>Builds a <c>Series</c></summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>
@@ -1640,198 +1966,26 @@
             <typeparam name="TU">the data type</typeparam>
             <typeparam name="TV">the label type</typeparam>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Create(System.Xml.XmlNode)">
-            <summary>Builds a <c>DataFrame</c> from its serialized form</summary>
-            <param name="node">the <c>XmlNode</c></param>
-            <returns>a <c>DataFrame</c></returns>
+        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.#ctor(Euclid.DataStructures.IndexedSeries.IHeader{`2},Euclid.DataStructures.IndexedSeries.IHeader{`0},`1[0:,0:])">
+            <summary>
+            Hidden constructor
+            </summary>
+            <param name="labels">header of labels</param>
+            <param name="legends">header of legends</param>
+            <param name="data">data</param>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IList{`2},System.Collections.Generic.IList{`0},`1[0:,0:])">
-            <summary>Builds a <c>DataFrame</c> </summary>
-            <param name="labels">the labels</param>
-            <param name="legends">the legends</param>
-            <param name="data">the data</param>
-            <returns>a <c>DataFrame</c></returns>
+        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.#ctor">
+            <summary>
+            public constructor
+            </summary>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IList{`2},System.Collections.Generic.IList{`0})">
-            <summary>Builds a <c>DataFrame</c></summary>
-            <param name="labels">the labels</param>
-            <param name="legends">the legends</param>
-            <returns>a <c>DataFrame</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{Euclid.DataStructures.IndexedSeries.Slice{`0,`1,`2}})">
-            <summary> Builds a <c>DataFrame</c></summary>
-            <param name="slices">the slices</param>
-            <returns>a DataFrame</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Create(System.Collections.Generic.IEnumerable{Euclid.DataStructures.IndexedSeries.Series{`0,`1,`2}})">
-            <summary>Builds a <c>DataFrame</c> </summary>
-            <param name="series">the series</param>
-            <returns>a DataFrame</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Create(System.String)">
-            <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
-            <param name="text">the serialized version of the data</param>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.DataFrame`3.Legends">
-            <summary>Returns the legends </summary>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.DataFrame`3.Labels">
-            <summary>Returns the labels </summary>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.DataFrame`3.Columns">
-            <summary>Returns the number of columns</summary>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.DataFrame`3.Rows">
-            <summary>Returns the number of rows</summary>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.DataFrame`3.Data">
-            <summary>Gets the data</summary>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.DataFrame`3.Item(System.Int32,System.Int32)">
-            <summary>Gets and sets the data for the i-th row and j-th column of the <c>DataFrame</c></summary>
-            <param name="i">the row index</param>
-            <param name="j">the column index</param>
-            <returns>a data point</returns>
-        </member>
-        <member name="P:Euclid.DataStructures.IndexedSeries.DataFrame`3.Item(`0,`2)">
-            <summary>Gets and sets the data for a given legend and a given label</summary>
-            <param name="t">the legend</param>
-            <param name="v">the label</param>
-            <returns>a data point</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetLabelRank(`2)">
-            <summary>Returns the label rank</summary>
-            <param name="label">the target label</param>
-            <returns>an <c>Integer</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetLabelRank(`0)">
-            <summary>Returns the legend rank</summary>
-            <param name="legend">the target legend</param>
-            <returns>an <c>Integer</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetSeriesAt(`2)">
-            <summary> Gets the data-point column of the given label</summary>
-            <param name="label">the label</param>
-            <returns> a <c>Series</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetSeriesAt(`2,System.Func{`0,System.Boolean})">
-            <summary> Gets the data-point column of the given label</summary>
-            <param name="label">the label</param>
-            <param name="predicate">legend predicate</param>
-            <returns> a <c>Series</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetSeries">
-            <summary> Gets all the data as an array of <c>Series</c></summary>
-            <returns>an array of <c>Series</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.AddSeries(`2,`1[])">
-            <summary> Adds a column to the <c>DataFrame</c></summary>
-            <param name="label">the new column's label</param>
-            <param name="column">the new column's data</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.AddSeries(`2)">
-            <summary>Adds an empty column to the <c>DataFrame</c></summary>
-            <param name="label">the new column's label</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.TakeSeries(`2)">
-            <summary>Takes a <c>Series</c> from the DataFrame thereby removing it from the DataFrame</summary>
-            <param name="label">the label of the <c>Series</c> to take</param>
-            <returns> a <c>Series</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.RemoveSeriesAt(`2)">
-            <summary>Remove the data for a given label</summary>
-            <param name="label">the label</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.ExtractByLabels(System.Func{`2,System.Boolean})">
-            <summary>Extracts the part of the DataFrame whose labels obeys the predicate</summary>
-            <param name="predicate">the predicate on the labels</param>
-            <returns>a DataFrame</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetSliceAt(`0)">
-            <summary>Gets the data-point row of the given legend</summary>
-            <param name="legend">the legend</param>
-            <returns>a <c>Slice</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetSlices">
-            <summary>Gets all the data as an array of <c>Slice</c></summary>
-            <returns>an array of <c>Slice</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.AddSlice(`0,`1[])">
-            <summary> Adds a slice to the <c>DataFrame</c></summary>
-            <param name="legend">the new slice's legend</param>
-            <param name="slice">the new slice's data</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.AddSlice(`0)">
-            <summary>Adds an empty slice to the <c>DataFrame</c></summary>
-            <param name="legend">the new slice's legend</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.TakeSlice(`0)">
-            <summary>Takes a <c>Slice</c> from the DataFrame thereby removing it from the DataFrame</summary>
-            <param name="legend">the legend of the <c>Slice</c> to take</param>
-            <returns> a <c>Slice</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.RemoveSliceAt(`0)">
-            <summary>Removes the row for a given legend</summary>
-            <param name="legend">the legend</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.ExtractByLegend(System.Func{`0,System.Boolean})">
-            <summary>Extracts the part of the DataFrame whose legends obeys the predicate</summary>
-            <param name="predicate">the predicate on the legends</param>
-            <returns>a DataFrame</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Clone">
-            <summary>Clones the <c>DataFrame</c></summary>
-            <returns>a <c>DataFrame</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.ApplyOnData(System.Func{`1,`1})">
-            <summary>Applies a function to all the data</summary>
-            <param name="function">the function</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.ApplyOnLegends(System.Func{`0,`0})">
-            <summary>Applies a function to all the legends</summary>
-            <param name="function">the function</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.ApplyOnLabels(System.Func{`2,`2})">
-            <summary>Applies a function to all the labels</summary>
-            <param name="function">the function</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetLegend(System.Int32)">
-            <summary>Gets the i-th legend value</summary>
-            <param name="index">the index</param>
-            <returns>a legend value</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.RenameLegend(`0,`0)">
-            <summary>Renames a legend</summary>
-            <param name="oldValue">the old legend value</param>
-            <param name="newValue">the new legend value</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.GetLabel(System.Int32)">
-            <summary>Gets the i-th label's value</summary>
-            <param name="index">the index</param>
-            <returns>a label</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.RenameLabel(`2,`2)">
-            <summary>Renames a label</summary>
-            <param name="oldValue">the old value</param>
-            <param name="newValue">the new value</param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.ToXml(System.Xml.XmlWriter)">
-            <summary>Serializes the <c>DataFrame</c> to Xml </summary>
-            <param name="writer">the <c>XmlWriter</c></param>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.FromXml(System.Xml.XmlNode)">
-            <summary>Buils a <c>DataFrame</c></summary>
-            <param name="node">the Xml node</param>
-            <returns>a DataFrame</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.ToCSV">
-            <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
-            <returns>a <c>String</c></returns>
-        </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Equals(Euclid.DataStructures.IndexedSeries.DataFrame{`0,`1,`2})">
-            <summary>Equality comparer</summary>
-            <param name="other">the other DataFrame</param>
-            <returns>true if the data, legends and labels match, false otherwise</returns>
+        <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Initialize(System.Collections.Generic.IList{`2},System.Collections.Generic.IList{`0},`1[0:,0:])">
+            <summary>
+            Initialize DataFrame instance
+            </summary>
+            <param name="labels">labels</param>
+            <param name="legends">legends</param>
+            <param name="data">data</param>
         </member>
         <member name="T:Euclid.DataStructures.IndexedSeries.IIndexedSeries`3">
             <summary>
@@ -1857,6 +2011,59 @@
             <summary>Applies a function to the data</summary>
             <param name="function">the function</param>
         </member>
+        <member name="T:Euclid.DataStructures.SortedMap`2">
+            <summary>
+            A two ways sorted dictionary class
+            </summary>
+            <typeparam name="T1">the left hand side type</typeparam>
+            <typeparam name="T2">the right hand side type</typeparam>
+        </member>
+        <member name="M:Euclid.DataStructures.SortedMap`2.#ctor(System.Collections.Generic.IDictionary{`0,`1},System.Collections.Generic.IDictionary{`1,`0})">
+            <summary>
+            Private constructor
+            </summary>
+            <param name="forward">forward field</param>
+            <param name="backward">backward field</param>
+        </member>
+        <member name="M:Euclid.DataStructures.SortedMap`2.#ctor">
+            <summary>
+            Empty sorted map
+            </summary>
+        </member>
+        <member name="M:Euclid.DataStructures.SortedMap`2.Clone">
+            <summary>Gets a deep copy of the sorted map</summary>
+        </member>
+        <member name="T:Euclid.DataStructures.TreeNode`1">
+            <summary>Represents a tree node</summary>
+            <typeparam name="T">The value type</typeparam>
+        </member>
+        <member name="P:Euclid.DataStructures.TreeNode`1.Value">
+            <summary>Gets and sets the node's value</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.TreeNode`1.Left">
+            <summary>Gets and sets the left node</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.TreeNode`1.Right">
+            <summary>Gets and sets the right node</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.TreeNode`1.Parent">
+            <summary>Gets and sets the parent node</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.TreeNode`1.Leaves">
+            <summary>Returns all the leaves</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.TreeNode`1.IsRoot">
+            <summary>Indicates if the current node is the root node</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.TreeNode`1.IsLeaf">
+            <summary>Indicates if the current node is a leaf node</summary>
+        </member>
+        <member name="M:Euclid.DataStructures.TreeNode`1.BuildRoot(Euclid.DataStructures.TreeNode{`0},Euclid.DataStructures.TreeNode{`0})">
+            <summary>Builds a root tree node</summary>
+            <param name="left">the left child node</param>
+            <param name="right">the right child node</param>
+            <returns>a tree node</returns>
+        </member>
         <member name="T:Euclid.DataStructures.SelfFlushedQueue`1">
             <summary>Queue that flushes itself whenever it reaches a given size</summary>
             <typeparam name="T">the template type of the data</typeparam>
@@ -1879,10 +2086,90 @@
             <summary>Delegate definition of the flush method</summary>
             <param name="content">the data to treat after flush</param>
         </member>
+        <member name="T:Euclid.DataStructures.IMap`2">
+            <summary>
+            A two ways dictionary interface
+            </summary>
+            <typeparam name="T1">the left hand side type</typeparam>
+            <typeparam name="T2">the right hand side type</typeparam>
+        </member>
+        <member name="P:Euclid.DataStructures.IMap`2.ForwardEnumerator">
+            <summary>Gets an enumerator for the left hand side</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IMap`2.BackwardEnumerator">
+            <summary>Gets an enumerator for the right hand side </summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.Add(`0,`1)">
+            <summary>Adds a pair to the map</summary>
+            <param name="t1">the left hand side key</param>
+            <param name="t2">the right hand side key</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.Remove(`0,`1)">
+            <summary>Removes a pair from the map</summary>
+            <param name="t1">the left hand side key</param>
+            <param name="t2">the right hand side key</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.SetForward(`0,`1)">
+            <summary>Sets the right hand side value for a given left hand side value</summary>
+            <param name="key">the left hand side key</param>
+            <param name="newValue">the new right hand side value</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.SetBackward(`1,`0)">
+            <summary>Sets the left hand side value for a given right hand side value</summary>
+            <param name="key">the right hand side key</param>
+            <param name="newValue">the new left right hand side value</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.ContainsForwardKey(`0)">
+            <summary>Checks if the left hand side contains a key</summary>
+            <param name="t1">the left hand side key</param>
+            <returns><c>True</c> if this is a left hand side key, <c>False</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.ContainsBackwardKey(`1)">
+            <summary>Checks if the right hand side contains a key</summary>
+            <param name="t2">the right hand side key</param>
+            <returns><c>True</c> if this a right hand side key, <c>False</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.Forward(`0)">
+            <summary>Gets the right hand side value associated to a left hand side key</summary>
+            <param name="t1">The left hand side key</param>
+            <returns>a right hand side key</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.Backward(`1)">
+            <summary>Gets the left hand side value associated to a right hand side key</summary>
+            <param name="t2">The right hand side key</param>
+            <returns>a left hand side key</returns>
+        </member>
+        <member name="P:Euclid.DataStructures.IMap`2.Lefts">
+            <summary>Gets the left hand side keys</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IMap`2.Rights">
+            <summary>Gets the right hand side keys</summary>
+        </member>
+        <member name="P:Euclid.DataStructures.IMap`2.Count">
+            <summary>Gets the number of pairs in the map</summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IMap`2.Clone">
+            <summary>Gets a deep copy of the map</summary>
+        </member>
         <member name="T:Euclid.DataStructures.Map`2">
             <summary>A two ways dictionary class</summary>
             <typeparam name="T1">the left hand side type</typeparam>
             <typeparam name="T2">the right hand side type</typeparam>
+        </member>
+        <member name="F:Euclid.DataStructures.Map`2._lock">
+            <summary>
+            lock field for thread safety
+            </summary>
+        </member>
+        <member name="F:Euclid.DataStructures.Map`2._forward">
+            <summary>
+            forward field
+            </summary>
+        </member>
+        <member name="F:Euclid.DataStructures.Map`2._backward">
+            <summary>
+            backward field
+            </summary>
         </member>
         <member name="M:Euclid.DataStructures.Map`2.#ctor">
             <summary>Builds an empty map</summary>
@@ -5412,6 +5699,33 @@
             <param name="p">the <c>Polynomial</c> target</param>
             <param name="pow">The power we want to raise the Polynomial to</param>
             <returns>The Polynomial, raised to the power pow</returns>
+        </member>
+        <member name="T:Euclid.Search.BinarySearch">
+            <summary>
+            Class which modelizes a glossary of methods that used binary search algorithm
+            </summary>
+        </member>
+        <member name="M:Euclid.Search.BinarySearch.FindFirstIndexOf``1(System.Collections.Generic.IReadOnlyList{``0},System.Func{``0,System.Boolean},System.Nullable{System.UInt32},System.Nullable{System.UInt32})">
+            <summary>
+            Binary search to find the first index that satisfying a predicate from the items
+            </summary>
+            <typeparam name="T">TYpe of item</typeparam>
+            <param name="items">Collection of items</param>
+            <param name="predicate">Predicate</param>
+            <param name="startRange">The starting index of the range to search</param>
+            <param name="endRange">The ending index of the range to search</param>
+            <returns>The first index that satisfying the predicate else -1</returns>
+        </member>
+        <member name="M:Euclid.Search.BinarySearch.FindLastIndexOf``1(System.Collections.Generic.IReadOnlyList{``0},System.Func{``0,System.Boolean},System.Nullable{System.UInt32},System.Nullable{System.UInt32})">
+            <summary>
+            Binary search to find the first index that satisfying a predicate from the items
+            </summary>
+            <typeparam name="T">TYpe of item</typeparam>
+            <param name="items">Collection of items</param>
+            <param name="predicate">Predicate</param>
+            <param name="startRange">The starting index of the range to search</param>
+            <param name="endRange">The ending index of the range to search</param>
+            <returns>The first index that satisfying the predicate else -1</returns>
         </member>
         <member name="T:Euclid.Serialization.CsvHelper">
             <summary>
