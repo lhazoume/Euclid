@@ -1989,7 +1989,7 @@
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,System.Collections.Generic.IList{`0},`1[])">
             <summary>
-            Create an instance of <c>Series</c>
+            Builds a <c>Series</c> from generic enumerables of legends and data
             </summary>
             <typeparam name="TY">Generic type</typeparam>
             <param name="label">label</param>
@@ -1997,14 +1997,17 @@
             <param name="data">data</param>
             <returns>Instance</returns>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1})">
-            <summary>Builds a <c>Series</c> from generic enumerables of legends and data</summary>
-            <param name="label">the label</param>
-            <param name="legends">the legends</param>
-            <param name="data">the series</param>
-            <returns>a <c>Series</c></returns>
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,Euclid.DataStructures.IndexedSeries.IHeader{`0},`1[])">
+            <summary>
+            Create a <c>Series</c> from generic enumerables of legends and data
+            </summary>
+            <typeparam name="TY">Typed series</typeparam>
+            <param name="label">Label</param>
+            <param name="legends">Legends</param>
+            <param name="data">Data</param>
+            <returns>Series</returns>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,System.Collections.Generic.IList{`0})">
             <summary>Builds a <c>Series</c> from generic enumerables of legends</summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>

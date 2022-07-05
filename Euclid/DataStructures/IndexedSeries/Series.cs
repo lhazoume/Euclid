@@ -78,7 +78,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a <c>Series</c></returns>
         public TY Clone<TY>() where TY : Series<T, TU, TV>
         {
-            return Create<TY>(_label, _legends, _data);
+            return Create<TY>(_label, _legends.Values, _data);
         }
 
         /// <summary>Gets and sets the i-th data of the <c>Series</c></summary>
@@ -379,7 +379,7 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>
-        /// Create an instance of <c>Series</c>
+        /// Builds a <c>Series</c> from generic enumerables of legends and data
         /// </summary>
         /// <typeparam name="TY">Generic type</typeparam>
         /// <param name="label">label</param>
@@ -395,24 +395,24 @@ namespace Euclid.DataStructures.IndexedSeries
             return serie;
         }
 
-        /// <summary>Builds a <c>Series</c> from generic enumerables of legends and data</summary>
-        /// <param name="label">the label</param>
-        /// <param name="legends">the legends</param>
-        /// <param name="data">the series</param>
-        /// <returns>a <c>Series</c></returns>
-        public static TY Create<TY>(TV label, IEnumerable<T> legends, IEnumerable<TU> data) where TY : Series<T, TU, TV>
+        /// <summary>
+        /// Create a <c>Series</c> from generic enumerables of legends and data
+        /// </summary>
+        /// <typeparam name="TY">Typed series</typeparam>
+        /// <param name="label">Label</param>
+        /// <param name="legends">Legends</param>
+        /// <param name="data">Data</param>
+        /// <returns>Series</returns>
+        public static TY Create<TY>(TV label, IHeader<T> legends, TU[] data) where TY : Series<T, TU, TV>
         {
-            if (label == null) throw new ArgumentNullException(nameof(label));
-            if (legends == null) throw new ArgumentNullException(nameof(legends));
-
-            return Create<TY>(label, legends, data);
+            return Create<TY>(label, legends.Values, data);
         }
 
         /// <summary>Builds a <c>Series</c> from generic enumerables of legends</summary>
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <returns>a <c>Series</c></returns>
-        public static TY Create<TY>(TV label, IEnumerable<T> legends) where TY : Series<T, TU, TV>
+        public static TY Create<TY>(TV label, IList<T> legends) where TY : Series<T, TU, TV>
         {
             if (label == null) throw new ArgumentNullException(nameof(label));
             if (legends == null) throw new ArgumentNullException(nameof(legends));
@@ -439,7 +439,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 data.Add(value);
             }
 
-            return Create<TY>(label, legends, data);
+            return Create<TY>(label, legends, data.ToArray());
         }
 
         /// <summary>Builds a <c>Series</c> from a string</summary>

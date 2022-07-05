@@ -289,7 +289,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 legends.Add(_legends.ElementAt(indice));
                 data.Add(_data[indice, indexLabel]);
             }
-            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, legends, data);
+            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, legends.Values, data.ToArray());
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
