@@ -1537,6 +1537,19 @@
             <returns>index of the target else -1</returns>
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeSeries`2.#ctor">
+            <summary>
+            Parameterless constructor
+            </summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeSeries`2.Initialize(`1,System.Collections.Generic.IList{System.DateTime},`0[])">
+            <summary>
+            Initialize serie instance
+            </summary>
+            <param name="label">Label</param>
+            <param name="legends">Legends</param>
+            <param name="data">Data</param>
+        </member>
         <member name="T:Euclid.DataStructures.IndexedSeries.DataCube`4">
             <summary>Class representing a cube of synchronized data</summary>
             <typeparam name="T">the legend type</typeparam>
@@ -1799,6 +1812,26 @@
             <typeparam name="TU">the data type</typeparam>
             <typeparam name="TV">the label type</typeparam>
         </member>
+        <member name="F:Euclid.DataStructures.IndexedSeries.Series`3._label">
+            <summary>
+            Label variable
+            </summary>
+        </member>
+        <member name="F:Euclid.DataStructures.IndexedSeries.Series`3._data">
+            <summary>
+            Data variable
+            </summary>
+        </member>
+        <member name="F:Euclid.DataStructures.IndexedSeries.Series`3._legends">
+            <summary>
+            Legend variable
+            </summary>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.#ctor">
+            <summary>
+            Parameterless constructor
+            </summary>
+        </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.#ctor(`2,Euclid.DataStructures.IndexedSeries.IHeader{`0},`1[])">
             <summary>Builds a <c>Series</c></summary>
             <param name="label">the label</param>
@@ -1934,24 +1967,42 @@
             <param name="amount">the scalar</param>
             <returns>a <c>Series</c></returns>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create(`2,System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1})">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Initialize(`2,System.Collections.Generic.IList{`0},`1[])">
+            <summary>
+            Initialize serie instance
+            </summary>
+            <param name="label">Label</param>
+            <param name="legends">Legends</param>
+            <param name="data">Data</param>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,System.Collections.Generic.IList{`0},`1[])">
+            <summary>
+            Create an instance of <c>Series</c>
+            </summary>
+            <typeparam name="TY">Generic type</typeparam>
+            <param name="label">label</param>
+            <param name="legends">legends</param>
+            <param name="data">data</param>
+            <returns>Instance</returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1})">
             <summary>Builds a <c>Series</c> from generic enumerables of legends and data</summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>
             <param name="data">the series</param>
             <returns>a <c>Series</c></returns>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create(`2,System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,System.Collections.Generic.IEnumerable{`0})">
             <summary>Builds a <c>Series</c> from generic enumerables of legends</summary>
             <param name="label">the label</param>
             <param name="legends">the legends</param>
             <returns>a <c>Series</c></returns>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create(System.Xml.XmlNode)">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(System.Xml.XmlNode)">
             <summary>Builds a <c>Series</c> from its serialized form</summary>
             <param name="node">the <c>XmlNode</c></param>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create(System.String)">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(System.String)">
             <summary>Builds a <c>Series</c> from a string</summary>
             <param name="text">the <c>String</c> content</param>
         </member>

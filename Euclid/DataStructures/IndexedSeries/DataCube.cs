@@ -180,15 +180,15 @@ namespace Euclid.DataStructures.IndexedSeries
         public Series<T, TW, string> GetSeriesAt(TU label, TV layer)
         {
             int labelIndex = _labels[label];
-            if (labelIndex == -1) throw new ArgumentException(string.Format("Label [{0}] was not found", label.ToString()));
+            if (labelIndex == -1) throw new ArgumentException($"Label [{label}] was not found");
 
             int layerIndex = _layers[layer];
-            if (layerIndex == -1) throw new ArgumentException(string.Format("Layer [{0}] was not found", layer.ToString()));
+            if (layerIndex == -1) throw new ArgumentException($"Layer [{layer}] was not found");
 
             TW[] result = new TW[_legends.Count];
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i, labelIndex, layerIndex];
-            return Series<T, TW, string>.Create(string.Format("{0}{1}", label.ToString(), layer.ToString()), _legends, result);
+            return Series<T, TW, string>.Create<Series<T, TW, string>>($"{label}{layer}", _legends, result);
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
@@ -203,7 +203,7 @@ namespace Euclid.DataStructures.IndexedSeries
                     for (int i = 0; i < _legends.Count; i++)
                         data[i] = _data[i, j, k];
 
-                    result[j, k] = Series<T, TW, string>.Create(string.Format("{0}{1}", _labels.ElementAt(j), _layers.ElementAt(k)), _legends, data);
+                    result[j, k] = Series<T, TW, string>.Create<Series<T, TW, string>>($"{_labels.ElementAt(j)}{_layers.ElementAt(k)}", _legends, data);
                 }
             return result;
         }

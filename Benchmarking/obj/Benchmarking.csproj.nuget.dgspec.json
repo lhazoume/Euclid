@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lucha\\source\\repos\\Euclid\\Benchmarking\\Benchmarking.csproj": {}
+    "D:\\IT\\Github\\Euclid\\Benchmarking\\Benchmarking.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lucha\\source\\repos\\Euclid\\Benchmarking\\Benchmarking.csproj": {
+    "D:\\IT\\Github\\Euclid\\Benchmarking\\Benchmarking.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lucha\\source\\repos\\Euclid\\Benchmarking\\Benchmarking.csproj",
+        "projectUniqueName": "D:\\IT\\Github\\Euclid\\Benchmarking\\Benchmarking.csproj",
         "projectName": "Benchmarking",
-        "projectPath": "C:\\Users\\lucha\\source\\repos\\Euclid\\Benchmarking\\Benchmarking.csproj",
-        "packagesPath": "C:\\Users\\lucha\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lucha\\source\\repos\\Euclid\\Benchmarking\\obj\\",
+        "projectPath": "D:\\IT\\Github\\Euclid\\Benchmarking\\Benchmarking.csproj",
+        "packagesPath": "C:\\Users\\aymer\\.nuget\\packages\\",
+        "outputPath": "D:\\IT\\Github\\Euclid\\Benchmarking\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\lucha\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\aymer\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,14 +25,16 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\IT\\Github\\Nuggets": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://dotnet.myget.org/F/dotnet-corefxlab/api/v3/index.json": {}
         },
         "frameworks": {
           "netstandard2.0": {
             "targetAlias": "netstandard2.0",
             "projectReferences": {
-              "C:\\Users\\lucha\\source\\repos\\Euclid\\Euclid\\Euclid.csproj": {
-                "projectPath": "C:\\Users\\lucha\\source\\repos\\Euclid\\Euclid\\Euclid.csproj"
+              "D:\\IT\\Github\\Euclid\\Euclid\\Euclid.csproj": {
+                "projectPath": "D:\\IT\\Github\\Euclid\\Euclid\\Euclid.csproj"
               }
             }
           }
@@ -61,23 +66,23 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\lucha\\source\\repos\\Euclid\\Euclid\\Euclid.csproj": {
+    "D:\\IT\\Github\\Euclid\\Euclid\\Euclid.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\lucha\\source\\repos\\Euclid\\Euclid\\Euclid.csproj",
+        "projectUniqueName": "D:\\IT\\Github\\Euclid\\Euclid\\Euclid.csproj",
         "projectName": "Euclid",
-        "projectPath": "C:\\Users\\lucha\\source\\repos\\Euclid\\Euclid\\Euclid.csproj",
+        "projectPath": "D:\\IT\\Github\\Euclid\\Euclid\\Euclid.csproj",
         "frameworks": {
-          "net452": {
+          "net48": {
             "projectReferences": {}
           }
         }
       },
       "frameworks": {
-        "net452": {}
+        "net48": {}
       }
     }
   }

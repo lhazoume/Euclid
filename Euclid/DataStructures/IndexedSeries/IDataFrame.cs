@@ -267,7 +267,7 @@ namespace Euclid.DataStructures.IndexedSeries
             TU[] result = new TU[_legends.Count];
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i, index];
-            return Series<T, TU, TV>.Create(label, _legends, result);
+            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, _legends, result);
         }
 
         /// <summary> Gets the data-point column of the given label</summary>
@@ -289,7 +289,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 legends.Add(_legends.ElementAt(indice));
                 data.Add(_data[indice, indexLabel]);
             }
-            return Series<T, TU, TV>.Create(label, legends, data);
+            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, legends, data);
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
@@ -303,7 +303,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 for (int i = 0; i < _legends.Count; i++)
                     data[i] = _data[i, j];
 
-                result[j] = Series<T, TU, TV>.Create(_labels.ElementAt(j), _legends, data);
+                result[j] = Series<T, TU, TV>.Create<Series<T, TU, TV>>(_labels.ElementAt(j), _legends, data);
             }
             return result;
         }
@@ -366,7 +366,7 @@ namespace Euclid.DataStructures.IndexedSeries
             _labels.Remove(label);
             _data = newData;
 
-            return Series<T, TU, TV>.Create(label, _legends, takenData);
+            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, _legends, takenData);
         }
 
         #endregion
@@ -531,7 +531,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Extracts the part of the DataFrame whose legends obeys the predicate</summary>
         /// <param name="predicate">the predicate on the legends</param>
         /// <returns>a DataFrame</returns>
-        public TY ExtractByLegend<TY>(Func<T, bool> predicate) where TY : IDataFrame<T, TU, TV>, new()
+        public TY ExtractByLegend<TY>(Func<T, bool> predicate) where TY : IDataFrame<T, TU, TV>
         {
             return Create<TY>(_legends.Where(predicate).Select(l => GetSliceAt(l)));
         }
