@@ -11,16 +11,16 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="TU">the data type</typeparam>
     /// <typeparam name="TV">the label type</typeparam>
-    public class Slice<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
+    public class Slice<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
-        private readonly Header<TV> _labels;
+        private readonly IHeader<TV> _labels;
         private TU[] _data;
         private T _legend;
         #endregion
 
         #region Constructors
-        private Slice(Header<TV> labels, T legend, IEnumerable<TU> data)
+        private Slice(IHeader<TV> labels, T legend, IEnumerable<TU> data)
         {
             _data = data.ToArray();
             _labels = labels.Clone();
@@ -210,7 +210,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="legend">the legend</param>
         /// <param name="data">the data</param>
         /// <returns>a <c>Slice</c></returns>
-        public static Slice<T, TU, TV> Create(Header<TV> labels, T legend, IEnumerable<TU> data)
+        public static Slice<T, TU, TV> Create(IHeader<TV> labels, T legend, IEnumerable<TU> data)
         {
             if (labels == null) throw new ArgumentNullException(nameof(labels));
 

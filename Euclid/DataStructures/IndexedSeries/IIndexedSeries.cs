@@ -9,7 +9,7 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <typeparam name="T">the type of legends</typeparam>
     /// <typeparam name="TU">the type of the data</typeparam>
     /// <typeparam name="TV">the type of the labels</typeparam>
-    public interface IIndexedSeries<T, TU, TV> : IXmlable, ICSVable where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
+    public interface IIndexedSeries<T, TU, TV> : IXmlable, ICSVable where TV : IEquatable<TV>
     {
         /// <summary>Gets the legends</summary>
         T[] Legends { get; }

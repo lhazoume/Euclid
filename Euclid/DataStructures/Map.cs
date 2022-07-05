@@ -4,28 +4,112 @@ using System.Linq;
 
 namespace Euclid.DataStructures
 {
+    /// <summary>
+    /// A two ways dictionary interface
+    /// </summary>
+    /// <typeparam name="T1">the left hand side type</typeparam>
+    /// <typeparam name="T2">the right hand side type</typeparam>
+    public interface IMap<T1, T2> where T1 : IEquatable<T1> where T2 : IEquatable<T2>
+    {
+        #region vars
+        /// <summary>Gets an enumerator for the left hand side</summary>
+        IEnumerator<T1> ForwardEnumerator { get; }
+        /// <summary>Gets an enumerator for the right hand side </summary>
+        IEnumerator<T2> BackwardEnumerator { get; }
+        #endregion
+
+        #region methods
+
+        #region Add / remove
+        /// <summary>Adds a pair to the map</summary>
+        /// <param name="t1">the left hand side key</param>
+        /// <param name="t2">the right hand side key</param>
+        void Add(T1 t1, T2 t2);
+        /// <summary>Removes a pair from the map</summary>
+        /// <param name="t1">the left hand side key</param>
+        /// <param name="t2">the right hand side key</param>
+        void Remove(T1 t1, T2 t2);
+        /// <summary>Sets the right hand side value for a given left hand side value</summary>
+        /// <param name="key">the left hand side key</param>
+        /// <param name="newValue">the new right hand side value</param>
+        void SetForward(T1 key, T2 newValue);
+        /// <summary>Sets the left hand side value for a given right hand side value</summary>
+        /// <param name="key">the right hand side key</param>
+        /// <param name="newValue">the new left right hand side value</param>
+        void SetBackward(T2 key, T1 newValue);
+        #endregion
+        #region Contains
+        /// <summary>Checks if the left hand side contains a key</summary>
+        /// <param name="t1">the left hand side key</param>
+        /// <returns><c>True</c> if this is a left hand side key, <c>False</c> otherwise</returns>
+        bool ContainsForwardKey(T1 t1);
+
+        /// <summary>Checks if the right hand side contains a key</summary>
+        /// <param name="t2">the right hand side key</param>
+        /// <returns><c>True</c> if this a right hand side key, <c>False</c> otherwise</returns>
+        bool ContainsBackwardKey(T2 t2);
+        #endregion
+
+        #region Access
+        /// <summary>Gets the right hand side value associated to a left hand side key</summary>
+        /// <param name="t1">The left hand side key</param>
+        /// <returns>a right hand side key</returns>
+        T2 Forward(T1 t1);
+
+        /// <summary>Gets the left hand side value associated to a right hand side key</summary>
+        /// <param name="t2">The right hand side key</param>
+        /// <returns>a left hand side key</returns>
+        T1 Backward(T2 t2);
+
+        /// <summary>Gets the left hand side keys</summary>
+        T1[] Lefts { get; }
+
+        /// <summary>Gets the right hand side keys</summary>
+        T2[] Rights { get; }
+
+        /// <summary>Gets the number of pairs in the map</summary>
+        int Count { get; }
+
+        /// <summary>Gets a deep copy of the map</summary>
+        Map<T1, T2> Clone();
+        #endregion
+        #endregion
+    }
     /// <summary>A two ways dictionary class</summary>
     /// <typeparam name="T1">the left hand side type</typeparam>
     /// <typeparam name="T2">the right hand side type</typeparam>
-    public class Map<T1, T2>
+    public class Map<T1, T2> : IMap<T1, T2>
         where T1 : IEquatable<T1>
         where T2 : IEquatable<T2>
     {
         #region Declarations
-        private readonly object _lock = new object();
-        private readonly Dictionary<T1, T2> _forward = new Dictionary<T1, T2>();
-        private readonly Dictionary<T2, T1> _backward = new Dictionary<T2, T1>();
+        /// <summary>
+        /// lock field for thread safety
+        /// </summary>
+        protected readonly object _lock = new object();
+        /// <summary>
+        /// forward field
+        /// </summary>
+        protected IDictionary<T1, T2> _forward;
+        /// <summary>
+        /// backward field
+        /// </summary>
+        protected IDictionary<T2, T1> _backward;
         #endregion
 
         #region Constructors
-        private Map(Dictionary<T1, T2> forward, Dictionary<T2, T1> backward)
+        private Map(IDictionary<T1, T2> forward, IDictionary<T2, T1> backward)
         {
             _forward = new Dictionary<T1, T2>(forward);
             _backward = new Dictionary<T2, T1>(backward);
         }
 
         /// <summary>Builds an empty map</summary>
-        public Map() { }
+        public Map() 
+        {
+            _forward = new Dictionary<T1, T2>();
+            _backward = new Dictionary<T2, T1>();
+        }
 
         /// <summary>Builds a Map of </summary>
         /// <param name="values"></param>
@@ -155,11 +239,10 @@ namespace Euclid.DataStructures
         public int Count => _forward.Count;
 
         /// <summary>Gets a deep copy of the map</summary>
-        public Map<T1, T2> Clone()
+        public virtual Map<T1, T2> Clone()
         {
             Map<T1, T2> map;
-            lock (_lock)
-                map = new Map<T1, T2>(_forward, _backward);
+            lock (_lock) map = new Map<T1, T2>(_forward, _backward);
             return map;
         }
     }

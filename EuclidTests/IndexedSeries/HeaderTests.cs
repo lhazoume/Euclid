@@ -68,7 +68,7 @@ namespace Euclid.IndexedSeries.Tests
         [TestMethod()]
         public void CloneTest()
         {
-            Header<string> result = BuildHeader(),
+            IHeader<string> result = BuildHeader(),
                 clone = result.Clone();
             Assert.AreEqual(result["C0"] + "_" + result["C1"], clone["C0"] + "_" + clone["C1"]);
         }
