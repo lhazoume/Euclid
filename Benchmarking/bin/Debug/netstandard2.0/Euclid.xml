@@ -1197,9 +1197,7 @@
             <returns>Instance</returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Create``1(System.String)">
-            <summary>
-            Builds a <c>DataFrame</c> from a CSV string
-            </summary>
+            <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
             <typeparam name="TY">IDataFrame implementation</typeparam>
             <param name="text">the serialized version of the data</param>
             <returns>Instance</returns>
@@ -1474,10 +1472,7 @@
             <returns>a Header</returns>
         </member>
         <member name="T:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2">
-            <summary>
-            Class representing a DataFrame of synchronized data ordered by time 
-            </summary>
-            <typeparam name="DateTime">The legend type</typeparam>
+            <summary>Class representing a DataFrame of synchronized data ordered by time </summary>
             <typeparam name="TU">The data type</typeparam>
             <typeparam name="TV">The lable type</typeparam>
         </member>
