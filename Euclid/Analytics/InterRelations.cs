@@ -16,7 +16,7 @@ namespace Euclid.Analytics
         {
             if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
             int n = dataFrame.Rows;
-            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels);
 
             #region Averages
             double[] averages = new double[dataFrame.Columns];
@@ -57,7 +57,7 @@ namespace Euclid.Analytics
             if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
 
             int n = dataFrame.Rows;
-            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels);
 
             #region Averages
             double[] averages = new double[dataFrame.Columns],
@@ -106,7 +106,7 @@ namespace Euclid.Analytics
             if (dataFrame1 == null) throw new ArgumentNullException(nameof(dataFrame1));
             if (dataFrame2 == null) throw new ArgumentNullException(nameof(dataFrame2));
 
-            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame1.Labels, dataFrame2.Labels, new double[dataFrame2.Columns, dataFrame1.Columns]);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame1.Labels, dataFrame2.Labels);
             if (dataFrame1.Rows != dataFrame2.Rows) throw new Exception("Rows do not match");
             int n = dataFrame1.Rows;
 
@@ -171,7 +171,7 @@ namespace Euclid.Analytics
         {
             if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
             int n = dataFrame.Rows;
-            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels, new double[n, n]);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels);
 
             #region Distinct values
             double[][] distincts = new double[dataFrame.Columns][];

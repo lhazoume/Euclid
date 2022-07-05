@@ -8,6 +8,35 @@ namespace Euclid.Extensions
     /// <summary>Helper class for generic array manipulations</summary>
     public static class Arrays
     {
+        public static T[][] Build<T>(int rows, int columns)
+        {
+            T[][] result = new T[rows][];
+            for (int i = 0; i < rows; i++)
+                result[i] = new T[columns];
+            return result;
+        }
+
+
+        /// <summary>Clones a jagged array</summary>
+        /// <typeparam name="T">template type</typeparam>
+        /// <param name="data">the 2d array of data</param>
+        /// <returns>a shallow copy of data</returns>
+        public static T[][] Clone<T>(this T[][] data)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            int n = data.Length;
+            T[][] result = new T[n][];
+            for (int i = 0; i < n; i++)
+            {
+                result[i] = new T[data[i].Length];
+                for (int j = 0; j < data[i].Length; j++)
+                    result[i][j] = data[i][j];
+            }
+
+            return result;
+        }
+
         /// <summary>clones a generic array</summary>
         /// <typeparam name="T">template type</typeparam>
         /// <param name="data">the array of data</param>

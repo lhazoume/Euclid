@@ -24,10 +24,9 @@ namespace Euclid.Solvers.Tests
         {
             UniformDistribution uniform = new UniformDistribution(0, 1);
             int dimension = 10;
-            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(
+            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(v=> 0.0,
                 Enumerable.Range(0, 1000).Select(i => Vector.CreateRandom(dimension, uniform)),
                 OptimizationType.Min,
-                v => 0.0,
                 100, 10);
 
             Assert.IsTrue(pso != null && pso.MaxIterations == 100 && pso.MaxStaticIterations == 10 && pso.SwarmSize == 1000);
@@ -38,10 +37,9 @@ namespace Euclid.Solvers.Tests
         {
             UniformDistribution uniform = new UniformDistribution(-2, 2);
             int dimension = 2;
-            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(
+            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(Rosenbrock,
                 Enumerable.Range(0, 10000).Select(i => Vector.CreateRandom(dimension, uniform)),
                 OptimizationType.Min,
-                Rosenbrock,
                 100, 10);
             pso.Optimize(false);
 
@@ -53,10 +51,9 @@ namespace Euclid.Solvers.Tests
         {
             UniformDistribution uniform = new UniformDistribution(-5, 5);
             int dimension = 5;
-            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(
+            ParticleSwarmOptimizer pso = new ParticleSwarmOptimizer(Rastrigin,
                 Enumerable.Range(0, 10000).Select(i => Vector.CreateRandom(dimension, uniform)),
                 OptimizationType.Min,
-                Rastrigin,
                 10000, 100);
             pso.Optimize(false);
 

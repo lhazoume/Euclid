@@ -16,11 +16,11 @@ namespace Euclid.DataStructures.IndexedSeries
         #region Declarations
         private readonly Header<TV> _labels;
         private readonly Header<T> _legends;
-        private TU[,] _data;
+        private TU[][] _data;
         #endregion
 
         #region Constructors
-        private DataFrame(IList<TV> labels, IList<T> legends, TU[,] data)
+        private DataFrame(IList<TV> labels, IList<T> legends, TU[][] data)
         {
             _data = Arrays.Clone(data);
             _labels = new Header<TV>(labels);
@@ -58,13 +58,13 @@ namespace Euclid.DataStructures.IndexedSeries
             #endregion
 
             #region Data
-            TU[,] data = new TU[legends.Length, labels.Length];
+            TU[][] data = Arrays.Build<TU>(legends.Length, labels.Length);
             foreach (XmlNode point in dataNodes)
             {
                 int row = int.Parse(point.Attributes["row"].Value),
                     col = int.Parse(point.Attributes["col"].Value);
                 TU value = point.Attributes["value"].Value.Parse<TU>();
-                data[row, col] = value;
+                data[row][col] = value;
             }
             #endregion
 
@@ -76,7 +76,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
         /// <returns>a <c>DataFrame</c></returns>
-        public static DataFrame<T, TU, TV> Create(IList<TV> labels, IList<T> legends, TU[,] data)
+        public static DataFrame<T, TU, TV> Create(IList<TV> labels, IList<T> legends, TU[][] data)
         {
             return new DataFrame<T, TU, TV>(labels, legends, data);
         }
@@ -90,7 +90,7 @@ namespace Euclid.DataStructures.IndexedSeries
             if (labels == null) throw new ArgumentNullException(nameof(labels));
             if (legends == null) throw new ArgumentNullException(nameof(legends));
 
-            return new DataFrame<T, TU, TV>(labels, legends, new TU[legends.Count, labels.Count]);
+            return new DataFrame<T, TU, TV>(labels, legends, Arrays.Build<TU>(legends.Count, labels.Count));
         }
 
         /// <summary> Builds a <c>DataFrame</c></summary>
@@ -98,10 +98,10 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a DataFrame</returns>
         public static DataFrame<T, TU, TV> Create(IEnumerable<Slice<T, TU, TV>> slices)
         {
-            TU[,] data = new TU[slices.Count(), slices.ElementAt(0).Columns];
+            TU[][] data = Arrays.Build<TU>(slices.Count(), slices.ElementAt(0).Columns);
             for (int i = 0; i < data.GetLength(0); i++)
                 for (int j = 0; j < data.GetLength(1); j++)
-                    data[i, j] = slices.ElementAt(i)[j];
+                    data[i][j] = slices.ElementAt(i)[j];
             return new DataFrame<T, TU, TV>(slices.ElementAt(0).Labels, slices.Select(s => s.Legend).ToList(), data);
         }
 
@@ -110,10 +110,10 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a DataFrame</returns>
         public static DataFrame<T, TU, TV> Create(IEnumerable<Series<T, TU, TV>> series)
         {
-            TU[,] data = new TU[series.ElementAt(0).Rows, series.Count()];
+            TU[][] data = Arrays.Build<TU>(series.ElementAt(0).Rows, series.Count());
             for (int i = 0; i < data.GetLength(0); i++)
                 for (int j = 0; j < data.GetLength(1); j++)
-                    data[i, j] = series.ElementAt(j)[i];
+                    data[i][j] = series.ElementAt(j)[i];
             return new DataFrame<T, TU, TV>(series.Select(s => s.Label).ToList(), series.ElementAt(0).Legends, data);
         }
 
@@ -139,7 +139,7 @@ namespace Euclid.DataStructures.IndexedSeries
             #region Legends and data
             int rows = lines.Length - 1;
             T[] legends = new T[rows];
-            TU[,] data = new TU[rows, cols];
+            TU[][] data = Arrays.Build<TU>(rows, cols);
 
             for (int i = 0; i < rows; i++)
             {
@@ -148,7 +148,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 legends[i] = lineSplit[0].Parse<T>();
 
                 for (int j = 0; j < cols; j++)
-                    data[i, j] = lineSplit[1 + j].Parse<TU>();
+                    data[i][j] = lineSplit[1 + j].Parse<TU>();
             }
             #endregion
 
@@ -171,7 +171,7 @@ namespace Euclid.DataStructures.IndexedSeries
         public int Rows => _legends.Count;
 
         /// <summary>Gets the data</summary>
-        public TU[,] Data => _data;
+        public TU[][] Data => _data;
 
 
         /// <summary>Gets and sets the data for the i-th row and j-th column of the <c>DataFrame</c></summary>
@@ -180,8 +180,8 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a data point</returns>
         public TU this[int i, int j]
         {
-            get { return _data[i, j]; }
-            set { _data[i, j] = value; }
+            get { return _data[i][j]; }
+            set { _data[i][j] = value; }
         }
 
         /// <summary>Gets and sets the data for a given legend and a given label</summary>
@@ -190,8 +190,8 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a data point</returns>
         public TU this[T t, TV v]
         {
-            get { return _data[_legends[t], _labels[v]]; }
-            set { _data[_legends[t], _labels[v]] = value; }
+            get { return _data[_legends[t]][_labels[v]]; }
+            set { _data[_legends[t]][_labels[v]] = value; }
         }
         #endregion
 
@@ -227,7 +227,7 @@ namespace Euclid.DataStructures.IndexedSeries
             if (index == -1) throw new ArgumentException("Label [" + label.ToString() + "] was not found");
             TU[] result = new TU[_legends.Count];
             for (int i = 0; i < _legends.Count; i++)
-                result[i] = _data[i, index];
+                result[i] = _data[i][index];
             return Series<T, TU, TV>.Create(label, _legends, result);
         }
 
@@ -248,7 +248,7 @@ namespace Euclid.DataStructures.IndexedSeries
             foreach (int indice in matchingIndices)
             {
                 legends.Add(_legends.ElementAt(indice));
-                data.Add(_data[indice, indexLabel]);
+                data.Add(_data[indice][indexLabel]);
             }
             return Series<T, TU, TV>.Create(label, legends, data);
         }
@@ -262,7 +262,7 @@ namespace Euclid.DataStructures.IndexedSeries
             {
                 TU[] data = new TU[_legends.Count];
                 for (int i = 0; i < _legends.Count; i++)
-                    data[i] = _data[i, j];
+                    data[i] = _data[i][j];
 
                 result[j] = Series<T, TU, TV>.Create(_labels.ElementAt(j), _legends, data);
             }
@@ -279,12 +279,12 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             if (column == null) throw new ArgumentNullException(nameof(column));
 
-            TU[,] newData = new TU[_legends.Count, _labels.Count + 1];
+            TU[][] newData = Arrays.Build<TU>(_legends.Count, _labels.Count + 1);
             for (int i = 0; i < _legends.Count; i++)
             {
-                newData[i, _labels.Count] = column[i];
+                newData[i][_labels.Count] = column[i];
                 for (int j = 0; j < _labels.Count; j++)
-                    newData[i, j] = _data[i, j];
+                    newData[i][j] = _data[i][j];
             }
 
             _labels.Add(label);
@@ -312,16 +312,16 @@ namespace Euclid.DataStructures.IndexedSeries
             if (indexToRemove == -1 || _labels.Count == 1) return null;
 
             TU[] takenData = new TU[_legends.Count];
-            TU[,] newData = new TU[_legends.Count, _data.Length - 1];
+            TU[][] newData = Arrays.Build<TU>(_legends.Count, _data.Length - 1);
             for (int j = 0; j < _labels.Count; j++)
             {
                 if (j == indexToRemove)
                     for (int i = 0; i < _legends.Count; i++)
-                        takenData[i] = _data[i, j];
+                        takenData[i] = _data[i][j];
                 else
                 {
                     for (int i = 0; i < _legends.Count; i++)
-                        newData[i, j - (j < indexToRemove ? 0 : 1)] = _data[i, j];
+                        newData[i][j - (j < indexToRemove ? 0 : 1)] = _data[i][j];
                 }
             }
             _labels.Remove(label);
@@ -344,13 +344,13 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             int indexToRemove = _labels[label];
             if (indexToRemove == -1 || _labels.Count == 1) return false;
-            TU[,] newData = new TU[_legends.Count, _data.Length - 1];
+            TU[][] newData = Arrays.Build<TU>(_legends.Count, _data.Length - 1);
 
             for (int j = 0; j < _labels.Count; j++)
             {
                 if (j == indexToRemove) continue;
                 for (int i = 0; i < _legends.Count; i++)
-                    newData[i, j - (j < indexToRemove ? 0 : 1)] = _data[i, j];
+                    newData[i][j - (j < indexToRemove ? 0 : 1)] = _data[i][j];
             }
 
             _labels.Remove(label);
@@ -385,7 +385,7 @@ namespace Euclid.DataStructures.IndexedSeries
             if (index == -1) throw new ArgumentException(string.Format("Legend [{0}] was not found", legend.ToString()));
             TU[] result = new TU[_labels.Count];
             for (int j = 0; j < _labels.Count; j++)
-                result[j] = _data[index, j];
+                result[j] = _data[index][j];
             return Slice<T, TU, TV>.Create(_labels, legend, result);
         }
 
@@ -398,7 +398,7 @@ namespace Euclid.DataStructures.IndexedSeries
             {
                 TU[] data = new TU[_labels.Count];
                 for (int j = 0; j < _labels.Count; j++)
-                    data[j] = _data[i, j];
+                    data[j] = _data[i][j];
 
                 result[i] = Slice<T, TU, TV>.Create(_labels, _legends.ElementAt(i), data);
             }
@@ -416,12 +416,12 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             if (slice == null) throw new ArgumentNullException(nameof(slice));
 
-            TU[,] newData = new TU[_legends.Count + 1, _labels.Count];
+            TU[][] newData = Arrays.Build<TU>(_legends.Count + 1, _labels.Count);
             for (int j = 0; j < _labels.Count; j++)
             {
-                newData[_legends.Count, j] = slice[j];
+                newData[_legends.Count][j] = slice[j];
                 for (int i = 0; i < _legends.Count; i++)
-                    newData[i, j] = _data[i, j];
+                    newData[i][j] = _data[i][j];
             }
 
             _legends.Add(legend);
@@ -449,16 +449,16 @@ namespace Euclid.DataStructures.IndexedSeries
             if (indexToRemove == -1 || _legends.Count == 1) return null;
 
             TU[] takenData = new TU[_labels.Count];
-            TU[,] newData = new TU[_legends.Count - 1, _labels.Count];
+            TU[][] newData = Arrays.Build<TU>(_legends.Count - 1, _labels.Count);
 
             for (int i = 0; i < _legends.Count; i++)
             {
                 if (i == indexToRemove)
                     for (int j = 0; j < _labels.Count; j++)
-                        takenData[j] = _data[i, j];
+                        takenData[j] = _data[i][j];
                 else
                     for (int j = 0; j < _labels.Count; j++)
-                        newData[i - (i < indexToRemove ? 0 : 1), j] = _data[i, j];
+                        newData[i - (i < indexToRemove ? 0 : 1)][j] = _data[i][j];
             }
             _legends.Remove(legend);
             _data = newData;
@@ -475,12 +475,12 @@ namespace Euclid.DataStructures.IndexedSeries
             int indexToRemove = _legends[legend];
             if (indexToRemove == -1 || _legends.Count == 1) return false;
 
-            TU[,] newData = new TU[_legends.Count - 1, _labels.Count];
+            TU[][] newData = Arrays.Build<TU>(_legends.Count - 1, _labels.Count);
             for (int i = 0; i < _legends.Count; i++)
             {
                 if (i == indexToRemove) continue;
                 for (int j = 0; j < _labels.Count; j++)
-                    newData[i - (i < indexToRemove ? 0 : 1), j] = _data[i, j];
+                    newData[i - (i < indexToRemove ? 0 : 1)][j] = _data[i][j];
             }
             _legends.Remove(legend);
             _data = newData;
@@ -515,7 +515,7 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
-                    _data[i, j] = function(_data[i, j]);
+                    _data[i][j] = function(_data[i][j]);
         }
 
         /// <summary>Applies a function to all the legends</summary>
@@ -609,7 +609,7 @@ namespace Euclid.DataStructures.IndexedSeries
                     writer.WriteStartElement("point");
                     writer.WriteAttributeString("row", i.ToString());
                     writer.WriteAttributeString("col", j.ToString());
-                    writer.WriteAttributeString("value", _data[i, j].ToString());
+                    writer.WriteAttributeString("value", _data[i][j].ToString());
                     writer.WriteEndElement();
                 }
             #endregion
@@ -646,14 +646,14 @@ namespace Euclid.DataStructures.IndexedSeries
 
             #region Values
             XmlNodeList pointNodes = node.SelectNodes("point");
-            TU[,] data = new TU[legends.Count, labels.Count];
+            TU[][] data = Arrays.Build<TU>(legends.Count, labels.Count);
 
             foreach (XmlNode pointNode in pointNodes)
             {
                 int i = int.Parse(pointNode.Attributes["row"].Value),
                     j = int.Parse(pointNode.Attributes["col"].Value);
                 TU value = pointNode.Attributes["value"].Value.Parse<TU>();
-                data[i, j] = value;
+                data[i][j] = value;
             }
 
             return new DataFrame<T, TU, TV>(labels, legends, data);
@@ -673,7 +673,7 @@ namespace Euclid.DataStructures.IndexedSeries
             for (int i = 0; i < _legends.Count; i++)
             {
                 TU[] row = new TU[_labels.Count];
-                for (int j = 0; j < _labels.Count; j++) row[j] = _data[i, j];
+                for (int j = 0; j < _labels.Count; j++) row[j] = _data[i][j];
                 lines[i + 1] = string.Format("{0}{1}{2}", _legends.ElementAt(i).ToString(), CsvHelper.Separator, string.Join(CsvHelper.Separator.ToString(), row));
             }
             return string.Join(Environment.NewLine, lines);

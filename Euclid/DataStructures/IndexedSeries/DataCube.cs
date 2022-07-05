@@ -135,7 +135,7 @@ namespace Euclid.DataStructures.IndexedSeries
         public int Depth => _layers.Count;
 
         /// <summary>Gets the data</summary>
-        public TW[,,] Data=> _data; 
+        public TW[,,] Data => _data;
 
         /// <summary>Gets and sets the data for the i-th row and j-th column of the <c>DataFrame</c></summary>
         /// <param name="i">the row index</param>
@@ -221,10 +221,10 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             int labelIndex = _labels[label];
             if (labelIndex == -1) throw new ArgumentException(string.Format("Label [{0}] was not found", label.ToString()));
-            TW[,] result = new TW[_legends.Count, _layers.Count];
+            TW[][] result = Arrays.Build<TW>(_legends.Count, _layers.Count);
             for (int i = 0; i < _legends.Count; i++)
                 for (int k = 0; k < _layers.Count; k++)
-                    result[i, k] = _data[i, labelIndex, k];
+                    result[i][k] = _data[i, labelIndex, k];
             return DataFrame<T, TW, TV>.Create(_layers.ToList(), _legends.ToList(), result);
         }
 
@@ -235,10 +235,10 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             int layerIndex = _layers[layer];
             if (layerIndex == -1) throw new ArgumentException(string.Format("Layer [{0}] was not found", layer.ToString()));
-            TW[,] result = new TW[_legends.Count, _labels.Count];
+            TW[][] result = Arrays.Build<TW>(_legends.Count, _labels.Count);
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
-                    result[i, j] = _data[i, j, layerIndex];
+                    result[i][j] = _data[i, j, layerIndex];
             return DataFrame<T, TW, TU>.Create(_labels.ToList(), _legends.ToList(), result);
         }
 

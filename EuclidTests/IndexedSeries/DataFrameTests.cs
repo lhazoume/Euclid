@@ -17,10 +17,10 @@ namespace Euclid.IndexedSeries.Tests
             DateTime.Today.AddDays(6), DateTime.Today.AddDays(7), DateTime.Today.AddDays(8),
             DateTime.Today.AddDays(9), DateTime.Today.AddDays(10), DateTime.Today.AddDays(11) };
 
-        private static readonly double[,] _data = new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 },
-            { 10, 11, 12 }, { 13, 14, 15 }, { 16, 17, 18 },
-            { 19, 20, 21 }, { 22, 23, 24 }, { 25, 26, 27 },
-            { 28, 29, 30 }, { 31, 32, 33 }, { 34, 35, 36 } };
+        private static readonly double[][] _data = new double[][] { new double[]{ 1, 2, 3 }, new double[]{ 4, 5, 6 }, new double[]{ 7, 8, 9 },
+            new double[]{ 10, 11, 12 }, new double[]{ 13, 14, 15 }, new double[]{ 16, 17, 18 },
+            new double[]{ 19, 20, 21 }, new double[]{ 22, 23, 24 }, new double[]{ 25, 26, 27 },
+            new double[]{ 28, 29, 30 }, new double[]{ 31, 32, 33 }, new double[]{ 34, 35, 36 } };
 
         private DataFrame<DateTime, double, string> SampleCreatedUsingFullConstructor()
         {
@@ -105,10 +105,10 @@ namespace Euclid.IndexedSeries.Tests
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
             bool areEqual = true;
-            double[,] data = dataFrame.Data;
+            double[][] data = dataFrame.Data;
             for (int i = 0; i < dataFrame.Rows; i++)
                 for (int j = 0; j < dataFrame.Columns; j++)
-                    if (data[i, j] != _data[i, j])
+                    if (data[i][j] != _data[i][j])
                     {
                         areEqual = false;
                         break;
@@ -123,7 +123,7 @@ namespace Euclid.IndexedSeries.Tests
             bool areEqual = true;
             for (int i = 0; i < dataFrame.Rows; i++)
                 for (int j = 0; j < dataFrame.Columns; j++)
-                    if (dataFrame[i, j] != _data[i, j])
+                    if (dataFrame[i, j] != _data[i][j])
                     {
                         areEqual = false;
                         break;
@@ -136,10 +136,10 @@ namespace Euclid.IndexedSeries.Tests
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
             bool areEqual = true;
-            double[,] data = dataFrame.Data;
+            double[][] data = dataFrame.Data;
             for (int i = 0; i < dataFrame.Rows; i++)
                 for (int j = 0; j < dataFrame.Columns; j++)
-                    if (dataFrame[_legends[i], _headers[j]] != _data[i, j])
+                    if (dataFrame[_legends[i], _headers[j]] != _data[i][j])
                     {
                         areEqual = false;
                         break;
@@ -159,7 +159,7 @@ namespace Euclid.IndexedSeries.Tests
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
             Series<DateTime, double, string> series = dataFrame.GetSeriesAt(_headers[0]);
-            Assert.IsTrue(series.Label == _headers[0] && Enumerable.Range(0, dataFrame.Rows).All(i => series[i] == _data[i, 0]));
+            Assert.IsTrue(series.Label == _headers[0] && Enumerable.Range(0, dataFrame.Rows).All(i => series[i] == _data[i][0]));
         }
 
         [TestMethod()]
@@ -168,7 +168,7 @@ namespace Euclid.IndexedSeries.Tests
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
             Series<DateTime, double, string>[] series = dataFrame.GetSeries();
             int[] rows = Enumerable.Range(0, dataFrame.Rows).ToArray();
-            Assert.IsTrue(Enumerable.Range(0, _headers.Length).All(j => series[j].Label == _headers[j] && rows.All(i => series[j][i] == _data[i, j])));
+            Assert.IsTrue(Enumerable.Range(0, _headers.Length).All(j => series[j].Label == _headers[j] && rows.All(i => series[j][i] == _data[i][j])));
         }
 
         #endregion
@@ -210,8 +210,8 @@ namespace Euclid.IndexedSeries.Tests
 
             Assert.IsTrue(takenSeries != null &&
                 dataFrame.Columns == _headers.Length - 1 &&
-                Enumerable.Range(0, dataFrame.Rows).All(i => takenSeries[i] == _data[i, 1]) &&
-                Enumerable.Range(0, dataFrame.Rows).All(i => dataFrame[i, 0] == _data[i, 0] && dataFrame[i, 1] == _data[i, 2]));
+                Enumerable.Range(0, dataFrame.Rows).All(i => takenSeries[i] == _data[i][1]) &&
+                Enumerable.Range(0, dataFrame.Rows).All(i => dataFrame[i, 0] == _data[i][0] && dataFrame[i, 1] == _data[i][2]));
         }
 
         #endregion
@@ -224,7 +224,7 @@ namespace Euclid.IndexedSeries.Tests
             dataFrame.RemoveSeriesAt("Col1");
             Assert.IsTrue(!dataFrame.Labels.Contains("Col1") &&
                 dataFrame.Columns == 2 &&
-                Enumerable.Range(0, dataFrame.Rows).All(i => dataFrame[i, 0] == _data[i, 1] && dataFrame[i, 1] == _data[i, 2]));
+                Enumerable.Range(0, dataFrame.Rows).All(i => dataFrame[i, 0] == _data[i][1] && dataFrame[i, 1] == _data[i][2]));
         }
         #endregion
 
@@ -251,7 +251,7 @@ namespace Euclid.IndexedSeries.Tests
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
             Slice<DateTime, double, string> slice = dataFrame.GetSliceAt(_legends[0]);
-            Assert.IsTrue(slice.Legend == _legends[0] && Enumerable.Range(0, dataFrame.Columns).All(i => slice[i] == _data[0, i]));
+            Assert.IsTrue(slice.Legend == _legends[0] && Enumerable.Range(0, dataFrame.Columns).All(i => slice[i] == _data[0][i]));
         }
 
         [TestMethod()]
@@ -260,7 +260,7 @@ namespace Euclid.IndexedSeries.Tests
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
             Slice<DateTime, double, string>[] slices = dataFrame.GetSlices();
             int[] cols = Enumerable.Range(0, dataFrame.Columns).ToArray();
-            Assert.IsTrue(Enumerable.Range(0, _legends.Length).All(i => slices[i].Legend == _legends[i] && cols.All(j => slices[i][j] == _data[i, j])));
+            Assert.IsTrue(Enumerable.Range(0, _legends.Length).All(i => slices[i].Legend == _legends[i] && cols.All(j => slices[i][j] == _data[i][j])));
         }
 
         #endregion
@@ -302,7 +302,7 @@ namespace Euclid.IndexedSeries.Tests
 
             Assert.IsTrue(takenSlice != null &&
                 dataFrame.Rows == _legends.Length - 1 &&
-                Enumerable.Range(0, dataFrame.Columns).All(j => takenSlice[j] == _data[2, j]));
+                Enumerable.Range(0, dataFrame.Columns).All(j => takenSlice[j] == _data[2][j]));
         }
         #endregion
 
@@ -360,7 +360,7 @@ namespace Euclid.IndexedSeries.Tests
             bool areEqual = true;
             for (int i = 0; i < dataFrame.Rows; i++)
                 for (int j = 0; j < dataFrame.Columns; j++)
-                    if (dataFrame[i, j] != _data[i, j] * _data[i, j])
+                    if (dataFrame[i, j] != _data[i][j] * _data[i][j])
                     {
                         areEqual = false;
                         break;

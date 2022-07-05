@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Euclid.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -82,6 +83,19 @@ namespace Euclid
                 for (int i = 0; i < _rows; i++)
                     for (int j = 0; j < _cols; j++)
                         result[i, j] = _data[i * _cols + j];
+                return result;
+            }
+        }
+
+        /// <summary>Gets the matrix' data as a jagged array</summary>
+        public double[][] JaggedArray
+        {
+            get
+            {
+                double[][] result = Arrays.Build<double>(_rows, _cols);
+                for (int i = 0; i < _rows; i++)
+                    for (int j = 0; j < _cols; j++)
+                        result[i][j] = _data[i * _cols + j];
                 return result;
             }
         }
@@ -804,6 +818,21 @@ namespace Euclid
             for (int i = 0; i < result.Rows; i++)
                 for (int j = 0; j < result.Columns; j++)
                     result[i, j] = model[i, j];
+            return result;
+        }
+
+        /// <summary>Builds a <c>Matrix</c> from a 2d-array of double</summary>
+        /// <param name="model">the 2d-array of data</param>
+        public static Matrix Create(double[][] model)
+        {
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            if (model.Length == 0) throw new ArgumentException(nameof(model));
+            if (model.Select(t => t.Length).Distinct().Count() != 1) throw new ArgumentException("the jagged array is not uniformely sized", nameof(model));
+            Matrix result = new Matrix(model.Length, model[0].Length, 0);
+
+            for (int i = 0; i < result.Rows; i++)
+                for (int j = 0; j < result.Columns; j++)
+                    result[i, j] = model[i][j];
             return result;
         }
 

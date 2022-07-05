@@ -17,7 +17,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             int[] indexes = new int[n];
             for (int i = 0; i < n; i++) indexes[i] = i;
 
-            double[,] data = Matrix.CreateRandom(n, 1).Array;
+            double[][] data = Matrix.CreateRandom(n, 1).JaggedArray;
 
             DataFrame<int, double, string> x = DataFrame<int, double, string>.Create(new string[] { "V0" }, indexes, data);
             for (int v = 1; v <= 9; v++)
@@ -39,7 +39,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             int[] indexes = new int[n];
             for (int i = 0; i < n; i++) indexes[i] = i;
 
-            double[,] data = Matrix.CreateRandom(n, 1).Array;
+            double[][] data = Matrix.CreateRandom(n, 1).JaggedArray;
 
             DataFrame<int, double, string> x = DataFrame<int, double, string>.Create(new string[] { "V0" }, indexes, data);
             for (int v = 1; v <= 2; v++)
@@ -71,7 +71,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             int[] indexes = new int[n];
             for (int i = 0; i < n; i++) indexes[i] = i;
 
-            double[,] data = Matrix.CreateRandom(n, 1).Array;
+            double[][] data = Matrix.CreateRandom(n, 1).JaggedArray;
 
             DataFrame<int, double, string> x = DataFrame<int, double, string>.Create(new string[] { "V0" }, indexes, data);
             for (int v = 1; v <= 3; v++)
