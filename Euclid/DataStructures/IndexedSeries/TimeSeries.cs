@@ -20,7 +20,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>
         /// Parameterless constructor
         /// </summary>
-        public TimeSeries() { }
+        protected TimeSeries() { }
         #endregion
 
         #region methods
