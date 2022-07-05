@@ -26,30 +26,10 @@ namespace Euclid.DataStructures.IndexedSeries
             _labels = new Header<TV>(labels);
             _legends = new Header<T>(legends);
         }
-        #endregion
 
-            #region Legends
-            T[] legends = new T[legendNodes.Count];
-            foreach (XmlNode legend in legendNodes)
-            {
-                int index = int.Parse(legend.Attributes["index"].Value);
-                legends[index] = legend.Attributes["value"].Value.Parse<T>();
-            }
-            #endregion
 
-            #region Data
-            TU[][] data = Arrays.Build<TU>(legends.Length, labels.Length);
-            foreach (XmlNode point in dataNodes)
-            {
-                int row = int.Parse(point.Attributes["row"].Value),
-                    col = int.Parse(point.Attributes["col"].Value);
-                TU value = point.Attributes["value"].Value.Parse<TU>();
-                data[row][col] = value;
-            }
-            #endregion
 
-            return new DataFrame<T, TU, TV>(labels, legends, data);
-        }
+
 
         /// <summary>Builds a <c>DataFrame</c> </summary>
         /// <param name="labels">the labels</param>
@@ -96,6 +76,8 @@ namespace Euclid.DataStructures.IndexedSeries
                     data[i][j] = series.ElementAt(j)[i];
             return new DataFrame<T, TU, TV>(series.Select(s => s.Label).ToList(), series.ElementAt(0).Legends, data);
         }
+
+
 
         /// <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
         /// <param name="text">the serialized version of the data</param>
@@ -208,7 +190,7 @@ namespace Euclid.DataStructures.IndexedSeries
             TU[] result = new TU[_legends.Count];
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i][index];
-            return Series<T, TU, TV>.Create(label, _legends, result);
+            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, _legends, result);
         }
 
         /// <summary> Gets the data-point column of the given label</summary>
@@ -230,7 +212,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 legends.Add(_legends.ElementAt(indice));
                 data.Add(_data[indice][indexLabel]);
             }
-            return Series<T, TU, TV>.Create(label, legends, data);
+            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, legends, data);
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
@@ -244,7 +226,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 for (int i = 0; i < _legends.Count; i++)
                     data[i] = _data[i][j];
 
-                result[j] = Series<T, TU, TV>.Create(_labels.ElementAt(j), _legends, data);
+                result[j] = Series<T, TU, TV>.Create<Series<T, TU, TV>>(_labels.ElementAt(j), _legends, data);
             }
             return result;
         }
@@ -307,7 +289,7 @@ namespace Euclid.DataStructures.IndexedSeries
             _labels.Remove(label);
             _data = newData;
 
-            return Series<T, TU, TV>.Create(label, _legends, takenData);
+            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, _legends, takenData);
         }
 
         #endregion
@@ -597,6 +579,7 @@ namespace Euclid.DataStructures.IndexedSeries
             writer.WriteEndElement();
         }
 
+
         /// <summary>Buils a <c>DataFrame</c></summary>
         /// <param name="node">the Xml node</param>
         /// <returns>a DataFrame</returns>
@@ -639,6 +622,7 @@ namespace Euclid.DataStructures.IndexedSeries
             return new DataFrame<T, TU, TV>(labels, legends, data);
             #endregion
         }
+
         #endregion
 
         #region ICSVable

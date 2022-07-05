@@ -24,7 +24,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="labels">Labels, serie of generic type</param>
         /// <param name="legends">Legends, serie of datetime type</param>
         /// <param name="data">Matric of generic type</param>
-        protected TimeDataFrame(IHeader<TV> labels, IHeader<DateTime> legends, TU[,] data) : base(labels, legends, data) { }
+        protected TimeDataFrame(IHeader<TV> labels, IHeader<DateTime> legends, TU[][] data) : base(labels, legends, data) { }
 
         /// <summary>
         /// public constructor
@@ -37,7 +37,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="labels">labels</param>
         /// <param name="legends">legends</param>
         /// <param name="data">data</param>
-        protected override void Initialize(IList<TV> labels, IList<DateTime> legends, TU[,] data)
+        protected override void Initialize(IList<TV> labels, IList<DateTime> legends, TU[][] data)
         {
             _data = Arrays.Clone(data);
             _labels = new SortedHeader<TV>(labels);
