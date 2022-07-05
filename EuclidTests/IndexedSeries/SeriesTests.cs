@@ -74,7 +74,7 @@ namespace Euclid.IndexedSeries.Tests
         public void CloneTest()
         {
             Series<DateTime, double, string> series = ValuesSeries(),
-                clone = series.Clone();
+                clone = series.Clone<Series<DateTime, double, string>>();
             Assert.IsTrue(series.Equals(clone));
         }
 

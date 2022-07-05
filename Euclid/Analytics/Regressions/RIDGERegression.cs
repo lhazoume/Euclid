@@ -32,7 +32,7 @@ namespace Euclid.Analytics.Regressions
             if (regularization <= 0) throw new ArgumentOutOfRangeException(nameof(regularization), "the regularization factor should be positive");
 
             _x = x.Clone<DataFrame<T, double, TV>>();
-            _y = y.Clone();
+            _y = y.Clone<Series<T, double, TV>>();
             _returnAverageIfFailed = false;
             _withConstant = true;
             _computeErr = true;

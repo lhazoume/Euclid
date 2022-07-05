@@ -1537,6 +1537,13 @@
             <returns>index of the target else -1</returns>
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
+        <member name="T:Euclid.DataStructures.IndexedSeries.TimeSeries`2">
+            <summary>
+            Class representing a serie ordered by time
+            </summary>
+            <typeparam name="TU"></typeparam>
+            <typeparam name="TV"></typeparam>
+        </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.TimeSeries`2.#ctor">
             <summary>
             Parameterless constructor
@@ -1549,6 +1556,11 @@
             <param name="label">Label</param>
             <param name="legends">Legends</param>
             <param name="data">Data</param>
+        </member>
+        <member name="P:Euclid.DataStructures.IndexedSeries.TimeSeries`2.Legends">
+            <summary>
+            returns the values of legend
+            </summary>
         </member>
         <member name="T:Euclid.DataStructures.IndexedSeries.DataCube`4">
             <summary>Class representing a cube of synchronized data</summary>
@@ -1856,7 +1868,7 @@
         <member name="P:Euclid.DataStructures.IndexedSeries.Series`3.Rows">
             <summary>Returns the number of rows of the <c>Series</c></summary>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Clone">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Clone``1">
             <summary>Clones the <c>Series</c></summary>
             <returns>a <c>Series</c></returns>
         </member>

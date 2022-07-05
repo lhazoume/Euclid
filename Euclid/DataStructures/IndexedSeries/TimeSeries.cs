@@ -2,11 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Euclid.DataStructures.IndexedSeries
 {
+    /// <summary>
+    /// Class representing a serie ordered by time
+    /// </summary>
+    /// <typeparam name="TU"></typeparam>
+    /// <typeparam name="TV"></typeparam>
     public class TimeSeries<TU, TV> : Series<DateTime, TU, TV> where TV : IEquatable<TV>
     {
         #region accessors
@@ -32,7 +35,15 @@ namespace Euclid.DataStructures.IndexedSeries
             _data = Arrays.Clone(data);
             _label = label;
             _legends = new SortedHeader<DateTime>(legends);
+            _timestamps = legends.ToArray();
         }
+        #endregion
+
+        #region accessors
+        /// <summary>
+        /// returns the values of legend
+        /// </summary>
+        public override DateTime[] Legends => _timestamps;
         #endregion
     }
 }

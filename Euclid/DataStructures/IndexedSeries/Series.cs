@@ -51,7 +51,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region Accessors
         /// <summary>Returns the legends of the <c>Series</c></summary>
-        public T[] Legends => _legends.Values;
+        public virtual T[] Legends => _legends.Values;
 
         /// <summary>Returns the labels of the <c>Series</c> (in this case, it is the only label)</summary>
         public TV[] Labels => new TV[] { _label };
@@ -76,9 +76,9 @@ namespace Euclid.DataStructures.IndexedSeries
         #region Methods
         /// <summary>Clones the <c>Series</c></summary>
         /// <returns>a <c>Series</c></returns>
-        public Series<T, TU, TV> Clone()
+        public TY Clone<TY>() where TY : Series<T, TU, TV>
         {
-            return new Series<T, TU, TV>(_label, _legends, _data);
+            return Create<TY>(_label, _legends, _data);
         }
 
         /// <summary>Gets and sets the i-th data of the <c>Series</c></summary>

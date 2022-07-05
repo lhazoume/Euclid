@@ -29,7 +29,7 @@ namespace Euclid.Analytics.Regressions
             if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
 
             _x = x.Clone<DataFrame<T, double, TV>>();
-            _y = y.Clone();
+            _y = y.Clone<Series<T, double, TV>>();
             _returnAverageIfFailed = false;
             _withConstant = true;
             _status = RegressionStatus.NotRan;

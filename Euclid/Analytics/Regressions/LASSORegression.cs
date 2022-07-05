@@ -33,7 +33,7 @@ namespace Euclid.Analytics.Regressions
             if (regularization <= 0) throw new ArgumentException("the regularization factor should be positive");
 
             _x = x.Clone<DataFrame<T, double, TV>>();
-            _y = y.Clone();
+            _y = y.Clone<Series<T, double, TV>>();
             _computeErr = true;
             _regularization = regularization;
             _status = RegressionStatus.NotRan;
