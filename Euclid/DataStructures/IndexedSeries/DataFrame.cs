@@ -578,7 +578,7 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
 
-        /// <summary>Buils a <c>DataFrame</c></summary>
+        /// <summary> Buils a <c>DataFrame</c> </summary>
         /// <param name="node">the Xml node</param>
         /// <returns>a DataFrame</returns>
         public static DataFrame<T, TU, TV> FromXml(XmlNode node)
@@ -625,7 +625,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region ICSVable
         /// <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
-        /// <returns>a <c>String</c></returns>
+        /// <returns>a <c>String</c> </returns>
         public string ToCSV()
         {
 
@@ -642,7 +642,7 @@ namespace Euclid.DataStructures.IndexedSeries
         }
         #endregion
 
-        /// <summary>Equality comparer</summary>
+        /// <summary> Equality comparer </summary>
         /// <param name="other">the other DataFrame</param>
         /// <returns>true if the data, legends and labels match, false otherwise</returns>
         public bool Equals(DataFrame<T, TU, TV> other)

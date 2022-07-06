@@ -1877,16 +1877,16 @@
             <param name="writer">the <c>XmlWriter</c></param>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.FromXml(System.Xml.XmlNode)">
-            <summary>Buils a <c>DataFrame</c></summary>
+            <summary> Buils a <c>DataFrame</c> </summary>
             <param name="node">the Xml node</param>
             <returns>a DataFrame</returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.ToCSV">
             <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
-            <returns>a <c>String</c></returns>
+            <returns>a <c>String</c> </returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.Equals(Euclid.DataStructures.IndexedSeries.DataFrame{`0,`1,`2})">
-            <summary>Equality comparer</summary>
+            <summary> Equality comparer </summary>
             <param name="other">the other DataFrame</param>
             <returns>true if the data, legends and labels match, false otherwise</returns>
         </member>
@@ -1988,71 +1988,6 @@
         <member name="T:Euclid.DataStructures.SelfFlushedQueue`1.Flush">
             <summary>Delegate definition of the flush method</summary>
             <param name="content">the data to treat after flush</param>
-        </member>
-        <member name="T:Euclid.DataStructures.I_Map`2">
-            <summary>
-            A two ways dictionary interface
-            </summary>
-            <typeparam name="T1">the left hand side type</typeparam>
-            <typeparam name="T2">the right hand side type</typeparam>
-        </member>
-        <member name="P:Euclid.DataStructures.I_Map`2.ForwardEnumerator">
-            <summary>Gets an enumerator for the left hand side</summary>
-        </member>
-        <member name="P:Euclid.DataStructures.I_Map`2.BackwardEnumerator">
-            <summary>Gets an enumerator for the right hand side </summary>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.Add(`0,`1)">
-            <summary>Adds a pair to the map</summary>
-            <param name="t1">the left hand side key</param>
-            <param name="t2">the right hand side key</param>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.Remove(`0,`1)">
-            <summary>Removes a pair from the map</summary>
-            <param name="t1">the left hand side key</param>
-            <param name="t2">the right hand side key</param>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.SetForward(`0,`1)">
-            <summary>Sets the right hand side value for a given left hand side value</summary>
-            <param name="key">the left hand side key</param>
-            <param name="newValue">the new right hand side value</param>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.SetBackward(`1,`0)">
-            <summary>Sets the left hand side value for a given right hand side value</summary>
-            <param name="key">the right hand side key</param>
-            <param name="newValue">the new left right hand side value</param>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.ContainsForwardKey(`0)">
-            <summary>Checks if the left hand side contains a key</summary>
-            <param name="t1">the left hand side key</param>
-            <returns><c>True</c> if this is a left hand side key, <c>False</c> otherwise</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.ContainsBackwardKey(`1)">
-            <summary>Checks if the right hand side contains a key</summary>
-            <param name="t2">the right hand side key</param>
-            <returns><c>True</c> if this a right hand side key, <c>False</c> otherwise</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.Forward(`0)">
-            <summary>Gets the right hand side value associated to a left hand side key</summary>
-            <param name="t1">The left hand side key</param>
-            <returns>a right hand side key</returns>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.Backward(`1)">
-            <summary>Gets the left hand side value associated to a right hand side key</summary>
-            <param name="t2">The right hand side key</param>
-            <returns>a left hand side key</returns>
-        </member>
-        <member name="P:Euclid.DataStructures.I_Map`2.Lefts">
-            <summary>Gets the left hand side keys</summary>
-        </member>
-        <member name="P:Euclid.DataStructures.I_Map`2.Rights">
-            <summary>Gets the right hand side keys</summary>
-        </member>
-        <member name="P:Euclid.DataStructures.I_Map`2.Count">
-            <summary>Gets the number of pairs in the map</summary>
-        </member>
-        <member name="M:Euclid.DataStructures.I_Map`2.Clone">
-            <summary>Gets a deep copy of the map</summary>
         </member>
         <member name="T:Euclid.DataStructures.Map`2">
             <summary>A two ways dictionary class</summary>
