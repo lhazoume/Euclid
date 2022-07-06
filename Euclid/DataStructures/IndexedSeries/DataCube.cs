@@ -220,12 +220,12 @@ namespace Euclid.DataStructures.IndexedSeries
         public DataFrame<T, TW, TV> GetDataFrameForLabel(TU label)
         {
             int labelIndex = _labels[label];
-            if (labelIndex == -1) throw new ArgumentException(string.Format("Label [{0}] was not found", label.ToString()));
+            if (labelIndex == -1) throw new ArgumentException($"Label [{label}] was not found");
             TW[][] result = Arrays.Build<TW>(_legends.Count, _layers.Count);
             for (int i = 0; i < _legends.Count; i++)
                 for (int k = 0; k < _layers.Count; k++)
                     result[i][k] = _data[i, labelIndex, k];
-            return DataFrame<T, TW, TV>.Create(_layers.ToList(), _legends.ToList(), result);
+            return DataFrame<T, TW, TV>.Create<DataFrame<T, TW, TV>>(_layers.ToList(), _legends.ToList(), result);
         }
 
         /// <summary>Gets the dataframe for a given layer</summary>
@@ -234,12 +234,12 @@ namespace Euclid.DataStructures.IndexedSeries
         public DataFrame<T, TW, TU> GetDataFrameForLayer(TV layer)
         {
             int layerIndex = _layers[layer];
-            if (layerIndex == -1) throw new ArgumentException(string.Format("Layer [{0}] was not found", layer.ToString()));
+            if (layerIndex == -1) throw new ArgumentException($"Layer [{layer}] was not found");
             TW[][] result = Arrays.Build<TW>(_legends.Count, _labels.Count);
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     result[i][j] = _data[i, j, layerIndex];
-            return DataFrame<T, TW, TU>.Create(_labels.ToList(), _legends.ToList(), result);
+            return DataFrame<T, TW, TU>.Create<DataFrame<T, TW, TU>>(_labels.ToList(), _legends.ToList(), result);
         }
 
         #endregion

@@ -14,108 +14,117 @@ namespace Euclid.DataStructures.IndexedSeries
     public class DataFrame<T, TU, TV> : IDataFrame<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
-        private readonly Header<TV> _labels;
-        private readonly Header<T> _legends;
+        protected Header<TV> _labels;
+        protected Header<T> _legends;
         private TU[][] _data;
         #endregion
 
         #region Constructors
-        private DataFrame(IList<TV> labels, IList<T> legends, TU[][] data)
+        protected DataFrame(IList<TV> labels, IList<T> legends, TU[][] data)
         {
             _data = Arrays.Clone(data);
             _labels = new Header<TV>(labels);
             _legends = new Header<T>(legends);
         }
 
+        protected DataFrame() { }
 
-
-
-
-        /// <summary>Builds a <c>DataFrame</c> </summary>
-        /// <param name="labels">the labels</param>
-        /// <param name="legends">the legends</param>
-        /// <param name="data">the data</param>
-        /// <returns>a <c>DataFrame</c></returns>
-        public static DataFrame<T, TU, TV> Create(IList<TV> labels, IList<T> legends, TU[][] data)
+        /// <summary>
+        /// Initialize DataFrame instance
+        /// </summary>
+        /// <param name="labels">labels</param>
+        /// <param name="legends">legends</param>
+        /// <param name="data">data</param>
+        protected override void Initialize(IList<TV> labels, IList<T> legends, TU[][] data)
         {
-            return new DataFrame<T, TU, TV>(labels, legends, data);
+            _data = Arrays.Clone(data);
+            _labels = new Header<TV>(labels);
+            _legends = new Header<T>(legends);
         }
 
-        /// <summary>Builds a <c>DataFrame</c></summary>
-        /// <param name="labels">the labels</param>
-        /// <param name="legends">the legends</param>
-        /// <returns>a <c>DataFrame</c></returns>
-        public static DataFrame<T, TU, TV> Create(IList<TV> labels, IList<T> legends)
-        {
-            if (labels == null) throw new ArgumentNullException(nameof(labels));
-            if (legends == null) throw new ArgumentNullException(nameof(legends));
+        ///// <summary>Builds a <c>DataFrame</c> </summary>
+        ///// <param name="labels">the labels</param>
+        ///// <param name="legends">the legends</param>
+        ///// <param name="data">the data</param>
+        ///// <returns>a <c>DataFrame</c></returns>
+        //public static DataFrame<T, TU, TV> Create(IList<TV> labels, IList<T> legends, TU[][] data)
+        //{
+        //    return new DataFrame<T, TU, TV>(labels, legends, data);
+        //}
 
-            return new DataFrame<T, TU, TV>(labels, legends, Arrays.Build<TU>(legends.Count, labels.Count));
-        }
+        ///// <summary>Builds a <c>DataFrame</c></summary>
+        ///// <param name="labels">the labels</param>
+        ///// <param name="legends">the legends</param>
+        ///// <returns>a <c>DataFrame</c></returns>
+        //public static DataFrame<T, TU, TV> Create(IList<TV> labels, IList<T> legends)
+        //{
+        //    if (labels == null) throw new ArgumentNullException(nameof(labels));
+        //    if (legends == null) throw new ArgumentNullException(nameof(legends));
 
-        /// <summary> Builds a <c>DataFrame</c></summary>
-        /// <param name="slices">the slices</param>
-        /// <returns>a DataFrame</returns>
-        public static DataFrame<T, TU, TV> Create(IEnumerable<Slice<T, TU, TV>> slices)
-        {
-            TU[][] data = Arrays.Build<TU>(slices.Count(), slices.ElementAt(0).Columns);
-            for (int i = 0; i < data.GetLength(0); i++)
-                for (int j = 0; j < data.GetLength(1); j++)
-                    data[i][j] = slices.ElementAt(i)[j];
-            return new DataFrame<T, TU, TV>(slices.ElementAt(0).Labels, slices.Select(s => s.Legend).ToList(), data);
-        }
+        //    return new DataFrame<T, TU, TV>(labels, legends, Arrays.Build<TU>(legends.Count, labels.Count));
+        //}
 
-        /// <summary>Builds a <c>DataFrame</c> </summary>
-        /// <param name="series">the series</param>
-        /// <returns>a DataFrame</returns>
-        public static DataFrame<T, TU, TV> Create(IEnumerable<Series<T, TU, TV>> series)
-        {
-            TU[][] data = Arrays.Build<TU>(series.ElementAt(0).Rows, series.Count());
-            for (int i = 0; i < data.GetLength(0); i++)
-                for (int j = 0; j < data.GetLength(1); j++)
-                    data[i][j] = series.ElementAt(j)[i];
-            return new DataFrame<T, TU, TV>(series.Select(s => s.Label).ToList(), series.ElementAt(0).Legends, data);
-        }
+        ///// <summary> Builds a <c>DataFrame</c></summary>
+        ///// <param name="slices">the slices</param>
+        ///// <returns>a DataFrame</returns>
+        //public static DataFrame<T, TU, TV> Create(IEnumerable<Slice<T, TU, TV>> slices)
+        //{
+        //    TU[][] data = Arrays.Build<TU>(slices.Count(), slices.ElementAt(0).Columns);
+        //    for (int i = 0; i < data.GetLength(0); i++)
+        //        for (int j = 0; j < data.GetLength(1); j++)
+        //            data[i][j] = slices.ElementAt(i)[j];
+        //    return new DataFrame<T, TU, TV>(slices.ElementAt(0).Labels, slices.Select(s => s.Legend).ToList(), data);
+        //}
 
+        ///// <summary>Builds a <c>DataFrame</c> </summary>
+        ///// <param name="series">the series</param>
+        ///// <returns>a DataFrame</returns>
+        //public static DataFrame<T, TU, TV> Create(IEnumerable<Series<T, TU, TV>> series)
+        //{
+        //    TU[][] data = Arrays.Build<TU>(series.ElementAt(0).Rows, series.Count());
+        //    for (int i = 0; i < data.GetLength(0); i++)
+        //        for (int j = 0; j < data.GetLength(1); j++)
+        //            data[i][j] = series.ElementAt(j)[i];
+        //    return new DataFrame<T, TU, TV>(series.Select(s => s.Label).ToList(), series.ElementAt(0).Legends, data);
+        //}
 
+        ///// <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
+        ///// <param name="text">the serialized version of the data</param>
+        //public static DataFrame<T, TU, TV> Create(string text)
+        //{
+        //    if (text == null) throw new ArgumentNullException(nameof(text));
 
-        /// <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
-        /// <param name="text">the serialized version of the data</param>
-        public static DataFrame<T, TU, TV> Create(string text)
-        {
-            if (text == null) throw new ArgumentNullException(nameof(text));
+        //    string[] lines = text.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+        //    char[] separator = CsvHelper.Separator.ToCharArray();
 
-            string[] lines = text.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            char[] separator = CsvHelper.Separator.ToCharArray();
+        //    #region Labels
+        //    string[] labelStrings = lines[0].Split(separator, StringSplitOptions.None);
+        //    labelStrings = labelStrings.SubArray(1, labelStrings.Length - 1);
+        //    int cols = labelStrings.Length;
 
-            #region Labels
-            string[] labelStrings = lines[0].Split(separator, StringSplitOptions.None);
-            labelStrings = labelStrings.SubArray(1, labelStrings.Length - 1);
-            int cols = labelStrings.Length;
+        //    TV[] labels = new TV[cols];
+        //    for (int j = 0; j < cols; j++)
+        //        labels[j] = labelStrings[j].Parse<TV>();
+        //    #endregion
 
-            TV[] labels = new TV[cols];
-            for (int j = 0; j < cols; j++)
-                labels[j] = labelStrings[j].Parse<TV>();
-            #endregion
+        //    #region Legends and data
+        //    int rows = lines.Length - 1;
+        //    T[] legends = new T[rows];
+        //    TU[][] data = Arrays.Build<TU>(rows, cols);
 
-            #region Legends and data
-            int rows = lines.Length - 1;
-            T[] legends = new T[rows];
-            TU[][] data = Arrays.Build<TU>(rows, cols);
+        //    for (int i = 0; i < rows; i++)
+        //    {
+        //        string[] lineSplit = lines[1 + i].Split(separator, StringSplitOptions.None);
 
-            for (int i = 0; i < rows; i++)
-            {
-                string[] lineSplit = lines[1 + i].Split(separator, StringSplitOptions.None);
+        //        legends[i] = lineSplit[0].Parse<T>();
 
-                legends[i] = lineSplit[0].Parse<T>();
+        //        for (int j = 0; j < cols; j++)
+        //            data[i][j] = lineSplit[1 + j].Parse<TU>();
+        //    }
+        //    #endregion
 
-                for (int j = 0; j < cols; j++)
-                    data[i][j] = lineSplit[1 + j].Parse<TU>();
-            }
-            #endregion
-
-            return new DataFrame<T, TU, TV>(labels, legends, data);
-        }
+        //    return new DataFrame<T, TU, TV>(labels, legends, data);
+        //}
 
         #endregion
 
@@ -186,7 +195,7 @@ namespace Euclid.DataStructures.IndexedSeries
         public Series<T, TU, TV> GetSeriesAt(TV label)
         {
             int index = _labels[label];
-            if (index == -1) throw new ArgumentException("Label [" + label.ToString() + "] was not found");
+            if (index == -1) throw new ArgumentException($"Label [{label}] was not found");
             TU[] result = new TU[_legends.Count];
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i][index];
@@ -200,19 +209,19 @@ namespace Euclid.DataStructures.IndexedSeries
         public Series<T, TU, TV> GetSeriesAt(TV label, Func<T, bool> predicate)
         {
             int indexLabel = _labels[label];
-            if (indexLabel == -1) throw new ArgumentException("Label [" + label.ToString() + "] was not found");
+            if (indexLabel == -1) throw new ArgumentException($"Label [{label}] was not found");
 
 
             IEnumerable<int> matchingIndices = _legends.FindIndices(predicate);
             IList<TU> data = new List<TU>();
-            Header<T> legends = new Header<T>();
+            IList<T> legends = new List<T>();
 
             foreach (int indice in matchingIndices)
             {
                 legends.Add(_legends.ElementAt(indice));
                 data.Add(_data[indice][indexLabel]);
             }
-            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, legends, data);
+            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, legends, data.ToArray());
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
@@ -328,7 +337,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a DataFrame</returns>
         public DataFrame<T, TU, TV> ExtractByLabels(Func<TV, bool> predicate)
         {
-            return Create(_labels.Where(predicate).Select(l => GetSeriesAt(l)));
+            return Create<DataFrame<T, TU, TV>>(_labels.Where(predicate).Select(l => GetSeriesAt(l)));
         }
         #endregion
 
@@ -456,7 +465,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a DataFrame</returns>
         public DataFrame<T, TU, TV> ExtractByLegend(Func<T, bool> predicate)
         {
-            return Create(_legends.Where(predicate).Select(l => GetSliceAt(l)));
+            return Create<DataFrame<T, TU, TV>>(_legends.Where(predicate).Select(l => GetSliceAt(l)));
         }
         #endregion
 

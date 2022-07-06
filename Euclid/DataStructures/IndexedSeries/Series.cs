@@ -48,7 +48,6 @@ namespace Euclid.DataStructures.IndexedSeries
         }
         #endregion
 
-
         #region Accessors
         /// <summary>Returns the legends of the <c>Series</c></summary>
         public virtual T[] Legends => _legends.Values;

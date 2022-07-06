@@ -48,6 +48,12 @@ namespace Euclid.DataStructures.IndexedSeries
         /// </summary>
         public IDataFrame() { }
 
+        /// <summary>
+        /// Initialize an instance of IDataFrame
+        /// </summary>
+        /// <param name="labels"></param>
+        /// <param name="legends"></param>
+        /// <param name="data"></param>
         protected abstract void Initialize(IList<TV> labels, IList<T> legends, TU[][] data);
 
         /// <summary>
@@ -162,7 +168,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <typeparam name="TY">IDataFrame implementation</typeparam>
         /// <param name="text">the serialized version of the data</param>
         /// <returns>Instance</returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">Text empty</exception>
         public static TY Create<TY>(string text) where TY : IDataFrame<T, TU, TV>
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
