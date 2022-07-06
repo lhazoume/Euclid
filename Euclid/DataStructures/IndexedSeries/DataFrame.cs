@@ -14,12 +14,27 @@ namespace Euclid.DataStructures.IndexedSeries
     public class DataFrame<T, TU, TV> : IDataFrame<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
+        /// <summary>
+        /// Labels variable
+        /// </summary>
         protected Header<TV> _labels;
+        /// <summary>
+        /// Legends variable
+        /// </summary>
         protected Header<T> _legends;
+        /// <summary>
+        /// Data variable
+        /// </summary>
         private TU[][] _data;
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Constructor of DataFrame
+        /// </summary>
+        /// <param name="labels">Label</param>
+        /// <param name="legends">Legends</param>
+        /// <param name="data">Data</param>
         protected DataFrame(IList<TV> labels, IList<T> legends, TU[][] data)
         {
             _data = Arrays.Clone(data);
@@ -27,6 +42,9 @@ namespace Euclid.DataStructures.IndexedSeries
             _legends = new Header<T>(legends);
         }
 
+        /// <summary>
+        /// Constructor parameterless
+        /// </summary>
         protected DataFrame() { }
 
         /// <summary>
