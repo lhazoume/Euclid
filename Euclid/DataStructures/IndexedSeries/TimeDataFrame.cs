@@ -9,12 +9,16 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <summary>Class representing a DataFrame of synchronized data ordered by time </summary>
     /// <typeparam name="TU">The data type</typeparam>
     /// <typeparam name="TV">The lable type</typeparam>
-    public class TimeDataFrame<TU, TV> : IDataFrame<DateTime, TU, TV> where TV : IEquatable<TV>
+    public class TimeDataFrame<TU, TV> where TV : IEquatable<TV> //: IDataFrame<DateTime, TU, TV> 
     {
         #region vars
         private readonly SortedDictionary<DateTime, Tuple<uint, uint>> _indexes = new SortedDictionary<DateTime, Tuple<uint, uint>>();
         private readonly List<DateTime> _chunks = new List<DateTime>();
-        private DateTime[] _timestamps;
+        //private DateTime[] _timestamps;
+
+        private Header<TV> _labels;
+        private SortedHeader<DateTime> _legends;
+        private TU[][] _data;
         #endregion
 
         #region constructor
@@ -24,13 +28,16 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="labels">Labels, serie of generic type</param>
         /// <param name="legends">Legends, serie of datetime type</param>
         /// <param name="data">Matric of generic type</param>
-        protected TimeDataFrame(IHeader<TV> labels, IHeader<DateTime> legends, TU[][] data) : base(labels, legends, data) { }
+        private TimeDataFrame(Header<TV> labels, SortedHeader<DateTime> legends, TU[][] data)
+            //: base(labels, legends, data) { }
+        {
+            _data = Arrays.Clone(data);
+            _labels = labels.Clone();
+            _legends = legends.Clone();
+            //_timestamps = _legends.Values;
+        }
 
-        /// <summary>
-        /// public constructor
-        /// </summary>
-        protected TimeDataFrame() { }
-
+        /*
         /// <summary>
         /// Initialize TimeDataFrame instance
         /// </summary>
@@ -40,24 +47,20 @@ namespace Euclid.DataStructures.IndexedSeries
         protected override void Initialize(IList<TV> labels, IList<DateTime> legends, TU[][] data)
         {
             _data = Arrays.Clone(data);
-            _labels = new SortedHeader<TV>(labels);
+            _labels = new Header<TV>(labels);
             _legends = new SortedHeader<DateTime>(legends);
             _timestamps = _legends.Values;
-        }
+        }*/
         #endregion
 
         #region accessors
-        /// <summary>
-        /// returns the chunk used for building index
-        /// </summary>
+        /// <summary>Returns the chunk used for building index</summary>
         public IReadOnlyList<DateTime> Chunks => _chunks;
-        /// <summary>
-        /// returns the values of legend
-        /// </summary>
-        public override DateTime[] Legends => _timestamps;
-        /// <summary>
-        /// Precise if the chunk has intraday granularity
-        /// </summary>
+
+        /// <summary>Returns the values of legend</summary>
+        public SortedHeader<DateTime> Legends => _legends;
+
+        /// <summary>Precise if the chunk has intraday granularity</summary>
         public bool IntradayChunk { get; private set; }
         #endregion
 
@@ -109,13 +112,13 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
-            if(!chunk.HasValue) return _timestamps.FindFirstIndexOf(predicate); // chunk does not help
+            if(!chunk.HasValue) return _legends.Values.FindFirstIndexOf(predicate); // chunk does not help
 
             int chunkIdx = _chunks.FindFirstIndexOf(IntradayChunk ? (Func<DateTime, bool>)(c => c >= chunk.Value) : (c => c >= chunk.Value));
-            if (chunkIdx == -1) return _timestamps.FindFirstIndexOf(predicate); // chunk does not help
+            if (chunkIdx == -1) return _legends.Values.FindFirstIndexOf(predicate); // chunk does not help
 
             Tuple<uint, uint> boundaries = _indexes[_chunks[chunkIdx]];
-            return _timestamps.FindFirstIndexOf(predicate, boundaries.Item1, boundaries.Item2);
+            return _legends.Values.FindFirstIndexOf(predicate, boundaries.Item1, boundaries.Item2);
         }
 
         /// <summary>
@@ -129,13 +132,13 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
-            if (!chunk.HasValue) return _timestamps.FindLastIndexOf(predicate); // chunk does not help
+            if (!chunk.HasValue) return _legends.Values.FindLastIndexOf(predicate); // chunk does not help
 
             int chunkIdx = _chunks.FindFirstIndexOf(IntradayChunk ? (Func<DateTime, bool>)(c => c >= chunk.Value) : (c => c >= chunk.Value));
-            if (chunkIdx == -1) return _timestamps.FindLastIndexOf(predicate); // chunk does not help
+            if (chunkIdx == -1) return _legends.Values.FindLastIndexOf(predicate); // chunk does not help
 
             Tuple<uint, uint> boundaries = _indexes[_chunks[chunkIdx]];
-            return _timestamps.FindLastIndexOf(predicate, boundaries.Item1, boundaries.Item2);
+            return _legends.Values.FindLastIndexOf(predicate, boundaries.Item1, boundaries.Item2);
         }
         #endregion
 

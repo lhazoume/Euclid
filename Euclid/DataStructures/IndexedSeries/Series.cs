@@ -1,5 +1,4 @@
 ﻿using Euclid.Extensions;
-using Euclid.Helpers;
 using Euclid.Serialization;
 using System;
 using System.Collections.Generic;
@@ -13,48 +12,43 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="TU">the data type</typeparam>
     /// <typeparam name="TV">the label type</typeparam>
-    public class Series<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
+    public class Series<T, TU, TV> : IIndexedSeries<T, TU, TV>
+        where T : IComparable<T>, IEquatable<T>
+        where TV : IEquatable<TV>
     {
-        #region Declarations
-        /// <summary>
-        /// Label variable
-        /// </summary>
-        protected TV _label;
-        /// <summary>
-        /// Data variable
-        /// </summary>
-        protected TU[] _data;
-        /// <summary>
-        /// Legend variable
-        /// </summary>
-        protected IHeader<T> _legends;
+        #region Variables
+        private TV _label;
+        private TU[] _data;
+        private Header<T> _legends;
         #endregion
 
         #region constructor
-        /// <summary>
-        /// Parameterless constructor
-        /// </summary>
-        public Series() { }
-
         /// <summary>Builds a <c>Series</c></summary>
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <param name="data">the data</param>
-        protected Series(TV label, IHeader<T> legends, TU[] data)
+        public Series(TV label, Header<T> legends, TU[] data)
         {
             _data = Arrays.Clone(data);
             _label = label;
             _legends = legends.Clone();
         }
+        /// <summary>Builds a <c>Series</c></summary>
+        /// <param name="label">the label</param>
+        /// <param name="legends">the legends</param>
+        /// <param name="data">the data</param>
+        public Series(TV label, IEnumerable<T> legends, TU[] data)
+            : this(label, new Header<T>(legends), data)
+        { }
         #endregion
 
 
         #region Accessors
         /// <summary>Returns the legends of the <c>Series</c></summary>
-        public virtual T[] Legends => _legends.Values;
+        public Header<T> Legends => _legends;
 
         /// <summary>Returns the labels of the <c>Series</c> (in this case, it is the only label)</summary>
-        public TV[] Labels => new TV[] { _label };
+        public Header<TV> Labels => new Header<TV>(_label);
 
         /// <summary>Returns the data of the <c>Series</c></summary>
         public TU[] Data => Arrays.Clone(_data);
@@ -76,9 +70,9 @@ namespace Euclid.DataStructures.IndexedSeries
         #region Methods
         /// <summary>Clones the <c>Series</c></summary>
         /// <returns>a <c>Series</c></returns>
-        public TY Clone<TY>() where TY : Series<T, TU, TV>
+        public Series<T, TU, TV> Clone()
         {
-            return Create<TY>(_label, _legends.Values, _data);
+            return new Series<T, TU, TV>(_label, _legends, _data);
         }
 
         /// <summary>Gets and sets the i-th data of the <c>Series</c></summary>
@@ -166,7 +160,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="function">the function</param>
         public void ApplyOnLegends(Func<T, T> function)
         {
-            _legends = new Header<T>(_legends.Select(t => function(t)).ToList());
+            _legends = new Header<T>(_legends.Values.Select(t => function(t)));
         }
 
         /// <summary>Returns the sum of the data passed through a function</summary>
@@ -199,11 +193,11 @@ namespace Euclid.DataStructures.IndexedSeries
 
         /// <summary>Equality comparer for the Series</summary>
         /// <param name="other"></param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if the series are equal, <c>false</c> otherwise</returns>
         public bool Equals(Series<T, TU, TV> other)
         {
             if (other != null && other._label.Equals(_label) && other._legends.Count == _legends.Count &&
-                !other._legends.Except(_legends).Any())
+                !other._legends.Values.Except(_legends.Values).Any())
             {
                 for (int i = 0; i < _data.Length; i++)
                     if (!other._data[i].Equals(_data[i]))
@@ -227,7 +221,7 @@ namespace Euclid.DataStructures.IndexedSeries
             writer.WriteAttributeString("value", _label.ToString());
             writer.WriteEndElement();
 
-            foreach (T t in _legends)
+            foreach (T t in _legends.Values)
             {
                 writer.WriteStartElement("point");
                 writer.WriteAttributeString("legend", t.ToString());
@@ -247,7 +241,7 @@ namespace Euclid.DataStructures.IndexedSeries
             {
                 string.Join(CsvHelper.Separator, "x", _label.ToString())
             };
-            foreach (T t in _legends)
+            foreach (T t in _legends.Values)
                 lines.Add(string.Join(CsvHelper.Separator, t.ToString(), _data[_legends[t]].ToString()));
             return string.Join(Environment.NewLine, lines);
         }
@@ -365,64 +359,22 @@ namespace Euclid.DataStructures.IndexedSeries
         #endregion
 
         #region Creators
-        /// <summary>
-        /// Initialize serie instance
-        /// </summary>
-        /// <param name="label">Label</param>
-        /// <param name="legends">Legends</param>
-        /// <param name="data">Data</param>
-        protected virtual void Initialize(TV label, IList<T> legends, TU[] data)
-        {
-            _data = Arrays.Clone(data);
-            _label = label;
-            _legends = new Header<T>(legends);
-        }
-
-        /// <summary>
-        /// Builds a <c>Series</c> from generic enumerables of legends and data
-        /// </summary>
-        /// <typeparam name="TY">Generic type</typeparam>
-        /// <param name="label">label</param>
-        /// <param name="legends">legends</param>
-        /// <param name="data">data</param>
-        /// <returns>Instance</returns>
-        public static TY Create<TY>(TV label, IList<T> legends, TU[] data) where TY : Series<T, TU, TV>
-        {
-            ConstructorInfo constructor = typeof(TY).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault(ct => ct.GetParameters().Length == 0);
-            if (constructor == null) throw new Exception("Impossible to find the matching constructor (protected, without parameters)!");
-            TY serie = (TY)constructor.Invoke(null);
-            serie.Initialize(label, legends, data);
-            return serie;
-        }
-
-        /// <summary>
-        /// Create a <c>Series</c> from generic enumerables of legends and data
-        /// </summary>
-        /// <typeparam name="TY">Typed series</typeparam>
-        /// <param name="label">Label</param>
-        /// <param name="legends">Legends</param>
-        /// <param name="data">Data</param>
-        /// <returns>Series</returns>
-        public static TY Create<TY>(TV label, IHeader<T> legends, TU[] data) where TY : Series<T, TU, TV>
-        {
-            return Create<TY>(label, legends.Values, data);
-        }
 
         /// <summary>Builds a <c>Series</c> from generic enumerables of legends</summary>
         /// <param name="label">the label</param>
         /// <param name="legends">the legends</param>
         /// <returns>a <c>Series</c></returns>
-        public static TY Create<TY>(TV label, IList<T> legends) where TY : Series<T, TU, TV>
+        public static Series<T, TU, TV> Create(TV label, IList<T> legends)
         {
             if (label == null) throw new ArgumentNullException(nameof(label));
             if (legends == null) throw new ArgumentNullException(nameof(legends));
 
-            return Create<TY>(label, legends, new TU[legends.Count()]);
+            return new Series<T, TU, TV>(label, legends, new TU[legends.Count()]);
         }
 
         /// <summary>Builds a <c>Series</c> from its serialized form</summary>
         /// <param name="node">the <c>XmlNode</c></param>
-        public static TY Create<TY>(XmlNode node) where TY : Series<T, TU, TV>
+        public static Series<T, TU, TV> Create(XmlNode node)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
 
@@ -439,12 +391,12 @@ namespace Euclid.DataStructures.IndexedSeries
                 data.Add(value);
             }
 
-            return Create<TY>(label, legends, data.ToArray());
+            return new Series<T, TU, TV>(label, legends, data.ToArray());
         }
 
         /// <summary>Builds a <c>Series</c> from a string</summary>
         /// <param name="text">the <c>String</c> content</param>
-        public static TY Create<TY>(string text) where TY : Series<T, TU, TV>
+        public static Series<T, TU, TV> Create(string text)
         {
             if (text == null) throw new ArgumentOutOfRangeException(nameof(text));
 
@@ -461,7 +413,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 legends.Add(content[0].Parse<T>());
             }
 
-            return Create<TY>(label, legends, data);
+            return new Series<T, TU, TV>(label, legends, data);
         }
         #endregion
     }

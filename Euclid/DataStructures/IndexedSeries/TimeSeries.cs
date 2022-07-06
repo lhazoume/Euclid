@@ -10,40 +10,35 @@ namespace Euclid.DataStructures.IndexedSeries
     /// </summary>
     /// <typeparam name="TU"></typeparam>
     /// <typeparam name="TV"></typeparam>
-    public class TimeSeries<TU, TV> : Series<DateTime, TU, TV> where TV : IEquatable<TV>
+    public class TimeSeries<TU, TV> where TV : IEquatable<TV> // : Series<DateTime, TU, TV>
     {
-        #region accessors
-        private DateTime[] _timestamps;
+        #region Variables
+        private TV _label;
+        private TU[] _data;
+        private SortedHeader<DateTime> _legends;
         #endregion
 
-        #region constructors
-        /// <summary>
-        /// Parameterless constructor
-        /// </summary>
-        protected TimeSeries() { }
-        #endregion
 
-        #region methods
-        /// <summary>
-        /// Initialize serie instance
-        /// </summary>
+        #region Constructors
+        /// <summary> Builds a <c>TimeSeries</c></summary>
         /// <param name="label">Label</param>
         /// <param name="legends">Legends</param>
         /// <param name="data">Data</param>
-        protected override void Initialize(TV label, IList<DateTime> legends, TU[] data)
+        private TimeSeries(TV label, IList<DateTime> legends, TU[] data)
         {
             _data = Arrays.Clone(data);
             _label = label;
             _legends = new SortedHeader<DateTime>(legends);
-            _timestamps = legends.ToArray();
         }
         #endregion
 
-        #region accessors
-        /// <summary>
-        /// returns the values of legend
-        /// </summary>
-        public override DateTime[] Legends => _timestamps;
+        #region methods
+
+        #endregion
+
+        #region Accessors
+        /// <summary>Returns the values of legend</summary>
+        public  DateTime[] Legends => _legends.Values;
         #endregion
     }
 }

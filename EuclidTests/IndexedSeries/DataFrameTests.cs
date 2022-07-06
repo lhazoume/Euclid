@@ -24,7 +24,7 @@ namespace Euclid.IndexedSeries.Tests
 
         private DataFrame<DateTime, double, string> SampleCreatedUsingFullConstructor()
         {
-            DataFrame<DateTime, double, string> result = DataFrame<DateTime, double, string>.Create<DataFrame<DateTime, double, string>>(_headers, _legends, _data);
+            DataFrame<DateTime, double, string> result = DataFrame<DateTime, double, string>.Create(_headers, _legends, _data);
             return result;
         }
 
@@ -36,21 +36,22 @@ namespace Euclid.IndexedSeries.Tests
             Assert.IsNotNull(dataFrame);
         }
 
+        /*
         [TestMethod()]
         public void DataFrameXmlConstructorTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(dataFrame.GetXml().Trim());
-            DataFrame<DateTime, double, string> newDataFrame = DataFrame<DateTime, double, string>.Create<DataFrame<DateTime, double, string>>(doc);
+            DataFrame<DateTime, double, string> newDataFrame = DataFrame<DateTime, double, string>.Create(doc);
             Assert.IsTrue(dataFrame.Equals(newDataFrame));
-        }
+        }*/
 
         [TestMethod()]
         public void DataFrameSeriesConstructorTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor(),
-                seriesDataFrame = DataFrame<DateTime, double, string>.Create<DataFrame<DateTime, double, string>>(dataFrame.GetSeries());
+                seriesDataFrame = DataFrame<DateTime, double, string>.Create(dataFrame.GetSeries());
             Assert.IsTrue(dataFrame.Equals(seriesDataFrame));
         }
 
@@ -58,7 +59,7 @@ namespace Euclid.IndexedSeries.Tests
         public void DataFrameSlicesConstructorTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor(),
-                slicesDataFrame = DataFrame<DateTime, double, string>.Create<DataFrame<DateTime, double, string>>(dataFrame.GetSlices());
+                slicesDataFrame = DataFrame<DateTime, double, string>.Create(dataFrame.GetSlices());
             Assert.IsTrue(dataFrame.Equals(slicesDataFrame));
         }
 
@@ -66,7 +67,7 @@ namespace Euclid.IndexedSeries.Tests
         public void DataFrameTextConstructorTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
-            DataFrame<DateTime, double, string> altDataFrame = DataFrame<DateTime, double, string>.Create<DataFrame<DateTime, double, string>>(dataFrame.ToCSV());
+            DataFrame<DateTime, double, string> altDataFrame = DataFrame<DateTime, double, string>.Create(dataFrame.ToCSV());
             Assert.IsNotNull(altDataFrame);
         }
         #endregion
@@ -76,14 +77,14 @@ namespace Euclid.IndexedSeries.Tests
         public void LegendsTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
-            Assert.AreEqual(dataFrame.Legends.Except(_legends).Count(), 0);
+            Assert.AreEqual(dataFrame.Legends.Values.Except(_legends).Count(), 0);
         }
 
         [TestMethod()]
         public void LabelsTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor();
-            Assert.AreEqual(dataFrame.Labels.Except(_headers).Count(), 0);
+            Assert.AreEqual(dataFrame.Labels.Values.Except(_headers).Count(), 0);
         }
 
         [TestMethod()]
@@ -233,10 +234,10 @@ namespace Euclid.IndexedSeries.Tests
         public void ExtractByLabelsTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor(),
-                extraction = dataFrame.ExtractByLabels<DataFrame<DateTime, double, string>>(s => !s.Contains("2"));
+                extraction = dataFrame.ExtractByLabels(s => !s.Contains("2"));
             Assert.IsTrue(extraction.Columns == 2 &&
-                _headers.Except(extraction.Labels).Count() == 1 &&
-                _headers.Except(extraction.Labels).Count(s => !s.Contains("2")) == 0 &&
+                _headers.Except(extraction.Labels.Values).Count() == 1 &&
+                _headers.Except(extraction.Labels.Values).Count(s => !s.Contains("2")) == 0 &&
                 extraction.Rows == dataFrame.Rows);
         }
         #endregion
@@ -327,12 +328,12 @@ namespace Euclid.IndexedSeries.Tests
             Func<DateTime, bool> predicate = d => d.DayOfWeek == DayOfWeek.Monday;
 
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor(),extraction 
-                = dataFrame.ExtractByLegend<DataFrame<DateTime, double, string>>(predicate);
+                = dataFrame.ExtractByLegend(predicate);
 
             int mondays = _legends.Count(predicate);
 
             Assert.IsTrue(extraction.Rows == mondays &&
-                _legends.Except(extraction.Legends).Count() == _legends.Length - mondays &&
+                _legends.Except(extraction.Legends.Values).Count() == _legends.Length - mondays &&
                 extraction.Columns == dataFrame.Columns);
         }
         #endregion
@@ -345,7 +346,7 @@ namespace Euclid.IndexedSeries.Tests
         public void CloneTest()
         {
             DataFrame<DateTime, double, string> dataFrame = SampleCreatedUsingFullConstructor(),
-                clone = dataFrame.Clone<DataFrame<DateTime, double, string>>();
+                clone = dataFrame.Clone();
 
             Assert.IsTrue(dataFrame.Equals(clone));
         }

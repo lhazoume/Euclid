@@ -16,7 +16,7 @@ namespace Euclid.Analytics
         {
             if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
             int n = dataFrame.Rows;
-            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels.Values, dataFrame.Labels.Values);
 
             #region Averages
             double[] averages = new double[dataFrame.Columns];
@@ -57,7 +57,7 @@ namespace Euclid.Analytics
             if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
 
             int n = dataFrame.Rows;
-            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels.Values, dataFrame.Labels.Values);
 
             #region Averages
             double[] averages = new double[dataFrame.Columns],
@@ -106,7 +106,7 @@ namespace Euclid.Analytics
             if (dataFrame1 == null) throw new ArgumentNullException(nameof(dataFrame1));
             if (dataFrame2 == null) throw new ArgumentNullException(nameof(dataFrame2));
 
-            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame1.Labels, dataFrame2.Labels);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame1.Labels.Values, dataFrame2.Labels.Values);
             if (dataFrame1.Rows != dataFrame2.Rows) throw new Exception("Rows do not match");
             int n = dataFrame1.Rows;
 
@@ -171,12 +171,12 @@ namespace Euclid.Analytics
         {
             if (dataFrame == null) throw new ArgumentNullException(nameof(dataFrame));
             int n = dataFrame.Rows;
-            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels, dataFrame.Labels);
+            DataFrame<TV, double, TV> result = DataFrame<TV, double, TV>.Create(dataFrame.Labels.Values, dataFrame.Labels.Values);
 
             #region Distinct values
             double[][] distincts = new double[dataFrame.Columns][];
             for (int i = 0; i < dataFrame.Columns; i++)
-                distincts[i] = dataFrame.GetSeriesAt(dataFrame.Labels[i]).Data.Distinct().OrderBy(d => d).ToArray();
+                distincts[i] = dataFrame.GetSeriesAt(dataFrame.Labels.ElementAt(i)).Data.Distinct().OrderBy(d => d).ToArray();
             #endregion
 
             #region Redundancy

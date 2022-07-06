@@ -53,7 +53,7 @@ namespace Euclid.IndexedSeries.Tests
             Assert.IsTrue(result.Count == 7 && result["C6"] == 6);
         }
 
-        [TestMethod()]
+        /*[TestMethod()]
         public void GetEnumeratorTest()
         {
             Header<string> result = BuildHeader();
@@ -63,12 +63,12 @@ namespace Euclid.IndexedSeries.Tests
             enumerator.MoveNext();
             string second = enumerator.Current;
             Assert.AreEqual(first + second, "C0C1");
-        }
+        }*/
 
         [TestMethod()]
         public void CloneTest()
         {
-            IHeader<string> result = BuildHeader(),
+            Header<string> result = BuildHeader(),
                 clone = result.Clone();
             Assert.AreEqual(result["C0"] + "_" + result["C1"], clone["C0"] + "_" + clone["C1"]);
         }

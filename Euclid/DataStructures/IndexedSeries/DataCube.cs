@@ -188,7 +188,7 @@ namespace Euclid.DataStructures.IndexedSeries
             TW[] result = new TW[_legends.Count];
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i, labelIndex, layerIndex];
-            return Series<T, TW, string>.Create<Series<T, TW, string>>($"{label}{layer}", _legends, result);
+            return new Series<T, TW, string>($"{label}{layer}", _legends, result);
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
@@ -203,7 +203,7 @@ namespace Euclid.DataStructures.IndexedSeries
                     for (int i = 0; i < _legends.Count; i++)
                         data[i] = _data[i, j, k];
 
-                    result[j, k] = Series<T, TW, string>.Create<Series<T, TW, string>>($"{_labels.ElementAt(j)}{_layers.ElementAt(k)}", _legends, data);
+                    result[j, k] = new Series<T, TW, string>($"{_labels.ElementAt(j)}{_layers.ElementAt(k)}", _legends, data);
                 }
             return result;
         }
@@ -225,7 +225,7 @@ namespace Euclid.DataStructures.IndexedSeries
             for (int i = 0; i < _legends.Count; i++)
                 for (int k = 0; k < _layers.Count; k++)
                     result[i][k] = _data[i, labelIndex, k];
-            return DataFrame<T, TW, TV>.Create(_layers.ToList(), _legends.ToList(), result);
+            return DataFrame<T, TW, TV>.Create(_layers.Values.ToList(), _legends.Values.ToList(), result);
         }
 
         /// <summary>Gets the dataframe for a given layer</summary>
@@ -239,7 +239,7 @@ namespace Euclid.DataStructures.IndexedSeries
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     result[i][j] = _data[i, j, layerIndex];
-            return DataFrame<T, TW, TU>.Create(_labels.ToList(), _legends.ToList(), result);
+            return DataFrame<T, TW, TU>.Create(_labels.Values.ToList(), _legends.Values.ToList(), result);
         }
 
         #endregion
@@ -432,9 +432,9 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             if (other == null) throw new ArgumentNullException(nameof(other));
 
-            if (other._labels.Count == _labels.Count && !other._labels.Except(_labels).Any() &&
-                other._legends.Count == _legends.Count && !other._legends.Except(_legends).Any() &&
-                other._layers.Count == _layers.Count && !other._layers.Except(_layers).Any())
+            if (other._labels.Count == _labels.Count && !other._labels.Values.Except(_labels.Values).Any() &&
+                other._legends.Count == _legends.Count && !other._legends.Values.Except(_legends.Values).Any() &&
+                other._layers.Count == _layers.Count && !other._layers.Values.Except(_layers.Values).Any())
             {
                 for (int i = 0; i < other.Rows; i++)
                 {

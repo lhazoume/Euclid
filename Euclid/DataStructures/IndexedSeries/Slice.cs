@@ -11,16 +11,18 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="TU">the data type</typeparam>
     /// <typeparam name="TV">the label type</typeparam>
-    public class Slice<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IEquatable<T> where TV : IEquatable<TV>
+    public class Slice<T, TU, TV> : IIndexedSeries<T, TU, TV>
+        where T : IComparable<T>, IEquatable<T>
+        where TV : IEquatable<TV>
     {
         #region Declarations
-        private readonly IHeader<TV> _labels;
+        private readonly Header<TV> _labels;
         private TU[] _data;
         private T _legend;
         #endregion
 
         #region Constructors
-        private Slice(IHeader<TV> labels, T legend, IEnumerable<TU> data)
+        private Slice(Header<TV> labels, T legend, IEnumerable<TU> data)
         {
             _data = data.ToArray();
             _labels = labels.Clone();
@@ -30,7 +32,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region Accessors
         /// <summary>Gets the legends. Inherited (in this case, the legend is packaged into an array)</summary>
-        public T[] Legends => new T[] { _legend };
+        public Header<T> Legends => new Header<T>(_legend);
 
         /// <summary>Gets and sets the legend</summary>
         public T Legend
@@ -40,7 +42,7 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>Returns the labels</summary>
-        public TV[] Labels => _labels.Values;
+        public Header<TV> Labels => _labels;
 
         /// <summary>Returns the number of columns</summary>
         public int Columns => _labels.Count;
@@ -153,7 +155,7 @@ namespace Euclid.DataStructures.IndexedSeries
             #endregion
 
             #region Data
-            foreach (TV v in _labels)
+            foreach (TV v in _labels.Values)
             {
                 writer.WriteStartElement("point");
                 writer.WriteAttributeString("label", v.ToString());
@@ -210,7 +212,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <param name="legend">the legend</param>
         /// <param name="data">the data</param>
         /// <returns>a <c>Slice</c></returns>
-        public static Slice<T, TU, TV> Create(IHeader<TV> labels, T legend, IEnumerable<TU> data)
+        public static Slice<T, TU, TV> Create(Header<TV> labels, T legend, IEnumerable<TU> data)
         {
             if (labels == null) throw new ArgumentNullException(nameof(labels));
 

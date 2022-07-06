@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Euclid.DataStructures.IndexedSeries
 {
+    /*
     /// <summary>
     /// Abstract Header class for the IIndexe
     /// </summary>
     /// <typeparam name="T">the type of label</typeparam>
-    public abstract class IHeader<T> : IEnumerable<T>, IEquatable<IHeader<T>> where T : IEquatable<T>
+    public abstract class I_Header<T> : IEnumerable<T>, IEquatable<IHeader<T>> where T : IEquatable<T>
     {
         #region vars
         /// <summary>
@@ -87,7 +88,7 @@ namespace Euclid.DataStructures.IndexedSeries
             _map.SetBackward(_map.Forward(oldValue), newValue);
         }
 
-        /// <summary>Returns the label at a given index</summary>
+        /// <summary>Gets the i-th legend value</summary>
         /// <param name="index">the index</param>
         /// <returns>a label</returns>
         public T ElementAt(int index)
@@ -159,4 +160,5 @@ namespace Euclid.DataStructures.IndexedSeries
         #endregion
         #endregion
     }
+    */
 }

@@ -8,11 +8,12 @@ using System.Xml;
 
 namespace Euclid.DataStructures.IndexedSeries
 {
+    /*
     /// <summary>Class representing a template of DataFrame of synchronized data</summary>
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="TU">the data type</typeparam>
     /// <typeparam name="TV">the label type</typeparam>
-    public abstract class IDataFrame<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
+    public abstract class I_DataFrame<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
         #region vars
         /// <summary>
@@ -202,7 +203,7 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region Accessors
         /// <summary>Returns the legends </summary>
-        public virtual T[] Legends => _legends.Values;
+        //public virtual T[] Legends => _legends.Values;
 
         /// <summary>Returns the labels </summary>
         public TV[] Labels => _labels.Values;
@@ -578,7 +579,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Gets the i-th legend value</summary>
         /// <param name="index">the index</param>
         /// <returns>a legend value</returns>
-        public T GetLegend(int index) { return _legends.ElementAt(index); }
+        //public T GetLegend(int index) { return _legends.ElementAt(index); }
 
         /// <summary>Renames a legend</summary>
         /// <param name="oldValue">the old legend value</param>
@@ -729,4 +730,6 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #endregion
     }
+
+    */
 }

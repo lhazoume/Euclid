@@ -9,7 +9,7 @@ namespace Euclid.DataStructures
     /// </summary>
     /// <typeparam name="T1">the left hand side type</typeparam>
     /// <typeparam name="T2">the right hand side type</typeparam>
-    public interface IMap<T1, T2> where T1 : IEquatable<T1> where T2 : IEquatable<T2>
+    public interface I_Map<T1, T2> where T1 : IEquatable<T1> where T2 : IEquatable<T2>
     {
         #region vars
         /// <summary>Gets an enumerator for the left hand side</summary>
@@ -25,14 +25,17 @@ namespace Euclid.DataStructures
         /// <param name="t1">the left hand side key</param>
         /// <param name="t2">the right hand side key</param>
         void Add(T1 t1, T2 t2);
+
         /// <summary>Removes a pair from the map</summary>
         /// <param name="t1">the left hand side key</param>
         /// <param name="t2">the right hand side key</param>
         void Remove(T1 t1, T2 t2);
+
         /// <summary>Sets the right hand side value for a given left hand side value</summary>
         /// <param name="key">the left hand side key</param>
         /// <param name="newValue">the new right hand side value</param>
         void SetForward(T1 key, T2 newValue);
+
         /// <summary>Sets the left hand side value for a given right hand side value</summary>
         /// <param name="key">the right hand side key</param>
         /// <param name="newValue">the new left right hand side value</param>
@@ -78,8 +81,7 @@ namespace Euclid.DataStructures
     /// <summary>A two ways dictionary class</summary>
     /// <typeparam name="T1">the left hand side type</typeparam>
     /// <typeparam name="T2">the right hand side type</typeparam>
-    public class Map<T1, T2> : IMap<T1, T2>
-        where T1 : IEquatable<T1>
+    public class Map<T1, T2> where T1 : IEquatable<T1>
         where T2 : IEquatable<T2>
     {
         #region Declarations
@@ -105,7 +107,7 @@ namespace Euclid.DataStructures
         }
 
         /// <summary>Builds an empty map</summary>
-        public Map() 
+        public Map()
         {
             _forward = new Dictionary<T1, T2>();
             _backward = new Dictionary<T2, T1>();

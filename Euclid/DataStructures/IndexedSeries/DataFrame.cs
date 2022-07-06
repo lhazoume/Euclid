@@ -11,7 +11,7 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <typeparam name="T">the legend type</typeparam>
     /// <typeparam name="TU">the data type</typeparam>
     /// <typeparam name="TV">the label type</typeparam>
-    public class DataFrame<T, TU, TV> : IDataFrame<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
+    public class DataFrame<T, TU, TV> : IIndexedSeries<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
         #region Declarations
         private readonly Header<TV> _labels;
@@ -20,16 +20,15 @@ namespace Euclid.DataStructures.IndexedSeries
         #endregion
 
         #region Constructors
-        private DataFrame(IList<TV> labels, IList<T> legends, TU[][] data)
+        private DataFrame(Header<TV> labels, Header<T> legends, TU[][] data)
         {
             _data = Arrays.Clone(data);
-            _labels = new Header<TV>(labels);
-            _legends = new Header<T>(legends);
+            _labels = labels;
+            _legends = legends;
         }
-
-
-
-
+        private DataFrame(IList<TV> labels, IList<T> legends, TU[][] data)
+            : this(new Header<TV>(labels), new Header<T>(legends), data)
+        { }
 
         /// <summary>Builds a <c>DataFrame</c> </summary>
         /// <param name="labels">the labels</param>
@@ -62,7 +61,7 @@ namespace Euclid.DataStructures.IndexedSeries
             for (int i = 0; i < data.GetLength(0); i++)
                 for (int j = 0; j < data.GetLength(1); j++)
                     data[i][j] = slices.ElementAt(i)[j];
-            return new DataFrame<T, TU, TV>(slices.ElementAt(0).Labels, slices.Select(s => s.Legend).ToList(), data);
+            return new DataFrame<T, TU, TV>(slices.ElementAt(0).Labels, new Header<T>(slices.Select(s => s.Legend)), data);
         }
 
         /// <summary>Builds a <c>DataFrame</c> </summary>
@@ -74,10 +73,8 @@ namespace Euclid.DataStructures.IndexedSeries
             for (int i = 0; i < data.GetLength(0); i++)
                 for (int j = 0; j < data.GetLength(1); j++)
                     data[i][j] = series.ElementAt(j)[i];
-            return new DataFrame<T, TU, TV>(series.Select(s => s.Label).ToList(), series.ElementAt(0).Legends, data);
+            return new DataFrame<T, TU, TV>(new Header<TV>(series.Select(s => s.Label)), series.ElementAt(0).Legends, data);
         }
-
-
 
         /// <summary>Builds a <c>DataFrame</c> from a CSV string</summary>
         /// <param name="text">the serialized version of the data</param>
@@ -121,10 +118,10 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region Accessors
         /// <summary>Returns the legends </summary>
-        public T[] Legends => _legends.Values;
+        public Header<T> Legends => _legends;
 
         /// <summary>Returns the labels </summary>
-        public TV[] Labels => _labels.Values;
+        public Header<TV> Labels => _labels;
 
         /// <summary>Returns the number of columns</summary>
         public int Columns => _labels.Count;
@@ -190,7 +187,7 @@ namespace Euclid.DataStructures.IndexedSeries
             TU[] result = new TU[_legends.Count];
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i][index];
-            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, _legends, result);
+            return new Series<T, TU, TV>(label, _legends, result);
         }
 
         /// <summary> Gets the data-point column of the given label</summary>
@@ -203,7 +200,7 @@ namespace Euclid.DataStructures.IndexedSeries
             if (indexLabel == -1) throw new ArgumentException("Label [" + label.ToString() + "] was not found");
 
 
-            IEnumerable<int> matchingIndices = _legends.FindIndices(predicate);
+            IEnumerable<int> matchingIndices = _legends.Values.FindIndices(predicate);
             IList<TU> data = new List<TU>();
             Header<T> legends = new Header<T>();
 
@@ -212,7 +209,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 legends.Add(_legends.ElementAt(indice));
                 data.Add(_data[indice][indexLabel]);
             }
-            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, legends, data);
+            return new Series<T, TU, TV>(label, legends, data.ToArray());
         }
 
         /// <summary> Gets all the data as an array of <c>Series</c></summary>
@@ -226,7 +223,7 @@ namespace Euclid.DataStructures.IndexedSeries
                 for (int i = 0; i < _legends.Count; i++)
                     data[i] = _data[i][j];
 
-                result[j] = Series<T, TU, TV>.Create<Series<T, TU, TV>>(_labels.ElementAt(j), _legends, data);
+                result[j] = new Series<T, TU, TV>(_labels.ElementAt(j), _legends, data);
             }
             return result;
         }
@@ -289,7 +286,7 @@ namespace Euclid.DataStructures.IndexedSeries
             _labels.Remove(label);
             _data = newData;
 
-            return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, _legends, takenData);
+            return new Series<T, TU, TV>(label, _legends, takenData);
         }
 
         #endregion
@@ -328,7 +325,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a DataFrame</returns>
         public DataFrame<T, TU, TV> ExtractByLabels(Func<TV, bool> predicate)
         {
-            return Create(_labels.Where(predicate).Select(l => GetSeriesAt(l)));
+            return Create(_labels.Values.Where(predicate).Select(l => GetSeriesAt(l)));
         }
         #endregion
 
@@ -456,7 +453,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a DataFrame</returns>
         public DataFrame<T, TU, TV> ExtractByLegend(Func<T, bool> predicate)
         {
-            return Create(_legends.Where(predicate).Select(l => GetSliceAt(l)));
+            return Create(_legends.Values.Where(predicate).Select(l => GetSliceAt(l)));
         }
         #endregion
 
@@ -499,6 +496,7 @@ namespace Euclid.DataStructures.IndexedSeries
         #endregion
 
         #region Access the legends and labels
+
 
         /// <summary>Gets the i-th legend value</summary>
         /// <param name="index">the index</param>
@@ -652,7 +650,7 @@ namespace Euclid.DataStructures.IndexedSeries
             if (other == null) throw new ArgumentNullException(nameof(other));
 
             if (other._labels.Count == _labels.Count && other._legends.Count == _legends.Count &&
-                !other._labels.Except(_labels).Any() && !other._legends.Except(_legends).Any())
+                !other._labels.Values.Except(_labels.Values).Any() && !other._legends.Values.Except(_legends.Values).Any())
             {
                 for (int i = 0; i < other.Rows; i++)
                 {

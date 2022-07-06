@@ -77,13 +77,13 @@
         "projectName": "Euclid",
         "projectPath": "C:\\Users\\Utilisateur\\source\\repos\\Euclid\\Euclid\\Euclid.csproj",
         "frameworks": {
-          "net48": {
+          "net452": {
             "projectReferences": {}
           }
         }
       },
       "frameworks": {
-        "net48": {}
+        "net452": {}
       }
     }
   }

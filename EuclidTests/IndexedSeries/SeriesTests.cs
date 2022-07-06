@@ -16,12 +16,12 @@ namespace Euclid.IndexedSeries.Tests
 
         private static Series<DateTime, double, string> BaseSeries(double value)
         {
-            return Series<DateTime, double, string>.Create<Series<DateTime, double, string>>("Titre", (new Header<DateTime>(_dates)).Values, Enumerable.Range(0, _dates.Length).Select(i => value).ToArray());
+            return new Series<DateTime, double, string>("Titre", (new Header<DateTime>(_dates)).Values, Enumerable.Range(0, _dates.Length).Select(i => value).ToArray());
         }
 
         private static Series<DateTime, double, string> ValuesSeries()
         {
-            return Series<DateTime, double, string>.Create<Series<DateTime, double, string>>("Titre", (new Header<DateTime>(_dates)).Values, _values);
+            return new Series<DateTime, double, string>("Titre", (new Header<DateTime>(_dates)).Values, _values);
         }
 
         #region Accessors
@@ -29,14 +29,14 @@ namespace Euclid.IndexedSeries.Tests
         public void LegendsTest()
         {
             Series<DateTime, double, string> series = BaseSeries(3);
-            Assert.IsTrue(series.Rows == _n && series.Legends.Except(_dates).Count() == 0);
+            Assert.IsTrue(series.Rows == _n && series.Legends.Values.Except(_dates).Count() == 0);
         }
 
         [TestMethod()]
         public void LabelsTest()
         {
             Series<DateTime, double, string> series = BaseSeries(3);
-            Assert.IsTrue(series.Labels[0] == "Titre");
+            Assert.IsTrue(series.Labels.ElementAt(0) == "Titre");
         }
 
         [TestMethod()]
@@ -74,7 +74,7 @@ namespace Euclid.IndexedSeries.Tests
         public void CloneTest()
         {
             Series<DateTime, double, string> series = ValuesSeries(),
-                clone = series.Clone<Series<DateTime, double, string>>();
+                clone = series.Clone();
             Assert.IsTrue(series.Equals(clone));
         }
 
@@ -89,7 +89,7 @@ namespace Euclid.IndexedSeries.Tests
         public void AccessByLegendTest()
         {
             Series<DateTime, double, string> series = ValuesSeries();
-            Assert.IsTrue(Enumerable.Range(0, _n).All(i => series[series.Legends[i]] == _values[i]));
+            Assert.IsTrue(Enumerable.Range(0, _n).All(i => series[series.Legends.ElementAt(i)] == _values[i]));
         }
 
         [TestMethod()]
@@ -173,7 +173,7 @@ namespace Euclid.IndexedSeries.Tests
             int rows = series.Remove((dt, d) => dt.DayOfWeek == DayOfWeek.Monday || d > 50);
 
             Assert.IsTrue(series.Data.Count(d => d > 50) == 0 &&
-                series.Legends.Count(dt => dt.DayOfWeek == DayOfWeek.Monday) == 0);
+                series.Legends.Values.Count(dt => dt.DayOfWeek == DayOfWeek.Monday) == 0);
         }
         #endregion
 
@@ -269,28 +269,28 @@ namespace Euclid.IndexedSeries.Tests
         [TestMethod()]
         public void CreateFromRawDataTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create<Series<DateTime, double, string>>("Label", (new Header<DateTime>(_dates)).Values, _values);
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Label", (new Header<DateTime>(_dates)).Values, _values);
             Assert.IsTrue(series != null && series.Rows == _n && series.Label == "Label" &&
-                series.Legends.Except(_dates).Count() == 0 &&
+                series.Legends.Values.Except(_dates).Count() == 0 &&
                 series.Data.Except(_values).Count() == 0);
         }
 
         [TestMethod()]
         public void CreateFromXmlTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create<Series<DateTime, double, string>>("Label", (new Header<DateTime>(_dates)).Values, _values);
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Label", (new Header<DateTime>(_dates)).Values, _values);
 
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(series.GetXml().Trim());
-            Series<DateTime, double, string> newSeries = Series<DateTime, double, string>.Create<Series<DateTime, double, string>>(doc);
+            Series<DateTime, double, string> newSeries = Series<DateTime, double, string>.Create(doc);
             Assert.IsTrue(series.Equals(newSeries));
         }
 
         [TestMethod()]
         public void CreateFromCSVTest()
         {
-            Series<DateTime, double, string> series = Series<DateTime, double, string>.Create<Series<DateTime, double, string>>("Label", (new Header<DateTime>(_dates)).Values, _values),
-                pseudoClone = Series<DateTime, double, string>.Create<Series<DateTime, double, string>>(series.ToCSV());
+            Series<DateTime, double, string> series = new Series<DateTime, double, string>("Label", (new Header<DateTime>(_dates)).Values, _values),
+                pseudoClone = Series<DateTime, double, string>.Create(series.ToCSV());
             Assert.IsTrue(series.Equals(pseudoClone));
         }
         #endregion
