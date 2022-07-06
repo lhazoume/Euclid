@@ -1,18 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Euclid.Extensions
 {
     /// <summary>Helper class for generic array manipulations</summary>
     public static class Arrays
     {
+        /// <summary>
+        /// Build a two dimensional jagged array
+        /// </summary>
+        /// <typeparam name="T">Type of the jagged array</typeparam>
+        /// <param name="rows">Nb rows</param>
+        /// <param name="columns">Nb Columns</param>
+        /// <returns>Initialized two dimensional jagged array</returns>
         public static T[][] Build<T>(int rows, int columns)
         {
             T[][] result = new T[rows][];
             for (int i = 0; i < rows; i++)
                 result[i] = new T[columns];
+            return result;
+        }
+
+        /// <summary>
+        /// Build a two dimensional jagged array
+        /// </summary>
+        /// <typeparam name="T">Type of the jagged array</typeparam>
+        /// <param name="rows">Nb rows</param>
+        /// <param name="columns">Nb Columns</param>
+        /// <param name="defaultValue">Default value for initilization</param>
+        /// <returns>Initialized two dimensional jagged array</returns>
+        public static T[][] Build<T>(int rows, int columns, T defaultValue)
+        {
+            T[][] result = new T[rows][];
+            for (int i = 0; i < rows; i++)
+            {
+                result[i] = new T[columns];
+                for(int j = 0; j < columns; j++)
+                    result[i][j] = defaultValue;
+            }
+                
             return result;
         }
 

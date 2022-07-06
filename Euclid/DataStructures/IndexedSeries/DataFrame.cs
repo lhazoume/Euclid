@@ -13,21 +13,6 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <typeparam name="TV">the label type</typeparam>
     public class DataFrame<T, TU, TV> : IDataFrame<T, TU, TV> where T : IComparable<T>, IEquatable<T> where TV : IEquatable<TV>
     {
-        #region Declarations
-        /// <summary>
-        /// Labels variable
-        /// </summary>
-        protected Header<TV> _labels;
-        /// <summary>
-        /// Legends variable
-        /// </summary>
-        protected Header<T> _legends;
-        /// <summary>
-        /// Data variable
-        /// </summary>
-        private TU[][] _data;
-        #endregion
-
         #region Constructors
         /// <summary>
         /// Constructor of DataFrame

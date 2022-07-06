@@ -2035,21 +2035,6 @@
             <typeparam name="TU">the data type</typeparam>
             <typeparam name="TV">the label type</typeparam>
         </member>
-        <member name="F:Euclid.DataStructures.IndexedSeries.DataFrame`3._labels">
-            <summary>
-            Labels variable
-            </summary>
-        </member>
-        <member name="F:Euclid.DataStructures.IndexedSeries.DataFrame`3._legends">
-            <summary>
-            Legends variable
-            </summary>
-        </member>
-        <member name="F:Euclid.DataStructures.IndexedSeries.DataFrame`3._data">
-            <summary>
-            Data variable
-            </summary>
-        </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.DataFrame`3.#ctor(System.Collections.Generic.IList{`2},System.Collections.Generic.IList{`0},`1[][])">
             <summary>
             Constructor of DataFrame
@@ -4135,6 +4120,25 @@
         </member>
         <member name="T:Euclid.Extensions.Arrays">
             <summary>Helper class for generic array manipulations</summary>
+        </member>
+        <member name="M:Euclid.Extensions.Arrays.Build``1(System.Int32,System.Int32)">
+            <summary>
+            Build a two dimensional jagged array
+            </summary>
+            <typeparam name="T">Type of the jagged array</typeparam>
+            <param name="rows">Nb rows</param>
+            <param name="columns">Nb Columns</param>
+            <returns>Initialized two dimensional jagged array</returns>
+        </member>
+        <member name="M:Euclid.Extensions.Arrays.Build``1(System.Int32,System.Int32,``0)">
+            <summary>
+            Build a two dimensional jagged array
+            </summary>
+            <typeparam name="T">Type of the jagged array</typeparam>
+            <param name="rows">Nb rows</param>
+            <param name="columns">Nb Columns</param>
+            <param name="defaultValue">Default value for initilization</param>
+            <returns>Initialized two dimensional jagged array</returns>
         </member>
         <member name="M:Euclid.Extensions.Arrays.Clone``1(``0[][])">
             <summary>Clones a jagged array</summary>
