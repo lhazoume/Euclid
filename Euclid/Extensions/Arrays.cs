@@ -44,7 +44,7 @@ namespace Euclid.Extensions
         }
 
 
-        /// <summary>Clones a jagged array</summary>
+        /// <summary>Clones a 2D jagged array</summary>
         /// <typeparam name="T">template type</typeparam>
         /// <param name="data">the 2d array of data</param>
         /// <returns>a shallow copy of data</returns>
@@ -59,6 +59,28 @@ namespace Euclid.Extensions
                 result[i] = new T[data[i].Length];
                 for (int j = 0; j < data[i].Length; j++)
                     result[i][j] = data[i][j];
+            }
+
+            return result;
+        }
+
+        /// <summary>Fast Clone a 2D jagged array</summary>
+        /// <typeparam name="T">template type</typeparam>
+        /// <param name="data">the 2d array of data</param>
+        /// <returns>a shallow copy of data</returns>
+        public static T[][] FastClone<T>(this T[][] data)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            int n = data.Length;
+            T[][] result = new T[n][];
+            for (int i = 0; i < n; i++)
+            {
+                T[] inner = data[i];
+                int m = inner.Length;
+                T[] newer = new T[m];
+                Array.Copy(inner, newer, m);
+                result[i] = newer;
             }
 
             return result;
