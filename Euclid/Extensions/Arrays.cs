@@ -8,6 +8,11 @@ namespace Euclid.Extensions
     /// <summary>Helper class for generic array manipulations</summary>
     public static class Arrays
     {
+        /// <summary>Returns a jagged array of the right type</summary>
+        /// <typeparam name="T">the underlying type</typeparam>
+        /// <param name="rows">the array's number of rows</param>
+        /// <param name="columns">the array's number of columuns</param>
+        /// <returns>a jagged array</returns>
         public static T[][] Build<T>(int rows, int columns)
         {
             T[][] result = new T[rows][];

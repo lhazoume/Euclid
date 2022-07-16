@@ -25,8 +25,9 @@ namespace Euclid.Serialization
             if (xmlable == null) throw new ArgumentNullException(nameof(xmlable));
 
             StringBuilder builder = new StringBuilder();
-            XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
-            using (XmlWriter writer = XmlWriter.Create(builder, settings))
+            StringWriterWithEncoding stringWriter = new StringWriterWithEncoding(builder, Encoding.UTF8);
+            XmlWriterSettings settings = new XmlWriterSettings() { Indent = true, CloseOutput = true };
+            using (XmlWriter writer = XmlWriter.Create(stringWriter, settings))
             {
                 writer.WriteStartDocument();
                 xmlable.ToXml(writer);
@@ -53,7 +54,7 @@ namespace Euclid.Serialization
         /// <returns>a string</returns>
         public static string ToEuclidDateString(this DateTime date)
         {
-            return string.Format("YYYYMMDD", date);
+            return $"{date.Year}{date.Month:00}{date.Day:00}";
         }
 
         /// <summary>De-serializes a string to a date </summary>
