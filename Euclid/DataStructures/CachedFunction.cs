@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Euclid.DataStructures
@@ -8,7 +9,7 @@ namespace Euclid.DataStructures
     /// <typeparam name="U">the value type</typeparam>
     public class CachedFunction<T, U> where T : IEquatable<T>
     {
-        private readonly Dictionary<T, U> _cache = new Dictionary<T, U>();
+        private readonly ConcurrentDictionary<T, U> _cache = new ConcurrentDictionary<T, U>(Environment.ProcessorCount * 2, 100);
         private readonly Func<T, U> _function;
 
         /// <summary>Builds a cached function class</summary>
@@ -28,7 +29,7 @@ namespace Euclid.DataStructures
                 if (_cache.ContainsKey(t))
                     return _cache[t];
                 U u = _function(t);
-                _cache.Add(t, u);
+                _cache.TryAdd(t, u);
                 return u;
             }
         }
