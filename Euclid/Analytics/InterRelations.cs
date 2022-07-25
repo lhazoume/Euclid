@@ -231,5 +231,37 @@ namespace Euclid.Analytics
 
             return result;
         }
+
+        /// <summary>Gets the cross-correlation between the time series of the input dataframes</summary>
+        /// <typeparam name="T">the dataframes' legend types</typeparam>
+        /// <typeparam name="TV">the dataframes' label types</typeparam>
+        /// <param name="dataFrame1">the left hand side dataFrame</param>
+        /// <param name="dataFrame2">the right hand side data frame</param>
+        /// <returns>a dataFrame</returns>
+        public static double Correlation(double[] series1, double[] series2)
+        {
+            if (series1 == null) throw new ArgumentNullException(nameof(series1));
+            if (series2 == null) throw new ArgumentNullException(nameof(series2));
+            if (series1.Length != series2.Length) throw new Exception("the sizes do not match");
+
+            #region Sums
+            double x = 0, x2 = 0, y = 0, y2 = 0, xy = 0;
+            for (int i = 0; i < series1.Length; i++)
+            {
+                x += series1[i];
+                y += series2[i];
+                x2 += series1[i] * series1[i];
+                y2 += series2[i] * series2[i];
+                xy += series1[i] * series2[i];
+            }
+            #endregion
+
+            double avg1 = x / series1.Length,
+                avg2 = y / series2.Length,
+                v1 = x2 / series1.Length - avg1 * avg1,
+                v2 = y2 / series1.Length - avg2 * avg2,
+                c = xy / series1.Length - avg1 * avg2;
+            return c / Math.Sqrt(v1 * v2);
+        }
     }
 }

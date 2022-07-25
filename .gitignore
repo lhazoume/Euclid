@@ -34,3 +34,8 @@ EuclidTests/obj
 *.targets
 *.props
 *.json
+Benchmarking/obj/project.assets.json
+Benchmarking/obj/Debug/netstandard2.0/Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
+Benchmarking/obj/Benchmarking.csproj.nuget.g.props
+Benchmarking/obj/Benchmarking.csproj.nuget.dgspec.json
+.vs/Euclid/v17/.futdcache.v1
