@@ -232,12 +232,10 @@ namespace Euclid.Analytics
             return result;
         }
 
-        /// <summary>Gets the cross-correlation between the time series of the input dataframes</summary>
-        /// <typeparam name="T">the dataframes' legend types</typeparam>
-        /// <typeparam name="TV">the dataframes' label types</typeparam>
-        /// <param name="dataFrame1">the left hand side dataFrame</param>
-        /// <param name="dataFrame2">the right hand side data frame</param>
-        /// <returns>a dataFrame</returns>
+        /// <summary>Gets the correlation between two time series</summary>
+        /// <param name="series1">the left hand side series</param>
+        /// <param name="series2">the right hand side series</param>
+        /// <returns>a double</returns>
         public static double Correlation(double[] series1, double[] series2)
         {
             if (series1 == null) throw new ArgumentNullException(nameof(series1));
