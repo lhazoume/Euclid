@@ -11,7 +11,7 @@ namespace Euclid.DataStructures.IndexedSeries
     public sealed class SortedHeader<T> : IEnumerable<T>, IEquatable<SortedHeader<T>> where T : IEquatable<T>
     {
         #region Variables
-        private Map<T, int> _map;
+        private readonly Map<T, int> _map;
         #endregion
 
 

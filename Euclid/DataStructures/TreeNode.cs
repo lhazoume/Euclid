@@ -56,12 +56,12 @@ namespace Euclid.DataStructures
         }
 
         /// <summary>Returns all the leaves</summary>
-        public List<TreeNode<T>> Leaves
+        public IEnumerable<TreeNode<T>> Leaves
         {
             get
             {
                 if (IsLeaf) return new List<TreeNode<T>>() { this };
-                return _right.Leaves.Union(_left.Leaves).ToList();
+                return _right.Leaves.Concat(_left.Leaves);
             }
         }
         #endregion

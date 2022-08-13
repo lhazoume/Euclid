@@ -1069,7 +1069,7 @@ namespace Euclid
         /// <param name="k">number of terms</param>
         /// <param name="x">double value</param>
         /// <returns></returns>
-        public static double poisson(int k, double x)
+        public static double Poisson(int k, double x)
         {
             if (k < 0 || x < 0) return 0.0;
 
@@ -1080,7 +1080,7 @@ namespace Euclid
         /// <param name="k">start</param>
         /// <param name="x">double value</param>
         /// <returns></returns>
-        public static double poissonc(int k, double x)
+        public static double Poissonc(int k, double x)
         {
             if (k < 0 || x < 0) return 0.0;
 

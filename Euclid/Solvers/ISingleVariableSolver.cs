@@ -24,7 +24,7 @@ namespace Euclid.Solvers
         double Error { get; }
 
         /// <summary>Gets the convergence path</summary>
-        List<Tuple<double, double>> Convergence { get; }
+        IEnumerable<Tuple<double, double>> Convergence { get; }
 
         /// <summary> Solves for the given function, parameters and initial conditions, target set @ 0</summary>
         void Solve();

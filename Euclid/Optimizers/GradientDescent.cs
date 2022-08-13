@@ -140,7 +140,7 @@ namespace Euclid.Optimizers
         public Vector Result => _result;
 
         /// <summary>Gets the details of the convergence (gradient norm, error)</summary>
-        public List<Tuple<double, double>> Convergence => _convergence.ToList();
+        public IEnumerable<Tuple<double, double>> Convergence => _convergence;
 
         /// <summary>Gets the number of times the function was evaluated </summary>
         public int Evaluations => _evaluations;

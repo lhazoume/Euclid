@@ -107,10 +107,8 @@ namespace Euclid.Solvers.SingleVariableSolver
         public SolverStatus Status => _status;
 
         /// <summary>Gets the details of the convergence (value, error) </summary>
-        public List<Tuple<double, double>> Convergence
-        {
-            get { return new List<Tuple<double, double>>(_convergence); }
-        }
+        public IEnumerable<Tuple<double, double>> Convergence => _convergence;
+
 
         #endregion
 

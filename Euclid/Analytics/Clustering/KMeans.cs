@@ -6,7 +6,7 @@ namespace Euclid.Analytics.Clustering
 {
     public class KMeans<T>
     {
-        #region Variables
+        #region Private fields
         private readonly Func<IEnumerable<T>, T> _aggregator;
         private readonly Func<T, T, double> _distance;
         private int _maxIterations;
@@ -20,11 +20,14 @@ namespace Euclid.Analytics.Clustering
             _maxIterations = maxIterations;
         }
 
+        /// <summary>Gets and sets the maximum number of iterations</summary>
         public int MaxIterations
         {
             get => _maxIterations;
             set => _maxIterations = value;
         }
+
+        #region Methods
 
         /// <summary>Provides the centroïds for the </summary>
         /// <param name="data">the data to cluster</param>
@@ -96,11 +99,13 @@ namespace Euclid.Analytics.Clustering
                 //assigns the data point to a class
                 if (!classes.ContainsKey(nearestCentroid))
                     classes.Add(nearestCentroid, new List<T>());
-                
+
                 classes[nearestCentroid].Add(t);
             }
 
             return classes;
         }
+
+        #endregion
     }
 }

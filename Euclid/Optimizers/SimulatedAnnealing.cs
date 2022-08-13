@@ -93,7 +93,7 @@ namespace Euclid.Optimizers
         public Vector Result => _result;
 
         /// <summary>Gets the details of the convergence (value, error)</summary>
-        public List<Tuple<Vector, double>> Convergence => _convergence.ToList();
+        public IEnumerable<Tuple<Vector, double>> Convergence => _convergence;
 
         #endregion
 

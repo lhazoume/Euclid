@@ -83,7 +83,7 @@ namespace Euclid.Numerics
         public NumericalSeriesStatus Status => _status;
 
         /// <summary>Gets the details of the convergence (value)</summary>
-        public List<double> Convergence => _convergence.ToList();
+        public IEnumerable<double> Convergence => _convergence;
 
         #endregion
 

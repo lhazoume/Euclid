@@ -101,7 +101,7 @@ namespace Euclid.Numerics
         public double Result => _result;
 
         /// <summary>Returns the details of the convergence sequence (integral and error)</summary>
-        public List<Tuple<double, double>> Convergence => _convergence.ToList();
+        public IEnumerable<Tuple<double, double>> Convergence => _convergence;
 
         #endregion
 

@@ -76,7 +76,7 @@ namespace Euclid.Logging
 
         #region Handle records
         /// <summary>Returns the logs</summary>
-        public List<LogRecord> Records => _records.ToList();
+        public IEnumerable<LogRecord> Records => _records;
 
         /// <summary>Clears the log</summary>
         public void Clear()

@@ -10,7 +10,7 @@ namespace Euclid.DataStructures.IndexedSeries
     public class Header<T> where T : IEquatable<T>
     {
         #region Declarations
-        private Map<T, int> _map;
+        private readonly Map<T, int> _map;
         #endregion
 
         #region Constructors
