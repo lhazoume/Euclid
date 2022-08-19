@@ -4501,6 +4501,12 @@
             <summary>Tabulates these values into to this instance</summary>
             <param name="values">the value</param>
         </member>
+        <member name="M:Euclid.Histograms.Histogram.Rank(System.Double)">
+            <summary>
+            Get the rank of the value from the distribution in (%)
+            </summary>
+            <param name="value">Target</param>
+        </member>
         <member name="M:Euclid.Histograms.Histogram.Create(System.Double,System.Double,System.Int32)">
             <summary>Creates an <c>Histogram</c> with regular buckets</summary>
             <param name="lowerBound">the support's lower bound</param>

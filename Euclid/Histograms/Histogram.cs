@@ -71,6 +71,25 @@ namespace Euclid.Histograms
         }
         #endregion
 
+        #region rank
+        /// <summary>
+        /// Get the rank of the value from the distribution in (%)
+        /// </summary>
+        /// <param name="value">Target</param>
+        public double Rank(double value)
+        {
+            int N = 0;
+            for (int i = 0; i < _intervals.Length; i++)
+            {
+                N += _items[i];
+                if (!(_intervals[i].LowerBound.Value >= value && _intervals[i].UpperBound.Value >= value)) continue;
+                return ((N * 1.0) / (TotalItems * 1.0)) * 100.0;
+            }
+
+            return 100;
+        }
+        #endregion
+
         #region Builders
         /// <summary>Creates an <c>Histogram</c> with regular buckets</summary>
         /// <param name="lowerBound">the support's lower bound</param>
