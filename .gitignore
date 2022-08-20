@@ -41,3 +41,8 @@ Benchmarking/obj/Benchmarking.csproj.nuget.dgspec.json
 .vs/Euclid/v17/.futdcache.v1
 Benchmarking/obj/Release/netstandard2.0/Benchmarking.csproj.FileListAbsolute.txt
 Benchmarking/obj/Release/netstandard2.0/Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
+.vs/Euclid/v17/.futdcache.v1
+*.json
+Benchmarking/obj/Benchmarking.csproj.nuget.g.props
+Benchmarking/obj/Debug/netstandard2.0/Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
+Benchmarking/obj/project.assets.json
