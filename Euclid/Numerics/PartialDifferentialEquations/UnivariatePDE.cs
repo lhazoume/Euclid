@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Euclid.Numerics.PartialDifferentialEquations
 {
@@ -45,6 +46,12 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             _slices[anteriorIndex] = operatorMatrix * _slices[posteriorIndex];
         }
 
+        public void OptimalExercice(Vector immediateExerice, int index)
+        {
+            for (int i = 0; i < _slices[index].Size; i++)
+                _slices[index][i] = Math.Max(immediateExerice[i], _slices[index][i]);
+        }
+
         #endregion
 
         #region Accessors
@@ -58,57 +65,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             set { _slices[t] = value; }
         }
 
-        #endregion
-
-        #region Archive
-        /*
-public class UnivariatePDE
-{
-    #region Methods
-
-    /// <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
-    /// <returns>a set of <c>Vector</c></returns>
-    public Vector Retropropagate(double upP, double midP, double dnP, Vector value)
-    {
-        Vector result = Vector.Create(_config.XCount, 0.0);
-
-        for (int i = 1; i < _config.XCount - 1; i++)
-            result[i] = midP * value[i] + upP * value[i + 1] + dnP * value[i - 1];
-
-        return result;
-    }
-
-    public void RetropropagateAllTheWay(List<Matrix> operatorMatrices)
-    {
-        if (operatorMatrices.Count != _slices.Length - 1)
-            throw new ArgumentOutOfRangeException(nameof(operatorMatrices));
-        for (int i = operatorMatrices.Count - 1; i > 0; i--)
-            Retropropagate(operatorMatrices[i], i); 
-    }
-    #endregion
-
-    /// <summary>Computes the exercice frontier</summary>
-    /// <param name="expected">the expected value matrix</param>
-    /// <param name="intrinsic">the intrinsic value matrix</param>
-    /// <returns>a <c>Matrix</c></returns>
-    public static Matrix ExerciceFrontier(Matrix expected, Matrix intrinsic)
-    {
-        if (expected.Rows != intrinsic.Rows || expected.Columns != intrinsic.Columns)
-            throw new ArgumentException("the expected and intrinsic matrices do not match");
-
-        Matrix result = Matrix.Create(expected.Rows, expected.Columns, 0.0);
-        Parallel.For(0, expected.Size, k =>
-        {
-            int i = k / expected.Columns,
-                j = k % expected.Columns;
-            result[i, j] = intrinsic[i, j] > expected[i, j] ? 1 : 0;
-        });
-        return result;
-    }
-    #endregion
-}
-
-*/
         #endregion
     }
 }
