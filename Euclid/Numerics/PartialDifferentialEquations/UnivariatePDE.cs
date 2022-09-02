@@ -46,12 +46,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             _slices[anteriorIndex] = operatorMatrix * _slices[posteriorIndex];
         }
 
-        public void OptimalExercice(Vector immediateExerice, int index)
-        {
-            for (int i = 0; i < _slices[index].Size; i++)
-                _slices[index][i] = Math.Max(immediateExerice[i], _slices[index][i]);
-        }
-
         #endregion
 
         #region Accessors

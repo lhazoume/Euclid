@@ -658,8 +658,10 @@ namespace Euclid
             if (m2 == null) throw new ArgumentNullException(nameof(m2));
             if (m1.Rows != m2.Rows || m1.Columns != m2.Columns) throw new ArgumentException("Matrices must have the same dimensions!");
             Matrix r = Matrix.Create(m1.Rows, m1.Columns);
+
             for (int k = 0; k < r.Size; k++)
                 r[k] = m1[k] + m2[k];
+
             return r;
         }
 
