@@ -121,6 +121,7 @@
     <Compile Include="Analytics\Statistics\Tests\ANOVA.cs" />
     <Compile Include="Analytics\Tests\KolmogorovSmirnovTest.cs" />
     <Compile Include="Arithmetics\BinomialCoefficients.cs" />
+    <Compile Include="Numerics\PiecewiseFunction.cs" />
     <Compile Include="Point3D.cs" />
     <Compile Include="Point2D.cs" />
     <Compile Include="DataStructures\CachedFunction.cs" />
