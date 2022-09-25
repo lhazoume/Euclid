@@ -14,9 +14,9 @@ namespace Euclid.Serialization
             StringBuilder stringBuilder = new StringBuilder();
             if (timeSpan.Days != 0) stringBuilder.Append(string.Format("{0:#0}d", timeSpan.Days));
             if (timeSpan.Hours != 0) stringBuilder.Append(string.Format("{0:#0}h", timeSpan.Hours));
-            if (timeSpan.Minutes != 0) stringBuilder.Append(string.Format("{0:00}m", timeSpan.Minutes));
-            if (timeSpan.Seconds != 0) stringBuilder.Append(string.Format("{0:00}s", timeSpan.Seconds));
-            if (timeSpan.Milliseconds != 0) stringBuilder.Append(string.Format("{0:000}ms", timeSpan.Milliseconds));
+            if (timeSpan.Minutes != 0) stringBuilder.Append(string.Format("{0:#0}m", timeSpan.Minutes));
+            if (timeSpan.Seconds != 0) stringBuilder.Append(string.Format("{0:#0}s", timeSpan.Seconds));
+            if (timeSpan.Milliseconds != 0) stringBuilder.Append(string.Format("{0:##0}ms", timeSpan.Milliseconds));
             if(timeSpan.Ticks% TimeSpan.TicksPerMillisecond !=0) stringBuilder.Append(string.Format("{0:0000}t", timeSpan.Ticks % TimeSpan.TicksPerMillisecond));
             return stringBuilder.ToString();
         }

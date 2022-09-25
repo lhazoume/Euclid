@@ -12,18 +12,19 @@ namespace Euclid.Optimizers
         private Func<Vector, double> _function;
         private readonly Func<Vector, Vector> _gradient;
         private readonly Func<Vector, Matrix> _hessian;
-        private double _error;
         private readonly double _gradientThreshold;
         private readonly int _maxIterations, _maxLineSearchIterations;
-        private int _evaluations;
-        private readonly Vector _initialGuess;
-        private Vector _result;
         private readonly List<Vector> _descentDirections = new List<Vector>();
         private readonly List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
-        private LineSearch _lineSearch;
         private readonly OptimizationType _optimizationType;
         private readonly int _sign;
+
         private SolverStatus _status = SolverStatus.NotRan;
+        private LineSearch _lineSearch;
+        private double _error;
+        private int _evaluations;
+        private Vector _initialGuess, _result;
+        private Func<Vector, bool> _feasibility;
         #endregion
 
         #region Constructors
@@ -139,6 +140,20 @@ namespace Euclid.Optimizers
         /// <summary>The result of the solver</summary>
         public Vector Result => _result;
 
+        /// <summary>Gets and sets the initial guess</summary>
+        public Vector InitialGuess
+        {
+            get { return _initialGuess; }
+            set { _initialGuess = value; }
+        }
+
+        /// <summary>Gets and sets the feasibility function</summary>
+        public Func<Vector, bool> Feasibility
+        {
+            get { return _feasibility; }
+            set { _feasibility = value; }
+        }
+
         /// <summary>Gets the details of the convergence (gradient norm, error)</summary>
         public IEnumerable<Tuple<double, double>> Convergence => _convergence;
 
@@ -173,11 +188,15 @@ namespace Euclid.Optimizers
         private double NaiveLineSearch(double error, Vector x, Vector direction)
         {
             double alpha = 1;
+            if (_feasibility != null)
+                while (!_feasibility(x + (alpha * direction)))
+                    alpha *= 0.5;
+
             int k = 0;
             double f = _function(x + (alpha * direction));
             _evaluations++;
 
-            while (double.IsNaN(f) || (Math.Sign(f - error) == -_sign && k < _maxLineSearchIterations))
+            while (double.IsNaN(f) || double.IsInfinity(f) || (Math.Sign(f - error) == -_sign && k < _maxLineSearchIterations))
             {
                 alpha *= 0.5;
                 f = _function(x + (alpha * direction));

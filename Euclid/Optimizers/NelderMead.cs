@@ -218,7 +218,6 @@ namespace Euclid.Optimizers
                 {
                     simplex[_dimension].Vector = contractionPoint;
                     simplex[_dimension].Value = contractionValue;
-                    Console.WriteLine(string.Format("Contraction value = {0}", contractionValue));
                     iterations++;
                     continue;
                 }

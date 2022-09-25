@@ -547,7 +547,7 @@ namespace Euclid
         /// <returns>a <c>Vector</c></returns>
         public static Vector CreateBaseVector(int size, int index)
         {
-            if (index < 0 || index >= size)
+            if (index >= 0 && index < size)
             {
                 Vector result = new Vector(size, 0);
                 result[index] = 1;
