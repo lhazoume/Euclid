@@ -5801,6 +5801,9 @@
         <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.Optimize(System.Boolean)">
             <summary>Optimizes the function using Particle Swarm Optimization</summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "T:Euclid.Overfitting.PSR" -->
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.PSR.computePSR(System.Double,System.Double,System.Double,System.Int32,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.PSR.computeMinTRL(System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double)" -->
         <member name="T:Euclid.Polynomial">
             <summary>
             Standard polynomial
