@@ -690,7 +690,7 @@ namespace Euclid.DataStructures.IndexedSeries
         #endregion
 
         #region ICSVable
-        /// <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
+        /// <summary>Builds a string representation of the content of the <c>DataFrame</c> (default use ',' as separator) </summary>
         /// <returns>a <c>String</c></returns>
         public string ToCSV()
         {
@@ -703,6 +703,23 @@ namespace Euclid.DataStructures.IndexedSeries
                 TU[] row = new TU[_labels.Count];
                 for (int j = 0; j < _labels.Count; j++) row[j] = _data[i][j];
                 lines[i + 1] = $"{_legends.ElementAt(i)}{CsvHelper.Separator}{string.Join(CsvHelper.Separator.ToString(), row)}";
+            }
+            return string.Join(Environment.NewLine, lines);
+        }
+
+        /// <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
+        /// <param name="separator">CSV separator</param>
+        /// <returns>a <c>String</c></returns>
+        public string ToCSV(string separator)
+        {
+            string[] lines = new string[1 + _legends.Count];
+            lines[0] = $"x{separator}{string.Join(separator, _labels)}";
+
+            for (int i = 0; i < _legends.Count; i++)
+            {
+                TU[] row = new TU[_labels.Count];
+                for (int j = 0; j < _labels.Count; j++) row[j] = _data[i][j];
+                lines[i + 1] = $"{_legends.ElementAt(i)}{separator}{string.Join(separator, row)}";
             }
             return string.Join(Environment.NewLine, lines);
         }

@@ -1364,7 +1364,12 @@
             <returns>a DataFrame</returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ToCSV">
+            <summary>Builds a string representation of the content of the <c>DataFrame</c> (default use ',' as separator) </summary>
+            <returns>a <c>String</c></returns>
+        </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.ToCSV(System.String)">
             <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
+            <param name="separator">CSV separator</param>
             <returns>a <c>String</c></returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Equals(Euclid.DataStructures.IndexedSeries.IDataFrame{`0,`1,`2})">
@@ -5801,9 +5806,10 @@
         <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.Optimize(System.Boolean)">
             <summary>Optimizes the function using Particle Swarm Optimization</summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:Euclid.Overfitting.PSR" -->
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.PSR.computePSR(System.Double,System.Double,System.Double,System.Int32,System.Double)" -->
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.PSR.computeMinTRL(System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "T:Euclid.Overfitting.SharpeStats" -->
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.computePSR(System.Double,System.Double,System.Double,System.Int32,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.computeMinTRL(System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.computeDSR(System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double)" -->
         <member name="T:Euclid.Polynomial">
             <summary>
             Standard polynomial

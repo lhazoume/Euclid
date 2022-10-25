@@ -196,7 +196,7 @@
     <Compile Include="Optimizers\PatternSearch.cs" />
     <Compile Include="Optimizers\SimulatedAnnealing.cs" />
     <Compile Include="Optimizers\GaussianHillClimb1D.cs" />
-    <Compile Include="Overfitting\PSR.cs" />
+    <Compile Include="Overfitting\SharpeStats.cs" />
     <Compile Include="Polynomial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\BinarySearch.cs" />

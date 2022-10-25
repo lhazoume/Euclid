@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace Euclid.Overfitting
 {
     /// <summary>
-    /// Class which computes Probilitistic Sharpe ratio & minimal Track Record Length (minTRL) , works came from Baily, Lopez de Prado 2012/2014
+    /// Class which computes Probilitistic Sharpe ratio, Deflated Sharpe Ratio & minimal Track Record Length (minTRL) , works came from Baily, Lopez de Prado 2012/2014
     /// </summary>
-    public static class PSR
+    public static class SharpeStats
     {
         #region methods
         /// <summary>
@@ -51,6 +51,30 @@ namespace Euclid.Overfitting
             double zAlpha = norm.InverseCumulativeDistribution(alpha);
 
             return 1 + (1 - (kappa * oSR) + ((lambda - 1) * (Math.Pow(oSR, 2) / 4))) * Math.Pow(zAlpha / (oSR - tSR), 2);
+        }
+
+        /// <summary>
+        /// Compute the Deflated Sharpe Ratio according the observable sharpe & its higher moments distribution & Nb of strategy trials
+        /// </summary>
+        /// <param name="oSR">Sharpe Ratio from the observable returns</param>
+        /// <param name="kappa">The skewness of the observed returns</param>
+        /// <param name="lambda">The kurtosis of the observed returns</param>
+        /// <param name="T">The number of observed returns</param>
+        /// <param name="N">Number of strategy trials</param>
+        /// <param name="Sstd">Standard deviation of sharpe strategy trials</param>
+        /// <returns>Deflated Sharpe Ratio</returns>
+        /// <exception cref="Exception">DSR value</exception>
+        public static double computeDSR(double oSR, double kappa, double lambda, int T, double N, double Sstd)
+        {
+            if (T <= 0) throw new Exception($"T must superior to 0 (T={T})");
+
+            NormalDistribution norm = new NormalDistribution();
+            double SE = Math.Sqrt((1 - (kappa * oSR) + ((lambda - 1) * (Math.Pow(oSR, 2) / 4))) / T); // standard error of observable sharpe ratio oSR
+
+            // compute the deflated sharpe (from trials)
+            double Sd = Sstd * ((1 - Fn.EulerGamma) * norm.InverseCumulativeDistribution(1 - (1 / N)) + (Fn.EulerGamma * norm.InverseCumulativeDistribution(1 - (1 / N * Math.Exp(1)))));
+
+            return norm.CumulativeDistribution((oSR - Sd) / SE);
         }
         #endregion
     }
