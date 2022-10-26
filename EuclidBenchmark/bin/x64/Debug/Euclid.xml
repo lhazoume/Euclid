@@ -1554,8 +1554,8 @@
             <summary>
             Class representing a serie ordered by time
             </summary>
-            <typeparam name="TU"></typeparam>
-            <typeparam name="TV"></typeparam>
+            <typeparam name="TU">Label type</typeparam>
+            <typeparam name="TV">Data type</typeparam>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.TimeSeries`2.#ctor">
             <summary>
