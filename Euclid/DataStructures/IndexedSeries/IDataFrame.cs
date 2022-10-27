@@ -142,8 +142,8 @@ namespace Euclid.DataStructures.IndexedSeries
         public static TY Create<TY>(IEnumerable<Slice<T, TU, TV>> slices) where TY : IDataFrame<T, TU, TV>
         {
             TU[][] data = Arrays.Build<TU>(slices.Count(), slices.ElementAt(0).Columns);
-            for (int i = 0; i < data.GetLength(0); i++)
-                for (int j = 0; j < data.GetLength(1); j++)
+            for (int i = 0; i < data.Length; i++)
+                for (int j = 0; j < data[i].Length; j++)
                     data[i][j] = slices.ElementAt(i)[j];
 
             return Create<TY>(slices.ElementAt(0).Labels, slices.Select(s => s.Legend).ToList(), data);
@@ -158,8 +158,8 @@ namespace Euclid.DataStructures.IndexedSeries
         public static TY Create<TY>(IEnumerable<Series<T, TU, TV>> series) where TY : IDataFrame<T, TU, TV>
         {
             TU[][] data = Arrays.Build<TU>(series.ElementAt(0).Rows, series.Count());
-            for (int i = 0; i < data.GetLength(0); i++)
-                for (int j = 0; j < data.GetLength(1); j++)
+            for (int i = 0; i < data.Length; i++)
+                for (int j = 0; j < data[i].Length; j++)
                     data[i][j] = series.ElementAt(j)[i];
             return Create<TY>(series.Select(s => s.Label).ToList(), series.ElementAt(0).Legends, data);
         }
