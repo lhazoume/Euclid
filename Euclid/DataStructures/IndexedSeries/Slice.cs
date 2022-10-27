@@ -212,7 +212,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a <c>Slice</c></returns>
         public static Slice<T, TU, TV> Create(IHeader<TV> labels, T legend, IEnumerable<TU> data)
         {
-            if (labels == null) throw new ArgumentNullException(nameof(labels));
+            //if (labels == null) throw new ArgumentNullException(nameof(labels));
 
             return new Slice<T, TU, TV>(labels, legend, data);
         }
