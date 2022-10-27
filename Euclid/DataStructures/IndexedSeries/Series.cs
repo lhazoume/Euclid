@@ -34,7 +34,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>
         /// Parameterless constructor
         /// </summary>
-        public Series() { }
+        protected Series() { }
 
         /// <summary>Builds a <c>Series</c></summary>
         /// <param name="label">the label</param>
