@@ -1162,6 +1162,12 @@
             <param name="legends"></param>
             <param name="data"></param>
         </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Initialize(`1)">
+            <summary>
+            Initialize the data matrix with the specified value.
+            </summary>
+            <param name="value">Value used for initialization</param>
+        </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.Create``1(System.Xml.XmlNode)">
             <summary>
             Builds a <c>DataFrame</c> from its serialized form

@@ -57,6 +57,17 @@ namespace Euclid.DataStructures.IndexedSeries
         protected abstract void Initialize(IList<TV> labels, IList<T> legends, TU[][] data);
 
         /// <summary>
+        /// Initialize the data matrix with the specified value.
+        /// </summary>
+        /// <param name="value">Value used for initialization</param>
+        public void Initialize(TU value)
+        {
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j <Columns; j++)
+                    _data[i][j] = value;
+        }
+
+        /// <summary>
         /// Builds a <c>DataFrame</c> from its serialized form
         /// </summary>
         /// <typeparam name="TY">IDataFrame implementation</typeparam>
