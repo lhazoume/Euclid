@@ -560,7 +560,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>a <c>DataFrame</c></returns>
         public TY Clone<TY>() where TY : IDataFrame<T, TU, TV>
         {
-            return Create<TY>(_labels.Values, _legends.Values, Arrays.Clone(_data));
+            return Create<TY>(_labels.Values, _legends.Values, Arrays.FastClone(_data));
         }
 
         #region Apply
