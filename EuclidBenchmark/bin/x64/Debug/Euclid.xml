@@ -2006,6 +2006,12 @@
             <param name="legends">Legends</param>
             <param name="data">Data</param>
         </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Initialize(`1)">
+            <summary>
+            Initialize the data vector with the specified value.
+            </summary>
+            <param name="value">Value used for initialization</param>
+        </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.Create``1(`2,System.Collections.Generic.IList{`0},`1[])">
             <summary>
             Builds a <c>Series</c> from generic enumerables of legends and data

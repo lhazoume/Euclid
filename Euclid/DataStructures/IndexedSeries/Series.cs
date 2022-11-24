@@ -378,6 +378,16 @@ namespace Euclid.DataStructures.IndexedSeries
         }
 
         /// <summary>
+        /// Initialize the data vector with the specified value.
+        /// </summary>
+        /// <param name="value">Value used for initialization</param>
+        public void Initialize(TU value)
+        {
+            for (int i = 0; i < Rows; i++)
+                    _data[i] = value;
+        }
+
+        /// <summary>
         /// Builds a <c>Series</c> from generic enumerables of legends and data
         /// </summary>
         /// <typeparam name="TY">Generic type</typeparam>
