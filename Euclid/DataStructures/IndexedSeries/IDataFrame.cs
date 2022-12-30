@@ -464,7 +464,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <typeparam name="TY">dataframe type</typeparam>
         /// <param name="predicate">the predicate on the labels</param>
         /// <returns>Matching dataframe</returns>
-        public TU[][] FastExtractValuesByLabels<TY>(Func<TV, bool> predicate) where TY : IDataFrame<T, TU, TV>
+        public TU[][] FastExtractValuesByLabels(Func<TV, bool> predicate)
         {
             List<TV> labels = _labels.Where(predicate).ToList();
             TU[][] data = Arrays.Build<TU>(Rows, labels.Count);

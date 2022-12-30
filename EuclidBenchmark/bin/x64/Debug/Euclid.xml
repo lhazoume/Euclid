@@ -1305,7 +1305,7 @@
             <param name="predicate">the predicate on the labels</param>
             <returns>Matching dataframe</returns>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.FastExtractValuesByLabels``1(System.Func{`2,System.Boolean})">
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.FastExtractValuesByLabels(System.Func{`2,System.Boolean})">
             <summary>
             Fast extracts the part of the DataFrame whose labels obeys the predicate
             </summary>
