@@ -1292,6 +1292,14 @@
             <param name="predicate">the predicate on the labels</param>
             <returns>a DataFrame</returns>
         </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.FastExtractByLabels``1(System.Func{`2,System.Boolean})">
+            <summary>
+            Fast extracts the part of the DataFrame whose labels obeys the predicate
+            </summary>
+            <typeparam name="TY">dataframe type</typeparam>
+            <param name="predicate">the predicate on the labels</param>
+            <returns>Matching dataframe</returns>
+        </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetSliceAt(`0)">
             <summary>Gets the data-point row of the given legend</summary>
             <param name="legend">the legend</param>
@@ -1557,6 +1565,11 @@
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.FastExtractByLegend(System.DateTime,System.DateTime)" -->
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.GetSeriesAt(`1)">
+            <summary> Gets the data-point column of the given label</summary>
+            <param name="label">the label</param>
+            <returns> a <c>Time series</c></returns>
+        </member>
         <member name="T:Euclid.DataStructures.IndexedSeries.TimeSeries`2">
             <summary>
             Class representing a serie ordered by time

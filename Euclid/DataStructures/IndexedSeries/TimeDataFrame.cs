@@ -139,7 +139,7 @@ namespace Euclid.DataStructures.IndexedSeries
         }
         #endregion
 
-        #region extraction
+        #region extraction & getters
         /// <summary>Extracts the part of the time dataFrame whose legends between the starting & ending date (include)</summary>
         /// <param name="start">Starting date which includes the targeting legends</param>
         /// <param name="end">Ending date which includes the targeting legends</param>
@@ -170,6 +170,19 @@ namespace Euclid.DataStructures.IndexedSeries
             }
 
             return Create<TimeDataFrame<TU, TV>>(Labels, legends, data);
+        }
+
+        /// <summary> Gets the data-point column of the given label</summary>
+        /// <param name="label">the label</param>
+        /// <returns> a <c>Time series</c></returns>
+        public new TimeSeries<TU, TV> GetSeriesAt(TV label)
+        {
+            int index = _labels[label];
+            if (index == -1) throw new ArgumentException($"Label [{label}] was not found");
+            TU[] result = new TU[_legends.Count];
+            for (int i = 0; i < _legends.Count; i++)
+                result[i] = _data[i][index];
+            return TimeSeries<TU, TV>.Create<TimeSeries<TU, TV>>(label, _legends, result);
         }
         #endregion
 
