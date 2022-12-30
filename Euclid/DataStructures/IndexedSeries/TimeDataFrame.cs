@@ -2,6 +2,7 @@
 using Euclid.Search;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Euclid.DataStructures.IndexedSeries
 {
@@ -170,6 +171,68 @@ namespace Euclid.DataStructures.IndexedSeries
             }
 
             return Create<TimeDataFrame<TU, TV>>(Labels, legends, data);
+        }
+
+        /// <summary>Extracts the part of the values of the time dataFrame whose legends between the starting & ending date (include)</summary>
+        /// <param name="start">Starting date which includes the targeting legends</param>
+        /// <param name="end">Ending date which includes the targeting legends</param>
+        /// <returns>Matching data</returns>
+        public TU[][] FastExtractValuesByLegend(DateTime start, DateTime end)
+        {
+            #region requirements
+            if (start > end) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the ending date [{end.ToShortDateString()}]!");
+
+            if (start > Legends[Legends.Length - 1]) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the last legend [{Legends[Legends.Length - 1].ToShortDateString()}]!");
+            if (end < Legends[0]) throw new Exception($"ExtractByLegend: Ending date [{end.ToShortDateString()}] is inferior to the first legend [{Legends[0].ToShortDateString()}]!");
+            #endregion
+
+            int startIdx = FindFirstIndexOf(l => l.Date >= start.Date, start.Date);
+            if (startIdx == -1) throw new Exception($"Impossible to find the FindFirstIndexOf [{start.ToShortDateString()}] into the legends!");
+
+            int endIdx = FindLastIndexOf(l => l.Date <= end.Date, end.Date);
+            if (endIdx == -1) throw new Exception($"Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
+
+            int N = endIdx - startIdx, M = Columns;
+            TU[][] data = Arrays.Build<TU>(N, M);
+
+            for (int i = startIdx; i <= endIdx; i++)
+                for (int j = 0; j < M; j++) 
+                    data[i - startIdx][j] = this[i, j];
+
+            return data;
+        }
+
+        /// <summary>Extracts the part of the values of the time dataFrame whose legends between the starting & ending date (include) & label predicate</summary>
+        /// <param name="start">Starting date which includes the targeting legends</param>
+        /// <param name="end">Ending date which includes the targeting legends</param>
+        /// <param name="predicate">The predicate on the labels</param>
+        /// <returns>Matching data</returns>
+        public TU[][] FastExtractValuesByLegendAndLabels(DateTime start, DateTime end, Func<TV, bool> predicate)
+        {
+            #region requirements
+            if (start > end) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the ending date [{end.ToShortDateString()}]!");
+
+            if (start > Legends[Legends.Length - 1]) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the last legend [{Legends[Legends.Length - 1].ToShortDateString()}]!");
+            if (end < Legends[0]) throw new Exception($"ExtractByLegend: Ending date [{end.ToShortDateString()}] is inferior to the first legend [{Legends[0].ToShortDateString()}]!");
+            #endregion
+
+            int startIdx = FindFirstIndexOf(l => l.Date >= start.Date, start.Date);
+            if (startIdx == -1) throw new Exception($"Impossible to find the FindFirstIndexOf [{start.ToShortDateString()}] into the legends!");
+
+            int endIdx = FindLastIndexOf(l => l.Date <= end.Date, end.Date);
+            if (endIdx == -1) throw new Exception($"Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
+
+            List<TV> labels = _labels.Where(predicate).ToList();
+            int N = endIdx - startIdx, M = Columns;
+            TU[][] data = Arrays.Build<TU>(N, M);
+
+            for (int j = 0; j < M; j++)
+            {
+                int k = _labels[labels[j]];
+                for (int i = startIdx; i <= endIdx; i++) data[i - startIdx][j] = this[i, k];
+            }
+
+            return data;
         }
 
         /// <summary> Gets the data-point column of the given label</summary>

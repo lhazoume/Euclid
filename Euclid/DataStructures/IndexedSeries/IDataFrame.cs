@@ -287,6 +287,19 @@ namespace Euclid.DataStructures.IndexedSeries
             return Series<T, TU, TV>.Create<Series<T, TU, TV>>(label, _legends, result);
         }
 
+        /// <summary> Gets the data-point collection of the given label</summary>
+        /// <param name="label">the label</param>
+        /// <returns> a <c>data</c></returns>
+        public TU[] GetValuesAt(TV label)
+        {
+            int index = _labels[label];
+            if (index == -1) throw new ArgumentException($"Label [{label}] was not found");
+            TU[] result = new TU[_legends.Count];
+            for (int i = 0; i < _legends.Count; i++)
+                result[i] = _data[i][index];
+            return result;
+        }
+
         /// <summary> Gets the data-point column of the given label</summary>
         /// <param name="label">the label</param>
         /// <param name="predicate">legend predicate</param>
@@ -433,7 +446,6 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <returns>Matching dataframe</returns>
         public TY FastExtractByLabels<TY>(Func<TV, bool> predicate) where TY : IDataFrame<T, TU, TV>
         {
-            TV[] nativeLabels = _labels.Values;
             List<TV> labels = _labels.Where(predicate).ToList();
             TU[][] data = Arrays.Build<TU>(Rows, labels.Count);
 
