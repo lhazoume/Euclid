@@ -139,6 +139,40 @@ namespace Euclid.DataStructures.IndexedSeries
         }
         #endregion
 
+        #region extraction
+        /// <summary>Extracts the part of the time dataFrame whose legends between the starting & ending date (include)</summary>
+        /// <param name="start">Starting date which includes the targeting legends</param>
+        /// <param name="end">Ending date which includes the targeting legends</param>
+        /// <returns>Matching time dataframe</returns>
+        public TimeDataFrame<TU, TV> FastExtractByLegend(DateTime start, DateTime end)
+        {
+            #region requirements
+            if(start > end) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the ending date [{end.ToShortDateString()}]!");
+
+            if (start > Legends[Legends.Length - 1]) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the last legend [{Legends[Legends.Length - 1].ToShortDateString()}]!");
+            if (end < Legends[0]) throw new Exception($"ExtractByLegend: Ending date [{end.ToShortDateString()}] is inferior to the first legend [{Legends[0].ToShortDateString()}]!");
+            #endregion
+
+            int startIdx = FindFirstIndexOf(l => l.Date >= start.Date, start.Date);
+            if (startIdx == -1) throw new Exception($"Impossible to find the FindFirstIndexOf [{start.ToShortDateString()}] into the legends!");
+
+            int endIdx = FindLastIndexOf(l => l.Date <= end.Date, end.Date);
+            if (endIdx == -1) throw new Exception($"Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
+
+            List<DateTime> legends = new List<DateTime>();
+            int N = endIdx - startIdx, M = Columns;
+            TU[][] data = Arrays.Build<TU>(N, M);
+
+            for(int i = startIdx; i <= endIdx; i++)
+            {
+                legends.Add(Legends[i]);
+                for (int j = 0; j < M; j++) data[i - startIdx][j] = this[i, j];
+            }
+
+            return Create<TimeDataFrame<TU, TV>>(Labels, legends, data);
+        }
+        #endregion
+
         #endregion
 
     }

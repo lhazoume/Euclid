@@ -1556,6 +1556,7 @@
             <returns>index of the target else -1</returns>
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.FastExtractByLegend(System.DateTime,System.DateTime)" -->
         <member name="T:Euclid.DataStructures.IndexedSeries.TimeSeries`2">
             <summary>
             Class representing a serie ordered by time
