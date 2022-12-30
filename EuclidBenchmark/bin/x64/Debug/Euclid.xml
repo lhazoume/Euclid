@@ -1305,6 +1305,14 @@
             <param name="predicate">the predicate on the labels</param>
             <returns>Matching dataframe</returns>
         </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.FastExtractValuesByLabels``1(System.Func{`2,System.Boolean})">
+            <summary>
+            Fast extracts the part of the DataFrame whose labels obeys the predicate
+            </summary>
+            <typeparam name="TY">dataframe type</typeparam>
+            <param name="predicate">the predicate on the labels</param>
+            <returns>Matching dataframe</returns>
+        </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.IDataFrame`3.GetSliceAt(`0)">
             <summary>Gets the data-point row of the given legend</summary>
             <param name="legend">the legend</param>
