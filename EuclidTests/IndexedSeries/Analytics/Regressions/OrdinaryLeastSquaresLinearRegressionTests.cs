@@ -28,7 +28,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             Series<int, double, string> y = (factors[0] * x.GetSeriesAt("V0")) + (factors[1] * x.GetSeriesAt("V1")) + (factors[2] * x.GetSeriesAt("V2"));
             y.Label = "Y";
 
-            OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);
+            OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x.Data, y.Data);
             Assert.IsTrue(ols.ComputeError && ols.WithConstant && !ols.ReturnAverageIfFailed && ols.Status == RegressionStatus.NotRan);
         }
 
@@ -53,7 +53,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             Series<int, double, string> y = (factors[0] * x.GetSeriesAt("V0")) + (factors[1] * x.GetSeriesAt("V1")) + (factors[2] * x.GetSeriesAt("V2"));
             y.Label = "Y";
 
-            OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);
+            OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x.Data, y.Data);
             ols.Regress();
             LinearModel lm = ols.LinearModel;
 
@@ -85,7 +85,7 @@ namespace Euclid.IndexedSeries.Analytics.Regressions.Tests
             Series<int, double, string> y = (factors[0] * x.GetSeriesAt("V0")) + (factors[1] * x.GetSeriesAt("V1")) + (factors[2] * x.GetSeriesAt("V2"));
             y.Label = "Y";
 
-            OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x, y);
+            OrdinaryLeastSquaresLinearRegression<int, string> ols = new OrdinaryLeastSquaresLinearRegression<int, string>(x.Data, y.Data);
             ols.Regress();
             LinearModel lm = ols.LinearModel;
 

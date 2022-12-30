@@ -15,21 +15,21 @@ namespace Euclid.Analytics.Regressions
         private bool _computeErr;
         private RegressionStatus _status;
         private LinearModel _linearModel = null;
-        private readonly DataFrame<T, double, TV> _x;
-        private readonly Series<T, double, TV> _y;
+        private readonly double[][] _x;
+        private readonly double[] _y;
         #endregion
 
         /// <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
         /// <param name="x">the <c>DataFrame</c></param>
         /// <param name="y">the <c>Series</c></param>
-        public OrdinaryLeastSquaresLinearRegression(DataFrame<T, double, TV> x, Series<T, double, TV> y)
+        public OrdinaryLeastSquaresLinearRegression(double[][] x, double[] y)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
             if (y == null) throw new ArgumentNullException(nameof(y));
-            if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
+            if (x[0].Length == 0 || x.Length != y.Length) throw new ArgumentException("the data is not consistent");
 
-            _x = x.Clone<DataFrame<T, double, TV>>();
-            _y = y.Clone<Series<T, double, TV>>();
+            _x = x;
+            _y = y;
             _returnAverageIfFailed = false;
             _withConstant = true;
             _computeErr = true;
@@ -79,20 +79,20 @@ namespace Euclid.Analytics.Regressions
             #region Matrices
 
             #region Load data
-            int n = _y.Rows, p = _x.Columns;
+            int n = _y.Length, p = _x[0].Length;
             Matrix X = Matrix.Create(n, p + (_withConstant ? 1 : 0));
-            Vector Y = Vector.Create(_y.Data);
+            Vector Y = Vector.Create(_y);
             for (int i = 0; i < n; i++)
             {
                 if (_withConstant)
                 {
                     X[i, 0] = 1;
-                    for (int j = 0; j < p; j++) X[i, j + 1] = _x[i, j];
+                    for (int j = 0; j < p; j++) X[i, j + 1] = _x[i][j];
                     /*X[i * (p + 1)] = 1;
                     for (int j = 0; j < p; j++) X[i * (p + 1) + j + 1] = _x[i, j];*/
                 }
                 else
-                    for (int j = 0; j < p; j++) X[i, j] = _x[i, j];
+                    for (int j = 0; j < p; j++) X[i, j] = _x[i][j];
             }
             #endregion
 

@@ -782,7 +782,7 @@
             <typeparam name="T">the legends' type</typeparam>
             <typeparam name="TV">the labels' type</typeparam>
         </member>
-        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.#ctor(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},Euclid.DataStructures.IndexedSeries.Series{`0,System.Double,`1})">
+        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.#ctor(System.Double[][],System.Double[])">
             <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
             <param name="x">the <c>DataFrame</c></param>
             <param name="y">the <c>Series</c></param>
