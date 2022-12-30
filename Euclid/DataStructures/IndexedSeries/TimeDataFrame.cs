@@ -161,7 +161,7 @@ namespace Euclid.DataStructures.IndexedSeries
             if (endIdx == -1) throw new Exception($"Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
 
             List<DateTime> legends = new List<DateTime>();
-            int N = endIdx - startIdx, M = Columns;
+            int N = endIdx - startIdx + 1, M = Columns;
             TU[][] data = Arrays.Build<TU>(N, M);
 
             for(int i = startIdx; i <= endIdx; i++)
@@ -192,7 +192,7 @@ namespace Euclid.DataStructures.IndexedSeries
             int endIdx = FindLastIndexOf(l => l.Date <= end.Date, end.Date);
             if (endIdx == -1) throw new Exception($"Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
 
-            int N = endIdx - startIdx, M = Columns;
+            int N = endIdx - startIdx + 1, M = Columns;
             TU[][] data = Arrays.Build<TU>(N, M);
 
             for (int i = startIdx; i <= endIdx; i++)
@@ -223,7 +223,7 @@ namespace Euclid.DataStructures.IndexedSeries
             if (endIdx == -1) throw new Exception($"Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
 
             List<TV> labels = _labels.Where(predicate).ToList();
-            int N = endIdx - startIdx, M = Columns;
+            int N = endIdx - startIdx + 1, M = Columns;
             TU[][] data = Arrays.Build<TU>(N, M);
 
             for (int j = 0; j < M; j++)
