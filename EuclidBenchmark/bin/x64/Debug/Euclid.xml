@@ -5848,9 +5848,9 @@
             <summary>Optimizes the function using Particle Swarm Optimization</summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:Euclid.Overfitting.SharpeStats" -->
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.computePSR(System.Double,System.Double,System.Double,System.Int32,System.Double)" -->
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.computeMinTRL(System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double)" -->
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.computeDSR(System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.ComputePSR(System.Double,System.Double,System.Double,System.Int32,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.ComputeMinTRL(System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Overfitting.SharpeStats.ComputeDSR(System.Double,System.Double,System.Double,System.Int32,System.Double,System.Double)" -->
         <member name="T:Euclid.Polynomial">
             <summary>
             Standard polynomial

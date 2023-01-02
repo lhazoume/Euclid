@@ -23,7 +23,7 @@ namespace Euclid.Overfitting
         /// <param name="tSR">True sharpe ratio tested or reference sharpe ratio</param>
         /// <returns>PSR value</returns>
         /// <exception cref="Exception">The number of observed returns</exception>
-        public static double computePSR(double oSR, double kappa, double lambda, int T, double tSR)
+        public static double ComputePSR(double oSR, double kappa, double lambda, int T, double tSR)
         {
             if (T <= 0) throw new Exception($"T must superior to 0 (T={T})");
 
@@ -43,7 +43,7 @@ namespace Euclid.Overfitting
         /// <param name="tSR">True sharpe ratio tested or reference sharpe ratio</param>
         /// <param name="alpha">Threshold of confidence interval</param>
         /// <returns>minTRL value</returns>
-        public static double computeMinTRL(double oSR, double kappa, double lambda, int T, double tSR, double alpha)
+        public static double ComputeMinTRL(double oSR, double kappa, double lambda, int T, double tSR, double alpha)
         {
             if (T <= 0) throw new Exception($"T must superior to 0 (T={T})");
 
@@ -64,7 +64,7 @@ namespace Euclid.Overfitting
         /// <param name="Sstd">Standard deviation of sharpe strategy trials</param>
         /// <returns>Deflated Sharpe Ratio</returns>
         /// <exception cref="Exception">DSR value</exception>
-        public static double computeDSR(double oSR, double kappa, double lambda, int T, double N, double Sstd)
+        public static double ComputeDSR(double oSR, double kappa, double lambda, int T, double N, double Sstd)
         {
             if (T <= 0) throw new Exception($"T must superior to 0 (T={T})");
 
