@@ -12,7 +12,6 @@ namespace Euclid.Analytics.Clustering
         private int _maxIterations;
         #endregion
 
-        /// TODO: harden this function
         public KMeans(Func<IEnumerable<T>, T> aggregator, Func<T, T, double> distance, int maxIterations)
         {
             _aggregator = aggregator;
