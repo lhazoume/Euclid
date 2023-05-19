@@ -306,7 +306,7 @@ namespace Euclid
 
         #region Static transformers or aggregators
 
-        /// <summary>Aggregates a list of <c>Vector</c></summary>
+        /// <summary>Aggregates a list of <c>Vector</c> by sum</summary>
         /// <param name="vectors">the vectors to sum</param>
         /// <returns>a <c>Vector</c></returns>
         public static Vector AggregateSum(IList<Vector> vectors)
@@ -328,6 +328,40 @@ namespace Euclid
                 });
                 return new Vector(array);
             }
+        }
+
+        /// <summary>Aggregates a list of <c>Vector</c> by average</summary>
+        /// <param name="vectors">the vectors to sum</param>
+        /// <returns>a <c>Vector</c></returns>
+        public static Vector AggregateAverage(IEnumerable<Vector> vectors)
+        {
+            if (vectors == null) throw new ArgumentNullException(nameof(vectors));
+
+            if (vectors.Count() == 0)
+                return Vector.Create(1, 0.0);
+            else if (vectors.Count() == 1)
+                return vectors.ElementAt(0).Clone;
+            else
+            {
+                int size = vectors.ElementAt(0).Size;
+                double avgFactor = 1.0 / vectors.Count();
+                double[] array = new double[size];
+                Parallel.For(0, size, s =>
+                {
+                    for (int i = 0; i < vectors.Count(); i++)
+                        array[s] += vectors.ElementAt(i)[s] * avgFactor;
+                });
+                return new Vector(array);
+            }
+        }
+
+        /// <summary>Provides the euclidian distance between two vectors</summary>
+        /// <param name="vector1">the right hand side</param>
+        /// <param name="vector2">the left hand side</param>
+        /// <returns>a <c>double</c></returns>
+        public static double Distance(Vector vector1, Vector vector2)
+        {
+            return (vector1 - vector2).Norm1;
         }
 
         /// <summary>Applies a function on the fields on a Vector</summary>
