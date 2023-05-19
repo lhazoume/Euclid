@@ -67,3 +67,17 @@ C:\Users\lucha\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchma
 C:\Users\lucha\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.CopyComplete
 C:\Users\lucha\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.dll
 C:\Users\lucha\source\repos\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.pdb
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\bin\Debug\netstandard2.0\Benchmarking.deps.json
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\bin\Debug\netstandard2.0\Benchmarking.dll
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\bin\Debug\netstandard2.0\Benchmarking.pdb
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.dll
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.pdb
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\bin\Debug\netstandard2.0\Euclid.xml
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.AssemblyReference.cache
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.AssemblyInfoInputs.cache
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.AssemblyInfo.cs
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.csproj.CopyComplete
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.dll
+C:\Users\user\Documents\GitHub\Euclid\Benchmarking\obj\Debug\netstandard2.0\Benchmarking.pdb
