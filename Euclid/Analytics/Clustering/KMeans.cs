@@ -131,7 +131,7 @@ namespace Euclid.Analytics.Clustering
                 results.Add(new Tuple<double, List<T>>(SimplifiedSilhouette(classes, centroids), centroids));
             }
 
-            double minSilhouette = results.Min(t => t.Item1);
+            double minSilhouette = results.Max(t => t.Item1);
             return results.Find(t => t.Item1 == minSilhouette).Item2;
         }
 
