@@ -8,8 +8,8 @@ namespace Euclid.DataStructures.IndexedSeries
     /// <summary>
     /// Class representing a serie ordered by time
     /// </summary>
-    /// <typeparam name="TU">Label type</typeparam>
-    /// <typeparam name="TV">Data type</typeparam>
+    /// <typeparam name="TU">Data type</typeparam>
+    /// <typeparam name="TV">Label type</typeparam>
     public class TimeSeries<TU, TV> : Series<DateTime, TU, TV> where TV : IEquatable<TV>
     {
         #region accessors
