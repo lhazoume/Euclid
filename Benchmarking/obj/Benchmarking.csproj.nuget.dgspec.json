@@ -69,7 +69,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -79,13 +79,13 @@
         "projectName": "Euclid",
         "projectPath": "C:\\Users\\Utilisateur\\source\\repos\\Euclid\\Euclid\\Euclid.csproj",
         "frameworks": {
-          "net452": {
+          "net48": {
             "projectReferences": {}
           }
         }
       },
       "frameworks": {
-        "net452": {}
+        "net48": {}
       }
     }
   }
