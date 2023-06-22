@@ -6,7 +6,8 @@
     public interface ICSVable
     {
         /// <summary>Builds a string representation of the content of the class </summary>
+        /// <param name="separator">Column separator</param>
         /// <returns>a <c>String</c></returns>
-        string ToCSV();
+        string ToCSV(string separator);
     }
 }

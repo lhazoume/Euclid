@@ -168,12 +168,13 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region ICSVable
         /// <summary>Builds a string representation the content of the slice </summary>
+        /// <param name="separator">Column separator</param>
         /// <returns>a <c>String</c></returns>
-        public string ToCSV()
+        public string ToCSV(string separator = ";")
         {
             string[] lines = new string[2];
-            lines[0] = "x" + CsvHelper.Separator + string.Join(CsvHelper.Separator.ToString(), _labels);
-            lines[1] = _legend.ToString() + CsvHelper.Separator + string.Join(CsvHelper.Separator.ToString(), _data);
+            lines[0] = "x" +separator + string.Join(separator, _labels);
+            lines[1] = _legend.ToString() + separator + string.Join(separator, _data);
             return string.Join(Environment.NewLine, lines);
         }
         #endregion

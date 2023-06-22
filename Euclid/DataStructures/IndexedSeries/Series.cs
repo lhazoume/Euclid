@@ -239,15 +239,12 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region ICSVable
         /// <summary>Builds a string representing the content of the <c>Series</c></summary>
+        /// <param name="separator">column separator, by default ';' is used</param>
         /// <returns>a <c>String</c></returns>
-        public string ToCSV()
+        public string ToCSV(string separator = ";")
         {
-            List<string> lines = new List<string>
-            {
-                string.Join(CsvHelper.Separator, "x", _label.ToString())
-            };
-            foreach (T t in _legends)
-                lines.Add(string.Join(CsvHelper.Separator, t.ToString(), _data[_legends[t]].ToString()));
+            List<string> lines = new List<string> { string.Join(separator, "x", _label.ToString()) };
+            foreach (T t in _legends) lines.Add(string.Join(separator, t.ToString(), _data[_legends[t]].ToString()));
             return string.Join(Environment.NewLine, lines);
         }
         #endregion

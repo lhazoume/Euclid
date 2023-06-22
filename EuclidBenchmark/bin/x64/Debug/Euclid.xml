@@ -1751,8 +1751,9 @@
             <summary>Serializes the <c>DataCube</c> to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.DataCube`4.ToCSV">
+        <member name="M:Euclid.DataStructures.IndexedSeries.DataCube`4.ToCSV(System.String)">
             <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
+            <param name="separator">Column separator</param>
             <returns>a <c>String</c></returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.DataCube`4.Equals(Euclid.DataStructures.IndexedSeries.DataCube{`0,`1,`2,`3})">
@@ -1847,8 +1848,9 @@
             <summary>Serializes the slice to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Slice`3.ToCSV">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Slice`3.ToCSV(System.String)">
             <summary>Builds a string representation the content of the slice </summary>
+            <param name="separator">Column separator</param>
             <returns>a <c>String</c></returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.Slice`3.Create(System.Xml.XmlNode)">
@@ -1975,8 +1977,9 @@
             <summary>Serializes the <c>Series</c> to Xml </summary>
             <param name="writer">the <c>XmlWriter</c></param>
         </member>
-        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.ToCSV">
+        <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.ToCSV(System.String)">
             <summary>Builds a string representing the content of the <c>Series</c></summary>
+            <param name="separator">column separator, by default ';' is used</param>
             <returns>a <c>String</c></returns>
         </member>
         <member name="M:Euclid.DataStructures.IndexedSeries.Series`3.op_Addition(Euclid.DataStructures.IndexedSeries.Series{`0,`1,`2},Euclid.DataStructures.IndexedSeries.Series{`0,`1,`2})">
@@ -6082,8 +6085,9 @@
             Interface allowing serialization and de-serialization from/to CSV files
             </summary>
         </member>
-        <member name="M:Euclid.Serialization.ICSVable.ToCSV">
+        <member name="M:Euclid.Serialization.ICSVable.ToCSV(System.String)">
             <summary>Builds a string representation of the content of the class </summary>
+            <param name="separator">Column separator</param>
             <returns>a <c>String</c></returns>
         </member>
         <member name="T:Euclid.Serialization.TextHelper">

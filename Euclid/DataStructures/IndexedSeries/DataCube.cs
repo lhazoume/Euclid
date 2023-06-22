@@ -409,18 +409,16 @@ namespace Euclid.DataStructures.IndexedSeries
 
         #region ICSVable
         /// <summary>Builds a string representation of the content of the <c>DataFrame</c> </summary>
+        /// <param name="separator">Column separator</param>
         /// <returns>a <c>String</c></returns>
-        public string ToCSV()
+        public string ToCSV(string separator = ";")
         {
-            List<string> lines = new List<string>
-            {
-                string.Join(CsvHelper.Separator.ToString(), "Legend", "Label", "Layer", "Value")
-            };
+            List<string> lines = new List<string> { string.Join(separator, "Legend", "Label", "Layer", "Value") };
 
             for (int i = 0; i < _legends.Count; i++)
                 for (int j = 0; j < _labels.Count; j++)
                     for (int k = 0; k < _layers.Count; k++)
-                        lines.Add(string.Join(CsvHelper.Separator.ToString(), _legends.ElementAt(i).ToString(), _labels.ElementAt(j).ToString(), _layers.ElementAt(k).ToString(), _data[i, j, k].ToString()));
+                        lines.Add(string.Join(separator, _legends.ElementAt(i).ToString(), _labels.ElementAt(j).ToString(), _layers.ElementAt(k).ToString(), _data[i, j, k].ToString()));
             return string.Join(Environment.NewLine, lines);
         }
         #endregion
