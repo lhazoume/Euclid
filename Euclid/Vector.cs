@@ -1,5 +1,6 @@
 ﻿using Euclid.Distributions.Continuous;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -286,6 +287,35 @@ namespace Euclid
         }
 
         #endregion
+
+        public static Vector Cumsum(Vector v)
+        {
+            double[] cumsum = new double[v.Size];
+            double sum = 0;
+
+            for (int i = 0; i < v.Size; i++)
+            {
+                sum += v[i];
+                cumsum[i] = sum;
+            }
+
+            return Vector.Create(cumsum);
+        }
+
+        /// <summary>
+        /// Sort a vector
+        /// </summary>
+        /// <param name="V">Candidat</param>
+        /// <param name="descending">true: descending order else ascending</param>
+        /// <returns>indices of elt moved</returns>
+        public static IReadOnlyList<int> Sort(Vector V, bool descending = false)
+        {
+            IEnumerable<KeyValuePair<double, int>> data = V.Data.Select((x, i) => new KeyValuePair<double, int>(x, i));
+            IOrderedEnumerable<KeyValuePair<double, int>> Vs = descending ? data.OrderByDescending(x => x.Key) : data.OrderBy(x => x.Key);
+
+            V = Vector.Create(Vs.Select(v => v.Key));
+            return Vs.Select(v => v.Value).ToArray();
+        }
 
         /// <summary>Returns the scalar product of the Vectors</summary>
         /// <param name="v1">the left hand side</param>
@@ -606,3 +636,4 @@ namespace Euclid
         #endregion
     }
 }
+

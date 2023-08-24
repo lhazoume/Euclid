@@ -836,6 +836,20 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>Builds a <c>Matrix</c> from a collection of vector</summary>
+        /// <param name="model">the collection of vector</param>
+        public static Matrix Create(IReadOnlyList<Vector> model)
+        {
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            Matrix result = new Matrix(model.Count, model.First().Size, 0);
+
+            for (int i = 0; i < result.Rows; i++)
+                for (int j = 0; j < result.Columns; j++)
+                    result[i, j] = model[i][j];
+
+            return result;
+        }
+
         /// <summary>Creates an empty rectangular Matrix </summary>
         /// <param name="rows">the number of rows</param>
         /// <param name="cols">the number of columns</param>

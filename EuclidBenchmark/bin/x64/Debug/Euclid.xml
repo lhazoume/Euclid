@@ -13,6 +13,99 @@
             <param name="numberOfClasses">the target number of classes</param>
             <returns>an Enumerable of centroïds</returns>
         </member>
+        <member name="T:Euclid.Analytics.Clustering.PCA`2">
+            <summary>
+            Class which modelize a PCA
+            </summary>
+            <typeparam name="T">Legends type</typeparam>
+            <typeparam name="TV">Labels types</typeparam>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.C">
+            <summary>
+            Number of components
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.Cov">
+            <summary>
+            Covariance matrix
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.EigenVectors">
+            <summary>
+            Eigen vectors
+            </summary>
+        </member>
+        <member name="F:Euclid.Analytics.Clustering.PCA`2._x">
+            <summary>
+            Matrix of data
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.X_">
+            <summary>
+            Matrix of data transformed by PCA
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.EigenValues">
+            <summary>
+            Eigei values
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.ExplainedVariance">
+            <summary>
+            Explained variance
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.CumulativeVariance">
+            <summary>
+            Cumulative variance
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.Status">
+            <summary>
+            Regression status
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.Centering">
+            <summary>
+            Apply/Applied centering over data matrix
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.Scaling">
+            <summary>
+            Apply/Applied scaling over data matrix
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.Err">
+            <summary>
+            Error information about regression
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.PCA`2.#ctor(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="x">Data</param>
+            <param name="c">Number of components</param>
+            <param name="centering">Centering</param>
+            <param name="scaling">Scaling</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.PCA`2.Create(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Create function
+            </summary>
+            <param name="x">Data</param>
+            <param name="centering">Centering</param>
+            <param name="scaling">Scaling</param>
+            <param name="c">Number of components</param>
+            <returns>PCA object</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.PCA`2.Fit">
+            <summary>
+            Fit a PCA
+            </summary>
+        </member>
         <member name="T:Euclid.Analytics.Clustering.IDecisionNode`2">
             <summary>Interface for decision tree node</summary>
             <typeparam name="TI">the input type</typeparam>
@@ -851,12 +944,26 @@
             <param name="data">the data to scale "up" : intercept + x * scalingCoefficient</param>
             <returns>an array of double</returns>
         </member>
-        <member name="M:Euclid.Analytics.Regressions.Scaling.Reduce(System.Collections.Generic.IEnumerable{System.Double})">
+        <member name="M:Euclid.Analytics.Regressions.Scaling.Reduce(System.Collections.Generic.IReadOnlyList{System.Double},System.Boolean,System.Boolean)">
             <summary>Scales "down" a series of data</summary>
             <param name="data">the data to scale "down" (x-intercept)/scalingCoefficient</param>
+            <param name="centering">Enable centering data (x-intercept) part</param>
+            <param name="scaling">Enable scaling data /scalingCoefficient part</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.Scaling.Reduce(Euclid.Matrix,System.Boolean,System.Boolean)">
+            <summary>Scales "down" a series of data</summary>
+            <param name="data">the data to scale "down" (x-intercept)/scalingCoefficient</param>
+            <param name="centering">Enable centering data (x-intercept) part</param>
+            <param name="scaling">Enable scaling data /scalingCoefficient part</param>
             <returns>an array of double</returns>
         </member>
         <member name="M:Euclid.Analytics.Regressions.Scaling.CreateZScore(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>Creates a Scaling based on the average and the standard deviation</summary>
+            <param name="data">the data to scale</param>
+            <returns>a <c>Scaling</c> class</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.Scaling.CreateZScore(Euclid.Matrix)">
             <summary>Creates a Scaling based on the average and the standard deviation</summary>
             <param name="data">the data to scale</param>
             <returns>a <c>Scaling</c> class</returns>
@@ -5016,6 +5123,10 @@
             <summary>Builds a <c>Matrix</c> from a 2d-array of double</summary>
             <param name="model">the 2d-array of data</param>
         </member>
+        <member name="M:Euclid.Matrix.Create(System.Collections.Generic.IReadOnlyList{Euclid.Vector})">
+            <summary>Builds a <c>Matrix</c> from a collection of vector</summary>
+            <param name="model">the collection of vector</param>
+        </member>
         <member name="M:Euclid.Matrix.Create(System.Int32,System.Int32)">
             <summary>Creates an empty rectangular Matrix </summary>
             <param name="rows">the number of rows</param>
@@ -7019,6 +7130,14 @@
             <param name="v1">the left hand side</param>
             <param name="v2">the right hand side</param>
             <returns>the <c>Vector</c> result of the substraction</returns>
+        </member>
+        <member name="M:Euclid.Vector.Sort(Euclid.Vector,System.Boolean)">
+            <summary>
+            Sort a vector
+            </summary>
+            <param name="V">Candidat</param>
+            <param name="descending">true: descending order else ascending</param>
+            <returns>indices of elt moved</returns>
         </member>
         <member name="M:Euclid.Vector.Scalar(Euclid.Vector,Euclid.Vector)">
             <summary>Returns the scalar product of the Vectors</summary>

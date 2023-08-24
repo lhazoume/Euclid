@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analytics\Clustering\KMeans.cs" />
+    <Compile Include="Analytics\Clustering\PCA.cs" />
     <Compile Include="Analytics\DecisionTree\DecisionTreeBarrierNode.cs" />
     <Compile Include="Analytics\Entropy.cs" />
     <Compile Include="Analytics\Clustering\ClusteringContext.cs" />

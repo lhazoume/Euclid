@@ -71,6 +71,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Analystics\PCATests.cs" />
     <Compile Include="Arithmetics\BinomialCoefficientsTests.cs" />
     <Compile Include="Arithmetics\SubsetsTests.cs" />
     <Compile Include="ComplexTests.cs" />
@@ -104,6 +105,9 @@
       <Project>{C685AEF9-4E07-40C7-AC2F-FF66C8A3A851}</Project>
       <Name>Euclid</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Analystics\data-pca.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

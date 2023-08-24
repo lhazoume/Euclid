@@ -46,13 +46,36 @@ namespace Euclid.Analytics.Regressions
 
         /// <summary>Scales "down" a series of data</summary>
         /// <param name="data">the data to scale "down" (x-intercept)/scalingCoefficient</param>
+        /// <param name="centering">Enable centering data (x-intercept) part</param>
+        /// <param name="scaling">Enable scaling data /scalingCoefficient part</param>
         /// <returns>an array of double</returns>
-        public double[] Reduce(IEnumerable<double> data)
+        public double[] Reduce(IReadOnlyList<double> data, bool centering = true, bool scaling = true)
         {
+            #region initialization
+            double intercept = centering ? _intercept : 0, scaleCoeffcient = scaling ? _scalingCoefficient : 1;
             double[] result = new double[data.Count()];
+            #endregion
 
-            for (int i = 0; i < result.Length; i++)
-                result[i] = (data.ElementAt(i) - _intercept) / _scalingCoefficient;
+            for (int i = 0; i < result.Length; i++) result[i] = (data[i] - intercept) / scaleCoeffcient;
+
+            return result;
+        }
+
+        /// <summary>Scales "down" a series of data</summary>
+        /// <param name="data">the data to scale "down" (x-intercept)/scalingCoefficient</param>
+        /// <param name="centering">Enable centering data (x-intercept) part</param>
+        /// <param name="scaling">Enable scaling data /scalingCoefficient part</param>
+        /// <returns>an array of double</returns>
+        public Matrix Reduce(Matrix data, bool centering = true, bool scaling = true)
+        {
+            #region initialization
+            double intercept = centering ? _intercept : 0, scaleCoeffcient = scaling ? _scalingCoefficient : 1;
+            Matrix result = Matrix.Create(data.Rows, data.Columns);
+            #endregion
+
+            for (int i = 0; i < result.Rows; i++) 
+                for(int j = 0; j < result.Columns; j++)
+                    result[i,j] = (data[i, j] - intercept) / scaleCoeffcient;
 
             return result;
         }
@@ -76,6 +99,32 @@ namespace Euclid.Analytics.Regressions
                 intercept += element;
                 scaling += element * element;
             }
+
+            intercept /= n;
+            double sd = Math.Sqrt(scaling / n - intercept * intercept);
+
+            if (sd == 0) return null;
+
+            Scaling result = new Scaling(intercept, sd);
+            return result;
+        }
+
+        /// <summary>Creates a Scaling based on the average and the standard deviation</summary>
+        /// <param name="data">the data to scale</param>
+        /// <returns>a <c>Scaling</c> class</returns>
+        public static Scaling CreateZScore(Matrix data)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            int n = data.Rows * data.Columns;
+            double intercept = 0, scaling = 0;
+
+            for(int i = 0; i < n; i++)
+                for(int j = 0; j < n; j++)
+                {
+                    intercept += data[i,j];
+                    scaling += data[i, j] * data[i, j];
+                }
 
             intercept /= n;
             double sd = Math.Sqrt(scaling / n - intercept * intercept);
