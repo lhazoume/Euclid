@@ -111,6 +111,12 @@
             Fit a PCA
             </summary>
         </member>
+        <member name="M:Euclid.Analytics.Clustering.PCA.GetTLSCoefficients">
+            <summary>
+            Compute the Total Least Squared coefficients from eigen vectors
+            </summary>
+            <returns>TLS Coefficients (slope eq beta)</returns>
+        </member>
         <member name="T:Euclid.Analytics.Clustering.IDecisionNode`2">
             <summary>Interface for decision tree node</summary>
             <typeparam name="TI">the input type</typeparam>

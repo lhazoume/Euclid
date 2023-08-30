@@ -192,6 +192,27 @@ namespace Euclid.Analytics.Clustering
                 Err = $"PCA.Fit: {ex.Message}";
             }
         }
+
+        /// <summary>
+        /// Compute the Total Least Squared coefficients from eigen vectors
+        /// </summary>
+        /// <returns>TLS Coefficients (slope eq beta)</returns>
+        public Vector GetTLSCoefficients()
+        {
+            #region computation extract from: https://stats.stackexchange.com/questions/13152/how-to-perform-orthogonal-regression-total-least-squares-via-pca
+            // Bk = -Vk / Vp+1
+
+            Matrix V = EigenVectors.Transpose;
+
+            int N = V.Rows - 1, N_1 = V.Rows - 1, m = V.Columns - 1;
+            double[] B = new double[N_1];
+
+            for (int i = 0; i < N_1; i++) B[i] = V[i, m] / V[N_1, m];
+
+            #endregion
+
+            return Vector.Create(B);
+        }
         #endregion
     }
 }
