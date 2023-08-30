@@ -1,4 +1,5 @@
-﻿using Euclid.DataStructures.IndexedSeries;
+﻿using Euclid.Analytics.Clustering;
+using Euclid.DataStructures.IndexedSeries;
 using Euclid.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -16,6 +17,7 @@ namespace EuclidTests.Analystics
     {
         #region vars
         public double[][] _data;
+        public IList<int> _labels, _legends;
         #endregion
 
         [TestInitialize]
@@ -28,17 +30,20 @@ namespace EuclidTests.Analystics
             for (int i = 1; i < lines.Length; i++)
             {
                 string[] columns = Regex.Split(lines[i], ",");
-                for (int j = 0; j < M; j++) _data[i][j] = Convert.ToDouble(columns[j]);
+                for (int j = 0; j < M; j++) _data[i-1][j] = Convert.ToDouble(columns[j]);
             }
+
+            _labels = Enumerable.Range(0, N).ToList();
+            _legends = Enumerable.Range(0, M).ToList();
         }
 
         #region methods
         [TestMethod()]
         public void FitPCATest()
         {
-
-
-            //Assert.AreEqual(cumulatedNorm / (n * n), 0, 1e-9, "The EigenDecomposition does not behave as expected");
+            PCA<int, int> pca = PCA<int, int>.Create(DataFrame<int, double, int>.Create<DataFrame<int, double, int>>(_labels, _legends, _data));
+            pca.Fit();
+            Assert.AreEqual(pca.Status, Euclid.Analytics.Regressions.RegressionStatus.Normal);
         }
         #endregion
     }

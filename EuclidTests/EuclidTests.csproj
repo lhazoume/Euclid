@@ -71,7 +71,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Analystics\PCATests.cs" />
+    <Compile Include="Analytics\PCATests.cs" />
     <Compile Include="Arithmetics\BinomialCoefficientsTests.cs" />
     <Compile Include="Arithmetics\SubsetsTests.cs" />
     <Compile Include="ComplexTests.cs" />
@@ -107,7 +107,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Analystics\data-pca.txt" />
+    <Content Include="Analytics\data-pca.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -20,9 +20,14 @@
             <typeparam name="T">Legends type</typeparam>
             <typeparam name="TV">Labels types</typeparam>
         </member>
+        <member name="P:Euclid.Analytics.Clustering.PCA`2.W">
+            <summary>
+            Variance threshold which defines the number of components included at the barrier
+            </summary>
+        </member>
         <member name="P:Euclid.Analytics.Clustering.PCA`2.C">
             <summary>
-            Number of components
+            Number of components according the variance threshold
             </summary>
         </member>
         <member name="P:Euclid.Analytics.Clustering.PCA`2.Cov">
@@ -80,25 +85,15 @@
             Error information about regression
             </summary>
         </member>
-        <member name="M:Euclid.Analytics.Clustering.PCA`2.#ctor(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},System.Int32,System.Boolean,System.Boolean)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="x">Data</param>
-            <param name="c">Number of components</param>
-            <param name="centering">Centering</param>
-            <param name="scaling">Scaling</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
-            <exception cref="T:System.ArgumentException"></exception>
-        </member>
-        <member name="M:Euclid.Analytics.Clustering.PCA`2.Create(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},System.Boolean,System.Boolean,System.Int32)">
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Analytics.Clustering.PCA`2.#ctor(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},System.Boolean,System.Boolean,System.Double)" -->
+        <member name="M:Euclid.Analytics.Clustering.PCA`2.Create(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},System.Boolean,System.Boolean,System.Double)">
             <summary>
             Create function
             </summary>
             <param name="x">Data</param>
             <param name="centering">Centering</param>
             <param name="scaling">Scaling</param>
-            <param name="c">Number of components</param>
+            <param name="w">Variance threshold</param>
             <returns>PCA object</returns>
         </member>
         <member name="M:Euclid.Analytics.Clustering.PCA`2.Fit">
@@ -7131,13 +7126,21 @@
             <param name="v2">the right hand side</param>
             <returns>the <c>Vector</c> result of the substraction</returns>
         </member>
-        <member name="M:Euclid.Vector.Sort(Euclid.Vector,System.Boolean)">
+        <member name="M:Euclid.Vector.Cumsum(Euclid.Vector)">
+            <summary>
+            Comput the cumulative sum
+            </summary>
+            <param name="v">Vector</param>
+            <returns>Cumulative sum into a vector</returns>
+        </member>
+        <member name="M:Euclid.Vector.Sort(Euclid.Vector,System.Int32[]@,System.Boolean)">
             <summary>
             Sort a vector
             </summary>
             <param name="V">Candidat</param>
             <param name="descending">true: descending order else ascending</param>
-            <returns>indices of elt moved</returns>
+            <param name="indices">indices of elt moved</param>
+            <returns>Sorted vector</returns>
         </member>
         <member name="M:Euclid.Vector.Scalar(Euclid.Vector,Euclid.Vector)">
             <summary>Returns the scalar product of the Vectors</summary>
@@ -7220,6 +7223,12 @@
         <member name="M:Euclid.Vector.Create(System.Double[])">
             <summary>Creates a Vector from a set of data</summary>
             <param name="data">the data set</param>
+            <returns>a Vector</returns>
+        </member>
+        <member name="M:Euclid.Vector.Create(System.Double[],System.Boolean)">
+            <summary>Creates a Vector from a set of data</summary>
+            <param name="data">the data set</param>
+            <param name="dirtyCopy">Dirty copy of data</param>
             <returns>a Vector</returns>
         </member>
         <member name="M:Euclid.Vector.Create(System.Collections.Generic.IEnumerable{System.Double})">

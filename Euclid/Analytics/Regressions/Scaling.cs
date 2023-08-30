@@ -116,11 +116,11 @@ namespace Euclid.Analytics.Regressions
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
-            int n = data.Rows * data.Columns;
+            int n = data.Rows * data.Columns, N = data.Rows, M = data.Columns;
             double intercept = 0, scaling = 0;
 
-            for(int i = 0; i < n; i++)
-                for(int j = 0; j < n; j++)
+            for(int i = 0; i < N; i++)
+                for(int j = 0; j < M; j++)
                 {
                     intercept += data[i,j];
                     scaling += data[i, j] * data[i, j];

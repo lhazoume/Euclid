@@ -1,4 +1,5 @@
 ﻿using Euclid.Distributions.Continuous;
+using Euclid.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,9 +23,18 @@ namespace Euclid
             _size = data.Count();
         }
 
-        private Vector(double[] data)
+        private Vector(double[] data, bool dirtyCopy)
         {
             _size = data.Length;
+
+            #region lead a dirty copy
+            if(dirtyCopy)
+            {
+                _data = data;
+                return;
+            }
+            #endregion
+
             _data = new double[_size];
             Array.Copy(data, _data, _size);
         }
@@ -288,6 +298,11 @@ namespace Euclid
 
         #endregion
 
+        /// <summary>
+        /// Comput the cumulative sum
+        /// </summary>
+        /// <param name="v">Vector</param>
+        /// <returns>Cumulative sum into a vector</returns>
         public static Vector Cumsum(Vector v)
         {
             double[] cumsum = new double[v.Size];
@@ -299,7 +314,7 @@ namespace Euclid
                 cumsum[i] = sum;
             }
 
-            return Vector.Create(cumsum);
+            return Create(cumsum, true);
         }
 
         /// <summary>
@@ -307,14 +322,24 @@ namespace Euclid
         /// </summary>
         /// <param name="V">Candidat</param>
         /// <param name="descending">true: descending order else ascending</param>
-        /// <returns>indices of elt moved</returns>
-        public static IReadOnlyList<int> Sort(Vector V, bool descending = false)
+        /// <param name="indices">indices of elt moved</param>
+        /// <returns>Sorted vector</returns>
+        public static Vector Sort(Vector V, out int[] indices, bool descending = false)
         {
-            IEnumerable<KeyValuePair<double, int>> data = V.Data.Select((x, i) => new KeyValuePair<double, int>(x, i));
-            IOrderedEnumerable<KeyValuePair<double, int>> Vs = descending ? data.OrderByDescending(x => x.Key) : data.OrderBy(x => x.Key);
+            IEnumerable<KeyValuePair<double, int>> Vdi = V.Data.Select((x, i) => new KeyValuePair<double, int>(x, i));
+            IOrderedEnumerable<KeyValuePair<double, int>> Vs = descending ? Vdi.OrderByDescending(x => x.Key) : Vdi.OrderBy(x => x.Key);
 
-            V = Vector.Create(Vs.Select(v => v.Key));
-            return Vs.Select(v => v.Value).ToArray();
+            indices = new int[V.Size];
+            double[] data = new double[V.Size];
+
+            for(int i = 0; i < V.Size; i++)
+            {
+                KeyValuePair<double, int> pair = Vs.ElementAt(i);
+                data[i] = pair.Key;
+                indices[i] = pair.Value;
+            }
+
+            return Create(data, true);
         }
 
         /// <summary>Returns the scalar product of the Vectors</summary>
@@ -544,6 +569,15 @@ namespace Euclid
         public static Vector Create(params double[] data)
         {
             return new Vector(data);
+        }
+
+        /// <summary>Creates a Vector from a set of data</summary>
+        /// <param name="data">the data set</param>
+        /// <param name="dirtyCopy">Dirty copy of data</param>
+        /// <returns>a Vector</returns>
+        public static Vector Create(double[] data, bool dirtyCopy)
+        {
+            return new Vector(data, dirtyCopy);
         }
 
         /// <summary>Creates a Vector from a list of data</summary>

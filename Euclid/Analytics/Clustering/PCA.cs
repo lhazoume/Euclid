@@ -18,7 +18,11 @@ namespace Euclid.Analytics.Clustering
     {
         #region vars
         /// <summary>
-        /// Number of components
+        /// Variance threshold which defines the number of components included at the barrier
+        /// </summary>
+        public double W { get; private set; }
+        /// <summary>
+        /// Number of components according the variance threshold
         /// </summary>
         public int C { get; private set; }
         /// <summary>
@@ -72,23 +76,21 @@ namespace Euclid.Analytics.Clustering
         /// Constructor
         /// </summary>
         /// <param name="x">Data</param>
-        /// <param name="c">Number of components</param>
         /// <param name="centering">Centering</param>
         /// <param name="scaling">Scaling</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
-        private PCA(DataFrame<T, double, TV> x, int c, bool centering, bool scaling)
+        /// <param name="w">Variance threshold (< 1 )</param>
+        private PCA(DataFrame<T, double, TV> x, bool centering, bool scaling, double w)
         {
             if (x == null) throw new ArgumentNullException(nameof(x), "the x should not be null");
             if (x.Columns == 0) throw new ArgumentException("the data is not consistent");
-            if(c > x.Columns) throw new ArgumentException($"The number of components has to be inferior or equals to the number of dimension ({c} <= {x.Columns})");
+            if (W >= 1) throw new ArgumentException("Inefficient variance threshold, w < 1");
 
             _x = x.Clone<DataFrame<T, double, TV>>();
 
-            C = c < 0 ? _x.Columns : c;
-
             Centering = centering;
             Scaling = scaling;
+
+            W = w;
 
             Status = RegressionStatus.NotRan;
         }
@@ -104,9 +106,9 @@ namespace Euclid.Analytics.Clustering
         /// <param name="x">Data</param>
         /// <param name="centering">Centering</param>
         /// <param name="scaling">Scaling</param>
-        /// <param name="c">Number of components</param>
+        /// <param name="w">Variance threshold</param>
         /// <returns>PCA object</returns>
-        public static PCA<T, TV> Create(DataFrame<T, double, TV> x, bool centering = true, bool scaling = true,int c = -1) { return new PCA<T, TV>(x, c, centering, scaling); }
+        public static PCA<T, TV> Create(DataFrame<T, double, TV> x, bool centering = true, bool scaling = true, double w = 0.5) { return new PCA<T, TV>(x, centering, scaling, w); }
         #endregion
 
         /// <summary>
@@ -128,28 +130,38 @@ namespace Euclid.Analytics.Clustering
                 Matrix Xs = xScaler.Reduce(X, Centering, Scaling);
                 #endregion
 
-                #region compute COV matrix Xt.X
-                Matrix cov = Matrix.FastTransposeBySelf(X);
+                #region compute COV tXs.Xs
+                Cov = Matrix.FastTransposeBySelf(Xs);
                 #endregion
 
                 #region perform eigen decomposition of cov matrix
-                EigenDecomposition eigen = new EigenDecomposition(cov);
+                EigenDecomposition eigen = new EigenDecomposition(Cov);
                 Vector[] eigeiVectors = eigen.RealEigenVectors;
-                EigenValues = Vector.Create(eigen.RealEigenValues);
+                Vector eigenValues = Vector.Create(eigen.RealEigenValues);
                 #endregion
 
                 #region sort eigen values and corresponding eigen vectors in descending order
-                IReadOnlyList<int> indices = Vector.Sort(EigenValues, true);
-                Vector[] eigeiVectorsSorted = new Vector[indices.Count];
+                int[] indices;
+                EigenValues = Vector.Sort(eigenValues, out indices, true);
+                Vector[] eigeiVectorsSorted = new Vector[eigenValues.Size];
 
-                for (int i = 0; i < indices.Count; i++) eigeiVectorsSorted[i] = eigeiVectors[indices[i]];
-                EigenVectors = Matrix.Create(eigen.RealEigenVectors);
+                for (int i = 0; i < eigenValues.Size; i++) eigeiVectorsSorted[i] = eigeiVectors[indices[i]];
+                EigenVectors = Matrix.Create(eigeiVectorsSorted);
                 #endregion
 
                 #region compute explained variance
-                double sumEigeiVal = EigenValues.Sum;
-                ExplainedVariance = EigenValues / sumEigeiVal;
-                CumulativeVariance = Vector.Cumsum(EigenValues);
+                double sumEigenVal = EigenValues.Sum;
+                ExplainedVariance = EigenValues / sumEigenVal;
+                CumulativeVariance = Vector.Cumsum(ExplainedVariance);
+                #endregion
+
+                #region define the # of components filtering by the var threshold
+                for(int i = 0; i < CumulativeVariance.Size; i++)
+                    if(CumulativeVariance[i] > W)
+                    {
+                        C = i + 1;
+                        break;
+                    }
                 #endregion
 
                 #region transform X
