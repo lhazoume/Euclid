@@ -1,5 +1,6 @@
 ﻿using Euclid.Analytics.Regressions;
 using Euclid.DataStructures.IndexedSeries;
+using Euclid.Extensions;
 using Euclid.LinearAlgebra;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,7 @@ namespace Euclid.Analytics.Clustering
     /// <summary>
     /// Class which modelize a PCA
     /// </summary>
-    /// <typeparam name="T">Legends type</typeparam>
-    /// <typeparam name="TV">Labels types</typeparam>
-    public class PCA<T, TV> where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
+    public class PCA
     {
         #region vars
         /// <summary>
@@ -36,11 +35,11 @@ namespace Euclid.Analytics.Clustering
         /// <summary>
         /// Matrix of data
         /// </summary>
-        private DataFrame<T, double, TV> _x;
+        private double[][] _x;
         /// <summary>
         /// Matrix of data transformed by PCA
         /// </summary>
-        public DataFrame<T, double, TV> X_ { get; private set; }
+        public double[][] X_ { get; private set; }
         /// <summary>
         /// Eigei values
         /// </summary>
@@ -79,13 +78,15 @@ namespace Euclid.Analytics.Clustering
         /// <param name="centering">Centering</param>
         /// <param name="scaling">Scaling</param>
         /// <param name="w">Variance threshold (< 1 )</param>
-        private PCA(DataFrame<T, double, TV> x, bool centering, bool scaling, double w)
+        /// <param name="deepCopy">Release a deep copy of the data</param>
+        private PCA(double[][] x, bool centering, bool scaling, double w, bool deepCopy = false)
         {
             if (x == null) throw new ArgumentNullException(nameof(x), "the x should not be null");
-            if (x.Columns == 0) throw new ArgumentException("the data is not consistent");
+            if (x.Length == 0) throw new ArgumentException("the data is not consistent, no rows");
+            if (x.First().Length == 0) throw new ArgumentException("the data is not consistent, no columns");
             if (W >= 1) throw new ArgumentException("Inefficient variance threshold, w < 1");
 
-            _x = x.Clone<DataFrame<T, double, TV>>();
+            _x = deepCopy? x: Arrays.Clone(x);
 
             Centering = centering;
             Scaling = scaling;
@@ -103,12 +104,25 @@ namespace Euclid.Analytics.Clustering
         /// <summary>
         /// Create function
         /// </summary>
+        /// <param name="x">Dataframe</param>
+        /// <param name="centering">Centering</param>
+        /// <param name="scaling">Scaling</param>
+        /// <param name="w">Variance threshold</param>
+        /// <param name="deepCopy">Release a deep copy of the data</param>
+        /// <returns>PCA object</returns>
+        public static PCA Create<T, TV>(IDataFrame<T, double, TV> x, bool centering = true, bool scaling = true, double w = 0.5, bool deepCopy = false) where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
+        { return new PCA(x.Data, centering, scaling, w, deepCopy); }
+
+        /// <summary>
+        /// Create function
+        /// </summary>
         /// <param name="x">Data</param>
         /// <param name="centering">Centering</param>
         /// <param name="scaling">Scaling</param>
         /// <param name="w">Variance threshold</param>
+        /// <param name="deepCopy">Release a deep copy of the data</param>
         /// <returns>PCA object</returns>
-        public static PCA<T, TV> Create(DataFrame<T, double, TV> x, bool centering = true, bool scaling = true, double w = 0.5) { return new PCA<T, TV>(x, centering, scaling, w); }
+        public static PCA Create(double[][] x, bool centering = true, bool scaling = true, double w = 0.5, bool deepCopy = false) { return new PCA(x, centering, scaling, w, deepCopy); }
         #endregion
 
         /// <summary>
@@ -119,7 +133,7 @@ namespace Euclid.Analytics.Clustering
             try
             {
                 #region pre-process data by scaling
-                Matrix X = Matrix.Create(_x.Data);
+                Matrix X = Matrix.Create(_x);
                 Scaling xScaler = Regressions.Scaling.CreateZScore(X);
                 if (xScaler == null)
                 {
@@ -166,7 +180,7 @@ namespace Euclid.Analytics.Clustering
 
                 #region transform X
                 Matrix x_ = Xs * EigenVectors;
-                X_ =  DataFrame<T, double, TV>.Create<DataFrame<T, double, TV>>(_x.Labels, _x.Legends, x_.JaggedArray);
+                X_ = x_.JaggedArray;
                 #endregion
 
                 Status = RegressionStatus.Normal;

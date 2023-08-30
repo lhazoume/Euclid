@@ -13,80 +13,89 @@
             <param name="numberOfClasses">the target number of classes</param>
             <returns>an Enumerable of centroïds</returns>
         </member>
-        <member name="T:Euclid.Analytics.Clustering.PCA`2">
+        <member name="T:Euclid.Analytics.Clustering.PCA">
             <summary>
             Class which modelize a PCA
             </summary>
-            <typeparam name="T">Legends type</typeparam>
-            <typeparam name="TV">Labels types</typeparam>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.W">
+        <member name="P:Euclid.Analytics.Clustering.PCA.W">
             <summary>
             Variance threshold which defines the number of components included at the barrier
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.C">
+        <member name="P:Euclid.Analytics.Clustering.PCA.C">
             <summary>
             Number of components according the variance threshold
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.Cov">
+        <member name="P:Euclid.Analytics.Clustering.PCA.Cov">
             <summary>
             Covariance matrix
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.EigenVectors">
+        <member name="P:Euclid.Analytics.Clustering.PCA.EigenVectors">
             <summary>
             Eigen vectors
             </summary>
         </member>
-        <member name="F:Euclid.Analytics.Clustering.PCA`2._x">
+        <member name="F:Euclid.Analytics.Clustering.PCA._x">
             <summary>
             Matrix of data
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.X_">
+        <member name="P:Euclid.Analytics.Clustering.PCA.X_">
             <summary>
             Matrix of data transformed by PCA
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.EigenValues">
+        <member name="P:Euclid.Analytics.Clustering.PCA.EigenValues">
             <summary>
             Eigei values
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.ExplainedVariance">
+        <member name="P:Euclid.Analytics.Clustering.PCA.ExplainedVariance">
             <summary>
             Explained variance
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.CumulativeVariance">
+        <member name="P:Euclid.Analytics.Clustering.PCA.CumulativeVariance">
             <summary>
             Cumulative variance
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.Status">
+        <member name="P:Euclid.Analytics.Clustering.PCA.Status">
             <summary>
             Regression status
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.Centering">
+        <member name="P:Euclid.Analytics.Clustering.PCA.Centering">
             <summary>
             Apply/Applied centering over data matrix
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.Scaling">
+        <member name="P:Euclid.Analytics.Clustering.PCA.Scaling">
             <summary>
             Apply/Applied scaling over data matrix
             </summary>
         </member>
-        <member name="P:Euclid.Analytics.Clustering.PCA`2.Err">
+        <member name="P:Euclid.Analytics.Clustering.PCA.Err">
             <summary>
             Error information about regression
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Analytics.Clustering.PCA`2.#ctor(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},System.Boolean,System.Boolean,System.Double)" -->
-        <member name="M:Euclid.Analytics.Clustering.PCA`2.Create(Euclid.DataStructures.IndexedSeries.DataFrame{`0,System.Double,`1},System.Boolean,System.Boolean,System.Double)">
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Analytics.Clustering.PCA.#ctor(System.Double[][],System.Boolean,System.Boolean,System.Double,System.Boolean)" -->
+        <member name="M:Euclid.Analytics.Clustering.PCA.Create``2(Euclid.DataStructures.IndexedSeries.IDataFrame{``0,System.Double,``1},System.Boolean,System.Boolean,System.Double,System.Boolean)">
+            <summary>
+            Create function
+            </summary>
+            <param name="x">Dataframe</param>
+            <param name="centering">Centering</param>
+            <param name="scaling">Scaling</param>
+            <param name="w">Variance threshold</param>
+            <param name="deepCopy">Release a deep copy of the data</param>
+            <returns>PCA object</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.PCA.Create(System.Double[][],System.Boolean,System.Boolean,System.Double,System.Boolean)">
             <summary>
             Create function
             </summary>
@@ -94,9 +103,10 @@
             <param name="centering">Centering</param>
             <param name="scaling">Scaling</param>
             <param name="w">Variance threshold</param>
+            <param name="deepCopy">Release a deep copy of the data</param>
             <returns>PCA object</returns>
         </member>
-        <member name="M:Euclid.Analytics.Clustering.PCA`2.Fit">
+        <member name="M:Euclid.Analytics.Clustering.PCA.Fit">
             <summary>
             Fit a PCA
             </summary>

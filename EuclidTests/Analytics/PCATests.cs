@@ -41,7 +41,7 @@ namespace EuclidTests.Analystics
         [TestMethod()]
         public void FitPCATest()
         {
-            PCA<int, int> pca = PCA<int, int>.Create(DataFrame<int, double, int>.Create<DataFrame<int, double, int>>(_labels, _legends, _data));
+            PCA pca = PCA.Create(_data);
             pca.Fit();
             Assert.AreEqual(pca.Status, Euclid.Analytics.Regressions.RegressionStatus.Normal);
         }
