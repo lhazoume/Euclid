@@ -210,17 +210,17 @@ namespace Euclid.DataStructures.IndexedSeries
         public TU[][] FastExtractValuesByLegendAndLabels(DateTime start, DateTime end, Func<TV, bool> predicate)
         {
             #region requirements
-            if (start > end) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the ending date [{end.ToShortDateString()}]!");
+            if (start > end) throw new Exception($"FastExtractValuesByLegendAndLabels: Starting date [{start.ToShortDateString()}] is superior to the ending date [{end.ToShortDateString()}]!");
 
             if (start > Legends[Legends.Length - 1]) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the last legend [{Legends[Legends.Length - 1].ToShortDateString()}]!");
-            if (end < Legends[0]) throw new Exception($"ExtractByLegend: Ending date [{end.ToShortDateString()}] is inferior to the first legend [{Legends[0].ToShortDateString()}]!");
+            if (end < Legends[0]) throw new Exception($"FastExtractValuesByLegendAndLabels: Ending date [{end.ToShortDateString()}] is inferior to the first legend [{Legends[0].ToShortDateString()}]!");
             #endregion
 
             int startIdx = FindFirstIndexOf(l => l.Date >= start.Date, start.Date);
-            if (startIdx == -1) throw new Exception($"Impossible to find the FindFirstIndexOf [{start.ToShortDateString()}] into the legends!");
+            if (startIdx == -1) throw new Exception($"FastExtractValuesByLegendAndLabels: Impossible to find the FindFirstIndexOf [{start.ToShortDateString()}] into the legends!");
 
             int endIdx = FindLastIndexOf(l => l.Date <= end.Date, end.Date);
-            if (endIdx == -1) throw new Exception($"Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
+            if (endIdx == -1) throw new Exception($"FastExtractValuesByLegendAndLabels: Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
 
             List<TV> labels = _labels.Where(predicate).ToList();
             int N = endIdx - startIdx + 1, M = Columns;
@@ -246,6 +246,41 @@ namespace Euclid.DataStructures.IndexedSeries
             for (int i = 0; i < _legends.Count; i++)
                 result[i] = _data[i][index];
             return TimeSeries<TU, TV>.Create<TimeSeries<TU, TV>>(label, _legends, result);
+        }
+
+        /// <summary>
+        /// Get values between a range of date for a specified label
+        /// </summary>
+        /// <param name="start">Starting date</param>
+        /// <param name="end">Ending date</param>
+        /// <param name="label">Label</param>
+        /// <returns>Values</returns>
+        /// <exception cref="Exception"></exception>
+        public TU[] GetValuesBetween(DateTime start, DateTime end, TV label)
+        {
+            #region requirements
+            if (start > end) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the ending date [{end.ToShortDateString()}]!");
+
+            if (start > Legends[Legends.Length - 1]) throw new Exception($"ExtractByLegend: Starting date [{start.ToShortDateString()}] is superior to the last legend [{Legends[Legends.Length - 1].ToShortDateString()}]!");
+            if (end < Legends[0]) throw new Exception($"ExtractByLegend: Ending date [{end.ToShortDateString()}] is inferior to the first legend [{Legends[0].ToShortDateString()}]!");
+            #endregion
+
+            #region found period
+            int startIdx = FindFirstIndexOf(l => l.Date >= start.Date, start.Date);
+            if (startIdx == -1) throw new Exception($"FastExtractValuesByLegendAndLabels: Impossible to find the FindFirstIndexOf [{start.ToShortDateString()}] into the legends!");
+
+            int endIdx = FindLastIndexOf(l => l.Date <= end.Date, end.Date);
+            if (endIdx == -1) throw new Exception($"FastExtractValuesByLegendAndLabels: Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
+            #endregion
+
+            #region retrieve values
+            int N = endIdx - startIdx + 1, k = _labels[label];
+            TU[] data = new TU[N];
+
+            for (int i = startIdx; i <= endIdx; i++) data[i - startIdx] = this[i, k];
+            #endregion
+
+            return data;
         }
         #endregion
 

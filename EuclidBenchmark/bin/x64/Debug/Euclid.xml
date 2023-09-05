@@ -1701,6 +1701,16 @@
             <param name="label">the label</param>
             <returns> a <c>Time series</c></returns>
         </member>
+        <member name="M:Euclid.DataStructures.IndexedSeries.TimeDataFrame`2.GetValuesBetween(System.DateTime,System.DateTime,`1)">
+            <summary>
+            Get values between a range of date for a specified label
+            </summary>
+            <param name="start">Starting date</param>
+            <param name="end">Ending date</param>
+            <param name="label">Label</param>
+            <returns>Values</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
         <member name="T:Euclid.DataStructures.IndexedSeries.TimeSeries`2">
             <summary>
             Class representing a serie ordered by time
