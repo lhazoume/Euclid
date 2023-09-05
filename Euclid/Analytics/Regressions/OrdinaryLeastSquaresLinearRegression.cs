@@ -5,9 +5,7 @@ using System.Collections.Generic;
 namespace Euclid.Analytics.Regressions
 {
     /// <summary>OrdinaryLeastSquaresLinearRegression class</summary>
-    /// <typeparam name="T">the legends' type</typeparam>
-    /// <typeparam name="TV">the labels' type</typeparam>
-    public class OrdinaryLeastSquaresLinearRegression<T, TV> where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
+    public class OrdinaryLeastSquaresLinearRegression
     {
         #region Declarations
         private bool _returnAverageIfFailed;

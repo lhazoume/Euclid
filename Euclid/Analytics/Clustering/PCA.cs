@@ -202,12 +202,14 @@ namespace Euclid.Analytics.Clustering
             #region computation extract from: https://stats.stackexchange.com/questions/13152/how-to-perform-orthogonal-regression-total-least-squares-via-pca
             // Bk = -Vk / Vp+1
 
-            Matrix V = EigenVectors.Transpose;
+            if (EigenVectors.Rows > 2) throw new Exception($"the method cannot compute TLS coefficient from PCA for more than 2 variables");
+
+            Matrix V = EigenVectors;
 
             int N = V.Rows - 1, N_1 = V.Rows - 1, m = V.Columns - 1;
             double[] B = new double[N_1];
 
-            for (int i = 0; i < N_1; i++) B[i] = V[i, m] / V[N_1, m];
+            for (int i = 0; i < N_1; i++) B[i] = V[i, 0] / V[N_1, 0];
 
             #endregion
 

@@ -881,32 +881,30 @@
         <member name="M:Euclid.Analytics.Regressions.RIDGERegression`2.Regress">
             <summary>Performs the regression</summary>
         </member>
-        <member name="T:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2">
+        <member name="T:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression">
             <summary>OrdinaryLeastSquaresLinearRegression class</summary>
-            <typeparam name="T">the legends' type</typeparam>
-            <typeparam name="TV">the labels' type</typeparam>
         </member>
-        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.#ctor(System.Double[][],System.Double[])">
+        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.#ctor(System.Double[][],System.Double[])">
             <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
             <param name="x">the <c>DataFrame</c></param>
             <param name="y">the <c>Series</c></param>
         </member>
-        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.ReturnAverageIfFailed">
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.ReturnAverageIfFailed">
             <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
         </member>
-        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.WithConstant">
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.WithConstant">
             <summary>Gets and sets whether the regression should involve a constant term</summary>
         </member>
-        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.ComputeError">
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.ComputeError">
             <summary>Gets and sets whether the errors should be computed after the regression</summary>
         </member>
-        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.LinearModel">
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.LinearModel">
             <summary>Gets the result <c>LinearModel</c></summary>
         </member>
-        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.Status">
+        <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.Status">
             <summary>Gets the regression's final status</summary>
         </member>
-        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression`2.Regress">
+        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.Regress">
             <summary>
             Performs the regression
             </summary>

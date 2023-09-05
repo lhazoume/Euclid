@@ -841,11 +841,13 @@ namespace Euclid
         public static Matrix Create(IReadOnlyList<Vector> model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
-            Matrix result = new Matrix(model.Count, model.First().Size, 0);
+
+            int N = model.Count, M = model.First().Size;
+            Matrix result = new Matrix(M, N, 0);
 
             for (int i = 0; i < result.Rows; i++)
                 for (int j = 0; j < result.Columns; j++)
-                    result[i, j] = model[i][j];
+                    result[i, j] = model[j][i];
 
             return result;
         }
