@@ -209,7 +209,7 @@ namespace Euclid.Analytics.Clustering
             int N = V.Rows - 1, N_1 = V.Rows - 1, m = V.Columns - 1;
             double[] B = new double[N_1];
 
-            for (int i = 0; i < N_1; i++) B[i] = V[i, 0] / V[N_1, 0];
+            for (int i = 0; i < N_1; i++) B[i] = (-1.0 * V[i, m]) / V[N_1, m];
 
             #endregion
 

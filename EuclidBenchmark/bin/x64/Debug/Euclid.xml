@@ -885,9 +885,9 @@
             <summary>OrdinaryLeastSquaresLinearRegression class</summary>
         </member>
         <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.#ctor(System.Double[][],System.Double[])">
-            <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
-            <param name="x">the <c>DataFrame</c></param>
-            <param name="y">the <c>Series</c></param>
+            <summary>Builds an OLS to regress a on a set of predictors</summary>
+            <param name="x">the <c>Predictor(s)</c></param>
+            <param name="y">the <c>Regressor</c></param>
         </member>
         <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.ReturnAverageIfFailed">
             <summary>Gets and sets whether the Y's average should be return when the regression fails</summary>
@@ -903,6 +903,27 @@
         </member>
         <member name="P:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.Status">
             <summary>Gets the regression's final status</summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.Create(System.Double[][],System.Double[])">
+            <summary>
+            Create an OLS object in order to regress a on a set of predictors
+            </summary>
+            <param name="x">the <c>Predictor(s)</c></param>
+            <param name="y">the <c>Regressor</c></param>
+            <returns>OLS object</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.Create``2(Euclid.DataStructures.IndexedSeries.DataFrame{``0,System.Double,``1},Euclid.DataStructures.IndexedSeries.Series{``0,System.Double,``1},System.Boolean)">
+            <summary>
+            Create an OLS object in order to regress a on a set of predictors
+            </summary>
+            <typeparam name="T">Legends</typeparam>
+            <typeparam name="TV">Labels</typeparam>
+            <param name="x">the <c>Predictor(s)</c></param>
+            <param name="y">the <c>Regressor</c></param>
+            <param name="deepCopy">Force deep copy</param>
+            <returns>OLS object</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:Euclid.Analytics.Regressions.OrdinaryLeastSquaresLinearRegression.Regress">
             <summary>

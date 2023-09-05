@@ -17,10 +17,11 @@ namespace Euclid.Analytics.Regressions
         private readonly double[] _y;
         #endregion
 
-        /// <summary>Builds a OLS to regress a <c>Series</c> on a <c>DataFrame</c></summary>
-        /// <param name="x">the <c>DataFrame</c></param>
-        /// <param name="y">the <c>Series</c></param>
-        public OrdinaryLeastSquaresLinearRegression(double[][] x, double[] y)
+        #region constructor
+        /// <summary>Builds an OLS to regress a on a set of predictors</summary>
+        /// <param name="x">the <c>Predictor(s)</c></param>
+        /// <param name="y">the <c>Regressor</c></param>
+        private OrdinaryLeastSquaresLinearRegression(double[][] x, double[] y)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
             if (y == null) throw new ArgumentNullException(nameof(y));
@@ -33,6 +34,7 @@ namespace Euclid.Analytics.Regressions
             _computeErr = true;
             _status = RegressionStatus.NotRan;
         }
+        #endregion
 
         #region  Accessors
 
@@ -67,6 +69,45 @@ namespace Euclid.Analytics.Regressions
         public RegressionStatus Status => _status;
         #endregion
 
+        #endregion
+
+        #region methods
+
+        #region creation
+        /// <summary>
+        /// Create an OLS object in order to regress a on a set of predictors
+        /// </summary>
+        /// <param name="x">the <c>Predictor(s)</c></param>
+        /// <param name="y">the <c>Regressor</c></param>
+        /// <returns>OLS object</returns>
+        public static OrdinaryLeastSquaresLinearRegression Create(double[][] x, double[] y) { return new OrdinaryLeastSquaresLinearRegression(x, y); }
+
+        /// <summary>
+        /// Create an OLS object in order to regress a on a set of predictors
+        /// </summary>
+        /// <typeparam name="T">Legends</typeparam>
+        /// <typeparam name="TV">Labels</typeparam>
+        /// <param name="x">the <c>Predictor(s)</c></param>
+        /// <param name="y">the <c>Regressor</c></param>
+        /// <param name="deepCopy">Force deep copy</param>
+        /// <returns>OLS object</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static OrdinaryLeastSquaresLinearRegression Create<T, TV>(DataFrame<T, double, TV> x, Series<T, double, TV> y, bool deepCopy = false) where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
+        {
+            #region requirements
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            if (x.Columns == 0 || x.Rows != y.Rows) throw new ArgumentException("the data is not consistent");
+            #endregion
+
+            if(deepCopy) return new OrdinaryLeastSquaresLinearRegression(x.Data, y.Data);
+
+            DataFrame<T, double, TV> x_ = x.Clone<DataFrame<T, double, TV>>();
+            Series<T, double, TV> y_ = y.Clone<Series<T, double, TV>>();
+
+            return new OrdinaryLeastSquaresLinearRegression(x_.Data, y_.Data);
+        }
         #endregion
 
         /// <summary>
@@ -147,5 +188,6 @@ namespace Euclid.Analytics.Regressions
             _linearModel = new LinearModel(beta0, beta.ToArray(), correls, n, sse, sst - sse);
             _status = RegressionStatus.Normal;
         }
+        #endregion
     }
 }
