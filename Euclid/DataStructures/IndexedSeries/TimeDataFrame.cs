@@ -223,7 +223,7 @@ namespace Euclid.DataStructures.IndexedSeries
             if (endIdx == -1) throw new Exception($"FastExtractValuesByLegendAndLabels: Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
 
             List<TV> labels = _labels.Where(predicate).ToList();
-            int N = endIdx - startIdx + 1, M = Columns;
+            int N = endIdx - startIdx + 1, M = labels.Count;
             TU[][] data = Arrays.Build<TU>(N, M);
 
             for (int j = 0; j < M; j++)
