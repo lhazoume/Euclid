@@ -4758,6 +4758,11 @@
         <member name="M:Euclid.LinearAlgebra.EigenDecomposition.NonsymmetricReduceHessenberToRealSchur">
             <summary>Nonsymmetric reduction from Hessenberg to real Schur form</summary>
         </member>
+        <member name="T:Euclid.LinearAlgebra.SingularValueDecomposition">
+            <summary>
+            Generalizes the eigendecomposition of a square normal matrix with an orthogonal eigenbasis (A = U.D.Vt)
+            </summary>
+        </member>
         <member name="T:Euclid.Logging.LogContainer">
             <summary>Log container class for display, organized for event handling</summary>
         </member>

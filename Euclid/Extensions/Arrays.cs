@@ -275,6 +275,7 @@ namespace Euclid.Extensions
             #region select the n outliers to remove
             List<int> I = new List<int>(n);
             for (int i = 0; i < n; i++) I.Add(A[i].Value);
+            I.Sort();
             #endregion
 
             #region fill the new collection wout outliers

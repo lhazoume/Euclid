@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Euclid.LinearAlgebra
 {
+    /// <summary>
+    /// Generalizes the eigendecomposition of a square normal matrix with an orthogonal eigenbasis (A = U.D.Vt)
+    /// </summary>
     public class SingularValueDecomposition
     {
         #region vars
