@@ -278,7 +278,7 @@ namespace Euclid.Extensions
             #endregion
 
             #region fill the new collection wout outliers
-            int idx = 0, bound = n - 1;
+            int idx = 0, bound = n - 1, k = 0;
             for (int i = 0; i < N; i++)
             {
                 if(idx <= bound && I[idx] == i)
@@ -287,7 +287,8 @@ namespace Euclid.Extensions
                     continue;
                 }
 
-                for (int j = 0; j < M; j++) newest[i][j] = data[i][j];
+                for (int j = 0; j < M; j++) newest[k][j] = data[i][j];
+                k++;
             }
             #endregion
 

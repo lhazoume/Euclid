@@ -175,6 +175,7 @@
     <Compile Include="DataStructures\IndexedSeries\Header.cs" />
     <Compile Include="DataStructures\IndexedSeries\Slice.cs" />
     <Compile Include="LinearAlgebra\EigenDecomposition.cs" />
+    <Compile Include="LinearAlgebra\SingularValueDecomposition.cs" />
     <Compile Include="Logging\LogContainer.cs" />
     <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />
