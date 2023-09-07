@@ -83,8 +83,13 @@
             Error information about regression
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Euclid.Analytics.Clustering.PCA.#ctor(System.Double[][],System.Boolean,System.Boolean,System.Double,System.Boolean)" -->
-        <member name="M:Euclid.Analytics.Clustering.PCA.Create``2(Euclid.DataStructures.IndexedSeries.IDataFrame{``0,System.Double,``1},System.Boolean,System.Boolean,System.Double,System.Boolean)">
+        <member name="P:Euclid.Analytics.Clustering.PCA.AdjustEigenVectors">
+            <summary>
+            Adjusting the eigenvectors that are largest in absolute value to be positive
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Analytics.Clustering.PCA.#ctor(System.Double[][],System.Boolean,System.Boolean,System.Double,System.Boolean,System.Boolean)" -->
+        <member name="M:Euclid.Analytics.Clustering.PCA.Create``2(Euclid.DataStructures.IndexedSeries.IDataFrame{``0,System.Double,``1},System.Boolean,System.Boolean,System.Double,System.Boolean,System.Boolean)">
             <summary>
             Create function
             </summary>
@@ -92,10 +97,11 @@
             <param name="centering">Centering</param>
             <param name="scaling">Scaling</param>
             <param name="w">Variance threshold</param>
+            <param name="adjustEigenVectors">Adjusting the eigen vectors</param>
             <param name="deepCopy">Release a deep copy of the data</param>
             <returns>PCA object</returns>
         </member>
-        <member name="M:Euclid.Analytics.Clustering.PCA.Create(System.Double[][],System.Boolean,System.Boolean,System.Double,System.Boolean)">
+        <member name="M:Euclid.Analytics.Clustering.PCA.Create(System.Double[][],System.Boolean,System.Boolean,System.Double,System.Boolean,System.Boolean)">
             <summary>
             Create function
             </summary>
@@ -103,6 +109,7 @@
             <param name="centering">Centering</param>
             <param name="scaling">Scaling</param>
             <param name="w">Variance threshold</param>
+            <param name="adjustEigenVectors">Adjusting the eigen vectors</param>
             <param name="deepCopy">Release a deep copy of the data</param>
             <returns>PCA object</returns>
         </member>
@@ -4407,6 +4414,7 @@
             <param name="data">the input array</param>
             <returns><c>true</c> is the array is sorted, <c>false</c> otherwise</returns>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:Euclid.Extensions.Arrays.FilteringAbsOutliersColumnWise(System.Double[][],System.Int32)" -->
         <member name="T:Euclid.Extensions.Loops">
             <summary>Handles the loops</summary>
         </member>
@@ -5013,7 +5021,7 @@
             <summary>Returns the sum of the absolute values</summary>
         </member>
         <member name="P:Euclid.Matrix.Norm2">
-            <summary>Returns the square root of the sum of squares</summary>
+            <summary>Returns the square root of the sum of squares (Frobenius norm)</summary>
         </member>
         <member name="P:Euclid.Matrix.NormSup">
             <summary>Returns the largest value of the <c>Matrix</c> in absolute value</summary>

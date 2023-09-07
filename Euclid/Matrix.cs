@@ -351,7 +351,7 @@ namespace Euclid
         /// <summary>Returns the sum of the absolute values</summary>
         public double Norm1 => _data.Sum(Math.Abs);
 
-        /// <summary>Returns the square root of the sum of squares</summary>
+        /// <summary>Returns the square root of the sum of squares (Frobenius norm)</summary>
         public double Norm2 => Math.Sqrt(this.SumOfSquares);
 
         /// <summary>Returns the largest value of the <c>Matrix</c> in absolute value</summary>

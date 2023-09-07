@@ -241,5 +241,57 @@ namespace Euclid.Extensions
                     return false;
             return true;
         }
+
+        /// <summary>
+        /// Filtering a 2D arrays wout its n outliers (abs sum column wise)
+        /// </summary>
+        /// <param name="data">Array<param>
+        /// <param name="n">n outliers to remove</param>
+        /// <returns>data wout outliers</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
+        public static double[][] FilteringAbsOutliersColumnWise(this double[][] data, int n)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+
+            int N = data.Length, M = data.First().Length;
+            if (N <= n) throw new Exception($"Number of element into data is inferior or equal [{N}] to the number of outliers to remove [{n}].");
+
+            double[][] newest = Build< double>(N - n, M);
+
+            #region sum the abs column values per row & sort
+            List<KeyValuePair<double, int>> A = new List<KeyValuePair<double, int>>(N);
+
+            for(int i = 0; i < N; i++)
+            {
+                double sumAbs = 0;
+                for (int j = 0; j < M; j++) sumAbs += Math.Abs(data[i][j]);
+                A.Add(new KeyValuePair<double, int>(sumAbs, i));
+            }
+
+            A.Sort((x,y) => -1*(x.Key.CompareTo(y.Key)));
+            #endregion
+
+            #region select the n outliers to remove
+            List<int> I = new List<int>(n);
+            for (int i = 0; i < n; i++) I.Add(A[i].Value);
+            #endregion
+
+            #region fill the new collection wout outliers
+            int idx = 0, bound = n - 1;
+            for (int i = 0; i < N; i++)
+            {
+                if(idx <= bound && I[idx] == i)
+                {
+                    idx++;
+                    continue;
+                }
+
+                for (int j = 0; j < M; j++) newest[i][j] = data[i][j];
+            }
+            #endregion
+
+            return newest;
+        }
     }
 }

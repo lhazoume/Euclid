@@ -68,6 +68,10 @@ namespace Euclid.Analytics.Clustering
         /// Error information about regression
         /// </summary>
         public string Err { get; private set; }
+        /// <summary>
+        /// Adjusting the eigenvectors that are largest in absolute value to be positive
+        /// </summary>
+        public bool AdjustEigenVectors { get; private set; }
         #endregion
 
         #region constructor
@@ -78,8 +82,9 @@ namespace Euclid.Analytics.Clustering
         /// <param name="centering">Centering</param>
         /// <param name="scaling">Scaling</param>
         /// <param name="w">Variance threshold (< 1 )</param>
+        /// <param name="adjustEigenVectors">Adjusting the eigen vectors</param>
         /// <param name="deepCopy">Release a deep copy of the data</param>
-        private PCA(double[][] x, bool centering, bool scaling, double w, bool deepCopy = false)
+        private PCA(double[][] x, bool centering, bool scaling, double w, bool adjustEigenVectors, bool deepCopy = false)
         {
             if (x == null) throw new ArgumentNullException(nameof(x), "the x should not be null");
             if (x.Length == 0) throw new ArgumentException("the data is not consistent, no rows");
@@ -90,7 +95,7 @@ namespace Euclid.Analytics.Clustering
 
             Centering = centering;
             Scaling = scaling;
-
+            AdjustEigenVectors = adjustEigenVectors;
             W = w;
 
             Status = RegressionStatus.NotRan;
@@ -108,10 +113,11 @@ namespace Euclid.Analytics.Clustering
         /// <param name="centering">Centering</param>
         /// <param name="scaling">Scaling</param>
         /// <param name="w">Variance threshold</param>
+        /// <param name="adjustEigenVectors">Adjusting the eigen vectors</param>
         /// <param name="deepCopy">Release a deep copy of the data</param>
         /// <returns>PCA object</returns>
-        public static PCA Create<T, TV>(IDataFrame<T, double, TV> x, bool centering = true, bool scaling = true, double w = 0.5, bool deepCopy = false) where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
-        { return new PCA(x.Data, centering, scaling, w, deepCopy); }
+        public static PCA Create<T, TV>(IDataFrame<T, double, TV> x, bool centering = true, bool scaling = true, double w = 0.5, bool adjustEigenVectors = false, bool deepCopy = false) where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
+        { return new PCA(x.Data, centering, scaling, w, adjustEigenVectors, deepCopy); }
 
         /// <summary>
         /// Create function
@@ -120,9 +126,10 @@ namespace Euclid.Analytics.Clustering
         /// <param name="centering">Centering</param>
         /// <param name="scaling">Scaling</param>
         /// <param name="w">Variance threshold</param>
+        /// <param name="adjustEigenVectors">Adjusting the eigen vectors</param>
         /// <param name="deepCopy">Release a deep copy of the data</param>
         /// <returns>PCA object</returns>
-        public static PCA Create(double[][] x, bool centering = true, bool scaling = true, double w = 0.5, bool deepCopy = false) { return new PCA(x, centering, scaling, w, deepCopy); }
+        public static PCA Create(double[][] x, bool centering = true, bool scaling = true, double w = 0.5, bool adjustEigenVectors = false, bool deepCopy = false) { return new PCA(x, centering, scaling, w, deepCopy); }
         #endregion
 
         /// <summary>
@@ -152,6 +159,44 @@ namespace Euclid.Analytics.Clustering
                 EigenDecomposition eigen = new EigenDecomposition(Cov);
                 Vector[] eigeiVectors = eigen.RealEigenVectors;
                 Vector eigenValues = Vector.Create(eigen.RealEigenValues);
+                #endregion
+
+                #region adjusting eigenVectors
+                if(AdjustEigenVectors)
+                {
+                    #region identify max arg of absolutes values per row & get its sign
+                    int L = eigeiVectors.Length, H = eigeiVectors.First().Size;
+
+                    double[] signs = new double[H];
+                    for(int i = 0; i < H; i++)
+                    {
+                        double absmaxRow = double.MinValue;
+                        for (int j = 0; j < L; j++)
+                        {
+                            double abs = Math.Abs(eigeiVectors[j][i]);
+                            if (absmaxRow >= abs) continue;
+                            
+                            absmaxRow = abs;
+                            signs[i] = eigeiVectors[j][i] / absmaxRow;
+                        }
+                    }
+
+                    for (int i = 0; i < H; i++)
+                        for(int j = 0; j < L; j++)
+                            eigeiVectors[j][i] *= signs[i];
+                    #endregion
+
+                    #region transpose collection of vector
+                    Vector[] V = new Vector[H];
+                    for(int i =0; i < H; i++)
+                    {
+                        Vector Vr = Vector.Create(L, 0);
+                        for (int j = 0; j < L; j++) Vr[j] = eigeiVectors[j][i];
+                        V[i] = Vr;
+                    }
+                    eigeiVectors = V;
+                    #endregion
+                }
                 #endregion
 
                 #region sort eigen values and corresponding eigen vectors in descending order
