@@ -4758,10 +4758,91 @@
         <member name="M:Euclid.LinearAlgebra.EigenDecomposition.NonsymmetricReduceHessenberToRealSchur">
             <summary>Nonsymmetric reduction from Hessenberg to real Schur form</summary>
         </member>
+        <member name="T:Euclid.LinearAlgebra.GaussEliminationAlgorithm">
+            <summary>
+            The elimination algorithm by Gauss (ref: https://www.mosismath.com/Matrix_Gauss/MatrixGauss.html)
+            </summary>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.GaussEliminationAlgorithm.Create(System.Int32)">
+            <summary>
+            Create an instance of Gauss elimination algorithm
+            </summary>
+            <param name="n"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.GaussEliminationAlgorithm.SwitchColumns(System.Int32)">
+            <summary>
+            Switch columns since n
+            </summary>
+            <param name="n"></param>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.GaussEliminationAlgorithm.Reorder">
+            <summary>
+            Re order
+            </summary>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.GaussEliminationAlgorithm.Eliminate(System.Int32)">
+            <summary>
+            Eliminate
+            </summary>
+            <param name="empties">Nb of empty elt</param>
+            <returns>Calculation error</returns>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.GaussEliminationAlgorithm.Solve(System.Int32)">
+            <summary>
+            Solve
+            </summary>
+            <param name="empties">Nb of empty elt</param>
+        </member>
+        <member name="T:Euclid.LinearAlgebra.SVDType">
+            <summary>
+            Enumeration which describes SVD type
+            </summary>
+        </member>
         <member name="T:Euclid.LinearAlgebra.SingularValueDecomposition">
             <summary>
-            Generalizes the eigendecomposition of a square normal matrix with an orthogonal eigenbasis (A = U.D.Vt)
+            Generalizes the eigendecomposition of a square normal matrix with an orthogonal eigenbasis (A = U.D.V^t)
             </summary>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.Run(Euclid.Matrix,Euclid.LinearAlgebra.SVDType)">
+            <summary>
+            Run a Singular Value Decomposition
+            </summary>
+            <param name="a">Matrix</param>
+            <returns>SVD object</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.SVDbyJacobi(Euclid.Matrix)">
+            <summary>
+            Process SVD by using Jacobi transformation
+            </summary>
+            <param name="C">Symmetric matrix</param>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.JacobiTransform(Euclid.Matrix,System.Int32,System.Int32,System.Double)">
+             <summary>
+             Transform a symmetric matrix C into a diagonal matrix by the use of orthogonal matrixes (rotation matrixes)
+             </summary>
+            <param name="C">symmetric matrix C </param>
+             <param name="O">Maximal order</param>
+             <param name="epsilon">minimal increment</param>
+             <param name="maxIter">Iteration maximal</param>
+             <returns>Rotation matrix</returns>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.JacobiRotationMatrix(Euclid.Matrix,Euclid.Matrix,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Compute the Jacobi's rotation matrix
+            </summary>
+            <param name="r">Rotation matrix</param>
+            <param name="a">Symmetric matrix</param>
+            <param name="p">p row</param>
+            <param name="q">q row</param>
+            <param name="size">size</param>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.FillCols(System.Int32)">
+            <summary>
+            Fill empty cols by using Gauss algorithm
+            </summary>
+            <param name="empties">Nb of elt to fill</param>
         </member>
         <member name="T:Euclid.Logging.LogContainer">
             <summary>Log container class for display, organized for event handling</summary>
@@ -4954,7 +5035,7 @@
         <member name="P:Euclid.Matrix.IsSquare">
             <summary>Specifies whether the <c>Matrix</c> is square</summary>
         </member>
-        <member name="P:Euclid.Matrix.IsSymetric">
+        <member name="P:Euclid.Matrix.IsSymmetric">
             <summary>Specifies whether the <c>Matrix</c> is square and symmetric</summary>
         </member>
         <member name="P:Euclid.Matrix.Size">
@@ -5036,6 +5117,26 @@
         </member>
         <member name="P:Euclid.Matrix.Sum">
             <summary>Returns the sum of the values</summary>
+        </member>
+        <member name="M:Euclid.Matrix.MultTranspLeft(Euclid.Matrix,Euclid.Matrix,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Multiply rotation matrix by a matrix from the left side only the rows p and q will affect the other matrix
+            </summary>
+            <param name="a">Matrix</param>
+            <param name="r">Rotation matrix</param>
+            <param name="p">row p</param>
+            <param name="q">row q</param>
+            <param name="size">size</param>
+        </member>
+        <member name="M:Euclid.Matrix.MultRight(Euclid.Matrix,Euclid.Matrix,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Multiply rotation matrix by a matrix from the right side only the rows p and q will affect the other matrix
+            </summary>
+            <param name="a">Matrix</param>
+            <param name="r">Rotation matrix</param>
+            <param name="p">row p</param>
+            <param name="q">row q</param>
+            <param name="size">size</param>
         </member>
         <member name="M:Euclid.Matrix.MakeLU">
             <summary>Evaluates the LU decomposition of the matrix and stores the results in the private attributes _L and _U.</summary>

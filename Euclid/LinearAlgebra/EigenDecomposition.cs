@@ -123,7 +123,7 @@ namespace Euclid.LinearAlgebra
         /// <summary>Tridiagonalizes the matrix and then diagonalize it in the complex space</summary>
         private void Solve()
         {
-            if (_V.IsSymetric)
+            if (_V.IsSymmetric)
             {
                 SymmetricTridiagonalize();
                 SymmetricDiagonalize();

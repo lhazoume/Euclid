@@ -55,7 +55,7 @@ namespace Euclid
         public bool IsSquare => (_rows == _cols);
 
         /// <summary>Specifies whether the <c>Matrix</c> is square and symmetric</summary>
-        public bool IsSymetric
+        public bool IsSymmetric
         {
             get
             {
@@ -379,6 +379,67 @@ namespace Euclid
         #region Methods
 
         #region Private methods
+
+        #region particular multiplication
+        /// <summary>
+        /// Multiply rotation matrix by a matrix from the left side only the rows p and q will affect the other matrix
+        /// </summary>
+        /// <param name="a">Matrix</param>
+        /// <param name="r">Rotation matrix</param>
+        /// <param name="p">row p</param>
+        /// <param name="q">row q</param>
+        /// <param name="size">size</param>
+        public static void MultTranspLeft(Matrix a, Matrix r, int p, int q, int size)
+        {
+            int j, k;
+            double[,] al = new double[2, size];
+            for (j = 0; j < size; j++)
+            {
+                al[0, j] = 0.0;
+                al[1, j] = 0.0;
+                for (k = 0; k < size; k++)
+                {
+                    al[0, j] = al[0, j] + (r[k, p] * a[k, j]);
+                    al[1, j] = al[1, j] + (r[k, q] * a[k, j]);
+                }
+            }
+            for (j = 0; j < size; j++)
+            {
+                a[p, j] = al[0, j];
+                a[q, j] = al[1, j];
+            }
+        }
+
+        /// <summary>
+        /// Multiply rotation matrix by a matrix from the right side only the rows p and q will affect the other matrix
+        /// </summary>
+        /// <param name="a">Matrix</param>
+        /// <param name="r">Rotation matrix</param>
+        /// <param name="p">row p</param>
+        /// <param name="q">row q</param>
+        /// <param name="size">size</param>
+        public static void MultRight(Matrix a, Matrix r, int p, int q, int size)
+        {
+            int i, k;
+            double[,] al = new double[size, 2];
+            for (i = 0; i < size; i++)
+            {
+                al[i, 0] = 0.0;
+                al[i, 1] = 0.0;
+                for (k = 0; k < size; k++)
+                {
+                    al[i, 0] = al[i, 0] + (a[i, k] * r[k, p]);
+                    al[i, 1] = al[i, 1] + (a[i, k] * r[k, q]);
+                }
+            }
+            for (i = 0; i < size; i++)
+            {
+                a[i, p] = al[i, 0];
+                a[i, q] = al[i, 1];
+            }
+        }
+
+        #endregion
 
         #region Inversion services
 

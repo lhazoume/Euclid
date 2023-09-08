@@ -87,6 +87,7 @@
     <Compile Include="IndexedSeries\HeaderTests.cs" />
     <Compile Include="IndexedSeries\SeriesTests.cs" />
     <Compile Include="LinearAlgebra\EigenDecompositionTests.cs" />
+    <Compile Include="LinearAlgebra\SVDTests.cs" />
     <Compile Include="MatrixTests.cs" />
     <Compile Include="Objects\MapTests.cs" />
     <Compile Include="Objects\SelfFlushedQueueTests.cs" />
