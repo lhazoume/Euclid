@@ -1010,6 +1010,75 @@
             <param name="data">the data to scale</param>
             <returns>a <c>Scaling</c> class</returns>
         </member>
+        <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.WithConstant">
+            <summary>
+            used Constant into error measurement
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.ComputeErr">
+            <summary>
+            Enable error computation
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Status">
+            <summary>
+            Regression status
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.X">
+            <summary>
+            Data to regress
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Beta">
+            <summary>
+            Coefficient of the regression, bo is intercept
+            </summary>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.#ctor(Euclid.Matrix,System.Boolean,System.Boolean)">
+            <summary>
+            TLS constructor
+            </summary>
+            <param name="x">Data</param>
+            <param name="withConstant">With contant</param>
+            <param name="computeErr">Compute error</param>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create(Euclid.Matrix,System.Boolean,System.Boolean)">
+            <summary>
+            Create a TLS from a matrix
+            </summary>
+            <param name="x">Data</param>
+            <param name="withConstant">With contant</param>
+            <param name="computeErr">Compute error</param>
+            <returns>TLS objects</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create(System.Double[][],System.Boolean,System.Boolean)">
+            <summary>
+            Create a TLS from a jagged array
+            </summary>
+            <param name="x">Data</param>
+            <param name="withConstant">With contant</param>
+            <param name="computeErr">Compute error</param>
+            <returns>TLS objects</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create``2(Euclid.DataStructures.IndexedSeries.IDataFrame{``0,System.Double,``1},System.Boolean,System.Boolean)">
+            <summary>
+            Create a TLS from a dataframe
+            </summary>
+            <typeparam name="T">Legend</typeparam>
+            <typeparam name="TV">Label</typeparam>
+            <param name="x">Data</param>
+            <param name="withConstant">With contant</param>
+            <param name="computeErr">Compute error</param>
+            <returns>TLS objects</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Regress">
+            <summary>
+            Run the Total Least Squares regression
+            </summary>
+        </member>
         <member name="T:Euclid.Analytics.Statistics.StatisticalFns">
             <summary>
             Collection of statistical functions
@@ -4804,15 +4873,17 @@
             Generalizes the eigendecomposition of a square normal matrix with an orthogonal eigenbasis (A = U.D.V^t)
             </summary>
         </member>
-        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.Run(Euclid.Matrix,Euclid.LinearAlgebra.SVDType)">
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.Run(Euclid.Matrix,Euclid.LinearAlgebra.SVDType,System.Double)">
             <summary>
             Run a Singular Value Decomposition
             </summary>
             <param name="a">Matrix</param>
+            <param name="svdType">SVD transformation type used for Eigen decomposition, Jacobi by default.</param>
+            <param name="epsilon">tolerance for power iteration</param>
             <returns>SVD object</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.SVDbyJacobi(Euclid.Matrix)">
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.SVDbyJacobi">
             <summary>
             Process SVD by using Jacobi transformation
             </summary>
@@ -4843,6 +4914,24 @@
             Fill empty cols by using Gauss algorithm
             </summary>
             <param name="empties">Nb of elt to fill</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Euclid.LinearAlgebra.SingularValueDecomposition.SVDbyPowerIteration(System.Double)" -->
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.DominantEigen(Euclid.Matrix,Euclid.Vector@,System.Double@,System.Double)">
+            <summary>
+            Compute the dominant eigen
+            </summary>
+            <param name="a">Matrix</param>
+            <param name="V">Singular vector</param>
+            <param name="Ev">Eigen value</param>
+            <param name="epsilon">Tolerance</param>
+        </member>
+        <member name="M:Euclid.LinearAlgebra.SingularValueDecomposition.ComputeEigenValue(Euclid.Matrix,Euclid.Vector)">
+            <summary>
+            Compute eigen value
+            </summary>
+            <param name="a">Matrix</param>
+            <param name="v">Singular vector</param>
+            <returns></returns>
         </member>
         <member name="T:Euclid.Logging.LogContainer">
             <summary>Log container class for display, organized for event handling</summary>
@@ -7212,6 +7301,12 @@
             <summary>Divides all the coefficients of a <c>Vector</c> by a scalar</summary>
             <param name="v">the left hand side <c>Vector</c></param>
             <param name="f">the scalar</param>
+            <returns>the <c>Vector</c> result of the division</returns>
+        </member>
+        <member name="M:Euclid.Vector.op_Division(Euclid.Vector,Euclid.Vector)">
+            <summary>Divides all the coefficients of a <c>Vector</c> by an other vector with equals shape</summary>
+            <param name="v1">the left hand side <c>Vector</c></param>
+            <param name="v2">the right hand side <c>Vector</c></param>
             <returns>the <c>Vector</c> result of the division</returns>
         </member>
         <member name="M:Euclid.Vector.op_Multiply(Euclid.Matrix,Euclid.Vector)">

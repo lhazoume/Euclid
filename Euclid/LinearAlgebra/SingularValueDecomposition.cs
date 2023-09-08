@@ -246,7 +246,7 @@ namespace Euclid.LinearAlgebra
 
         #region power iteration
         /// <summary>
-        /// Compute SVD method by using Power iteration
+        /// Compute SVD method by using Power iteration from Risto Hinno implementations (Naive ways to calculate SVD) : https://towardsdatascience.com/simple-svd-algorithms-13291ad2eef2 & https://github.com/RRisto/learning/blob/master/linear_algebra_learn/PCA_SVD/power_method.ipynb
         /// </summary>
         /// <param name="epsilon">Tolerance</param>
         private void SVDbyPowerIteration(double epsilon = 1e-10)

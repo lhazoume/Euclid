@@ -117,6 +117,7 @@
     <Compile Include="Analytics\Regressions\RegressionStatus.cs" />
     <Compile Include="Analytics\Regressions\RegressionHelper.cs" />
     <Compile Include="Analytics\Regressions\Scaling.cs" />
+    <Compile Include="Analytics\Regressions\TotalLeastSquaresRegression.cs" />
     <Compile Include="Analytics\Statistics\StatisticalFns.cs" />
     <Compile Include="Analytics\Statistics\SummaryStatistics.cs" />
     <Compile Include="Analytics\Statistics\Tests\ANOVA.cs" />
