@@ -23,7 +23,7 @@ namespace Euclid.LinearAlgebra
         public Matrix A { get; private set; }
         public Matrix V { get; private set; }
         public Matrix U { get; private set; }
-        public Matrix D { get; private set; }
+        public Vector D { get; private set; }
         #endregion
 
         #region constructor
@@ -32,7 +32,7 @@ namespace Euclid.LinearAlgebra
             A = a.Clone;
             V = Matrix.CreateIdentityMatrix(A.Columns, A.Rows);
             U = Matrix.Create(A.Rows, A.Rows);
-            D = Matrix.Create(A.Columns, 1);
+            D = Vector.Create(A.Columns, 1);
         }
         #endregion
 
@@ -42,38 +42,40 @@ namespace Euclid.LinearAlgebra
         /// </summary>
         /// <param name="a">Matrix</param>
         /// <param name="svdType">SVD transformation type used for Eigen decomposition, Jacobi by default.</param>
+        /// <param name="epsilon">tolerance for power iteration</param>
         /// <returns>SVD object</returns>
         /// <exception cref="Exception"></exception>
-        public static SingularValueDecomposition Run(Matrix a, SVDType svdType = SVDType.JACOBI)
+        public static SingularValueDecomposition Run(Matrix a, SVDType svdType = SVDType.JACOBI, double epsilon = 1e-10)
         {
             if (a == null) throw new ArgumentNullException("a");
 
             SingularValueDecomposition svd = new SingularValueDecomposition(a);
             Matrix A = svd.A;
 
-            #region compute A^T.A
-            Matrix C = A.Transpose * A;
-            #endregion
-
             #region run svd
             switch(svdType)
             {
-                default: case SVDType.JACOBI:
-                    if (!C.IsSymmetric) throw new Exception("Impossible to lead an eigen decomposition by Jacobi transform due to A^t.A is not symmetric");
-                    svd.SVDbyJacobi(C);
-                break;
+                default: case SVDType.JACOBI: svd.SVDbyJacobi(); break;
+                case SVDType.POWER_ITERATION: svd.SVDbyPowerIteration(epsilon); break;
             }
             #endregion 
 
             return svd; 
         }
 
+        #region Jacobi transform
         /// <summary>
         /// Process SVD by using Jacobi transformation
         /// </summary>
         /// <param name="C">Symmetric matrix</param>
-        private void SVDbyJacobi(Matrix C)
+        private void SVDbyJacobi()
         {
+            #region compute A^T.A
+            Matrix C = A.Transpose * A;
+
+            if (!C.IsSymmetric) throw new Exception("Impossible to lead an eigen decomposition by Jacobi transform due to A^t.A is not symmetric");
+            #endregion
+
             #region compute eigeivalues & vectors by jacobi
             Matrix R = JacobiTransform(C, C.Columns);
             #endregion
@@ -82,8 +84,8 @@ namespace Euclid.LinearAlgebra
             int m = C.Columns;
             for (int i = 0; i < m; i++)
             {
-                if (C[i, i] > 0) D[i,0] = Math.Sqrt(C[i, i]);
-                else D[i,0] = 0;
+                if (C[i, i] > 0) D[i] = Math.Sqrt(C[i, i]);
+                else D[i] = 0;
             }
             #endregion
 
@@ -94,13 +96,13 @@ namespace Euclid.LinearAlgebra
                 for (int j = i + 1; j < m; j++)
                 {
 
-                    if (D[j, 0] > D[idx, 0])
+                    if (D[j] > D[idx])
                         idx = j;
                 }
 
-                double tempVal = D[i, 0];
-                D[i, 0] = D[idx, 0];
-                D[idx, 0] = tempVal;
+                double tempVal = D[i];
+                D[i] = D[idx];
+                D[idx] = tempVal;
                 for (int j = 0; j < m; j++)
                 {
                     tempVal = V[j, i];
@@ -111,7 +113,7 @@ namespace Euclid.LinearAlgebra
 
             int rank = 1;
             for (int i = 0; i < m; i++)
-                if (Math.Abs(D[i, 0]) > 1E-5) 
+                if (Math.Abs(D[i]) > 1E-5) 
                     rank = i + 1;
             #endregion
 
@@ -126,7 +128,7 @@ namespace Euclid.LinearAlgebra
                     {
                         U[j, i] = U[j, i] + A[j, k] * V[k, i];
                     }
-                    if (D[i, 0] != 0) U[j, i] = U[j, i] / D[i, 0];
+                    if (D[i] != 0) U[j, i] = U[j, i] / D[i];
                 }
             }
 
@@ -240,6 +242,109 @@ namespace Euclid.LinearAlgebra
                 for (int i = 0; i < Gauss.N; i++) U[i, n - empties + index] = Gauss.x[i];
             }
         }
+        #endregion
+
+        #region power iteration
+        /// <summary>
+        /// Compute SVD method by using Power iteration
+        /// </summary>
+        /// <param name="epsilon">Tolerance</param>
+        private void SVDbyPowerIteration(double epsilon = 1e-10)
+        {
+            #region requirements
+            int n = A.Rows, m = A.Columns, k = Math.Min(n, m);
+
+            List<Tuple<Vector, Vector, double>> R = new List<Tuple<Vector, Vector, double>>();
+            #endregion
+
+            #region compute singular value & vector per power iteration
+            for (int i = 0; i < k; i++)
+            {
+                Matrix A_ = A.Clone;
+
+                for(int l = 0;  l < R.Count; l++)
+                    A_ = A_ - (R[l].Item3 * (R[l].Item2 * R[l].Item1));
+
+                Vector V, U;
+                double Ev, d;
+
+                if( n > m)
+                {
+                    DominantEigen(A_, out V, out Ev, epsilon); // compute singular vector V
+                    Vector U_ = A * V; // U unnormalized
+                    d = U_.Norm2; // singular value d
+                    U = U_ / d;
+                }
+
+                else
+                {
+                    DominantEigen(A_, out U, out Ev, epsilon); // compute singular vector V
+                    Vector V_ = A.Transpose * U;
+                    d = V_.Norm2;
+                    V = V_ / d;
+                }
+
+                R.Add(new Tuple<Vector, Vector, double>(V, U, d));
+            }
+            #endregion
+
+            #region sort singular vector per descending singular values
+            R.Sort((x, y) => -1 * x.Item3.CompareTo(y.Item3));
+            #endregion
+
+            U = Matrix.Create(R.Select(r => r.Item2).ToList());
+            V = Matrix.Create(R.Select(r => r.Item1).ToList());
+            D = Vector.Create(R.Select(r => r.Item3).ToList());
+        }
+
+        /// <summary>
+        /// Compute the dominant eigen
+        /// </summary>
+        /// <param name="a">Matrix</param>
+        /// <param name="V">Singular vector</param>
+        /// <param name="Ev">Eigen value</param>
+        /// <param name="epsilon">Tolerance</param>
+        private void DominantEigen(Matrix a, out Vector V, out double Ev, double epsilon = 1e-10)
+        {
+            #region requirements
+            int n = a.Rows, m = a.Columns, k = Math.Min(n, m);
+
+            Vector v = Vector.Create(k, 1) / Math.Sqrt(k);
+
+            if (n > m) a = a.Transpose * a;
+            else if (n < m) a = a * a.Transpose;
+
+            double ev = ComputeEigenValue(a, v);
+            #endregion
+
+            #region compute most dominant eigenvalue & eigenvector
+            while(true)
+            {
+                Vector av = a * v;
+                V = av / av.Norm2;
+                Ev = ComputeEigenValue(a, V);
+
+                if (Math.Abs(ev - Ev) <= epsilon) return;
+
+                v = V;
+                ev = Ev;
+            }
+            #endregion
+        }
+
+        /// <summary>
+        /// Compute eigen value
+        /// </summary>
+        /// <param name="a">Matrix</param>
+        /// <param name="v">Singular vector</param>
+        /// <returns></returns>
+        private double ComputeEigenValue(Matrix a, Vector v)
+        {
+            Vector v_ = (a * v ) / v;
+            return v_[0];
+        }
+        #endregion
+
         #endregion
     }
 }

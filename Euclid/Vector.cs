@@ -137,6 +137,21 @@ namespace Euclid
             return v * (1 / f);
         }
 
+        /// <summary>Divides all the coefficients of a <c>Vector</c> by an other vector with equals shape</summary>
+        /// <param name="v1">the left hand side <c>Vector</c></param>
+        /// <param name="v2">the right hand side <c>Vector</c></param>
+        /// <returns>the <c>Vector</c> result of the division</returns>
+        public static Vector operator /(Vector v1, Vector v2)
+        {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
+            if (v1.Size != v2.Size) throw new Exception($"Vector must be equal (v1[{v1.Size}] != v2[{v2.Size}])");
+
+            Vector result = Vector.Create(v1._size, v2._size);
+            for (int i = 0; i < v1._size; i++) result[i] = v1._data[i] / v2._data[i];
+            return result;
+        }
+
         /// <summary>Multiplies a Matrix by a Vector</summary>
         /// <param name="m">the left hand side <c>Matrix</c></param>
         /// <param name="v">the right hand side <c>Vector</c></param>
