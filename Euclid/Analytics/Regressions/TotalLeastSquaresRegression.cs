@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Euclid.Analytics.Regressions
 {
+    /// <summary>
+    /// Total Least Squares Regression class
+    /// </summary>
     public class TotalLeastSquaresRegression
     {
         #region vars
@@ -36,6 +39,11 @@ namespace Euclid.Analytics.Regressions
         /// Coefficient of the regression, bo is intercept
         /// </summary>
         public Vector Beta { get; private set; }
+
+        /// <summary>
+        /// Linear attributes of the regression
+        /// </summary>
+        public LinearModel Linear { get; private set; }
         #endregion
 
         #region constructor
@@ -105,12 +113,60 @@ namespace Euclid.Analytics.Regressions
         {
             SingularValueDecomposition svd = SingularValueDecomposition.Run(X, SVDType.POWER_ITERATION);
 
-            Matrix V = svd.V.Transpose;
-            int n = V.Rows - 1, n_1 = n - 1, p = V.Columns - 1;
+            Matrix V = svd.V;
+            int n = V.Rows - 1, p = V.Columns - 1;
 
             Beta = Vector.Create(n);
 
-            for(int i = 0; i < n; i++) Beta[i] = (-1*V[i,p]) / V[n_1,p];
+            for(int i = 0; i < n; i++) Beta[i] = (-1*V[i,p]) / V[n,p];
+
+            #region compute error
+            double ssr = 0, sse = 0, y_ = 0, x_ = 0;
+            Matrix cov = null;
+            if (ComputeErr)
+            {
+                for (int i = 0; i < X.Rows; i++)
+                {
+                    for (int j = 0; j < X.Columns - 1; j++) x_ += X[i, j];
+                    y_ += X[i, p];
+                }
+                y_ /= (X.Rows * 1.0);
+                x_ /= (X.Rows * 1.0);
+
+                double x_squares = 0, y_squares = 0;
+                for (int i = 0; i < X.Rows; i++)
+                {
+                    double yhat = 0;
+                    for (int j = 0; j < X.Columns - 1; j++)
+                    {
+                        yhat += X[i, j] * Beta[j];
+                        x_squares += Math.Pow(X[i, j] - x_, 2.0);
+                    }
+
+                    y_squares += Math.Pow(X[i, p] - y_, 2.0);
+
+                    ssr += Math.Pow(yhat - y_, 2);
+                    sse += Math.Pow(X[i, p] - yhat, 2);
+                }
+
+                #region compute correlation
+                cov = Matrix.FastTransposeBySelf(X);
+                double x_sigma = Math.Sqrt(x_squares), y_sigma = Math.Sqrt(y_squares);
+                cov = cov / (x_sigma * y_sigma);
+                #endregion
+
+                #region compute constant
+                double alpha = 0;
+                if (WithConstant)
+                {
+                    for (int j = 0; j < X.Columns - 1; j++) alpha -= Beta[j] * x_;
+                    alpha += y_;
+                }
+                #endregion
+
+                Linear = new LinearModel(alpha, Beta.Data, cov.Data, X.Rows, sse, ssr);
+            }
+            #endregion
 
             Status = RegressionStatus.Normal;
         }

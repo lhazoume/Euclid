@@ -1010,6 +1010,11 @@
             <param name="data">the data to scale</param>
             <returns>a <c>Scaling</c> class</returns>
         </member>
+        <member name="T:Euclid.Analytics.Regressions.TotalLeastSquaresRegression">
+            <summary>
+            Total Least Squares Regression class
+            </summary>
+        </member>
         <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.WithConstant">
             <summary>
             used Constant into error measurement
@@ -1033,6 +1038,11 @@
         <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Beta">
             <summary>
             Coefficient of the regression, bo is intercept
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Linear">
+            <summary>
+            Linear attributes of the regression
             </summary>
         </member>
         <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.#ctor(Euclid.Matrix,System.Boolean,System.Boolean)">
