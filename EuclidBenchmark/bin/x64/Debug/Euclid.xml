@@ -1040,38 +1040,54 @@
             Coefficient of the regression, bo is intercept
             </summary>
         </member>
+        <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.SVDMethod">
+            <summary>
+            Singular Value Decomposition method
+            </summary>
+        </member>
+        <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Epsilon">
+            <summary>
+            Error tolerance for SVD
+            </summary>
+        </member>
         <member name="P:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Linear">
             <summary>
             Linear attributes of the regression
             </summary>
         </member>
-        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.#ctor(Euclid.Matrix,System.Boolean,System.Boolean)">
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.#ctor(Euclid.Matrix,System.Boolean,System.Boolean,Euclid.LinearAlgebra.SVDType,System.Double)">
             <summary>
             TLS constructor
             </summary>
             <param name="x">Data</param>
             <param name="withConstant">With contant</param>
             <param name="computeErr">Compute error</param>
+            <param name="svdType">Singular Value Decomposition type</param>
+            <param name="epsilon">Tolerance for SVD</param>
         </member>
-        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create(Euclid.Matrix,System.Boolean,System.Boolean)">
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create(Euclid.Matrix,System.Boolean,System.Boolean,Euclid.LinearAlgebra.SVDType,System.Double)">
             <summary>
             Create a TLS from a matrix
             </summary>
             <param name="x">Data</param>
             <param name="withConstant">With contant</param>
             <param name="computeErr">Compute error</param>
+            <param name="svdType">Singular Value Decomposition type</param>
+            <param name="epsilon">Tolerance for SVD</param>
             <returns>TLS objects</returns>
         </member>
-        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create(System.Double[][],System.Boolean,System.Boolean)">
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create(System.Double[][],System.Boolean,System.Boolean,Euclid.LinearAlgebra.SVDType,System.Double)">
             <summary>
             Create a TLS from a jagged array
             </summary>
             <param name="x">Data</param>
             <param name="withConstant">With contant</param>
             <param name="computeErr">Compute error</param>
+            <param name="svdType">Singular Value Decomposition type</param>
+            <param name="epsilon">Tolerance for SVD</param>
             <returns>TLS objects</returns>
         </member>
-        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create``2(Euclid.DataStructures.IndexedSeries.IDataFrame{``0,System.Double,``1},System.Boolean,System.Boolean)">
+        <member name="M:Euclid.Analytics.Regressions.TotalLeastSquaresRegression.Create``2(Euclid.DataStructures.IndexedSeries.IDataFrame{``0,System.Double,``1},System.Boolean,System.Boolean,Euclid.LinearAlgebra.SVDType,System.Double)">
             <summary>
             Create a TLS from a dataframe
             </summary>
@@ -1080,6 +1096,8 @@
             <param name="x">Data</param>
             <param name="withConstant">With contant</param>
             <param name="computeErr">Compute error</param>
+            <param name="svdType">Singular Value Decomposition type</param>
+            <param name="epsilon">Tolerance for SVD</param>
             <returns>TLS objects</returns>
             <exception cref="T:System.ArgumentNullException"></exception>
             <exception cref="T:System.ArgumentException"></exception>

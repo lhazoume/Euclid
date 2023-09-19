@@ -41,6 +41,16 @@ namespace Euclid.Analytics.Regressions
         public Vector Beta { get; private set; }
 
         /// <summary>
+        /// Singular Value Decomposition method
+        /// </summary>
+        public SVDType SVDMethod { get; private set; }
+
+        /// <summary>
+        /// Error tolerance for SVD
+        /// </summary>
+        public double Epsilon { get; private set; }
+
+        /// <summary>
         /// Linear attributes of the regression
         /// </summary>
         public LinearModel Linear { get; private set; }
@@ -53,8 +63,12 @@ namespace Euclid.Analytics.Regressions
         /// <param name="x">Data</param>
         /// <param name="withConstant">With contant</param>
         /// <param name="computeErr">Compute error</param>
-        private TotalLeastSquaresRegression(Matrix x, bool withConstant, bool computeErr)
+        /// <param name="svdType">Singular Value Decomposition type</param>
+        /// <param name="epsilon">Tolerance for SVD</param>
+        private TotalLeastSquaresRegression(Matrix x, bool withConstant, bool computeErr, SVDType svdType = SVDType.POWER_ITERATION, double epsilon = 1e-10)
         {
+            Epsilon = epsilon;
+            SVDMethod = svdType;
             WithConstant = withConstant;
             ComputeErr = computeErr;
             Status = RegressionStatus.NotRan;
@@ -71,8 +85,10 @@ namespace Euclid.Analytics.Regressions
         /// <param name="x">Data</param>
         /// <param name="withConstant">With contant</param>
         /// <param name="computeErr">Compute error</param>
+        /// <param name="svdType">Singular Value Decomposition type</param>
+        /// <param name="epsilon">Tolerance for SVD</param>
         /// <returns>TLS objects</returns>
-        public static TotalLeastSquaresRegression Create(Matrix x, bool withConstant = true, bool computeErr = true) { return new TotalLeastSquaresRegression(x, withConstant, computeErr); }
+        public static TotalLeastSquaresRegression Create(Matrix x, bool withConstant = true, bool computeErr = true, SVDType svdType = SVDType.POWER_ITERATION, double epsilon = 1e-10) { return new TotalLeastSquaresRegression(x, withConstant, computeErr, svdType, epsilon); }
 
         /// <summary>
         /// Create a TLS from a jagged array
@@ -80,8 +96,10 @@ namespace Euclid.Analytics.Regressions
         /// <param name="x">Data</param>
         /// <param name="withConstant">With contant</param>
         /// <param name="computeErr">Compute error</param>
+        /// <param name="svdType">Singular Value Decomposition type</param>
+        /// <param name="epsilon">Tolerance for SVD</param>
         /// <returns>TLS objects</returns>
-        public static TotalLeastSquaresRegression Create(double[][] x, bool withConstant = true, bool computeErr = true) { return new TotalLeastSquaresRegression(Matrix.Create(x), withConstant, computeErr); }
+        public static TotalLeastSquaresRegression Create(double[][] x, bool withConstant = true, bool computeErr = true, SVDType svdType = SVDType.POWER_ITERATION, double epsilon = 1e-10) { return new TotalLeastSquaresRegression(Matrix.Create(x), withConstant, computeErr, svdType, epsilon); }
 
         /// <summary>
         /// Create a TLS from a dataframe
@@ -91,17 +109,19 @@ namespace Euclid.Analytics.Regressions
         /// <param name="x">Data</param>
         /// <param name="withConstant">With contant</param>
         /// <param name="computeErr">Compute error</param>
+        /// <param name="svdType">Singular Value Decomposition type</param>
+        /// <param name="epsilon">Tolerance for SVD</param>
         /// <returns>TLS objects</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static TotalLeastSquaresRegression Create<T, TV>(IDataFrame<T, double, TV> x, bool withConstant = true, bool computeErr = true) where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
+        public static TotalLeastSquaresRegression Create<T, TV>(IDataFrame<T, double, TV> x, bool withConstant = true, bool computeErr = true, SVDType svdType = SVDType.POWER_ITERATION, double epsilon = 1e-10) where T : IEquatable<T>, IComparable<T> where TV : IEquatable<TV>, IConvertible
         {
             #region requirements
             if (x == null) throw new ArgumentNullException(nameof(x));
             if (x.Columns == 0 || x.Rows == 0) throw new ArgumentException("the data is not consistent");
             #endregion
 
-            return Create(x.Data, withConstant, computeErr); 
+            return Create(x.Data, withConstant, computeErr, svdType, epsilon); 
         }
         #endregion
 
@@ -111,7 +131,7 @@ namespace Euclid.Analytics.Regressions
         /// </summary>
         public void Regress()
         {
-            SingularValueDecomposition svd = SingularValueDecomposition.Run(X, SVDType.POWER_ITERATION);
+            SingularValueDecomposition svd = SingularValueDecomposition.Run(X, SVDMethod, Epsilon);
 
             Matrix V = svd.V;
             int n = V.Rows - 1, p = V.Columns - 1;
