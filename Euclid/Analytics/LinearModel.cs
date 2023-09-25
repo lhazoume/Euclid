@@ -115,7 +115,7 @@ namespace Euclid.Analytics
         /// <returns>a string that represents the linear model</returns>
         public override string ToString()
         {
-            return string.Format("[R2={0}];[AdjustedR2={1}];[Constant={2}]", R2, AdjustedR2, _constant);
+            return $"[R2={R2}];[AdjustedR2={AdjustedR2}];[Constant={_constant}]";
         }
         #endregion
 

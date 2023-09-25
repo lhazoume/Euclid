@@ -1131,6 +1131,63 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>
+        /// Swicth columns values 
+        /// </summary>
+        /// <param name="m">Matrix</param>
+        /// <param name="from">Targeting column</param>
+        /// <param name="to">Destination column</param>
+        /// <returns>result</returns>
+        public static Matrix SwitchColumns(Matrix m, int from, int to)
+        {
+            if (m == null) throw new ArgumentNullException(nameof(m));
+
+            Matrix result = Matrix.Create(m._rows, m._cols);
+            Parallel.For(0, result.Columns, k => 
+            {
+                if(k == from || k == to) return;
+                for (int i = 0; i < m.Rows; i++) result[i, k] = m[i, k];
+            });
+
+            for(int i  = 0; i < m.Rows; i++)
+            {
+                result[i, to] = m[i, from];
+                result[i, from] = m[i, to];
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Extract a sub matrix between row and column range
+        /// </summary>
+        /// <param name="m">Matrix</param>
+        /// <param name="rowIdx">Starting row idx for extracting</param>
+        /// <param name="nbRows">Nb of rows to extract from row idx</param>
+        /// <param name="columnIdx">Starting columnn idx for extracting</param>
+        /// <param name="nbColumns">Nb of columns to extract from column idx</param>
+        /// <returns>Sub matrix</returns>
+        public static Matrix ExtractSubMatrix(Matrix m, int rowIdx, int nbRows, int columnIdx, int nbColumns)
+        {
+            if (m == null) throw new ArgumentNullException(nameof(m));
+
+            int N = rowIdx + nbRows, M = columnIdx + nbColumns;
+            if(N > m.Rows) throw new Exception($"can extract a matrix larger than the original matrix rows = {m.Rows} < {N}");
+            if (N > m.Rows) throw new Exception($"can extract a matrix larger than the original matrix columns = {m.Columns} < {M}");
+            //if (m.Rows < rowIdx) throw new Exception($"can starting row extraction at a higher rank than available #rows {m.Rows} < {rowIdx}");
+            //if (m.Columns < columnIdx) throw new Exception($"can starting column extraction at a higher rank than available #columns {m.Columns} < {columnIdx}");
+            //if (m.Rows < nbRows) throw new Exception($"can extract a matrix larger than the original matrix rows = {m.Rows} < {nbRows}");
+            //if (m.Columns < nbColumns) throw new Exception($"can extract a matrix larger than the original matrix columns = {m.Columns} < {nbColumns}");
+
+            Matrix result = Matrix.Create(N, M);
+
+            for (int i = rowIdx; i < N; i++)
+                for (int j = columnIdx; j < M; j++)
+                    result[i - rowIdx, j - columnIdx] = m[i, j];
+
+            return result;
+        }
+
         /// <summary>Applies a function to transform the data of the matrix</summary>
         /// <param name="m">the matrix to transform</param>
         /// <param name="func">the transforming function</param>

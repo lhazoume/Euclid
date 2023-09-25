@@ -160,14 +160,33 @@ namespace Euclid.Analytics.Regressions
 
             double sse = 0;
             double[] correls = new double[p];
+            //if (_computeErr)
+            //{
+            //    Matrix H = X ^ radix,
+            //        I = Matrix.CreateIdentityMatrix(H.Rows, H.Columns);
+            //    sse = Vector.Scalar(Y, (I - H) * Y);
+            //    Vector cov = tX * Y;
+
+            //    #region Correlations
+            //    for (int i = 0; i < p; i++)
+            //    {
+            //        double xb = X.Column((_withConstant ? 1 : 0) + i).Sum / n,
+            //            sX = tXX[(_withConstant ? 1 : 0) + i, (_withConstant ? 1 : 0) + i] / n - xb * xb,
+            //            cXY = cov[(_withConstant ? 1 : 0) + i] / n - yb * xb;
+            //        correls[i] = cXY / Math.Sqrt(sX * sst);
+            //    }
+            //    #endregion
+            //}
+
             if (_computeErr)
             {
-                Matrix H = X ^ radix,
-                    I = Matrix.CreateIdentityMatrix(H.Rows, H.Columns);
-                sse = Vector.Scalar(Y, (I - H) * Y);
-                Vector cov = tX * Y;
+                #region Error
+                Vector residual = Y - (X * A);
+                sse = residual.SumOfSquares;
+                #endregion
 
                 #region Correlations
+                Vector cov = tX * Y;
                 for (int i = 0; i < p; i++)
                 {
                     double xb = X.Column((_withConstant ? 1 : 0) + i).Sum / n,
