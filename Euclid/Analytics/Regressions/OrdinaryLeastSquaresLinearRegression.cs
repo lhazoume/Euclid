@@ -186,14 +186,25 @@ namespace Euclid.Analytics.Regressions
                 #endregion
 
                 #region Correlations
-                Vector cov = tX * Y;
-                for (int i = 0; i < p; i++)
-                {
-                    double xb = X.Column((_withConstant ? 1 : 0) + i).Sum / n,
-                        sX = tXX[(_withConstant ? 1 : 0) + i, (_withConstant ? 1 : 0) + i] / n - xb * xb,
-                        cXY = cov[(_withConstant ? 1 : 0) + i] / n - yb * xb;
-                    correls[i] = cXY / Math.Sqrt(sX * sst);
-                }
+                Matrix corr = Matrix.Corr(Matrix.Create(_x), Y);
+
+                int w = 0;
+                //double[] correls = new double[A.Size];
+                for (int i = 1; i < corr.Rows; i++)
+                    for (int j = 0; j < corr.Columns - 1; j++)
+                    {
+                        correls[w] = corr[i, j];
+                        w++;
+                    }
+
+                //Vector cov = tX * Y;
+                //for (int i = 0; i < p; i++)
+                //{
+                //    double xb = X.Column((_withConstant ? 1 : 0) + i).Sum / n,
+                //        sX = tXX[(_withConstant ? 1 : 0) + i, (_withConstant ? 1 : 0) + i] / n - xb * xb,
+                //        cXY = cov[(_withConstant ? 1 : 0) + i] / n - yb * xb;
+                //    correls[i] = cXY / Math.Sqrt(sX * sst);
+                //}
                 #endregion
             }
             #endregion

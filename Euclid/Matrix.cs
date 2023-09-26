@@ -1,7 +1,9 @@
 ﻿using Euclid.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -369,6 +371,22 @@ namespace Euclid
             }
         }
 
+        /// <summary>
+        /// Returns a matrix with sqrt values
+        /// </summary>
+        public Matrix Sqrt
+        {
+            get
+            {
+                Matrix result = Create(_cols, _rows);
+                for (int i = 0; i < _rows; i++)
+                    for (int j = 0; j < _cols; j++)
+                        result[i, j] += Math.Sqrt(this[i, j]);
+
+                return result;
+            }
+        }
+
         /// <summary>Returns the sum of the values</summary>
         public double Sum => _data.Sum();
 
@@ -658,6 +676,27 @@ namespace Euclid
             return m * (1 / f);
         }
 
+        /// <summary>
+        /// Divide a matrix by an another of the same dimension following outer instructions
+        /// </summary>
+        /// <param name="m1">the left hand side <c>Matrix</c></param>
+        /// <param name="m2">the right hand side <c>Matrix</c></param>
+        /// <returns>Divided matrix</returns>
+        public static Matrix operator /(Matrix m1, Matrix m2)
+        {
+            if (m1 == null) throw new ArgumentNullException(nameof(m1));
+            if (m2 == null) throw new ArgumentNullException(nameof(m2));
+            if (m1.Rows != m2.Rows || m1.Columns != m2.Columns) throw new Exception($"Wrong dimension of row of matrix m1[{m1.Rows},{m1.Columns}] m2[{m2.Rows},{m2.Columns}]");
+
+            Matrix result = Create(m1.Rows, m1.Columns);
+
+            for (int i = 0; i < m1.Rows; i++)
+                for (int j = 0; j < m1.Columns; j++)
+                    result[i, j] = m1[i, j] / m2[i, j];
+
+            return result;
+        }
+
         /// <summary>Multiplies two matrices</summary>
         /// <param name="m1">the left hand side <c>Matrix</c></param>
         /// <param name="m2">the right hand side <c>Matrix</c></param>
@@ -897,6 +936,24 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>Builds a <c>Matrix</c> from a matrix and a vector</summary>
+        /// <param name="model">the 2d-array of data</param>
+        /// <param name="v">Vector v</param>
+        public static Matrix Create(Matrix model, Vector v)
+        {
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            Matrix result = new Matrix(model.Rows, model.Columns + 1, 0);
+
+            for (int i = 0; i < result.Rows; i++)
+                for (int j = 0; j < result.Columns - 1; j++)
+                    result[i, j] = model[i, j];
+
+            int p = result.Columns - 1;
+            for (int i = 0; i < result.Rows; i++) result[i, p] = v[i];
+
+            return result;
+        }
+
         /// <summary>Builds a <c>Matrix</c> from a collection of vector</summary>
         /// <param name="model">the collection of vector</param>
         public static Matrix Create(IReadOnlyList<Vector> model)
@@ -1046,12 +1103,13 @@ namespace Euclid
         /// <returns>a Matrix</returns>
         public static Matrix CreateFromColumns(params Vector[] vectors)
         {
-            #region Verifications
+            #region verifications
             Vector reference = vectors.ElementAt(0);
             for (int i = 1; i < vectors.Length; i++)
                 if (vectors.ElementAt(i).Size != reference.Size)
                     throw new ArgumentException("all the vectors do not have the same size");
             #endregion
+
             Matrix result = Matrix.Create(reference.Size, vectors.Length);
             for (int j = 0; j < result.Columns; j++)
             {
@@ -1059,6 +1117,27 @@ namespace Euclid
                 for (int i = 0; i < result.Rows; i++)
                     result[i, j] = v[i];
             }
+            return result;
+        }
+
+        /// <summary>
+        /// Create a matrix fills from a vector which is broadcasted to fit to the matrix shape
+        /// </summary>
+        /// <param name="vector">Vector</param>
+        /// <param name="d">True (default), vector is row oriented else column</param>
+        /// <param name="k">Targeting dimension to broadcast</param>
+        /// <returns>Matrix broadcasted</returns>
+        public static Matrix CreateByBroadcast(Vector vector, bool d, int k)
+        {
+            if (k <= 0) throw new Exception("Impossible to broadcast a dimension inferior or equals to 0");
+
+            int N = vector.Size;
+            Matrix result = d ? Create(N, k, 0) : Create(k, N, 0);
+
+            for (int i = 0; i < result.Rows; i++)
+                for (int j = 0; j < result.Columns; j++)
+                    result[i, j] = vector[d ? i : j];
+
             return result;
         }
 
@@ -1129,6 +1208,124 @@ namespace Euclid
             });
 
             return result;
+        }
+
+        /// <summary>
+        /// Estimate the covariance matrix
+        /// </summary>
+        /// <param name="X">Matrix of variables and observations</param>
+        /// <param name="y">Additional set of variables and observations, y has the same form as X</param>
+        /// <param name="rowvar">True each row represents a variable with observations in columns. Otherwise (default), the relationship is inversed, columns as variables and rows as observations</param>
+        /// <param name="biais">False (default) normalization is done by dividing cov matrix by N - 1 else N. N is the number of observations</param>
+        /// <param name="normalization">True (dafault) normalize each variables by computing its mean else native data matrix are used</param>
+        /// <returns>Covariance matrix</returns>
+        public static Matrix Cov(Matrix X, Vector y = null, bool rowvar = false, bool biais = false, bool normalization = true)
+        {
+            if (X == null) throw new Exception("X is null");
+            if (y != null && (y.Size != X.Columns && y.Size != X.Rows)) throw new Exception($"y is not as the same form of X: y[{y.Size}] X[{X.Rows},{X.Columns}]");
+
+            int ddof = biais ? 0 : 1;
+            Matrix D = rowvar ? X.FastTranspose : X;
+            
+            if(y != null) D = Create(D, y);
+
+            #region normalization
+            if(normalization)
+            {
+                for(int j = 0; j < D.Columns; j++)
+                {
+                    double mj = 0;
+                    for (int i = 0; i < D.Rows; i++) mj += D[i, j];
+                    mj /= D.Rows;
+
+                    for (int i = 0; i < D.Rows; i++) D[i, j] -= mj;
+                }
+            }
+            #endregion
+
+            #region calculation
+            int fact = D.Rows - ddof;
+            Matrix c = FastTransposeBySelf(D);
+            c /= fact;
+            #endregion
+
+            return c;
+        }
+
+        /// <summary>
+        /// Estimate the correlation matrix
+        /// </summary>
+        /// <param name="X">Matrix of variables and observations</param>
+        /// <param name="y">Additional set of variables and observations, y has the same form as X</param>
+        /// <param name="rowvar">True each row represents a variable with observations in columns. Otherwise (default), the relationship is inversed, columns as variables and rows as observations</param>
+        /// <param name="biais">False (default) normalization is done by dividing cov matrix by N - 1 else N. N is the number of observations</param>
+        /// <param name="normalization">True (dafault) normalize each variables by computing its mean else native data matrix are used</param>
+        /// <returns>Correlation matrix</returns>
+        public static Matrix Corr(Matrix X, Vector y = null, bool rowvar = false, bool biais = false, bool normalization = true)
+        {
+            Matrix c = Cov(X, y, rowvar, biais, normalization);
+            Vector d = Diag(c);
+            
+            Vector s = d.Sqrt;
+
+            Matrix s1 = CreateByBroadcast(s, true, s.Size), s2 = CreateByBroadcast(s, false, s.Size);
+            Matrix corr = c / s1;
+            corr /= s2;
+
+            //for(int i = 0; i < c.Rows; i++)
+            //    for(int j = 0; j < c.Columns; j++)
+            //        c[i, j] /= s[i];
+
+
+           
+            return corr;
+        }
+
+        /// <summary>
+        /// Extract/Build a diagonal
+        /// </summary>
+        /// <param name="m">Matrix</param>
+        /// <param name="k">k = 0 (default) return the main diagonal. Otherwise if k>0 for diagonals above the main one and k<0 for diagonal below the main diagonal</param>
+        /// <returns>Vector of diagonal</returns>
+        public static Vector Diag(Matrix m, int k = 0)
+        {
+            if (k < 0 && Math.Abs(k) > m.Rows) throw new Exception($"k {k} has to be inferior to the nb of row the matrix {m.Rows}");
+            if (k > 0 && Math.Abs(k) < m.Columns) throw new Exception($"k {k} has to be inferior to the nb of column the matrix {m.Columns}");
+
+            List<double> candidats = new List<double>();
+
+            int n = k >= 0 ? 0 : m.Rows + k, p = k <= 0 ? 0 : m.Columns - k, nb = n;
+
+            for (int j = p; j < m.Columns; j++)
+                for (int i = nb; i < m.Rows; i++)
+                {
+                    candidats.Add(m[i, j]);
+                    nb++;
+                    break;
+                }
+                
+            return Vector.Create(candidats);
+        }
+
+        /// <summary>
+        /// Compare two matrix in order to know if ones are element-wise equal within a tolerance
+        /// </summary>
+        /// <param name="m1">Input matrix left</param>
+        /// <param name="m2">Input matrix right</param>
+        /// <param name="epsilon">Tolerance</param>
+        /// <returns>True if success else false</returns>
+        public static bool AllClose(Matrix m1, Matrix m2, double epsilon = 1e-5)
+        {
+            if (m1 == null) throw new ArgumentNullException(nameof(m1));
+            if (m2 == null) throw new ArgumentNullException(nameof(m2));
+            if (m1.Rows != m2.Rows || m1.Columns != m2.Columns) throw new Exception($"Wrong dimension of row of matrix m1[{m1.Rows},{m1.Columns}] m2[{m2.Rows},{m2.Columns}]");
+
+            for (int i = 0; i < m1.Rows; i++)
+                for (int j = 0; j < m1.Columns; j++)
+                    if (Math.Abs(m1[i, j] - m2[i, j]) > epsilon)
+                        return false;
+
+            return true;
         }
 
         /// <summary>

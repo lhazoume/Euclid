@@ -9,6 +9,19 @@ namespace Euclid.Tests
     [TestClass()]
     public class MatrixTests
     {
+        #region vars
+        public double[,] dataset;
+        #endregion
+
+        #region initialization
+        [TestInitialize()]
+        public void Initialization()
+        {
+            dataset = new double[,]{ { 152.95, 152.85, 152.86, 152.85, 152.87, 152.87, 152.83, 152.84, 152.83, 152.81, 152.81, 152.8, 152.78, 152.8, 152.8, 152.82, 152.82, 152.84, 152.82 },
+                            { 108.95,109.15,109.24,109.24,109.23,109.2,109.16,109.18,109.16,109.18,109.18,109.22,109.21,109.23,109.25,109.24,109.18,109.18,109.18} };
+        }
+        #endregion
+
         #region Constructors
 
         [TestMethod()]
@@ -317,6 +330,28 @@ namespace Euclid.Tests
                 v4 = Vector.Create(10, 4.0);
             Matrix m = Matrix.CreateFromColumns(new Vector[] { v1, v2, v3, v4 });
             Assert.IsTrue(m.Rows == 10 && m.Columns == 4 && m[2, 1] == 2.0);
+        }
+
+        [TestMethod()]
+        public void CovTest()
+        {
+            Matrix m = Matrix.Create(dataset);
+            m = m.Transpose;
+            Matrix cov = Matrix.Cov(m);
+
+            Matrix covBench = Matrix.Create(new double[,] { { 0.00141462, -0.00166053 }, { -0.00166053, 0.00428713 } });
+            Assert.IsTrue(Matrix.AllClose(cov,covBench));
+        }
+
+        [TestMethod()]
+        public void CorrTest()
+        {
+            Matrix m = Matrix.Create(dataset);
+            m = m.Transpose;
+            Matrix corr = Matrix.Corr(m);
+
+            Matrix corrBench = Matrix.Create(new double[,] { { 1, -0.67428318 }, { -0.67428318, 1 } });
+            Assert.IsTrue(Matrix.AllClose(corr, corrBench));
         }
     }
 }

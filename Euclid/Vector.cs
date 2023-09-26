@@ -97,6 +97,20 @@ namespace Euclid
             }
         }
 
+        /// <summary>
+        /// Returns a vector with sqrt values
+        /// </summary>
+        public Vector Sqrt
+        {
+            get
+            {
+                double[] result = new double[_size];
+                for (int k = 0; k < _data.Length; k++)
+                    result[k] = Math.Sqrt(_data[k]);
+                return Create(result);
+            }
+        }
+
         /// <summary>Returns the sum of the values</summary>
         public double Sum => _data.Sum();
 
