@@ -33,7 +33,7 @@ namespace Euclid.Analytics.Regressions
         /// <summary>
         /// Data to regress
         /// </summary>
-        public  Matrix X { get; private set; }
+        public Matrix X { get; private set; }
 
         /// <summary>
         /// Coefficient of the regression, bo is intercept
@@ -150,14 +150,16 @@ namespace Euclid.Analytics.Regressions
         public void Regress()
         {
             #region pre-process data by scaling
-            Scaling xScaler = Regressions.Scaling.CreateZScore(X);
-            if (xScaler == null)
-            {
-                Status = RegressionStatus.BadData;
-                return;
-            }
+            //Scaling xScaler = Regressions.Scaling.CreateZScore(X);
+            //if (xScaler == null)
+            //{
+            //    Status = RegressionStatus.BadData;
+            //    return;
+            //}
 
-            Matrix Xs = xScaler.Reduce(X, Centering, Scaling);
+            //Matrix Xs = xScaler.Reduce(X, Centering, Scaling);
+            Scaling[] scalings = Regressions.Scaling.MatrixColumnWiseScaler(X);
+            Matrix Xs = Regressions.Scaling.MatrixColumnWiseReducer(X, scalings, Centering, Scaling);
             #endregion
 
             SingularValueDecomposition svd = SingularValueDecomposition.Run(Xs, SVDMethod, Epsilon);
@@ -198,16 +200,12 @@ namespace Euclid.Analytics.Regressions
                     sse += Math.Pow(Xs[i, p] - yhat, 2);
                 }
 
-                int N = (Xs.Rows - 1);
-
-                Matrix cov = Matrix.FastTransposeBySelf(Xs);
-                double x_sigma = Math.Sqrt(x_squares), y_sigma = Math.Sqrt(y_squares);
-                Matrix corr = cov / (x_sigma * y_sigma);
+                Matrix corr = Matrix.Corr(X);
 
                 int w = 0;
                 double[] correls = new double[Beta.Size];
-                for (int i = 1; i < cov.Rows; i++)
-                    for (int j = 0; j < cov.Columns - 1; j++)
+                for (int i = 1; i < corr.Rows; i++)
+                    for (int j = 0; j < corr.Columns - 1; j++)
                     {
                         correls[w] = corr[i, j];
                         w++;

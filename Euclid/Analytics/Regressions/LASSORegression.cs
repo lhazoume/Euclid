@@ -70,26 +70,6 @@ namespace Euclid.Analytics.Regressions
         #endregion
 
         #endregion
-
-        private static Scaling[] MatrixColumnWiseScaler(Matrix X)
-        {
-            Scaling[] scalers = new Scaling[X.Columns];
-
-            Parallel.For(0, X.Columns, i => { scalers[i] = Scaling.CreateZScore(X.Column(i).Data); });
-
-            return scalers;
-        }
-        private static Matrix MatrixColumnWiseReducer(Matrix A, Scaling[] scalers)
-        {
-            Vector[] vectors = new Vector[A.Columns];
-            Parallel.For(0, A.Columns, i =>
-            {
-                if (scalers[i] == null) return;
-                vectors[i] = Vector.Create(scalers[i].Reduce(A.Column(i).Data));
-            });
-
-            return Matrix.CreateFromColumns(vectors);
-        }
         private Vector IntermediateStepShootingLASSO(Vector tXY, Matrix tXX, Vector W)
         {
             Vector result = Vector.Create(W.Size);
@@ -134,8 +114,8 @@ namespace Euclid.Analytics.Regressions
 
             #region Read and Reduce the data
             Matrix X = Matrix.Create(_x.Data);
-            Scaling[] scalings = MatrixColumnWiseScaler(X);
-            Matrix Xr = MatrixColumnWiseReducer(X, scalings);
+            Scaling[] scalings = Scaling.MatrixColumnWiseScaler(X);
+            Matrix Xr = Scaling.MatrixColumnWiseReducer(X, scalings);
 
             Vector Y = Vector.Create(_y.Data);
             Scaling Yscaler = Scaling.CreateZScore(_y.Data);

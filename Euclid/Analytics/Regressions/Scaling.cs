@@ -80,6 +80,40 @@ namespace Euclid.Analytics.Regressions
             return result;
         }
 
+        /// <summary>
+        /// Build a scaler per matrix column
+        /// </summary>
+        /// <param name="X">Dataset</param>
+        /// <returns>Scalers</returns>
+        public static Scaling[] MatrixColumnWiseScaler(Matrix X)
+        {
+            Scaling[] scalers = new Scaling[X.Columns];
+
+            Parallel.For(0, X.Columns, i => { scalers[i] = CreateZScore(X.Column(i).Data); });
+
+            return scalers;
+        }
+
+        /// <summary>
+        /// Reduce a matrix per columns
+        /// </summary>
+        /// <param name="A">Marix</param>
+        /// <param name="scalers">Scalers for each column</param>
+        /// <param name="centering">True (default) centering data by removing its mean otherwise not</param>
+        /// <param name="scaling">True (default) scales data by dividing by its stdev otherwise not</param>
+        /// <returns>Reduced matrix</returns>
+        public static Matrix MatrixColumnWiseReducer(Matrix A, Scaling[] scalers, bool centering = true, bool scaling = true)
+        {
+            Vector[] vectors = new Vector[A.Columns];
+            Parallel.For(0, A.Columns, i =>
+            {
+                if (scalers[i] == null) return;
+                vectors[i] = Vector.Create(scalers[i].Reduce(A.Column(i).Data, centering, scaling));
+            });
+
+            return Matrix.CreateFromColumns(vectors);
+        }
+
         #endregion
 
         #region Creators
@@ -158,7 +192,6 @@ namespace Euclid.Analytics.Regressions
             Scaling result = new Scaling(min, sd);
             return result;
         }
-
         #endregion
     }
 }
