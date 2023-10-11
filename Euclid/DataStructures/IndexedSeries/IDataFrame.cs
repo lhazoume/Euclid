@@ -712,7 +712,7 @@ namespace Euclid.DataStructures.IndexedSeries
         /// <summary>Buils a <c>DataFrame</c></summary>
         /// <param name="node">the Xml node</param>
         /// <returns>a DataFrame</returns>
-        public static TY FromXml<TY>(XmlNode node) where TY : IDataFrame<T, TU, TV>, new()
+        public static TY FromXml<TY>(XmlNode node) where TY : IDataFrame<T, TU, TV>
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
 

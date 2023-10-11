@@ -71,6 +71,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Content Include="Analytics\data-kalman.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="Analytics\KalmanTests.cs" />
     <Compile Include="Analytics\PCATests.cs" />
     <Compile Include="Analytics\TLSTest.cs" />
     <Compile Include="Arithmetics\BinomialCoefficientsTests.cs" />

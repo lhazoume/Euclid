@@ -82,7 +82,5 @@ namespace EuclidTests.LinearAlgebra
             Assert.IsTrue(svd.D.Equals(D_pi));
         }
         #endregion
-
-
     }
 }

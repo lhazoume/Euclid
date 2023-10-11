@@ -625,6 +625,18 @@ namespace Euclid
             return result;
         }
 
+        /// <summary>
+        /// Extract a specific column to a matrix [rows, 1]
+        /// </summary>
+        /// <param name="j">Column rank</param>
+        /// <returns>A column matrix</returns>
+        public Matrix ColumnMatrix(int j)
+        {
+            Matrix result = Create(_rows, 1);
+            for (int i = 0; i < _rows; i++) result[i, 0] = _data[i * _cols + j];
+            return result;
+        }
+
         /// <summary> Extracts a specific row</summary>
         /// <param name="i">the specified row</param>
         /// <returns>a row Vector</returns>
@@ -633,6 +645,18 @@ namespace Euclid
             Vector result = Vector.Create(_cols);
             for (int j = 0; j < _cols; j++)
                 result[j] = _data[i * _cols + j];
+            return result;
+        }
+
+        /// <summary>
+        /// Extract a specific row to a matrix [1, col(s)]
+        /// </summary>
+        /// <param name="i">Row rank</param>
+        /// <returns>A row matrix</returns>
+        public Matrix RowMatrix(int i)
+        {
+            Matrix result = Create(1, _cols);
+            for (int j = 0; j < _cols; j++) result[0, j] = _data[i * _cols + j];
             return result;
         }
 
@@ -849,7 +873,7 @@ namespace Euclid
             if (m == null) throw new ArgumentNullException(nameof(m));
             Matrix tmp = m.Clone;
             for (int i = 0; i < m.Size; i++)
-                tmp[i] = m[i] - c;
+                tmp[i] = c - m[i];
             return tmp;
         }
 

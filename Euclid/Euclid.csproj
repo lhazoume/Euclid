@@ -96,6 +96,7 @@
     <Compile Include="Analytics\ErrorFunctions\ManhattanError.cs" />
     <Compile Include="Analytics\ErrorFunctions\SumOfSquares.cs" />
     <Compile Include="Analytics\ErrorFunctions\IErrorFunction.cs" />
+    <Compile Include="Analytics\Filtering\KalmanFilter.cs" />
     <Compile Include="Analytics\InterRelations.cs" />
     <Compile Include="Analytics\LogisticModel.cs" />
     <Compile Include="Analytics\LinearModel.cs" />
