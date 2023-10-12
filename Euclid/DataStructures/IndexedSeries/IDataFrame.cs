@@ -718,7 +718,9 @@ namespace Euclid.DataStructures.IndexedSeries
         {
             try
             {
-                using(XmlWriter writer = XmlWriter.Create(path))
+                XmlWriterSettings xws = new XmlWriterSettings() { Indent = true, };
+
+                using (XmlWriter writer = XmlWriter.Create(path, xws))
                 {
                     writer.WriteStartDocument();
                     ToXml(writer);
