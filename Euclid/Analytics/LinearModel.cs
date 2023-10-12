@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Euclid.Analytics
 {
@@ -14,10 +15,49 @@ namespace Euclid.Analytics
         private readonly Vector _factors, _correlations;
         private readonly int _n, _p;
         private readonly bool _succeeded;
+        private readonly Vector _residuals;
         #endregion
 
-        #region Constructors
+        #region Accessors
+        /// <summary>Gets the constant term</summary>
+        public double Constant => _succeeded ? _constant : 0;
 
+        /// <summary>Gets the linear terms</summary>
+        public Vector Factors => _succeeded ? _factors : Vector.Create(0.0);
+
+        /// <summary>Gets the correlations between the explanatory variables and the regressand </summary>
+        public Vector Correlations => _succeeded ? _correlations : Vector.Create(0.0);
+
+        /// <summary>Gets the sample size</summary>
+        public int SampleSize => _n;
+
+        /// <summary>Gets the R² on the sample data</summary>
+        public double R2 => _succeeded ? _ssr / _sst : 0;
+
+        /// <summary>Gets the adjusted R² on the sample data</summary>
+        public double AdjustedR2 => _succeeded ?
+            _sst == 0 ? 0 : 1 - _sse * (_n - 1) / (_sst * (_n - _factors.Data.Count(f => f != 0) - 1)) :
+            0;
+
+        /// <summary>Specifies whether the regression succeeds</summary>
+        public bool Succeeded => _succeeded;
+
+        /// <summary>Gets the sum of squares due to error</summary>
+        public double SSE => _sse;
+
+        /// <summary>Gets the sum of squares due to the regression</summary>
+        public double SSR => _ssr;
+
+        /// <summary>Gets the total sum of squares</summary>
+        public double SST => _sst;
+
+        /// <summary>
+        /// Residuals
+        /// </summary>
+        public Vector Residuals => _residuals;
+        #endregion
+
+        #region constructor
         /// <summary>Default constructor for a linear model</summary>
         /// <param name="constant">the constant term</param>
         /// <param name="factors">the regression coefficients</param>
@@ -25,8 +65,9 @@ namespace Euclid.Analytics
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squared due to error</param>
         /// <param name="SSR">the sum of squared due to the regression</param>
+        /// <param name="residuals">Residuals</param>
         /// <param name="succeeded">the status of the regression</param>
-        private LinearModel(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, bool succeeded)
+        private LinearModel(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, Vector residuals, bool succeeded)
         {
             if (factors == null) throw new ArgumentNullException(nameof(factors));
             if (correlations == null) throw new ArgumentNullException(nameof(correlations));
@@ -48,20 +89,24 @@ namespace Euclid.Analytics
                 _factors[i] = factors[i];
                 _correlations[i] = correlations[i];
             }
-        }
 
-        /// <summary>Builds a linear model for a failed regression</summary>
-        public LinearModel()
-            : this(0, new double[] { 0 }, new double[] { 0 }, 0, 0, 0, false)
-        { }
+            _residuals = residuals;
+        }
+        #endregion
+
+        #region methods
+
+        /// <summary>
+        /// Create an empty Linear Model
+        /// </summary>
+        /// <returns></returns>
+        public static LinearModel Create() { return new LinearModel(0, new double[] { 0 }, new double[] { 0 }, 0, 0, 0, Vector.Create(new double[] { 0 }), false); }
 
         /// <summary> Builds a constant linear model</summary>
         /// <param name="constant">the constant</param>
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squares due to error</param>
-        public LinearModel(double constant, int sampleSize, double SSE)
-            : this(constant, new double[] { 0 }, new double[] { 0 }, sampleSize, SSE, 0, true)
-        { }
+        public static LinearModel Create(double constant, int sampleSize, double SSE) { return new LinearModel(constant, new double[] { 0 }, new double[] { 0 }, sampleSize, SSE, 0, Vector.Create(new double[] { 0 }), true); }
 
         /// <summary> Builds a linear model for a succesful regression </summary>
         /// <param name="constant">the regression constant term</param>
@@ -70,45 +115,18 @@ namespace Euclid.Analytics
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squares due to the error</param>
         /// <param name="SSR">the sum of squares due to the regression</param>
-        public LinearModel(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR)
-            : this(constant, factors, correlations, sampleSize, SSE, SSR, true)
-        { }
+        public static LinearModel Create(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR) { return new LinearModel(constant, factors, correlations, sampleSize, SSE, SSR, Vector.Create(new double[] { 0 }), true); }
 
-        #endregion
-
-        #region Accessors
-        /// <summary>Gets the constant term</summary>
-        public double Constant => _succeeded ? _constant : 0;
-
-        /// <summary>Gets the linear terms</summary>
-        public Vector Factors => _succeeded ? _factors : Vector.Create(0.0);
-
-        /// <summary>Gets the correlations between the explanatory variables and the regressand </summary>
-        public Vector Correlations => _succeeded ? _correlations : Vector.Create(0.0);
-
-        /// <summary>Gets the sample size</summary>
-        public int SampleSize => _n;
-
-        /// <summary>Gets the R² on the sample data</summary>
-        public double R2 => _succeeded ? _ssr / _sst : 0;
-
-        /// <summary>Gets the adjusted R² on the sample data</summary>
-        public double AdjustedR2=>_succeeded ?
-            _sst == 0 ? 0 : 1 - _sse * (_n - 1) / (_sst * (_n - _factors.Data.Count(f => f != 0) - 1)):
-            0;
-
-        /// <summary>Specifies whether the regression succeeds</summary>
-        public bool Succeeded => _succeeded;
-
-        /// <summary>Gets the sum of squares due to error</summary>
-        public double SSE => _sse;
-
-        /// <summary>Gets the sum of squares due to the regression</summary>
-        public double SSR => _ssr;
-
-        /// <summary>Gets the total sum of squares</summary>
-        public double SST => _sst;
-        #endregion
+        /// <summary> Builds a linear model for a succesful regression </summary>
+        /// <param name="constant">the regression constant term</param>
+        /// <param name="factors">the regression linear coefficients</param>
+        /// <param name="correlations">the zero-degree correlations</param>
+        /// <param name="sampleSize">the sample size</param>
+        /// <param name="SSE">the sum of squares due to the error</param>
+        /// <param name="SSR">the sum of squares due to the regression</param>
+        /// <param name="residuals">Residuals of the regression</param>
+        public static LinearModel Create(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, Vector residuals) { return new LinearModel(constant, factors, correlations, sampleSize, SSE, SSR, residuals, true); }
+        #endregion   
 
         #region ToString
         /// <summary>Returns a string that represents the linear model</summary>
@@ -131,16 +149,14 @@ namespace Euclid.Analytics
             if (_succeeded)
                 for (int i = 0; i < Math.Min(_factors.Size, x.Count); i++)
                     y += _factors[i] * x[i];
+
             return y;
         }
 
         /// <summary>Returns the estimator for the given set of data</summary>
         /// <param name="x">the set of regressors</param>
         /// <returns>the estimator of the regressed data</returns>
-        public double Predict(Vector x)
-        {
-            return _constant + (_succeeded ? Vector.Scalar(x, _factors) : 0);
-        }
+        public double Predict(Vector x) { return _constant + (_succeeded ? Vector.Scalar(x, _factors) : 0); }
         #endregion
     }
 }

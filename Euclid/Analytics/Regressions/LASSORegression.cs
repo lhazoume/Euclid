@@ -108,7 +108,7 @@ namespace Euclid.Analytics.Regressions
         /// <summary>Performs the regression</summary>
         public void Regress()
         {
-            _linearModel = new LinearModel();
+            _linearModel = LinearModel.Create();
 
             int n = _x.Rows, p = _x.Columns;
 
@@ -159,10 +159,12 @@ namespace Euclid.Analytics.Regressions
             #region Output
             double sse = 0;
             double[] correls = new double[p];
+            Vector residuals = null;
+
             if (_computeErr)
             {
                 #region Error
-                Vector residuals = Y - (X * W) - b;
+                residuals = Y - (X * W) - b;
                 sse = residuals.SumOfSquares;
                 #endregion
 
@@ -180,7 +182,7 @@ namespace Euclid.Analytics.Regressions
             }
             #endregion
 
-            _linearModel = new LinearModel(b, W.Data, correls, n, sse, sst);
+            _linearModel = LinearModel.Create(b, W.Data, correls, n, sse, sst, residuals);
             _status = RegressionStatus.Normal;
         }
     }

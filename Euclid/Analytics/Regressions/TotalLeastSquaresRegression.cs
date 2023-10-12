@@ -175,6 +175,7 @@ namespace Euclid.Analytics.Regressions
             if (ComputeErr)
             {
                 double ssr = 0, sse = 0, y_ = 0, x_ = 0;
+                double[] e = new double[Xs.Rows];
 
                 for (int i = 0; i < X.Rows; i++)
                 {
@@ -198,6 +199,7 @@ namespace Euclid.Analytics.Regressions
 
                     ssr += Math.Pow(yhat - y_, 2);
                     sse += Math.Pow(Xs[i, p] - yhat, 2);
+                    e[i] = yhat;
                 }
 
                 Matrix corr = Matrix.Corr(X);
@@ -211,30 +213,6 @@ namespace Euclid.Analytics.Regressions
                         w++;
                     }
 
-                //double sse = 0;
-
-                //double[] correls = new double[p];
-                //#region Error
-                //Vector Y = Xs.Column(p);
-                //n = Xs.Rows;
-                //Matrix x = Matrix.ExtractSubMatrix(Xs, 0, Xs.Rows, 0, Xs.Columns - 1);
-                //Vector residual = Y - (x * Beta);
-                //sse = residual.SumOfSquares;
-                //double yb = Y.Sum / n, sst = (Y - yb).SumOfSquares;
-                //#endregion
-
-                //#region Correlations
-                //Vector cov = x.FastTranspose * Y;
-                //Matrix tXX = Matrix.FastTransposeBySelf(x);
-                //for (int i = 0; i < p; i++)
-                //{
-                //    double xb = x.Column(i).Sum / n,
-                //        sX = tXX[i, i] / n - xb * xb,
-                //        cXY = cov[i] / n - yb * xb;
-                //    correls[i] = cXY / Math.Sqrt(sX * sst);
-                //}
-                //#endregion
-
                 #region compute constant
                 double alpha = 0;
                 if (WithConstant)
@@ -244,7 +222,7 @@ namespace Euclid.Analytics.Regressions
                 }
                 #endregion
 
-                Linear = new LinearModel(alpha, Beta.Data, correls, Xs.Rows, sse, ssr);
+                Linear = LinearModel.Create(alpha, Beta.Data, correls, Xs.Rows, sse, ssr, Vector.Create(e));
             }
             #endregion
 

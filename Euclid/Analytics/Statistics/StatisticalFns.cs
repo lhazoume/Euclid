@@ -81,7 +81,7 @@ namespace Euclid.Analytics.Statistics
             double std = Math.Sqrt(sumSquared * inverse - (average * average)),
                 skew = std == 0 ? 0 : sumOfCubes / (n * Math.Pow(std, 1.5)), kurt = std == 0 ? 0 : sumOfFours / (n * Math.Sqrt(std));
 
-            return new SummaryStatistics(min, sum * inverse, max, std, max - min, percentilesValues[0], percentilesValues[1], percentilesValues[2], n, skew, kurt, sum);
+            return SummaryStatistics.Create(min, sum * inverse, max, std, max - min, percentilesValues[0], percentilesValues[1], percentilesValues[2], n, skew, kurt, sum);
         }
         #endregion
     }

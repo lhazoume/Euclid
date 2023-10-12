@@ -103,7 +103,7 @@ namespace Euclid.Analytics.Regressions
             {
                 if (_returnAverageIfFailed && !_withConstant)
                 {
-                    _linearModel = new LinearModel(yb, n, sst);
+                    _linearModel = LinearModel.Create(yb, n, sst);
                     _status = RegressionStatus.Normal;
                 }
                 else
@@ -154,9 +154,6 @@ namespace Euclid.Analytics.Regressions
             double sse = Vector.Scalar(Y * (I + (-2 * bestXDR) + Matrix.FastTransposeBySelf(bestXDR)), Y);
             A = bestD * A;
             #endregion
-
-
-
             #endregion
 
             #region Output
@@ -165,7 +162,7 @@ namespace Euclid.Analytics.Regressions
             for (int i = (_withConstant ? 1 : 0); i < A.Size; i++) beta.Add(A[i]);
             #endregion
 
-            _linearModel = new LinearModel(beta0, beta.ToArray(), correls, n, sse, sst - sse);
+            _linearModel = LinearModel.Create(beta0, beta.ToArray(), correls, n, sse, sst - sse);
             _status = RegressionStatus.Normal;
         }
 

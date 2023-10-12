@@ -118,7 +118,7 @@ namespace Euclid.Analytics.Regressions
             {
                 if (_returnAverageIfFailed && !_withConstant)
                 {
-                    _linearModel = new LinearModel(yb, n, sst);
+                    _linearModel = LinearModel.Create(yb, n, sst);
                     _status = RegressionStatus.Normal;
                 }
                 else
@@ -132,10 +132,12 @@ namespace Euclid.Analytics.Regressions
 
             double sse = 0;
             double[] correls = new double[p];
+            Vector residual = null;
+
             if (_computeErr)
             {
                 #region Error
-                Vector residual = Y - (X * A);
+                residual = Y - (X * A);
                 sse = residual.SumOfSquares;
                 #endregion
 
@@ -157,7 +159,7 @@ namespace Euclid.Analytics.Regressions
             double[] beta = _withConstant ? A.Data.SubArray(1, A.Size - 1) : A.Data;
             #endregion
 
-            _linearModel = new LinearModel(beta0, beta, correls, n, sse, sst - sse);
+            _linearModel = LinearModel.Create(beta0, beta, correls, n, sse, sst - sse, residual);
             _status = RegressionStatus.Normal;
         }
     }

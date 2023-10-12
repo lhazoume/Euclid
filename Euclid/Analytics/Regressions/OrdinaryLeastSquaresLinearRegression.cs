@@ -162,7 +162,7 @@ namespace Euclid.Analytics.Regressions
             {
                 if (_returnAverageIfFailed && !_withConstant)
                 {
-                    _linearModel = new LinearModel(yb, n, sst);
+                    _linearModel = LinearModel.Create(yb, n, sst);
                     _status = RegressionStatus.Normal;
                 }
                 else _status = RegressionStatus.BadData;
@@ -175,28 +175,12 @@ namespace Euclid.Analytics.Regressions
 
             double sse = 0;
             double[] correls = new double[p];
-            //if (_computeErr)
-            //{
-            //    Matrix H = X ^ radix,
-            //        I = Matrix.CreateIdentityMatrix(H.Rows, H.Columns);
-            //    sse = Vector.Scalar(Y, (I - H) * Y);
-            //    Vector cov = tX * Y;
-
-            //    #region Correlations
-            //    for (int i = 0; i < p; i++)
-            //    {
-            //        double xb = X.Column((_withConstant ? 1 : 0) + i).Sum / n,
-            //            sX = tXX[(_withConstant ? 1 : 0) + i, (_withConstant ? 1 : 0) + i] / n - xb * xb,
-            //            cXY = cov[(_withConstant ? 1 : 0) + i] / n - yb * xb;
-            //        correls[i] = cXY / Math.Sqrt(sX * sst);
-            //    }
-            //    #endregion
-            //}
+            Vector residual = null;
 
             if (_computeErr)
             {
                 #region Error
-                Vector residual = Y - (X * A);
+                residual = Y - (X * A);
                 sse = residual.SumOfSquares;
                 #endregion
 
@@ -204,22 +188,12 @@ namespace Euclid.Analytics.Regressions
                 Matrix corr = Matrix.Corr(Matrix.Create(_x), Y);
 
                 int w = 0;
-                //double[] correls = new double[A.Size];
                 for (int i = 1; i < corr.Rows; i++)
                     for (int j = 0; j < corr.Columns - 1; j++)
                     {
                         correls[w] = corr[i, j];
                         w++;
                     }
-
-                //Vector cov = tX * Y;
-                //for (int i = 0; i < p; i++)
-                //{
-                //    double xb = X.Column((_withConstant ? 1 : 0) + i).Sum / n,
-                //        sX = tXX[(_withConstant ? 1 : 0) + i, (_withConstant ? 1 : 0) + i] / n - xb * xb,
-                //        cXY = cov[(_withConstant ? 1 : 0) + i] / n - yb * xb;
-                //    correls[i] = cXY / Math.Sqrt(sX * sst);
-                //}
                 #endregion
             }
             #endregion
@@ -230,7 +204,7 @@ namespace Euclid.Analytics.Regressions
             for (int i = (_withConstant ? 1 : 0); i < A.Size; i++) beta.Add(A[i]);
             #endregion
 
-            _linearModel = new LinearModel(beta0, beta.ToArray(), correls, n, sse, sst - sse);
+            _linearModel = LinearModel.Create(beta0, beta.ToArray(), correls, n, sse, sst - sse, residual);
             _status = RegressionStatus.Normal;
         }
         #endregion
