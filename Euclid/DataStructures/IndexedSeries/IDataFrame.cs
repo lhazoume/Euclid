@@ -672,7 +672,7 @@ namespace Euclid.DataStructures.IndexedSeries
         public void ToXml(XmlWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
-            writer.WriteStartElement("dataFrame");
+            writer.WriteStartElement("dataframe");
 
             #region Labels
             for (int j = 0; j < _labels.Count; j++)
@@ -741,10 +741,11 @@ namespace Euclid.DataStructures.IndexedSeries
         public static TY FromXml<TY>(XmlNode node) where TY : IDataFrame<T, TU, TV>
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
+            XmlNode dataframeNode = node.SelectSingleNode("dataframe");
 
             #region Labels and legends
-            XmlNodeList labelNodes = node.SelectNodes("label"),
-                legendNodes = node.SelectNodes("legend");
+            XmlNodeList labelNodes = dataframeNode.SelectNodes("label"),
+                legendNodes = dataframeNode.SelectNodes("legend");
 
             List<TV> labels = new List<TV>();
             List<T> legends = new List<T>();
@@ -763,7 +764,7 @@ namespace Euclid.DataStructures.IndexedSeries
             #endregion
 
             #region Values
-            XmlNodeList pointNodes = node.SelectNodes("point");
+            XmlNodeList pointNodes = dataframeNode.SelectNodes("point");
             TU[][] data = Arrays.Build<TU>(legends.Count, labels.Count);
 
             foreach (XmlNode pointNode in pointNodes)
