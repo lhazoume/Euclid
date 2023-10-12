@@ -709,6 +709,30 @@ namespace Euclid.DataStructures.IndexedSeries
             writer.WriteEndElement();
         }
 
+        /// <summary>
+        /// Save a <c>DataFrame</c> to a XML file
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <returns>Empty in case of success otherwise error message</returns>
+        public string SaveToXml(string path)
+        {
+            try
+            {
+                using(XmlWriter writer = XmlWriter.Create(path))
+                {
+                    writer.WriteStartDocument();
+                    ToXml(writer);
+                    writer.WriteEndDocument();
+                    writer.Flush();
+                    writer.Close();
+                }
+
+                return string.Empty;
+            }
+
+            catch(Exception ex) { return $"IDataFrame.SaveToXml: {ex.Message}"; }
+        }
+
         /// <summary>Buils a <c>DataFrame</c></summary>
         /// <param name="node">the Xml node</param>
         /// <returns>a DataFrame</returns>

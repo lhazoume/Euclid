@@ -34,3 +34,4 @@ EuclidTests/obj
 *.targets
 *.props
 *.json
+.vs/Euclid/v17/TestStore/0/065.testlog

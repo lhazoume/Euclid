@@ -109,6 +109,8 @@ namespace Euclid.Analytics.Filtering
         /// Measurement variance prediction
         /// </summary>
         public Matrix Shat { get; private set; }
+
+        private double _log2Pi;
         #endregion
 
         #region constructor
@@ -150,6 +152,8 @@ namespace Euclid.Analytics.Filtering
             YhatPre = Matrix.Create(N, 1, 0);
             YhatPost = Matrix.Create(N, 1, 0);
             Shat = Matrix.Create(N, 1, 0);
+
+            _log2Pi = Math.Log(2.0 * Math.PI);
         }
         #endregion
 
@@ -225,9 +229,13 @@ namespace Euclid.Analytics.Filtering
             Xfs[t] = X.Clone;
             Pfs[t] = P.Clone;
 
+            Loglikelihood += 0.5 * (-1.0 * _log2Pi - Math.Log(S[0, 0]) - ((y[0, 0] * y[0, 0]) / S[0, 0]));
+
+            #region measurement metrics
             Shat[t, 0] = S[0, 0];
             YhatPre[t, 0] = y[0, 0];
             YhatPost[t, 0] = (Y[t] - Ht * X)[0,0]; // measurement post-fit residual
+            #endregion
         }
 
         /// <summary>
@@ -237,7 +245,11 @@ namespace Euclid.Analytics.Filtering
         {
             try
             {
-                for(int t = 0; t < N; t++)
+                #region requirement
+                Loglikelihood = 0;
+                #endregion
+
+                for (int t = 0; t < N; t++)
                 {
                     if(t == 0)
                     {
