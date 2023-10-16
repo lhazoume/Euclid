@@ -266,10 +266,11 @@ namespace Euclid.DataStructures.IndexedSeries
             #endregion
 
             #region found period
-            int startIdx = FindFirstIndexOf(l => l.Date >= start.Date, start.Date);
+            bool hasIndex = _indexes.Count > 0;
+            int startIdx =  FindFirstIndexOf(l => l.Date >= start.Date, hasIndex ? start.Date : (DateTime?)null);
             if (startIdx == -1) throw new Exception($"FastExtractValuesByLegendAndLabels: Impossible to find the FindFirstIndexOf [{start.ToShortDateString()}] into the legends!");
 
-            int endIdx = FindLastIndexOf(l => l.Date <= end.Date, end.Date);
+            int endIdx = FindLastIndexOf(l => l.Date <= end.Date, hasIndex ? end.Date : (DateTime?)null);
             if (endIdx == -1) throw new Exception($"FastExtractValuesByLegendAndLabels: Impossible to find the FindLastIndexOf [{end.ToShortDateString()}] into the legends!");
             #endregion
 
