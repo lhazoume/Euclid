@@ -1,8 +1,14 @@
 ﻿using Euclid.Extensions;
+using Euclid.Logging;
 using Euclid.Search;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Euclid.DataStructures.IndexedSeries
 {
@@ -63,6 +69,49 @@ namespace Euclid.DataStructures.IndexedSeries
         #endregion
 
         #region methods
+
+        #region create
+        /// <summary>
+        /// Builds a <c>TimeDataFrame</c> by synchronizing timeseries
+        /// </summary>
+        /// <typeparam name="TY">IDataFrame implementation</typeparam>
+        /// <param name="series">Series</param>
+        /// <returns>TimeDataFrame from synchronized timeseries</returns>
+        public static TY CreateFromUnsynchronizedTimeseries<TY>(IEnumerable<TimeSeries<TU, TV>> series) where TY : TimeDataFrame<TU, TV>
+        {
+            if (series == null) throw new ArgumentNullException(nameof(series));
+
+            #region build synchronized legend(s)
+            int M = series.Count();
+            IReadOnlyList<DateTime> legends = series.First().Legends;
+
+            for (int i = 1; i < M; i++)
+            {
+                TimeSeries<TU,TV> candidat = series.ElementAt(i);
+
+                ResultOutput<IReadOnlyList<DateTime>> qoIntersection = legends.Intersection(candidat.Legends);
+                if (qoIntersection.Failed) throw new Exception(qoIntersection.Message);
+                legends = qoIntersection.Result;
+            }
+            #endregion
+
+            if (legends == null || legends.Count == 0) throw new Exception($"No matching legends between timeseries [{string.Join(";", series.Select(s => s.Label))}]");
+
+            #region fill data
+            int N = legends.Count;
+            TU[][] data = Arrays.Build<TU>(N, M);
+
+            for (int j = 0; j < M; j++)
+            {
+                TimeSeries<TU, TV> candidat = series.ElementAt(j);
+                for (int i = 0; i < N; i++) data[i][j] = candidat[legends[i]];
+
+            }
+            #endregion
+
+            return Create<TY>(series.Select(s => s.Label).ToList(), legends.ToArray(), data);
+        }
+        #endregion
 
         #region index time series
         /// <summary>
@@ -137,6 +186,35 @@ namespace Euclid.DataStructures.IndexedSeries
 
             Tuple<uint, uint> boundaries = _indexes[_chunks[chunkIdx]];
             return _timestamps.FindLastIndexOf(predicate, boundaries.Item1, boundaries.Item2);
+        }
+        #endregion
+
+        #region adding
+        /// <summary>
+        /// Add a timeseries to the time dataframe
+        /// </summary>
+        /// <param name="series">Timeseries</param>
+        public void AddSeries(TimeSeries<TU, TV> series)
+        {
+            if (_indexes.Count > 0) throw new Exception($"Cannot add a series to a dataframe if an index is present!");
+            if (series == null) throw new ArgumentNullException(nameof(series));
+            if (series.Rows < 1) throw new Exception($"None element into the series");
+
+            ResultOutput<IReadOnlyList<DateTime>> qoIntersection =  _timestamps.Intersection(series.Legends);
+            if (qoIntersection.Failed) throw new Exception(qoIntersection.Message);
+            IReadOnlyList<DateTime> legends = qoIntersection.Result;
+
+            TU[][] newData = Arrays.Build<TU>(legends.Count, _labels.Count + 1);
+            Parallel.For(0, legends.Count, i =>
+            {
+                DateTime legend = legends[i];
+                newData[i][_labels.Count] = series[legend];
+                for (int j = 0; j < _labels.Count; j++)
+                    newData[i][j] = this[legend,j];
+            });
+
+            _labels.Add(series.Label);
+            _data = newData;
         }
         #endregion
 

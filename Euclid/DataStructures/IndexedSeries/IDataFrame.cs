@@ -2,6 +2,7 @@
 using Euclid.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -253,6 +254,26 @@ namespace Euclid.DataStructures.IndexedSeries
             get { return _data[_legends[t]][_labels[v]]; }
             set { _data[_legends[t]][_labels[v]] = value; }
         }
+
+        /// <summary>Gets and sets the data for a given legend and j-th column of the <c>DataFrame</c></summary>
+        /// <param name="t">the legend</param>
+        /// <param name="j">the column index</param>
+        /// <returns>a data point</returns>
+        public TU this[T t, int j]
+        {
+            get { return _data[_legends[t]][j]; }
+            set { _data[_legends[t]][j] = value; }
+        }
+
+        /// <summary>Gets and sets the data for the i-th row and a given label</summary>
+        /// <param name="i">the row index</param>
+        /// <param name="v">the label</param>
+        /// <returns>a data point</returns>
+        public TU this[int i, TV v]
+        {
+            get { return _data[i][_labels[v]]; }
+            set { _data[i][_labels[v]] = value; }
+        }
         #endregion
 
         #region methods
@@ -340,13 +361,13 @@ namespace Euclid.DataStructures.IndexedSeries
         #endregion
 
         #region Add
-
         /// <summary> Adds a column to the <c>DataFrame</c></summary>
         /// <param name="label">the new column's label</param>
         /// <param name="column">the new column's data</param>
         public void AddSeries(TV label, TU[] column)
         {
             if (column == null) throw new ArgumentNullException(nameof(column));
+            if (column.Length != Rows) throw new Exception($"The new column has not the same dimension [{column.Length}] that the dataframe [{_legends.Count}]");
 
             TU[][] newData = Arrays.Build<TU>(_legends.Count, _labels.Count + 1);
             for (int i = 0; i < _legends.Count; i++)
