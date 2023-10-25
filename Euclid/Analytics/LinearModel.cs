@@ -11,7 +11,7 @@ namespace Euclid.Analytics
     public class LinearModel : IPredictor<double, double>
     {
         #region Declarations
-        private readonly double _constant, _sse, _ssr, _sst;
+        private readonly double _constant, _sse, _ssr, _sst, _y_;
         private readonly Vector _factors, _correlations;
         private readonly int _n, _p;
         private readonly bool _succeeded;
@@ -50,6 +50,7 @@ namespace Euclid.Analytics
 
         /// <summary>Gets the total sum of squares</summary>
         public double SST => _sst;
+        public double Y_ => _y_;
 
         /// <summary>
         /// Residuals
@@ -59,6 +60,7 @@ namespace Euclid.Analytics
 
         #region constructor
         /// <summary>Default constructor for a linear model</summary>
+        /// <param name="y_">Predictor mean</param>
         /// <param name="constant">the constant term</param>
         /// <param name="factors">the regression coefficients</param>
         /// <param name="correlations">the zero-degree correlations</param>
@@ -67,7 +69,7 @@ namespace Euclid.Analytics
         /// <param name="SSR">the sum of squared due to the regression</param>
         /// <param name="residuals">Residuals</param>
         /// <param name="succeeded">the status of the regression</param>
-        private LinearModel(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, Vector residuals, bool succeeded)
+        private LinearModel(double y_, double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, Vector residuals, bool succeeded)
         {
             if (factors == null) throw new ArgumentNullException(nameof(factors));
             if (correlations == null) throw new ArgumentNullException(nameof(correlations));
@@ -77,6 +79,7 @@ namespace Euclid.Analytics
             _p = factors.Length;
             _n = sampleSize;
 
+            _y_ = y_;
             _sse = SSE;
             _ssr = SSR;
             _sst = _ssr + _sse;
@@ -100,24 +103,27 @@ namespace Euclid.Analytics
         /// Create an empty Linear Model
         /// </summary>
         /// <returns></returns>
-        public static LinearModel Create() { return new LinearModel(0, new double[] { 0 }, new double[] { 0 }, 0, 0, 0, Vector.Create(new double[] { 0 }), false); }
+        public static LinearModel Create() { return new LinearModel(0, 0, new double[] { 0 }, new double[] { 0 }, 0, 0, 0, Vector.Create(new double[] { 0 }), false); }
 
         /// <summary> Builds a constant linear model</summary>
+        /// <param name="y_">Predictor mean</param>
         /// <param name="constant">the constant</param>
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squares due to error</param>
-        public static LinearModel Create(double constant, int sampleSize, double SSE) { return new LinearModel(constant, new double[] { 0 }, new double[] { 0 }, sampleSize, SSE, 0, Vector.Create(new double[] { 0 }), true); }
+        public static LinearModel Create(double y_, double constant, int sampleSize, double SSE) { return new LinearModel(y_, constant, new double[] { 0 }, new double[] { 0 }, sampleSize, SSE, 0, Vector.Create(new double[] { 0 }), true); }
 
         /// <summary> Builds a linear model for a succesful regression </summary>
+        /// <param name="y_">Predictor mean</param>
         /// <param name="constant">the regression constant term</param>
         /// <param name="factors">the regression linear coefficients</param>
         /// <param name="correlations">the zero-degree correlations</param>
         /// <param name="sampleSize">the sample size</param>
         /// <param name="SSE">the sum of squares due to the error</param>
         /// <param name="SSR">the sum of squares due to the regression</param>
-        public static LinearModel Create(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR) { return new LinearModel(constant, factors, correlations, sampleSize, SSE, SSR, Vector.Create(new double[] { 0 }), true); }
+        public static LinearModel Create(double y_, double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR) { return new LinearModel(y_, constant, factors, correlations, sampleSize, SSE, SSR, Vector.Create(new double[] { 0 }), true); }
 
         /// <summary> Builds a linear model for a succesful regression </summary>
+        /// <param name="y_">Predictor mean</param>
         /// <param name="constant">the regression constant term</param>
         /// <param name="factors">the regression linear coefficients</param>
         /// <param name="correlations">the zero-degree correlations</param>
@@ -125,7 +131,7 @@ namespace Euclid.Analytics
         /// <param name="SSE">the sum of squares due to the error</param>
         /// <param name="SSR">the sum of squares due to the regression</param>
         /// <param name="residuals">Residuals of the regression</param>
-        public static LinearModel Create(double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, Vector residuals) { return new LinearModel(constant, factors, correlations, sampleSize, SSE, SSR, residuals, true); }
+        public static LinearModel Create(double y_, double constant, double[] factors, double[] correlations, int sampleSize, double SSE, double SSR, Vector residuals) { return new LinearModel(y_, constant, factors, correlations, sampleSize, SSE, SSR, residuals, true); }
         #endregion   
 
         #region ToString

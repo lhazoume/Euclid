@@ -118,7 +118,7 @@ namespace Euclid.Analytics.Regressions
             {
                 if (_returnAverageIfFailed && !_withConstant)
                 {
-                    _linearModel = LinearModel.Create(yb, n, sst);
+                    _linearModel = LinearModel.Create(yb, yb, n, sst);
                     _status = RegressionStatus.Normal;
                 }
                 else
@@ -159,7 +159,7 @@ namespace Euclid.Analytics.Regressions
             double[] beta = _withConstant ? A.Data.SubArray(1, A.Size - 1) : A.Data;
             #endregion
 
-            _linearModel = LinearModel.Create(beta0, beta, correls, n, sse, sst - sse, residual);
+            _linearModel = LinearModel.Create(yb, beta0, beta, correls, n, sse, sst - sse, residual);
             _status = RegressionStatus.Normal;
         }
     }

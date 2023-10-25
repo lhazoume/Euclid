@@ -111,14 +111,65 @@ namespace Euclid.DataStructures.IndexedSeries
 
             return Create<TY>(series.Select(s => s.Label).ToList(), legends.ToArray(), data);
         }
+
+        /// <summary>
+        /// Create a synchronized <c>timedataframe</c> from a collection of sub unsynchronized <c>timedataframe</c>
+        /// </summary>
+        /// <typeparam name="TY">IDataFrame implementation</typeparam>
+        /// <param name="tfs">Collection of sub unsynchronized <c>timedataframe</c></param>
+        /// <returns>Synchronized <c>timedataframe</c></returns>
+        public static ResultOutput<TY> CreateFromUnsynchronizedTF<TY>(IEnumerable<TimeDataFrame<TU, TV>> tfs) where TY : TimeDataFrame<TU, TV>
+        {
+            try
+            {
+                if (tfs == null) throw new ArgumentNullException(nameof(tfs));
+
+                #region build synchronized legends
+                int M = tfs.Count();
+                IReadOnlyList<DateTime> legends = tfs.First().Legends;
+
+                for (int i = 1; i < M; i++)
+                {
+                    DateTime[] candidats = tfs.ElementAt(i).Legends;
+
+                    ResultOutput<IReadOnlyList<DateTime>> qoIntersection = legends.Intersection(candidats);
+                    if (qoIntersection.Failed) throw new Exception(qoIntersection.Message);
+                    legends = qoIntersection.Result;
+                }
+                #endregion
+
+                if (legends == null || legends.Count == 0) throw new Exception($"No matching legends between timedataframe [{string.Join(";", tfs.Select(s => string.Join(";", s.Labels)))}]");
+
+                #region fill data
+                int N = legends.Count, k = 0; M = tfs.Sum(tf => tf.Labels.Length);
+                TU[][] data = Arrays.Build<TU>(N, M);
+                List<TV> labels = new List<TV>(M);
+
+                foreach(TimeDataFrame<TU, TV> candidat in tfs)
+                {
+                    int K = candidat.Labels.Length;
+                    for(int j = 0; j < K; j++)
+                    {
+                        for (int i = 0; i < N; i++) data[i][k] = candidat[i, j];
+                        k++;
+                    }
+                    labels.AddRange(candidat.Labels);
+                }
+                #endregion
+
+                return Create<TY>(labels, legends.ToArray(), data);
+            }
+
+            catch(Exception ex) { return ResultOutput < TY > .CreateFailed($"TimeDataFrame.CreateFromUnsynchronizedTF: {ex.Message}"); }            
+        }
         #endregion
 
-        #region index time series
-        /// <summary>
-        /// Build index for searching into the time series
-        /// </summary>
-        /// <param name="chunks">Chunk of time</param>
-        /// <param name="intraday">Precise if index is intraday or extraday</param>
+            #region index time series
+            /// <summary>
+            /// Build index for searching into the time series
+            /// </summary>
+            /// <param name="chunks">Chunk of time</param>
+            /// <param name="intraday">Precise if index is intraday or extraday</param>
         public void BuildIndex(IEnumerable<DateTime> chunks, bool intraday = false)
         {
             try

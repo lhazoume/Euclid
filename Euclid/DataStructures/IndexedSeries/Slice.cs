@@ -218,6 +218,16 @@ namespace Euclid.DataStructures.IndexedSeries
             return new Slice<T, TU, TV>(labels, legend, data);
         }
 
+        /// <summary>Builds a slice from generic enumerable labels and data</summary>
+        /// <param name="labels">the labels</param>
+        /// <param name="legend">the legend</param>
+        /// <param name="data">the data</param>
+        /// <returns>a <c>Slice</c></returns>
+        public static Slice<T, TU, TV> Create(IList<TV> labels, T legend, IEnumerable<TU> data)
+        {
+            return new Slice<T, TU, TV>(new Header<TV>(labels), legend, data);
+        }
+
         /// <summary>Builds a <c>Slice</c> from its CSV string</summary>
         /// <param name="text">the <c>String</c> content</param>
         public static Slice<T, TU, TV> Create(string text)

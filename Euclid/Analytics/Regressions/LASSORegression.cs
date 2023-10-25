@@ -182,7 +182,7 @@ namespace Euclid.Analytics.Regressions
             }
             #endregion
 
-            _linearModel = LinearModel.Create(b, W.Data, correls, n, sse, sst, residuals);
+            _linearModel = LinearModel.Create(yb, b, W.Data, correls, n, sse, sst, residuals);
             _status = RegressionStatus.Normal;
         }
     }

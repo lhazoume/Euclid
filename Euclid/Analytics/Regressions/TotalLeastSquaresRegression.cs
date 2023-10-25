@@ -222,7 +222,7 @@ namespace Euclid.Analytics.Regressions
                 }
                 #endregion
 
-                Linear = LinearModel.Create(alpha, Beta.Data, correls, Xs.Rows, sse, ssr, Vector.Create(e));
+                Linear = LinearModel.Create(y_, alpha, Beta.Data, correls, Xs.Rows, sse, ssr, Vector.Create(e));
             }
             #endregion
 
