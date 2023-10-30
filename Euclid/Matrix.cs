@@ -207,6 +207,8 @@ namespace Euclid
         {
             get
             {
+                if (Columns == 1 && Columns == Rows) return Create(Rows, Columns, 1 / this[0, 0]);
+
                 double[,] both = new double[_rows, 2 * _cols];
                 Parallel.For(0, _rows * _cols, l =>
                 {
