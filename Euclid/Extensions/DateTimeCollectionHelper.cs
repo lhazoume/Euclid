@@ -36,6 +36,7 @@ namespace Euclid.Extensions
                     else if (candidat > attempt)
                     {
                         while (k < matches.Count && matches[k] < candidat) k++;
+                        k += (k == matches.Count ? -1 : 0);
                         attempt = matches[k];
                     }
                     if (candidat == attempt) common.Add(candidat);
