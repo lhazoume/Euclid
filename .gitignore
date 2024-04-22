@@ -34,3 +34,17 @@ EuclidTests/obj
 *.targets
 *.props
 *.json
+/EuclidBenchmark/obj/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Benchmarking/obj/Benchmarking.csproj.nuget.dgspec.json
+/Benchmarking/obj/Benchmarking.csproj.nuget.g.props
+/Benchmarking/obj/Benchmarking.csproj.nuget.g.targets
+/Benchmarking/obj/project.assets.json
+/Benchmarking/obj/Debug/netstandard2.0/Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
+/Benchmarking/obj/Debug/netstandard2.0/Benchmarking.AssemblyInfo.cs
+/.vs/ProjectEvaluation/euclid.projects.v7.bin
+/.vs/ProjectEvaluation/euclid.metadata.v7.bin
+/.vs/Euclid/v17/.wsuo
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/Benchmarking/obj/Release/netstandard2.0/Benchmarking.AssemblyInfo.cs
+/Benchmarking/obj/Release/netstandard2.0/Benchmarking.GeneratedMSBuildEditorConfig.editorconfig
