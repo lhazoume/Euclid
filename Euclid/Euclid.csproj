@@ -134,6 +134,7 @@
     <Compile Include="DataStructures\IndexedSeries\TimeSeries.cs" />
     <Compile Include="DataStructures\SortedMap.cs" />
     <Compile Include="DataStructures\TreeNode.cs" />
+    <Compile Include="Distributions\Continuous\StudentDistribution.cs" />
     <Compile Include="Extensions\Subsets.cs" />
     <Compile Include="Complex.cs" />
     <Compile Include="Distributions\Continuous\CauchyDistribution.cs" />

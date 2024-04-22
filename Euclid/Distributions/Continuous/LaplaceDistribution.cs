@@ -3,9 +3,7 @@ using System;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Laplace distribution class
-    /// </summary>
+    /// <summary>Laplace distribution class</summary>
     public class LaplaceDistribution : ContinuousDistribution
     {
         #region Declarations
