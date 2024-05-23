@@ -4,13 +4,35 @@
         <name>Euclid</name>
     </assembly>
     <members>
+        <member name="T:Euclid.Analytics.Clustering.KMeans`1">
+            <summary>Represents a K-means clusterer</summary>
+            <typeparam name="T">the underlying object clustered</typeparam>
+        </member>
         <member name="M:Euclid.Analytics.Clustering.KMeans`1.#ctor(System.Func{System.Collections.Generic.IEnumerable{`0},`0},System.Func{`0,`0,System.Double},System.Int32)">
-            TODO: harden this function
+            <summary>Builds a K-means clusterer</summary>
+            <param name="aggregator"></param>
+            <param name="distance"></param>
+            <param name="maxIterations"></param>
+        </member>
+        <member name="P:Euclid.Analytics.Clustering.KMeans`1.MaxIterations">
+            <summary>Gets and sets the maximum number of iterations</summary>
         </member>
         <member name="M:Euclid.Analytics.Clustering.KMeans`1.Cluster(System.Collections.Generic.IList{`0},System.Int32)">
-            <summary>Provides the centroïds for the </summary>
+            <summary>Provides the centroïds for the K-means</summary>
             <param name="data">the data to cluster</param>
             <param name="numberOfClasses">the target number of classes</param>
+            <returns>an Enumerable of centroïds</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.KMeans`1.Classes(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})">
+            <summary>Returns the classes for all centroïds</summary>
+            <param name="data">the data to cluster</param>
+            <param name="centroids">the pre-calculated centroïds</param>
+            <returns>a dictionary of item list per centroïd index</returns>
+        </member>
+        <member name="M:Euclid.Analytics.Clustering.KMeans`1.ClusterSilhouette(System.Collections.Generic.IList{`0},System.Int32)">
+            <summary>Provides the optimal centroïds for the K-means using the silhouette criterion</summary>
+            <param name="data">the data to cluster</param>
+            <param name="maxNumberOfClasses">the maximum number of classes</param>
             <returns>an Enumerable of centroïds</returns>
         </member>
         <member name="T:Euclid.Analytics.Clustering.IDecisionNode`2">
@@ -257,6 +279,12 @@
             <param name="dataSeries">the input data series</param>
             <param name="lags">the lags for which the correlogram is calculated</param>
             <returns>an array of <c>double</c></returns>
+        </member>
+        <member name="M:Euclid.Analytics.InterRelations.Correlation(System.Double[],System.Double[])">
+            <summary>Gets the correlation between two time series</summary>
+            <param name="series1">the left hand side series</param>
+            <param name="series2">the right hand side series</param>
+            <returns>a double</returns>
         </member>
         <member name="T:Euclid.Analytics.LogisticModel">
             <summary>
@@ -1091,6 +1119,403 @@
             <param name="subsetSize">the subset size</param>
             <param name="startingIndex">the starting index</param>
             <returns>the list of subsets</returns>
+        </member>
+        <member name="P:Euclid.Benchmarking.CaseResult.Name">
+            <summary>Gets the case's name</summary>
+        </member>
+        <member name="P:Euclid.Benchmarking.CaseResult.Iterations">
+            <summary>Gets the case's iteration number</summary>
+        </member>
+        <member name="P:Euclid.Benchmarking.CaseResult.TimeSpan">
+            <summary>Gets the time taken to run the iterations</summary>
+        </member>
+        <member name="P:Euclid.Benchmarking.CaseResult.MemoryUsage">
+            <summary>Gets the memory used by the case</summary>
+        </member>
+        <member name="P:Euclid.Benchmarking.CaseResult.RunDate">
+            <summary>Gets the case run date</summary>
+        </member>
+        <member name="P:Euclid.Benchmarking.CaseResult.SerialNumber">
+            <summary>Get the motherboard's serial number</summary>
+        </member>
+        <member name="T:Euclid.Numerics.PiecewiseFunction">
+            <summary>Represents a piecewise function</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PiecewiseFunction.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Builds a piecewise function</summary>
+            <param name="cornerPoints">the corner points</param>
+            <param name="values">the bucket values</param>
+        </member>
+        <member name="P:Euclid.Numerics.PiecewiseFunction.Item(System.Double)">
+            <summary>Accesses the piecewise function for a given value</summary>
+            <param name="t">the input abscissa</param>
+            <returns>a double</returns>
+        </member>
+        <member name="T:Euclid.Numerics.FiniteDifferenceScheme">
+            <summary>Represents a finite difference scheme</summary>
+        </member>
+        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.Implicit">
+            <summary>Implicit scheme</summary>
+        </member>
+        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.Explicit">
+            <summary>Explicit scheme</summary>
+        </member>
+        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.CrankNicholson">
+            <summary>Crank Nicholson scheme</summary>
+        </member>
+        <member name="T:Euclid.Numerics.DifferenceForm">
+            <summary>
+            The difference form used to differentiate
+            </summary>
+        </member>
+        <member name="F:Euclid.Numerics.DifferenceForm.Forward">
+            <summary>the forward-rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.DifferenceForm.Backward">
+            <summary>the backward-rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.DifferenceForm.Central">
+            <summary>the central-rule</summary>
+        </member>
+        <member name="T:Euclid.Numerics.Differentiator">
+            <summary>Numeric differentiation class</summary>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double})">
+            <summary> First degree numerical differentiation</summary>
+            <param name="function">the function to differentiate</param>
+            <returns>the derivative</returns>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double},Euclid.Numerics.DifferenceForm,System.Double)">
+            <summary>First degree numerical differentiation</summary>
+            <param name="function">the function to differentiate</param>
+            <param name="form">the differentiation form</param>
+            <param name="step">the differentiation step</param>
+            <returns>the derivative</returns>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double},System.Int32,Euclid.Numerics.DifferenceForm,System.Double)">
+            <summary> High degree numerical differentiation</summary>
+            <param name="function">the function to differentiate</param>
+            <param name="n">the degree</param>
+            <param name="form">the differentiation form</param>
+            <param name="step">the differentiation step</param>
+            <returns>the n-degree derivative</returns>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Hessian(System.Func{Euclid.Vector,System.Double},Euclid.Vector)">
+            <summary> High degree numerical differentiation</summary>
+            <param name="function">the function to differentiate</param>
+            <param name="bump">the differentiation step</param>
+            <returns>the hessian matrix</returns>
+        </member>
+        <member name="T:Euclid.Numerics.IntegrationForm">
+            <summary>
+            The integration method
+            </summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Left">
+            <summary>Left-point rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Right">
+            <summary>Right-point rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Middle">
+            <summary>Middle-point rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Trapeze">
+            <summary>Trapeze rule</summary>
+        </member>
+        <member name="F:Euclid.Numerics.IntegrationForm.Simpson">
+            <summary>Simpson rule</summary>
+        </member>
+        <member name="T:Euclid.Numerics.Integrator">
+            <summary>
+            Iterative processor to calculate the integral of a function over an interval
+            </summary>
+        </member>
+        <member name="M:Euclid.Numerics.Integrator.#ctor(System.Double,System.Double,System.Func{System.Double,System.Double},Euclid.Numerics.IntegrationForm,System.Int32)">
+            <summary>
+            Builds a <c>Integrator</c>
+            </summary>
+            <param name="a">the lower bound of the interval</param>
+            <param name="b">the upper bound of the interval</param>
+            <param name="f">the function to integrate</param>
+            <param name="form">the IntegrationForm use to approximate</param>
+            <param name="maxIterations">the maximum iterations </param>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Function">
+            <summary>
+            Gets and sets the function to integrate
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.MaxIterations">
+            <summary>
+            Gets and sets the maximum number of iterations
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.LowerBound">
+            <summary>
+            Gets and sets the lower bound of the interval
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.UpperBound">
+            <summary>
+            Gets and sets the upper bound of the interval
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Form">
+            <summary>
+            Gets and sets the integration form
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Error">
+            <summary>
+            Returns the error of the integration
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Status">
+            <summary>Returns the status of the solver after the integration process</summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Result">
+            <summary>Returns the integral value of the function</summary>
+        </member>
+        <member name="P:Euclid.Numerics.Integrator.Convergence">
+            <summary>Returns the details of the convergence sequence (integral and error)</summary>
+        </member>
+        <member name="M:Euclid.Numerics.Integrator.Integrate">
+            <summary>
+            Performs the iterative integration of the function
+            </summary>
+        </member>
+        <member name="T:Euclid.Numerics.NumericalSeriesCumulator">
+            <summary>Calculates the sum of the numerical series</summary>
+        </member>
+        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.#ctor(System.Int64,System.Func{System.Int64,System.Double},System.Int32)">
+            <summary>Builds a cumulative calculator of numerical series</summary>
+            <param name="initialIndex">the initial index of the sum</param>
+            <param name="series">the series function</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.InitialIndex">
+            <summary>Gets and sets the initial index of the sum</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.MaxIterations">
+            <summary>Gets and sets the maximum number of iterations</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Tolerance">
+            <summary>
+            Gets and sets the tolerance for the target (threshold for target reached)
+            </summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Iterations">
+            <summary>Gets the number of interations of the cumulator</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Sum">
+            <summary>Gets the cumulated sum of the series</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Status">
+            <summary>Gets the final status of the cumulator</summary>
+        </member>
+        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Convergence">
+            <summary>Gets the details of the convergence (value)</summary>
+        </member>
+        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.Calculate">
+            <summary>Sums the series until convergence or exhaustion of the iterations</summary>
+        </member>
+        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.CalculateAitken">
+            <summary>Sums the series until convergence or exhaustion of the iterations (using the Aitken Delta Squared method)</summary>
+        </member>
+        <member name="T:Euclid.Numerics.NumericalSeriesStatus">
+            <summary>The status of the numerical series status</summary>
+        </member>
+        <member name="F:Euclid.Numerics.NumericalSeriesStatus.NotRan">
+            <summary>The cumulator did not run</summary>
+        </member>
+        <member name="F:Euclid.Numerics.NumericalSeriesStatus.Diverged">
+            <summary>The cumulator diverged</summary>
+        </member>
+        <member name="F:Euclid.Numerics.NumericalSeriesStatus.Normal">
+            <summary>The cumulator ran as expected</summary>
+        </member>
+        <member name="F:Euclid.Numerics.NumericalSeriesStatus.IterationExceeded">
+            <summary>The cumulator exceeded its maximum number of iterations</summary>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration">
+            <summary>Represents a grid configuration for univariate PDEs</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Builds a univariate EDP grid configuration</summary>
+            <param name="tBuckets">the time buckets</param>
+            <param name="xBuckets">the x-buckets</param>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeCount">
+            <summary>Returns the number of time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeBuckets">
+            <summary>Returns the time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeIncrements">
+            <summary>Returns the time increments</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XCount">
+            <summary>Returns the number of X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XBuckets">
+            <summary>Returns the X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XIncrements">
+            <summary>Returns the X increments</summary>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE">
+            <summary>Represents a bivariate partial derivative equation</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration)">
+            <summary>Builds a Bivariate Partial Derivative Equation grid</summary>
+            <param name="configuration">the grid configuration</param>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Value(System.Int32,System.Int32,System.Int32)">
+            <summary>Returns the grid value for a given date, x index, and y index</summary>
+            <param name="t">the date index</param>
+            <param name="xIndex">the x index</param>
+            <param name="yIndex">the y index</param>
+            <returns>a double</returns>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.VALUE">
+            <summary>Index of the value matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XDERIVATIVE">
+            <summary>Index of the x derivative matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.YDERIVATIVE">
+            <summary>Index of the y derivative matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XCONVEXITY">
+            <summary>Index of the x second order derivative matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.YCONVEXITY">
+            <summary>Index of the y second order derivative matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XYCONVECITY">
+            <summary>Index of the xy cross derivative matrix</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Matrices(System.Int32)">
+            <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
+            <param name="t">the date index</param>
+            <returns>a set of <c>Matrix</c></returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Set(System.Int32,Euclid.Matrix)">
+            <summary>Sets the grid value for a given date</summary>
+            <param name="t">the date index</param>
+            <param name="value">the value grid</param>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.ExerciceFrontier(Euclid.Matrix,Euclid.Matrix)">
+            <summary>Computes the exercice frontier</summary>
+            <param name="expected">the expected value matrix</param>
+            <param name="intrinsic">the intrinsic value matrix</param>
+            <returns>a <c>Matrix</c></returns>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration">
+            <summary>Represents a grid configuration for bivariate PDEs</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Builds a bivariate EDP grid configuration</summary>
+            <param name="tBuckets">the time buckets</param>
+            <param name="xBuckets">the x-buckets</param>
+            <param name="yBuckets">the y-buckets</param>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeCount">
+            <summary>Returns the number of time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeBuckets">
+            <summary>Returns the time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeIncrements">
+            <summary>Returns the time increments</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XCount">
+            <summary>Returns the number of X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XBuckets">
+            <summary>Returns the X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XIncrements">
+            <summary>Returns the X increments</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YCount">
+            <summary>Returns the number of Y buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YBuckets">
+            <summary>Returns the Y buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YIncrements">
+            <summary>Returns the Y increments</summary>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE">
+            <summary>Represents a one-dimensional PDE</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration)">
+            <summary>Builds a univariate PDE (1D)</summary>
+            <param name="configuration">the grid configuration</param>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Value(System.Int32,System.Int32)">
+            <summary>Returns the grid value for a given date, x index</summary>
+            <param name="t">the date index</param>
+            <param name="xIndex">the x index</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(Euclid.Matrix,System.Int32,System.Int32)">
+            <summary>
+            Retropropagates for the given index to the previous step
+            using the given matrix representation of the PDE operator
+            </summary>
+            <param name="operatorMatrix">the operator matrix</param>
+            <param name="anteriorIndex">the index <b>to</b> which the data is retropropagated</param>
+            <param name="posteriorIndex">the index <b>from</b> which the data is retropropagated</param>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Item(System.Int32)">
+            <summary>Sets the grid value for a given date</summary>
+            <param name="t">the date index</param>
+            <param name="value">the value grid</param>
+        </member>
+        <member name="T:Euclid.Point3D">
+            <summary>Represents a 2-dimensional point</summary>
+        </member>
+        <member name="F:Euclid.Point3D.X">
+            <summary>Gets and sets the point's abscissa</summary>
+        </member>
+        <member name="F:Euclid.Point3D.Y">
+            <summary>Gets and sets the point's ordinate</summary>
+        </member>
+        <member name="F:Euclid.Point3D.Z">
+            <summary>Gets and sets the point's depth</summary>
+        </member>
+        <member name="M:Euclid.Point3D.#ctor(System.Double,System.Double,System.Double)">
+            <summary>Builds a 2-dimensional point</summary>
+            <param name="x">the abscissa</param>
+            <param name="y">the ordinate</param>
+            <param name="z">the depth</param>
+        </member>
+        <member name="M:Euclid.Point3D.Equals(Euclid.Point3D)">
+            <summary>Checks if two points are congruent</summary>
+            <param name="other">the alternate point</param>
+            <returns><c>true</c> if congruent, <c>false</c> otherwise</returns>
+        </member>
+        <member name="T:Euclid.Point2D">
+            <summary>Represents a 2-dimensional point</summary>
+        </member>
+        <member name="F:Euclid.Point2D.X">
+            <summary>Gets and sets he point's abscissa</summary>
+        </member>
+        <member name="F:Euclid.Point2D.Y">
+            <summary>Gets and sets he point's ordinate</summary>
+        </member>
+        <member name="M:Euclid.Point2D.#ctor(System.Double,System.Double)">
+            <summary>Builds a 2-dimensional point</summary>
+            <param name="x">the abscissa</param>
+            <param name="y">the ordinate</param>
+        </member>
+        <member name="M:Euclid.Point2D.Equals(Euclid.Point2D)">
+            <summary>Checks if two points are congruent</summary>
+            <param name="other">the alternate point</param>
+            <returns><c>true</c> if congruent, <c>false</c> otherwise</returns>
         </member>
         <member name="T:Euclid.DataStructures.CachedFunction`2">
             <summary>Class allowing to cache calculation results</summary>
@@ -2074,135 +2499,16 @@
         <member name="M:Euclid.DataStructures.Map`2.Clone">
             <summary>Gets a deep copy of the map</summary>
         </member>
-        <member name="T:Euclid.Complex">
-            <summary>Represents complex numbers</summary>
+        <member name="T:Euclid.Distributions.Continuous.StudentDistribution">
+            <summary>Student distribution class</summary>
         </member>
-        <member name="M:Euclid.Complex.#ctor(System.Double,System.Double)">
-            <summary>
-            Builds a <c>Complex</c> number
-            </summary>
-            <param name="real">the real part of the <c>Complex</c></param>
-            <param name="imaginary">the imaginary part of the <c>Complex</c></param>
+        <member name="P:Euclid.Distributions.Continuous.StudentDistribution.Entropy">
+            <summary>Gets the distribution's entropy</summary>
         </member>
-        <member name="M:Euclid.Complex.#ctor">
-            <summary>
-            Builds a <c>Complex</c> number with its real and imaginary parts at zero
-            </summary>
-        </member>
-        <member name="P:Euclid.Complex.Re">
-            <summary>Returns the real part of the <c>Complex</c></summary>
-        </member>
-        <member name="P:Euclid.Complex.Im">
-            <summary>Returns the imaginary part of the <c>Complex</c></summary>
-        </member>
-        <member name="P:Euclid.Complex.Conjugate">
-            <summary>The conjugate number of the <c>Complex</c></summary>
-        </member>
-        <member name="M:Euclid.Complex.Modulus">
-            <summary>Returns the modulus of the <c>Complex</c></summary>
-            <returns>the modulus of the complex</returns>
-        </member>
-        <member name="M:Euclid.Complex.SquareModulus">
-            <summary>Returns the square of the modulus of the <c>Complex</c></summary>
-            <returns>a double</returns>
-        </member>
-        <member name="M:Euclid.Complex.Argument">
-            <summary>
-            Returns the argument of the <c>Complex</c> (between -Pi and +Pi)
-            </summary>
-            <returns>the argument of the <c>Complex</c></returns>
-        </member>
-        <member name="M:Euclid.Complex.ToString">
-            <summary>
-            Returns a string that represents the <c>Complex</c>
-            </summary>
-            <returns>a string that represents the <c>Complex</c></returns>
-        </member>
-        <member name="M:Euclid.Complex.ToString(System.String)">
-            <summary>
-            returns a string that represents the <c>Complex</c> with the specified format to the composants
-            </summary>
-            <param name="format">the format string</param>
-            <returns>a string that represents the <c>Complex</c></returns>
-        </member>
-        <member name="P:Euclid.Complex.I">
-            <summary>Returns the imaginary number <c>i</c></summary>
-        </member>
-        <member name="P:Euclid.Complex.One">
-            <summary>Returns the complex representation of the real number 1</summary>
-        </member>
-        <member name="P:Euclid.Complex.Zero">
-            <summary>Returns a complex with both imaginary and real parts equal to zero</summary>
-        </member>
-        <member name="M:Euclid.Complex.Exp(Euclid.Complex)">
-            <summary>Returns a complex from its exponential form </summary>
-            <param name="complex">the exponential argument</param>
-            <returns>a <c>Complex</c></returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Addition(Euclid.Complex,Euclid.Complex)">
-            <summary>Allows to add a complex to another complex</summary>
-            <param name="lhs">the right hand side</param>
-            <param name="rhs">the left hand side</param>
-            <returns>the <c>Complex</c> result of the addition</returns>
-        </member>
-        <member name="M:Euclid.Complex.Add(Euclid.Complex,System.Double)">
-            <summary>Allows to add a scalar to a complex</summary>
-            <param name="complex">the complex left hand side</param>
-            <param name="addon">the scalar right hand side</param>
-            <returns>the <c>Complex</c> result of the addition</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Addition(Euclid.Complex,System.Double)">
-            <summary>Allows to add a scalar to a complex</summary>
-            <param name="complex">the complex left hand side</param>
-            <param name="addon">the scalar right hand side</param>
-            <returns>the <c>Complex</c> result of the addition</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Addition(System.Double,Euclid.Complex)">
-            <summary>Allows to add a scalar to a complex</summary>
-            <param name="addon">the scalar right hand side </param>
-            <param name="complex">the complex left hand side</param>
-            <returns>the <c>Complex</c> result of the addition</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Subtraction(Euclid.Complex,Euclid.Complex)">
-            <summary>Allows to substract a complex to another complex</summary>
-            <param name="rhs">the right hand side</param>
-            <param name="lhs">the left hand side</param>
-            <returns>the <c>Complex</c> result of the substraction</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Multiply(Euclid.Complex,Euclid.Complex)">
-            <summary>Allows to multiply a complex by another complex</summary>
-            <param name="lhs">the left hand side</param>
-            <param name="rhs">the right hand side</param>
-            <returns>the <c>Complex</c> result of the multiplication</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Multiply(Euclid.Complex,System.Double)">
-            <summary>Allows to multiply a complex by a scalar</summary>
-            <param name="complex">the complex number</param>
-            <param name="factor">the scalar</param>
-            <returns>the <c>Complex</c> result of the multiplication</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Multiply(System.Double,Euclid.Complex)">
-            <summary>Allows to multiply a complex by a scalar</summary>
-            <param name="factor">the scalar</param>
-            <param name="complex">the complex number</param>
-            <returns>the <c>Complex</c> result of the multiplication</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Division(Euclid.Complex,Euclid.Complex)">
-            <summary>Allows to divide a complex by another complex</summary>
-            <param name="numerator">the numerator</param>
-            <param name="denominator">the denominator</param>
-            <returns>the <c>Complex</c> result of the division</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_Division(Euclid.Complex,System.Double)">
-            <summary>Allows to divide a complex by a double</summary>
-            <param name="complex">the numerator</param>
-            <param name="factor">the denominator</param>
-            <returns>the <c>Complex</c> result of the division</returns>
-        </member>
-        <member name="M:Euclid.Complex.op_UnaryNegation(Euclid.Complex)">
-            <summary>Returns the opposite of the complex</summary>
-            <param name="complex">the <c>Complex</c></param>
-            <returns>the opposite complex</returns>
+        <member name="M:Euclid.Distributions.Continuous.StudentDistribution.ProbabilityDensity(System.Double)">
+            <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+            <param name="x">The location at which to compute the density</param>
+            <returns>a <c>double</c></returns>
         </member>
         <member name="T:Euclid.Distributions.Continuous.CauchyDistribution">
             <summary>
@@ -2692,9 +2998,7 @@
             </summary>
         </member>
         <member name="T:Euclid.Distributions.Continuous.LaplaceDistribution">
-            <summary>
-            Laplace distribution class
-            </summary>
+            <summary>Laplace distribution class</summary>
         </member>
         <member name="M:Euclid.Distributions.Continuous.LaplaceDistribution.#ctor(System.Double,System.Double)">
             <summary>Initializes a new instance of the Laplace distribution</summary>
@@ -3726,8 +4030,145 @@
         <member name="P:Euclid.Distributions.IDistribution.Variance">
             <summary>Returns the distribution's variance</summary>
         </member>
+        <member name="T:Euclid.Complex">
+            <summary>Represents complex numbers</summary>
+        </member>
+        <member name="M:Euclid.Complex.#ctor(System.Double,System.Double)">
+            <summary>
+            Builds a <c>Complex</c> number
+            </summary>
+            <param name="real">the real part of the <c>Complex</c></param>
+            <param name="imaginary">the imaginary part of the <c>Complex</c></param>
+        </member>
+        <member name="M:Euclid.Complex.#ctor">
+            <summary>
+            Builds a <c>Complex</c> number with its real and imaginary parts at zero
+            </summary>
+        </member>
+        <member name="P:Euclid.Complex.Re">
+            <summary>Returns the real part of the <c>Complex</c></summary>
+        </member>
+        <member name="P:Euclid.Complex.Im">
+            <summary>Returns the imaginary part of the <c>Complex</c></summary>
+        </member>
+        <member name="P:Euclid.Complex.Conjugate">
+            <summary>The conjugate number of the <c>Complex</c></summary>
+        </member>
+        <member name="M:Euclid.Complex.Modulus">
+            <summary>Returns the modulus of the <c>Complex</c></summary>
+            <returns>the modulus of the complex</returns>
+        </member>
+        <member name="M:Euclid.Complex.SquareModulus">
+            <summary>Returns the square of the modulus of the <c>Complex</c></summary>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Complex.Argument">
+            <summary>
+            Returns the argument of the <c>Complex</c> (between -Pi and +Pi)
+            </summary>
+            <returns>the argument of the <c>Complex</c></returns>
+        </member>
+        <member name="M:Euclid.Complex.ToString">
+            <summary>
+            Returns a string that represents the <c>Complex</c>
+            </summary>
+            <returns>a string that represents the <c>Complex</c></returns>
+        </member>
+        <member name="M:Euclid.Complex.ToString(System.String)">
+            <summary>
+            returns a string that represents the <c>Complex</c> with the specified format to the composants
+            </summary>
+            <param name="format">the format string</param>
+            <returns>a string that represents the <c>Complex</c></returns>
+        </member>
+        <member name="P:Euclid.Complex.I">
+            <summary>Returns the imaginary number <c>i</c></summary>
+        </member>
+        <member name="P:Euclid.Complex.One">
+            <summary>Returns the complex representation of the real number 1</summary>
+        </member>
+        <member name="P:Euclid.Complex.Zero">
+            <summary>Returns a complex with both imaginary and real parts equal to zero</summary>
+        </member>
+        <member name="M:Euclid.Complex.Exp(Euclid.Complex)">
+            <summary>Returns a complex from its exponential form </summary>
+            <param name="complex">the exponential argument</param>
+            <returns>a <c>Complex</c></returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Addition(Euclid.Complex,Euclid.Complex)">
+            <summary>Allows to add a complex to another complex</summary>
+            <param name="lhs">the right hand side</param>
+            <param name="rhs">the left hand side</param>
+            <returns>the <c>Complex</c> result of the addition</returns>
+        </member>
+        <member name="M:Euclid.Complex.Add(Euclid.Complex,System.Double)">
+            <summary>Allows to add a scalar to a complex</summary>
+            <param name="complex">the complex left hand side</param>
+            <param name="addon">the scalar right hand side</param>
+            <returns>the <c>Complex</c> result of the addition</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Addition(Euclid.Complex,System.Double)">
+            <summary>Allows to add a scalar to a complex</summary>
+            <param name="complex">the complex left hand side</param>
+            <param name="addon">the scalar right hand side</param>
+            <returns>the <c>Complex</c> result of the addition</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Addition(System.Double,Euclid.Complex)">
+            <summary>Allows to add a scalar to a complex</summary>
+            <param name="addon">the scalar right hand side </param>
+            <param name="complex">the complex left hand side</param>
+            <returns>the <c>Complex</c> result of the addition</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Subtraction(Euclid.Complex,Euclid.Complex)">
+            <summary>Allows to substract a complex to another complex</summary>
+            <param name="rhs">the right hand side</param>
+            <param name="lhs">the left hand side</param>
+            <returns>the <c>Complex</c> result of the substraction</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Multiply(Euclid.Complex,Euclid.Complex)">
+            <summary>Allows to multiply a complex by another complex</summary>
+            <param name="lhs">the left hand side</param>
+            <param name="rhs">the right hand side</param>
+            <returns>the <c>Complex</c> result of the multiplication</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Multiply(Euclid.Complex,System.Double)">
+            <summary>Allows to multiply a complex by a scalar</summary>
+            <param name="complex">the complex number</param>
+            <param name="factor">the scalar</param>
+            <returns>the <c>Complex</c> result of the multiplication</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Multiply(System.Double,Euclid.Complex)">
+            <summary>Allows to multiply a complex by a scalar</summary>
+            <param name="factor">the scalar</param>
+            <param name="complex">the complex number</param>
+            <returns>the <c>Complex</c> result of the multiplication</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Division(Euclid.Complex,Euclid.Complex)">
+            <summary>Allows to divide a complex by another complex</summary>
+            <param name="numerator">the numerator</param>
+            <param name="denominator">the denominator</param>
+            <returns>the <c>Complex</c> result of the division</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_Division(Euclid.Complex,System.Double)">
+            <summary>Allows to divide a complex by a double</summary>
+            <param name="complex">the numerator</param>
+            <param name="factor">the denominator</param>
+            <returns>the <c>Complex</c> result of the division</returns>
+        </member>
+        <member name="M:Euclid.Complex.op_UnaryNegation(Euclid.Complex)">
+            <summary>Returns the opposite of the complex</summary>
+            <param name="complex">the <c>Complex</c></param>
+            <returns>the opposite complex</returns>
+        </member>
         <member name="T:Euclid.Extensions.Arrays">
             <summary>Helper class for generic array manipulations</summary>
+        </member>
+        <member name="M:Euclid.Extensions.Arrays.Build``1(System.Int32,System.Int32)">
+            <summary>Returns a jagged array of the right type</summary>
+            <typeparam name="T">the underlying type</typeparam>
+            <param name="rows">the array's number of rows</param>
+            <param name="columns">the array's number of columuns</param>
+            <returns>a jagged array</returns>
         </member>
         <member name="M:Euclid.Extensions.Arrays.Clone``1(``0[][])">
             <summary>Clones a jagged array</summary>
@@ -4651,330 +5092,6 @@
             <summary>Returns a string that represents the matrix</summary>
             <returns>a string that represents the matrix</returns>
         </member>
-        <member name="T:Euclid.Numerics.FiniteDifferenceScheme">
-            <summary>Represents a finite difference scheme</summary>
-        </member>
-        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.Implicit">
-            <summary>Implicit scheme</summary>
-        </member>
-        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.Explicit">
-            <summary>Explicit scheme</summary>
-        </member>
-        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.CrankNicholson">
-            <summary>Crank Nicholson scheme</summary>
-        </member>
-        <member name="T:Euclid.Numerics.DifferenceForm">
-            <summary>
-            The difference form used to differentiate
-            </summary>
-        </member>
-        <member name="F:Euclid.Numerics.DifferenceForm.Forward">
-            <summary>the forward-rule</summary>
-        </member>
-        <member name="F:Euclid.Numerics.DifferenceForm.Backward">
-            <summary>the backward-rule</summary>
-        </member>
-        <member name="F:Euclid.Numerics.DifferenceForm.Central">
-            <summary>the central-rule</summary>
-        </member>
-        <member name="T:Euclid.Numerics.Differentiator">
-            <summary>Numeric differentiation class</summary>
-        </member>
-        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double})">
-            <summary> First degree numerical differentiation</summary>
-            <param name="function">the function to differentiate</param>
-            <returns>the derivative</returns>
-        </member>
-        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double},Euclid.Numerics.DifferenceForm,System.Double)">
-            <summary>First degree numerical differentiation</summary>
-            <param name="function">the function to differentiate</param>
-            <param name="form">the differentiation form</param>
-            <param name="step">the differentiation step</param>
-            <returns>the derivative</returns>
-        </member>
-        <member name="M:Euclid.Numerics.Differentiator.Differentiate(System.Func{System.Double,System.Double},System.Int32,Euclid.Numerics.DifferenceForm,System.Double)">
-            <summary> High degree numerical differentiation</summary>
-            <param name="function">the function to differentiate</param>
-            <param name="n">the degree</param>
-            <param name="form">the differentiation form</param>
-            <param name="step">the differentiation step</param>
-            <returns>the n-degree derivative</returns>
-        </member>
-        <member name="M:Euclid.Numerics.Differentiator.Hessian(System.Func{Euclid.Vector,System.Double},Euclid.Vector)">
-            <summary> High degree numerical differentiation</summary>
-            <param name="function">the function to differentiate</param>
-            <param name="bump">the differentiation step</param>
-            <returns>the hessian matrix</returns>
-        </member>
-        <member name="T:Euclid.Numerics.IntegrationForm">
-            <summary>
-            The integration method
-            </summary>
-        </member>
-        <member name="F:Euclid.Numerics.IntegrationForm.Left">
-            <summary>Left-point rule</summary>
-        </member>
-        <member name="F:Euclid.Numerics.IntegrationForm.Right">
-            <summary>Right-point rule</summary>
-        </member>
-        <member name="F:Euclid.Numerics.IntegrationForm.Middle">
-            <summary>Middle-point rule</summary>
-        </member>
-        <member name="F:Euclid.Numerics.IntegrationForm.Trapeze">
-            <summary>Trapeze rule</summary>
-        </member>
-        <member name="F:Euclid.Numerics.IntegrationForm.Simpson">
-            <summary>Simpson rule</summary>
-        </member>
-        <member name="T:Euclid.Numerics.Integrator">
-            <summary>
-            Iterative processor to calculate the integral of a function over an interval
-            </summary>
-        </member>
-        <member name="M:Euclid.Numerics.Integrator.#ctor(System.Double,System.Double,System.Func{System.Double,System.Double},Euclid.Numerics.IntegrationForm,System.Int32)">
-            <summary>
-            Builds a <c>Integrator</c>
-            </summary>
-            <param name="a">the lower bound of the interval</param>
-            <param name="b">the upper bound of the interval</param>
-            <param name="f">the function to integrate</param>
-            <param name="form">the IntegrationForm use to approximate</param>
-            <param name="maxIterations">the maximum iterations </param>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.Function">
-            <summary>
-            Gets and sets the function to integrate
-            </summary>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.MaxIterations">
-            <summary>
-            Gets and sets the maximum number of iterations
-            </summary>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.LowerBound">
-            <summary>
-            Gets and sets the lower bound of the interval
-            </summary>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.UpperBound">
-            <summary>
-            Gets and sets the upper bound of the interval
-            </summary>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.Form">
-            <summary>
-            Gets and sets the integration form
-            </summary>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.Error">
-            <summary>
-            Returns the error of the integration
-            </summary>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.Status">
-            <summary>Returns the status of the solver after the integration process</summary>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.Result">
-            <summary>Returns the integral value of the function</summary>
-        </member>
-        <member name="P:Euclid.Numerics.Integrator.Convergence">
-            <summary>Returns the details of the convergence sequence (integral and error)</summary>
-        </member>
-        <member name="M:Euclid.Numerics.Integrator.Integrate">
-            <summary>
-            Performs the iterative integration of the function
-            </summary>
-        </member>
-        <member name="T:Euclid.Numerics.NumericalSeriesCumulator">
-            <summary>Calculates the sum of the numerical series</summary>
-        </member>
-        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.#ctor(System.Int64,System.Func{System.Int64,System.Double},System.Int32)">
-            <summary>Builds a cumulative calculator of numerical series</summary>
-            <param name="initialIndex">the initial index of the sum</param>
-            <param name="series">the series function</param>
-            <param name="maxIterations">the maximum number of iterations</param>
-        </member>
-        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.InitialIndex">
-            <summary>Gets and sets the initial index of the sum</summary>
-        </member>
-        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.MaxIterations">
-            <summary>Gets and sets the maximum number of iterations</summary>
-        </member>
-        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Tolerance">
-            <summary>
-            Gets and sets the tolerance for the target (threshold for target reached)
-            </summary>
-        </member>
-        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Iterations">
-            <summary>Gets the number of interations of the cumulator</summary>
-        </member>
-        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Sum">
-            <summary>Gets the cumulated sum of the series</summary>
-        </member>
-        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Status">
-            <summary>Gets the final status of the cumulator</summary>
-        </member>
-        <member name="P:Euclid.Numerics.NumericalSeriesCumulator.Convergence">
-            <summary>Gets the details of the convergence (value)</summary>
-        </member>
-        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.Calculate">
-            <summary>Sums the series until convergence or exhaustion of the iterations</summary>
-        </member>
-        <member name="M:Euclid.Numerics.NumericalSeriesCumulator.CalculateAitken">
-            <summary>Sums the series until convergence or exhaustion of the iterations (using the Aitken Delta Squared method)</summary>
-        </member>
-        <member name="T:Euclid.Numerics.NumericalSeriesStatus">
-            <summary>The status of the numerical series status</summary>
-        </member>
-        <member name="F:Euclid.Numerics.NumericalSeriesStatus.NotRan">
-            <summary>The cumulator did not run</summary>
-        </member>
-        <member name="F:Euclid.Numerics.NumericalSeriesStatus.Diverged">
-            <summary>The cumulator diverged</summary>
-        </member>
-        <member name="F:Euclid.Numerics.NumericalSeriesStatus.Normal">
-            <summary>The cumulator ran as expected</summary>
-        </member>
-        <member name="F:Euclid.Numerics.NumericalSeriesStatus.IterationExceeded">
-            <summary>The cumulator exceeded its maximum number of iterations</summary>
-        </member>
-        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration">
-            <summary>Represents a grid configuration for univariate PDEs</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
-            <summary>Builds a univariate EDP grid configuration</summary>
-            <param name="tBuckets">the time buckets</param>
-            <param name="xBuckets">the x-buckets</param>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeCount">
-            <summary>Returns the number of time buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeBuckets">
-            <summary>Returns the time buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeIncrements">
-            <summary>Returns the time increments</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XCount">
-            <summary>Returns the number of X buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XBuckets">
-            <summary>Returns the X buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XIncrements">
-            <summary>Returns the X increments</summary>
-        </member>
-        <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE">
-            <summary>Represents a bivariate partial derivative equation</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration)">
-            <summary>Builds a Bivariate Partial Derivative Equation grid</summary>
-            <param name="configuration">the grid configuration</param>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Value(System.Int32,System.Int32,System.Int32)">
-            <summary>Returns the grid value for a given date, x index, and y index</summary>
-            <param name="t">the date index</param>
-            <param name="xIndex">the x index</param>
-            <param name="yIndex">the y index</param>
-            <returns>a double</returns>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.VALUE">
-            <summary>Index of the value matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XDERIVATIVE">
-            <summary>Index of the x derivative matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.YDERIVATIVE">
-            <summary>Index of the y derivative matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XCONVEXITY">
-            <summary>Index of the x second order derivative matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.YCONVEXITY">
-            <summary>Index of the y second order derivative matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XYCONVECITY">
-            <summary>Index of the xy cross derivative matrix</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Matrices(System.Int32)">
-            <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
-            <param name="t">the date index</param>
-            <returns>a set of <c>Matrix</c></returns>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Set(System.Int32,Euclid.Matrix)">
-            <summary>Sets the grid value for a given date</summary>
-            <param name="t">the date index</param>
-            <param name="value">the value grid</param>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.ExerciceFrontier(Euclid.Matrix,Euclid.Matrix)">
-            <summary>Computes the exercice frontier</summary>
-            <param name="expected">the expected value matrix</param>
-            <param name="intrinsic">the intrinsic value matrix</param>
-            <returns>a <c>Matrix</c></returns>
-        </member>
-        <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration">
-            <summary>Represents a grid configuration for bivariate PDEs</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
-            <summary>Builds a bivariate EDP grid configuration</summary>
-            <param name="tBuckets">the time buckets</param>
-            <param name="xBuckets">the x-buckets</param>
-            <param name="yBuckets">the y-buckets</param>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeCount">
-            <summary>Returns the number of time buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeBuckets">
-            <summary>Returns the time buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeIncrements">
-            <summary>Returns the time increments</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XCount">
-            <summary>Returns the number of X buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XBuckets">
-            <summary>Returns the X buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XIncrements">
-            <summary>Returns the X increments</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YCount">
-            <summary>Returns the number of Y buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YBuckets">
-            <summary>Returns the Y buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YIncrements">
-            <summary>Returns the Y increments</summary>
-        </member>
-        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE">
-            <summary>Represents a one-dimensional PDE</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration)">
-            <summary>Builds a univariate PDE (1D)</summary>
-            <param name="configuration">the grid configuration</param>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Value(System.Int32,System.Int32)">
-            <summary>Returns the grid value for a given date, x index</summary>
-            <param name="t">the date index</param>
-            <param name="xIndex">the x index</param>
-            <returns>a double</returns>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(Euclid.Matrix,System.Int32,System.Int32)">
-            <summary>
-            Retropropagates for the given index to the previous step
-            using the given matrix representation of the PDE operator
-            </summary>
-            <param name="operatorMatrix">the operator matrix</param>
-            <param name="anteriorIndex">the index <b>to</b> which the data is retropropagated</param>
-            <param name="posteriorIndex">the index <b>from</b> which the data is retropropagated</param>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Item(System.Int32)">
-            <summary>Sets the grid value for a given date</summary>
-            <param name="t">the date index</param>
-            <param name="value">the value grid</param>
-        </member>
         <member name="T:Euclid.Optimizers.PatternSearch">
             <summary>Pattern search class</summary>
         </member>
@@ -5145,6 +5262,12 @@
         </member>
         <member name="P:Euclid.Optimizers.GradientDescent.Result">
             <summary>The result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.InitialGuess">
+            <summary>Gets and sets the initial guess</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.Feasibility">
+            <summary>Gets and sets the feasibility function</summary>
         </member>
         <member name="P:Euclid.Optimizers.GradientDescent.Convergence">
             <summary>Gets the details of the convergence (gradient norm, error)</summary>
@@ -5577,6 +5700,17 @@
             <param name="startRange">The starting index of the range to search</param>
             <param name="endRange">The ending index of the range to search</param>
             <returns>The first index that satisfying the predicate else -1</returns>
+        </member>
+        <member name="T:Euclid.Serialization.StringWriterWithEncoding">
+            <summary>Overrides the string writer to allow for a specific encoding</summary>
+        </member>
+        <member name="M:Euclid.Serialization.StringWriterWithEncoding.#ctor(System.Text.StringBuilder,System.Text.Encoding)">
+            <summary>Builds a StringWrtiter with the possibility to specify the encoding</summary>
+            <param name="sb">the underlying StringBuilder</param>
+            <param name="encoding">the Encoding</param>
+        </member>
+        <member name="P:Euclid.Serialization.StringWriterWithEncoding.Encoding">
+            <summary>Returns the StringWriter's encoding</summary>
         </member>
         <member name="T:Euclid.Serialization.CsvHelper">
             <summary>
@@ -6287,13 +6421,13 @@
             <param name="x">the location at which to compute the function</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Fn.poisson(System.Int32,System.Double)">
+        <member name="M:Euclid.Fn.Poisson(System.Int32,System.Double)">
             <summary>Returns the sum of the first k terms of the Poisson distribution</summary>
             <param name="k">number of terms</param>
             <param name="x">double value</param>
             <returns></returns>
         </member>
-        <member name="M:Euclid.Fn.poissonc(System.Int32,System.Double)">
+        <member name="M:Euclid.Fn.Poissonc(System.Int32,System.Double)">
             <summary>Returns the sum of the terms k+1 to infinity of the Poisson distribution</summary>
             <param name="k">start</param>
             <param name="x">double value</param>
@@ -6421,6 +6555,16 @@
             <summary>Computes the metaphone version of a string</summary>
             <param name="name">the string to convert</param>
             <returns>a <c>String</c></returns>
+        </member>
+        <member name="T:Euclid.Text.SentenceParsing">
+            <summary>Helps parsing sentences</summary>
+        </member>
+        <member name="M:Euclid.Text.SentenceParsing.CommonWords(System.String,System.String)">
+            <summary>Counts the words that are common to two sentences</summary>
+            <param name="sentenceA">the first sentence</param>
+            <param name="sentenceB">the second sentence</param>
+            <returns>an int</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <member name="T:Euclid.Vector">
             <summary>Vector of double class</summary>
@@ -6550,9 +6694,20 @@
             <returns>a double value</returns>
         </member>
         <member name="M:Euclid.Vector.AggregateSum(System.Collections.Generic.IList{Euclid.Vector})">
-            <summary>Aggregates a list of <c>Vector</c></summary>
+            <summary>Aggregates a list of <c>Vector</c> by sum</summary>
             <param name="vectors">the vectors to sum</param>
             <returns>a <c>Vector</c></returns>
+        </member>
+        <member name="M:Euclid.Vector.AggregateAverage(System.Collections.Generic.IEnumerable{Euclid.Vector})">
+            <summary>Aggregates a list of <c>Vector</c> by average</summary>
+            <param name="vectors">the vectors to sum</param>
+            <returns>a <c>Vector</c></returns>
+        </member>
+        <member name="M:Euclid.Vector.Distance(Euclid.Vector,Euclid.Vector)">
+            <summary>Provides the euclidian distance between two vectors</summary>
+            <param name="vector1">the right hand side</param>
+            <param name="vector2">the left hand side</param>
+            <returns>a <c>double</c></returns>
         </member>
         <member name="M:Euclid.Vector.Apply(System.Func{System.Double,System.Double})">
             <summary>Applies a function on the fields on a Vector</summary>

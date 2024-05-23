@@ -1,4 +1,4 @@
-﻿using Benchmarking;
+﻿using Euclid.Benchmarking;
 using System;
 using System.Collections.Generic;
 
