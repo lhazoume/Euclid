@@ -55,3 +55,7 @@ Benchmarking/obj/project.assets.json
 /.vs/ProjectEvaluation/euclid.projects.v7.bin
 /Benchmarking/obj/Debug/netstandard2.0/Benchmarking.AssemblyInfo.cs
 /.vs/Euclid/DesignTimeBuild/.dtbcache.v2
+*.cs
+/.vs/Euclid/v17/.wsuo
+/.vs/Euclid/v17/TestStore/0/000.testlog
+/EuclidBenchmark/obj/Debug/EuclidBenchmark.csproj.FileListAbsolute.txt
