@@ -24,7 +24,7 @@ namespace Euclid.Optimizers
         private readonly List<Tuple<Vector, double>> _convergence;
         #endregion
 
-        /// <summary>Builds a Particle Swarm Optimizer</summary>
+        /// <summary>Builds a Pattern Search Optimizer</summary>
         /// <param name="fitnessFunction">the function to optimize</param>
         /// <param name="feasabilityFunction">the feasability function</param>
         /// <param name="optimizationType">the optimization type</param>
