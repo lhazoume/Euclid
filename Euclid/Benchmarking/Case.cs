@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Euclid.Benchmarking
 {
-    internal class Case
+    public class Case
     {
         #region Variables
         private readonly Action<int> _action;

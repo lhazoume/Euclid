@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Euclid.Benchmarking
 {
-    internal class CaseSet
+    public class CaseSet
     {
         private readonly List<Case> _cases;
 

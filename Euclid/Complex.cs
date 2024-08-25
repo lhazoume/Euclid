@@ -63,9 +63,7 @@ namespace Euclid
             return _re * _re + _im * _im;
         }
 
-        /// <summary>
-        /// Returns the argument of the <c>Complex</c> (between -Pi and +Pi)
-        /// </summary>
+        /// <summary>Returns the argument of the <c>Complex</c> (between -Pi and +Pi)</summary>
         /// <returns>the argument of the <c>Complex</c></returns>
         public double Argument()
         {
@@ -78,9 +76,17 @@ namespace Euclid
                 return Math.Atan(_im / _re) + Math.Sign(_im) * Math.PI;
         }
 
-        /// <summary>
-        /// Returns a string that represents the <c>Complex</c>
-        /// </summary>
+        /// <summary>Returns the log of the <c>Complex</c> number</summary>
+        /// <param name="c">the operand complex</param>
+        /// <returns>a <c>Complex</c></returns>
+        public Complex Log(Complex c)
+        {
+            if (_re == 0 && _im == 0)
+                throw new ArgumentException("the complex is null", nameof(c));
+            return new Complex(Math.Log(c.Modulus()), c.Argument());
+        }
+
+        /// <summary>Returns a string that represents the <c>Complex</c></summary>
         /// <returns>a string that represents the <c>Complex</c></returns>
         public override string ToString()
         {

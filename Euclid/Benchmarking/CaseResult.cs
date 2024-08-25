@@ -14,7 +14,7 @@ using System.Xml;
 
 namespace Euclid.Benchmarking
 {
-    internal class CaseResult : IXmlable
+    public class CaseResult : IXmlable
     {
         #region Variables
         private readonly string _name;
