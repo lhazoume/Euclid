@@ -134,7 +134,6 @@
     <Compile Include="DataStructures\IndexedSeries\IDataFrame.cs" />
     <Compile Include="DataStructures\IndexedSeries\IHeader.cs" />
     <Compile Include="DataStructures\IndexedSeries\SortedHeader.cs" />
-    <Compile Include="DataStructures\IndexedSeries\TimeDataFrame.cs" />
     <Compile Include="DataStructures\IndexedSeries\TimeSeries.cs" />
     <Compile Include="DataStructures\SortedMap.cs" />
     <Compile Include="DataStructures\TreeNode.cs" />

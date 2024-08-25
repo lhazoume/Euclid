@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Benchmarking
+namespace Euclid.Benchmarking
 {
     public class Case
     {
@@ -41,6 +41,6 @@ namespace Benchmarking
 
             return CaseResult.Build(_name, _iterations, _timeSpan, _memoryUsage);
         }
-        public string Name => _name; 
+        public string Name => _name;
     }
 }
