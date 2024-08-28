@@ -120,6 +120,8 @@
     <Compile Include="Analytics\Statistics\StatisticalFns.cs" />
     <Compile Include="Analytics\Statistics\SummaryStatistics.cs" />
     <Compile Include="Analytics\Statistics\Tests\ANOVA.cs" />
+    <Compile Include="Analytics\Statistics\Tests\StudentTest.cs" />
+    <Compile Include="Analytics\Statistics\Tests\RejectionRegion.cs" />
     <Compile Include="Analytics\Tests\KolmogorovSmirnovTest.cs" />
     <Compile Include="Arithmetics\BinomialCoefficients.cs" />
     <Compile Include="Benchmarking\Case.cs" />
