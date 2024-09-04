@@ -20,15 +20,15 @@ namespace Euclid.Helpers
             List<double> orderedValues = values.OrderBy(d => d).ToList();
             List<Interval> result = new List<Interval>();
 
-            double lowerBound = open ? double.NegativeInfinity : values[0],
-                upperBound = open ? double.PositiveInfinity : values.Last();
+            double lowerBound = open ? double.NegativeInfinity : orderedValues[0],
+                upperBound = open ? double.PositiveInfinity : orderedValues.Last();
 
-            result.Add(new Interval(lowerBound, values[orderedValues.Count / buckets], !open, true));
+            result.Add(new Interval(lowerBound, orderedValues[orderedValues.Count / buckets], !open, true));
 
             for (int i = 1; i < buckets - 1; i++)
-                result.Add(new Interval(values[(orderedValues.Count * i) / buckets], values[(orderedValues.Count * (i + 1)) / buckets], false, true));
+                result.Add(new Interval(orderedValues[(orderedValues.Count * i) / buckets], orderedValues[(orderedValues.Count * (i + 1)) / buckets], false, true));
 
-            result.Add(new Interval(values[(orderedValues.Count * (buckets - 1)) / buckets], upperBound, false, !open));
+            result.Add(new Interval(orderedValues[(orderedValues.Count * (buckets - 1)) / buckets], upperBound, false, !open));
 
             return result;
         }
