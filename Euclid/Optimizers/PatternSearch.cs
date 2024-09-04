@@ -3,6 +3,7 @@ using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Euclid.Optimizers
 {
@@ -14,7 +15,7 @@ namespace Euclid.Optimizers
         private readonly int _maxIterations, _maxStaticIterations;
         private SolverStatus _status;
         private readonly OptimizationType _optimizationType;
-        private readonly double _shrinkageFactor;
+        private readonly double _shrinkageFactor, _expandFactor;
         private double _epsilon;
 
         private readonly Func<Vector, double> _fitnessFunction;
@@ -41,7 +42,8 @@ namespace Euclid.Optimizers
             int maxIterations,
             int maxStaticIterations,
             double epsilon = 1e-8,
-            double shrinkageFactor = 0.5)
+            double shrinkageFactor = 0.5,
+            double expandFactor = 1.0)
         {
             #region Check the initial point
             if (shocks.Data.Min() <= 0)
@@ -60,6 +62,7 @@ namespace Euclid.Optimizers
             #endregion
 
             _shrinkageFactor = shrinkageFactor;
+            _expandFactor = expandFactor;
             _optimizationType = optimizationType;
 
             if (epsilon <= 0)
@@ -160,6 +163,7 @@ namespace Euclid.Optimizers
                     double target = _optimizationType == OptimizationType.Min ? relevantNeighbours.Min(t => t.Item2) : relevantNeighbours.Max(t => t.Item2);
                     current = relevantNeighbours.Find(t => t.Item2 == target).Item1.Clone;
                     reference = _fitnessFunction(current);
+                    shock *= _expandFactor;
                 }
 
                 _convergence.Add(new Tuple<Vector, double>(current, reference));
