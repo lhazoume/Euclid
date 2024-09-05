@@ -155,7 +155,7 @@ namespace Euclid.Optimizers
                 });
                 #endregion
 
-                List<Tuple<Vector, double>> relevantNeighbours = neighbours.Where(t => t != null && Math.Sign(t.Item2 - reference) == sign).ToList();
+                List<Tuple<Vector, double>> relevantNeighbours = neighbours.Where(t => t != null && !double.IsNaN(t.Item2) && Math.Sign(t.Item2 - reference) == sign).ToList();
                 if (relevantNeighbours.Count == 0)
                     shock *= _shrinkageFactor;
                 else
