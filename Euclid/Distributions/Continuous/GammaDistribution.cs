@@ -132,26 +132,27 @@ namespace Euclid.Distributions.Continuous
 
         private static double GenerateAhrensDieterRejection(Random random, double delta)
         {
-            double u = 1 - random.NextDouble(),
-                v = 1 - random.NextDouble(),
-                w = 1 - random.NextDouble(),
-                e, n;
-            if (u * (Math.E + delta) <= Math.E)
+            double e, n;
+            do
             {
-                e = Math.Pow(v, 1 / delta);
-                n = w * Math.Pow(e, delta - 1);
-            }
-            else
-            {
-                e = 1 - Math.Log(v);
-                n = w * Math.Exp(-e);
-            }
+                double u = 1 - random.NextDouble(),
+                    v = 1 - random.NextDouble(),
+                    w = 1 - random.NextDouble();
 
-            if (n > Math.Pow(e, delta - 1) * Math.Exp(-e))
-                return e;
-            else
-                return GenerateAhrensDieterRejection(random, delta);
+                if (u * (Math.E + delta) <= Math.E)
+                {
+                    e = Math.Pow(v, 1 / delta);
+                    n = w * Math.Pow(e, delta - 1);
+                }
+                else
+                {
+                    e = 1 - Math.Log(v);
+                    n = w * Math.Exp(-e);
+                }
 
+            } while (n <= Math.Pow(e, delta - 1) * Math.Exp(-e));
+
+            return e;
         }
 
         /// <summary>Returns a string that represents this instance</summary>
