@@ -13,22 +13,15 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private ChiSquaredDistribution(int k, Random randomSource)
+        /// <summary>Builds a Chi² distribution</summary>
+        /// <param name="k">the number of freedom degrees</param>
+        public ChiSquaredDistribution(int k)
         {
             if (k <= 0) throw new ArgumentException("degrees of freedom has to be positive");
             _freedomDegrees = k;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(0, double.PositiveInfinity, true, false);
         }
-
-        /// <summary>
-        /// Builds a Chi² distribution
-        /// </summary>
-        /// <param name="k">the number of freedom degrees</param>
-        public ChiSquaredDistribution(int k)
-            : this(k, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors
@@ -100,7 +93,7 @@ namespace Euclid.Distributions.Continuous
         public override double ProbabilityDensity(double x)
         {
             if (x < 0) return 0;
-            return Math.Pow(0.5 * x, 0.5 * _freedomDegrees - 1) * Math.Exp(-0.5 * x) / (x * Fn.Gamma(0.5 * _freedomDegrees));//Mathieu : pas en accord avec wiki
+            return Math.Pow(0.5 * x, 0.5 * _freedomDegrees - 1) * Math.Exp(-0.5 * x) / (2 * Fn.Gamma(0.5 * _freedomDegrees));
         }
 
         /// <summary>Evaluates the moment-generating function for a given t</summary>

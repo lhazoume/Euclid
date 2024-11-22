@@ -19,7 +19,6 @@ namespace Euclid.Distributions.Continuous
 
             if (gamma <= 0) throw new ArgumentException("gamma has to be positive");
             _gamma = gamma;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
@@ -40,7 +39,7 @@ namespace Euclid.Distributions.Continuous
         public override Interval Support => _support;
 
         /// <summary>Gets the distribution's mean</summary>
-        public override double Mean => _x0;
+        public override double Mean => double.NaN;
 
         /// <summary>Gets the distribution's median</summary>
         public override double Median => _x0;
@@ -73,7 +72,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
-            return 0.5 + Math.Atan((x - _x0) / _gamma);
+            return 0.5 + Math.Atan((x - _x0) / _gamma); //Mathieu : On devrait diviser par pi ici
         }
 
         /// <summary>

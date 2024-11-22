@@ -20,7 +20,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private BoundedNormalDistribution(double mu, double sigma, double a, double b, Random randomSource)
+        /// <summary>Builds a truncated normal distribution</summary>
+        /// <param name="mu">the location</param>
+        /// <param name="sigma">the scale</param>
+        /// <param name="a">the interval's lower bound</param>
+        /// <param name="b">the interval's upper bound</param>
+        public BoundedNormalDistribution(double mu, double sigma, double a, double b)
         {
             if (sigma <= 0) throw new ArgumentException("sigma has to be positive");
             if (a >= b) throw new ArgumentException("the interval is not defined");
@@ -43,20 +48,8 @@ namespace Euclid.Distributions.Continuous
             _dGb = (double.IsNegativeInfinity(_a) ? 0 : (_alpha * _gbAlpha)) - (double.IsPositiveInfinity(_b) ? 0 : (_beta * _gbBeta));
 
             _Z = _phiBeta - _phiAlpha;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
             _support = new Interval(_a, _b, true, true);
         }
-
-        /// <summary>
-        /// Builds a truncated normal distribution
-        /// </summary>
-        /// <param name="mu">the location</param>
-        /// <param name="sigma">the scale</param>
-        /// <param name="a">the interval's lower bound</param>
-        /// <param name="b">the interval's upper bound</param>
-        public BoundedNormalDistribution(double mu, double sigma, double a, double b)
-            : this(mu, sigma, a, b, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors
@@ -158,7 +151,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("BoundedN(μ = {0}, σ = {1}, a = {2}, b = {3})", _mu, _sigma, _a, _b);
+            return $"BoundedN(μ = {_mu}, σ = {_sigma}, a = {_a}, b = {_b})";
         }
         #endregion
     }

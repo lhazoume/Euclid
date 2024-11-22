@@ -25,7 +25,6 @@ namespace Euclid.Distributions.Continuous
             _beta = beta;
             _1Beta = 1 / _beta;
             _gamma1Beta = Fn.Gamma(_1Beta);
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
@@ -82,7 +81,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
-            return 0.5 + Math.Sign(x - _mu) * Fn.IncompleteLowerGamma(_1Beta, Math.Pow(Math.Abs(x - _mu) / _alpha, _beta)) / (2 * Fn.Gamma(_1Beta));
+            return 0.5 + Math.Sign(x - _mu) * Fn.IncompleteLowerGamma(_1Beta, Math.Pow(Math.Abs(x - _mu) / _alpha, _beta)) / (2 * _gamma1Beta);
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function</summary>

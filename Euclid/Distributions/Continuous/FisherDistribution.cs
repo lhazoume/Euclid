@@ -15,24 +15,19 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private FisherDistribution(double d1, double d2, Random randomSource)
+        /// <summary>Initializes a new instance of the Fisher distribution</summary>
+        /// <param name="d1">the first number of freedom degrees</param>
+        /// <param name="d2">the second number of freedom degrees</param>
+        public FisherDistribution(double d1, double d2)
         {
             if (d1 <= 0) throw new ArgumentException("The d1 can not be negative");
             _d1 = d1;
 
             if (d2 <= 0) throw new ArgumentException("The d2 can not be negative");
             _d2 = d2;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(0, double.PositiveInfinity, true, false);
         }
-
-        /// <summary>Initializes a new instance of the Fisher distribution</summary>
-        /// <param name="d1">the first number of freedom degrees</param>
-        /// <param name="d2">the second number of freedom degrees</param>
-        public FisherDistribution(double d1, double d2)
-            : this(d1, d2, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors

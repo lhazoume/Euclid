@@ -13,25 +13,18 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private ParetoDistribution(double xm, double alpha, Random randomSource)
+        /// <summary>Builds a Pareto distribution</summary>
+        /// <param name="xm">the scale</param>
+        /// <param name="alpha">the shape</param>
+        private ParetoDistribution(double xm, double alpha)
         {
             if (xm <= 0) throw new ArgumentException("xm has to be positive");
             if (alpha <= 0) throw new ArgumentException("alpha has to be positive");
             _alpha = alpha;
             _xm = xm;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(_xm, double.PositiveInfinity, true, false);
         }
-
-        /// <summary>
-        /// Builds a Pareto distribution
-        /// </summary>
-        /// <param name="xm">the scale</param>
-        /// <param name="alpha">the shape</param>
-        public ParetoDistribution(double xm, double alpha)
-            : this(xm, alpha, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors
@@ -147,11 +140,12 @@ namespace Euclid.Distributions.Continuous
         /// <summary> Builds a sample of random variables under this distribution </summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int size)
+        public override double[] Sample(int size, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[size];
             for (int i = 0; i < size; i++)
-                result[i] = _xm / Math.Pow(_randomSource.NextDouble(), 1 / _alpha);
+                result[i] = _xm / Math.Pow(random.NextDouble(), 1 / _alpha);
             return result;
         }
 

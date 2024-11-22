@@ -20,7 +20,7 @@ namespace Euclid.Distributions.Continuous
         private readonly IDensityKernel _kernel;
         #endregion
 
-        private EmpiricUnivariateDistribution(IList<double> weights, IList<double> values, double h, IDensityKernel kernel, Random randomSource)
+        private EmpiricUnivariateDistribution(IList<double> weights, IList<double> values, double h, IDensityKernel kernel)
         {
             if (weights == null || values == null ||
                 weights.Count == 0 || values.Count == 0 ||
@@ -32,7 +32,6 @@ namespace Euclid.Distributions.Continuous
             _values = new double[_n];
             _h = h;
             _kernel = kernel ?? throw new ArgumentNullException(nameof(kernel));
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _sumWeights = 0;
             _m1 = 0;
@@ -78,7 +77,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>EmpiricUnivariateDistribution</c></returns>
         public static EmpiricUnivariateDistribution Create(IList<double> weights, IList<double> values, double h, IDensityKernel kernel)
         {
-            return new EmpiricUnivariateDistribution(weights, values, h, kernel, new Random(Guid.NewGuid().GetHashCode()));
+            return new EmpiricUnivariateDistribution(weights, values, h, kernel);
         }
         #endregion
 

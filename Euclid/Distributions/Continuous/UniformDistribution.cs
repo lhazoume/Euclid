@@ -12,7 +12,10 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private UniformDistribution(double a, double b, Random randomSource)
+        /// <summary>Builds a Uniform distribution</summary>
+        /// <param name="a">the support's lower bound</param>
+        /// <param name="b">the support's upper bound</param>
+        public UniformDistribution(double a, double b)
         {
             if (a >= b) throw new ArgumentException("the interval is not defined");
             _a = a;
@@ -20,17 +23,8 @@ namespace Euclid.Distributions.Continuous
             _d = _b - _a;
             _m = 0.5 * (_b + _a);
 
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
-
             _support = new Interval(_a, _b, true, true);
         }
-
-        /// <summary>Builds a Uniform distribution</summary>
-        /// <param name="a">the support's lower bound</param>
-        /// <param name="b">the support's upper bound</param>
-        public UniformDistribution(double a, double b)
-            : this(a, b, new Random(Guid.NewGuid().GetHashCode()))
-        { }
 
         /// <summary>Builds a standard Uniform distribution </summary>
         public UniformDistribution()
@@ -74,7 +68,7 @@ namespace Euclid.Distributions.Continuous
             if (method == FittingMethod.Moments)
             {
                 double avg = sample.Average(),
-                    stdev = Math.Sqrt(12 * (sample.Average(x => x * x) - avg * avg));
+                    stdev = Math.Sqrt(3 * (sample.Average(x => x * x) - avg * avg));
                 return new UniformDistribution(avg - stdev, avg + stdev);
             }
             return new UniformDistribution(sample.Min(), sample.Max());
@@ -120,11 +114,12 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints)
+        public override double[] Sample(int numberOfPoints, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[numberOfPoints];
             for (int i = 0; i < numberOfPoints; i++)
-                result[i] = _a + _d * _randomSource.NextDouble();
+                result[i] = _a + _d * random.NextDouble();
             return result;
         }
 

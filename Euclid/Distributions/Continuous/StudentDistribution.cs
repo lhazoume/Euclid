@@ -11,17 +11,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private StudentDistribution(int k, Random randomSource)
+        public StudentDistribution(int k)
         {
             if (k <= 0) throw new ArgumentException("the freedom degrees have to be positive");
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
             _k = k;
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
-
-        public StudentDistribution(int k)
-            : this(k, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors

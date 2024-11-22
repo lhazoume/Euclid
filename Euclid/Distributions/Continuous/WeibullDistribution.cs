@@ -12,14 +12,16 @@ namespace Euclid.Distributions.Continuous
         private readonly double _lambda, _k, _mu, _sigma2, _sigma;
         #endregion
 
-        private WeibullDistribution(double lambda, double k, Random randomSource)
+        /// <summary>Builds a Weibull distribution</summary>
+        /// <param name="lambda">the scale</param>
+        /// <param name="k">the shape</param>
+        public WeibullDistribution(double lambda, double k )
         {
             if (lambda <= 0) throw new ArgumentException("The scale can not be negative");
             if (k <= 0) throw new ArgumentException("The shape can not be negative");
             _lambda = lambda;
             _k = k;
 
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(0, double.PositiveInfinity, true, false);
 
@@ -27,15 +29,6 @@ namespace Euclid.Distributions.Continuous
             _sigma2 = _lambda * _lambda * Fn.Gamma(1 + 2 / _k) - _mu * _mu;
             _sigma = Math.Sqrt(_sigma2);
         }
-
-        /// <summary>
-        /// Builds a Weibull distribution
-        /// </summary>
-        /// <param name="lambda">the scale</param>
-        /// <param name="k">the shape</param>
-        public WeibullDistribution(double lambda, double k)
-            : this(lambda, k, new Random(Guid.NewGuid().GetHashCode()))
-        { }
 
         #region Accessors
         /// <summary>Gets the distribution's entropy</summary>

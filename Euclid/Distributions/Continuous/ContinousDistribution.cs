@@ -8,9 +8,6 @@ namespace Euclid.Distributions.Continuous
     /// <summary>Abstract class base for continuous distributions</summary>
     public abstract class ContinuousDistribution : IDistribution
     {
-        /// <summary>The random number generator</summary>
-        protected Random _randomSource;
-
         /// <summary>The distribution's support </summary>
         protected Interval _support;
 
@@ -39,14 +36,6 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's variance</summary>
         public abstract double Variance { get; }
 
-        /// <summary>
-        /// Gets or sets the random number generator which is used to draw random samples
-        /// </summary>
-        public Random RandomSource
-        {
-            get { return _randomSource; }
-            set { _randomSource = value ?? throw new ArgumentException("The random source can not be null"); }
-        }
         #endregion
 
         #region Methods
@@ -85,11 +74,18 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
-        public virtual double[] Sample(int size)
+        public virtual double[] Sample(int size) => Sample(size, Guid.NewGuid().GetHashCode());
+
+        /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
+        /// <param name="size">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
+        /// <returns>an array of double</returns>
+        public virtual double[] Sample(int size, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[size];
             for (int i = 0; i < size; i++)
-                result[i] = InverseCumulativeDistribution(_randomSource.NextDouble());
+                result[i] = InverseCumulativeDistribution(random.NextDouble());
             return result;
         }
 

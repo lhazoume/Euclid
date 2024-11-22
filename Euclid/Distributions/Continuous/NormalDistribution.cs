@@ -16,13 +16,11 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Builds a normal distribution</summary>
         /// <param name="mean">the distribution's mean</param>
         /// <param name="standardDeviation">the distributions's standard deviation</param>
-        /// <param name="randomSource">the random source</param>
-        public NormalDistribution(double mean, double standardDeviation, Random randomSource)
+        public NormalDistribution(double mean, double standardDeviation)
         {
             _mean = mean;
             if (standardDeviation < 0) throw new ArgumentException("The standard deviation can not be negative");
             _standardDeviation = standardDeviation;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
@@ -30,13 +28,6 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Builds a standard normal distribution</summary>
         public NormalDistribution()
             : this(0, 1)
-        { }
-
-        /// <summary>Builds a normal distribution</summary>
-        /// <param name="mean">the average</param>
-        /// <param name="standardDeviation">the standard deviation</param>
-        public NormalDistribution(double mean, double standardDeviation)
-            : this(mean, standardDeviation, new Random(Guid.NewGuid().GetHashCode()))
         { }
         #endregion
 
@@ -65,7 +56,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            return Fn.GaussBell((x - _mean) / _standardDeviation); //Mathieu : On devrait diviser par sigma 
+            return Fn.GaussBell((x - _mean) / _standardDeviation) / _standardDeviation;
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
@@ -79,15 +70,16 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints)
+        public override double[] Sample(int numberOfPoints, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[numberOfPoints];
             int processorCount = Environment.ProcessorCount;
 
             #region Initialize the seeds
             int[] seeds = new int[processorCount];
             for (int p = 0; p < processorCount; p++)
-                seeds[p] = _randomSource.Next();
+                seeds[p] = random.Next();
             int buckets = numberOfPoints / processorCount + (numberOfPoints % processorCount == 0 ? 0 : 1);
             buckets += buckets % 2 == 0 ? 0 : 1;
             #endregion

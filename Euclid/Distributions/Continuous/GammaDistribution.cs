@@ -13,26 +13,21 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private GammaDistribution(double k, double theta, Random randomSource)
+        /// <summary>Builds a Gamma distribution</summary>
+        /// <param name="k">the shape</param>
+        /// <param name="theta">the scale</param>
+        public GammaDistribution(double k, double theta)
         {
             if (k <= 0) throw new ArgumentException("the shape has to be positive");
             if (theta <= 0) throw new ArgumentException("the scale has to be positive");
             _k = k;
             _theta = theta;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _support = new Interval(0, double.PositiveInfinity, false, false);
 
             _cdfFactor = 1 / Fn.Gamma(_k);
             _pdfFactor = Math.Pow(_theta, -_k) * _cdfFactor;
         }
-
-        /// <summary>Builds a Gamma distribution</summary>
-        /// <param name="k">the shapee</param>
-        /// <param name="theta">the scale</param>
-        public GammaDistribution(double k, double theta)
-            : this(k, theta, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors
@@ -112,8 +107,9 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Generates a sequence of samples using the Ahrens-Dieter algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints)
+        public override double[] Sample(int numberOfPoints, int seed)
         {
+            Random random = new Random(seed);
             int n = Convert.ToInt32(Math.Floor(_k));
             double delta = _k - n;
             double[] result = new double[numberOfPoints];
@@ -122,11 +118,11 @@ namespace Euclid.Distributions.Continuous
                 #region Int part
                 double sumLog = 0;
                 for (int k = 0; k < n; k++)
-                    sumLog -= Math.Log(1 - _randomSource.NextDouble());
+                    sumLog -= Math.Log(1 - random.NextDouble());
                 #endregion
 
                 #region Remainder
-                double e = GenerateAhrensDieterRejection(_randomSource, delta);
+                double e = GenerateAhrensDieterRejection(random, delta);
                 #endregion
 
                 result[i] = _theta * (e + sumLog);

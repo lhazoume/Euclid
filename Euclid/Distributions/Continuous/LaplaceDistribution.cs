@@ -11,22 +11,17 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private LaplaceDistribution(double mu, double b, Random randomSource)
-        {
-            if (b <= 0) throw new ArgumentException("scale has to be positive");
-            _mu = mu;
-            _b = b;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
-
-            _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
-        }
-
         /// <summary>Initializes a new instance of the Laplace distribution</summary>
         /// <param name="mu">the location</param>
         /// <param name="b">the scale</param>
         public LaplaceDistribution(double mu, double b)
-            : this(mu, b, new Random(Guid.NewGuid().GetHashCode()))
-        { }
+        {
+            if (b <= 0) throw new ArgumentException("scale has to be positive");
+            _mu = mu;
+            _b = b;
+
+            _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
+        }
         #endregion
 
         #region Accessors

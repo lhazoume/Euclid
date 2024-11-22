@@ -13,21 +13,17 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private LogNormalDistribution(double mu, double sigma, Random randomSource)
+        /// <summary>Builds a log normal distribution</summary>
+        /// <param name="mu">the average</param>
+        /// <param name="sigma">the standard deviation</param>
+        public LogNormalDistribution(double mu, double sigma)
         {
             if (sigma <= 0) throw new ArgumentException("sigma has to be positive");
             _sigma = sigma;
             _sigma2 = _sigma * _sigma;
             _mu = mu;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
             _support = new Interval(0, double.PositiveInfinity, false, false);
         }
-        /// <summary>Builds a log normal distribution</summary>
-        /// <param name="mu">the average</param>
-        /// <param name="sigma">the standard deviation</param>
-        public LogNormalDistribution(double mu, double sigma)
-            : this(mu, sigma, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors
@@ -94,11 +90,12 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Generates a sequence of samples from the log normal distribution</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints)
+        public override double[] Sample(int numberOfPoints, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[numberOfPoints];
             for (int i = 0; i < numberOfPoints; i++)
-                result[i] = Math.Exp(_mu + _sigma * Fn.InvPhi(Math.Log(_randomSource.NextDouble())));
+                result[i] = Math.Exp(_mu + _sigma * Fn.InvPhi(Math.Log(random.NextDouble())));
             return result;
         }
 

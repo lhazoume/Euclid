@@ -11,24 +11,18 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private LogisticDistribution(double mu, double s, Random randomSource)
+        /// <summary>Builds a Logistic distribution</summary>
+        /// <param name="mu">the location</param>
+        /// <param name="s">the scale</param>
+        public LogisticDistribution(double mu, double s)
         {
             _mu = mu;
 
             if (s <= 0) throw new ArgumentException("scale has to be positive");
             _s = s;
 
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
-
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
-
-        /// <summary>Builds a Logistic distribution</summary>
-        /// <param name="mu">the location</param>
-        /// <param name="s">the scale</param>
-        public LogisticDistribution(double mu, double s)
-            : this(mu, s, new Random(Guid.NewGuid().GetHashCode()))
-        { }
 
         #endregion
 

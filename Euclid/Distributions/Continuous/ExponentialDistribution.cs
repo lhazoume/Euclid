@@ -12,22 +12,15 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private ExponentialDistribution(double lambda, Random randomSource)
+        /// <summary>Builds a Exponential distribution</summary>
+        /// <param name="lambda">the rate</param>
+        public ExponentialDistribution(double lambda)
         {
             if (lambda <= 0) throw new ArgumentException("λ has to be positive");
             _lambda = lambda;
             _beta = 1 / _lambda;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
             _support = new Interval(0, double.PositiveInfinity, true, false);
         }
-
-        /// <summary>
-        /// Builds a Exponential distribution
-        /// </summary>
-        /// <param name="lambda">the rate</param>
-        public ExponentialDistribution(double lambda)
-            : this(lambda, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Methods
@@ -37,15 +30,10 @@ namespace Euclid.Distributions.Continuous
         /// <param name="method">the fitting method</param>
         public static ExponentialDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.Moments)
-            {
-                double avg = sample.Average();
-
-                double beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
-                return new ExponentialDistribution(1 / beta);
-            }
-
-            throw new NotImplementedException();
+            
+            double avg = sample.Average();
+            //double beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
+            return new ExponentialDistribution(1 / avg);
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -87,11 +75,12 @@ namespace Euclid.Distributions.Continuous
         /// <summary> Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints)
+        public override double[] Sample(int numberOfPoints, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[numberOfPoints];
             for (int i = 0; i < numberOfPoints; i++)
-                result[i] = -Math.Log(_randomSource.NextDouble()) * _beta;
+                result[i] = -Math.Log(random.NextDouble()) * _beta;
             return result;
         }
 
