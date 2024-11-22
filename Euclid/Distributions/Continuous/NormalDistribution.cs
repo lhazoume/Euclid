@@ -65,7 +65,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            return Fn.GaussBell((x - _mean) / _standardDeviation);
+            return Fn.GaussBell((x - _mean) / _standardDeviation); //Mathieu : On devrait diviser par sigma 
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>

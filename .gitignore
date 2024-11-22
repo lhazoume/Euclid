@@ -63,3 +63,4 @@ Benchmarking/obj/project.assets.json
 /.vs/ProjectEvaluation/euclid.projects.v8.bin
 /.vs/ProjectEvaluation/euclid.strings.v8.bin
 /.vs/VSWorkspaceState.json
+*.bin

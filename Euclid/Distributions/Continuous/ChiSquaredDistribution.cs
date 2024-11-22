@@ -100,7 +100,7 @@ namespace Euclid.Distributions.Continuous
         public override double ProbabilityDensity(double x)
         {
             if (x < 0) return 0;
-            return Math.Pow(0.5 * x, 0.5 * _freedomDegrees - 1) * Math.Exp(-0.5 * x) / (x * Fn.Gamma(0.5 * _freedomDegrees));
+            return Math.Pow(0.5 * x, 0.5 * _freedomDegrees - 1) * Math.Exp(-0.5 * x) / (x * Fn.Gamma(0.5 * _freedomDegrees));//Mathieu : pas en accord avec wiki
         }
 
         /// <summary>Evaluates the moment-generating function for a given t</summary>
