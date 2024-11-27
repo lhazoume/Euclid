@@ -27,6 +27,8 @@ namespace Euclid.Solvers.SingleVariableSolver
         /// <param name="f">the function to solve for</param>
         /// <param name="df">the derivative of the function to solve for</param>
         /// <param name="maxIterations">the maximum number of iterations</param>
+        /// <param name="min">the maximum number of iterations</param>
+        /// <param name="max">the maximum number of iterations</param>
         public NewtonRaphson(double initialGuess,
             Func<double, double> f,
             Func<double, double> df,
