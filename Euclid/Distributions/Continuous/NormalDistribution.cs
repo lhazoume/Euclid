@@ -32,15 +32,23 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static NormalDistribution Fit(double[] sample)
+        {
+            return Fit(FittingMethod.MaximumLikelihood, sample);
+        }
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static NormalDistribution Fit(FittingMethod method, double[] sample)
         {
-            double avg = sample.Average(),
+            if (method == FittingMethod.Moments || method == FittingMethod.MaximumLikelihood)
+            {
+                double avg = sample.Average(),
                 stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
-            return new NormalDistribution(avg, stdev);
+                return new NormalDistribution(avg, stdev);
+            } else { throw new NotImplementedException(); }
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>

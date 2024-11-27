@@ -1,5 +1,6 @@
 ﻿using Euclid.Histograms;
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 
 namespace Euclid.Distributions.Continuous
@@ -24,16 +25,22 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static ExponentialDistribution Fit(double[] sample) {
+            return Fit(FittingMethod.Moments, sample);
+        }
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static ExponentialDistribution Fit(FittingMethod method, double[] sample)
         {
-            
-            double avg = sample.Average();
-            //double beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
-            return new ExponentialDistribution(1 / avg);
+            if (method == FittingMethod.Moments || method == FittingMethod.MaximumLikelihood) {
+                int n = sample.Length;
+                double avg = sample.Average();
+                //double beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
+                return new ExponentialDistribution((n-2) / ((n-1)*avg));
+            } else { throw new NotImplementedException(); } 
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>

@@ -2,6 +2,7 @@
 using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -62,13 +63,36 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static FisherDistribution Fit(double[] sample)
+        {
+            return Fit(FittingMethod.Moments, sample);
+        }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static FisherDistribution Fit(FittingMethod method, double[] sample)
         {
-            throw new NotImplementedException();
+            if (method == FittingMethod.Moments) {
+                double mean = sample.Average();
+                double variance = sample.Select(x => Math.Pow(x, 2)).Average() - mean*mean;
+
+                if (mean <= 1)
+                    throw new ArgumentException("Mean must be greater than 1 for a valid Fisher distribution.");
+
+                double d2 = 2 * mean / (mean - 1);
+
+                if (d2 <= 4)
+                    throw new ArgumentException("Variance is undefined for d2 <= 4.");
+
+                double numerator = 2 * mean * (d2 - 2);
+                double d1 = numerator / (variance * (d2 - 4) - 2 * mean);
+
+                return new FisherDistribution(d1, d2);
+            } else { throw new NotImplementedException(); }
+            
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>

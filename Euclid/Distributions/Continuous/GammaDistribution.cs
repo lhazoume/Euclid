@@ -1,7 +1,10 @@
 ﻿using Euclid.Histograms;
 using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
+using Microsoft.Win32.SafeHandles;
 using System;
+using System.CodeDom;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -57,13 +60,39 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static GammaDistribution Fit(double[] sample)
+        {
+            return Fit(FittingMethod.MaximumLikelihood, sample);
+        }
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static GammaDistribution Fit(FittingMethod method, double[] sample)
         {
-            throw new NotImplementedException();
+            int n = sample.Length;
+            if (method == FittingMethod.Moments)
+            {
+                double avg = sample.Average();
+                double sigma2 = sample.Select(x => x * x).Average() - avg * avg;
+                double theta = sigma2 / avg;
+                double k = avg * avg / sigma2;
+                return new GammaDistribution(k, theta);
+            }
+            else if (method == FittingMethod.MaximumLikelihood)
+            {
+                double sumX = sample.Sum();
+                double sumLogX = sample.Select(x => Math.Log(x)).Sum();
+                double sumXLogX = sample.Select(x => x * Math.Log(x)).Sum();
+
+                double k = (n * sumX) / (n * sumXLogX - sumLogX * sumX);
+                double theta = (n * sumXLogX - sumLogX * sumX) / ((n-1)*n);
+                k = k - 1 / n * (3 * k - 2 / 3 * (k / (1 + k)) - 4 * k / (5 * Math.Pow(1 + k,2)));
+                return new GammaDistribution(k, theta);
+            }
+            else { throw new NotImplementedException(); }
+            
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -110,22 +139,61 @@ namespace Euclid.Distributions.Continuous
         public override double[] Sample(int numberOfPoints, int seed)
         {
             Random random = new Random(seed);
-            int n = Convert.ToInt32(Math.Floor(_k));
-            double delta = _k - n;
             double[] result = new double[numberOfPoints];
-            for (int i = 0; i < numberOfPoints; i++)
+            int i = 0;
+            if (_k < 1)
             {
-                #region Int part
-                double sumLog = 0;
-                for (int k = 0; k < n; k++)
-                    sumLog -= Math.Log(1 - random.NextDouble());
-                #endregion
+                double w = _k / Math.Exp(1) / (1 - _k);
+                double l = 1 / _k - 1;
+                double r = 1 / (1 + w);
+                double z, nz, hz;
+                do { 
+                    double u1 = random.NextDouble();
 
-                #region Remainder
-                double e = GenerateAhrensDieterRejection(random, delta);
-                #endregion
+                    if (u1<=r) {
+                        z = -Math.Log(random.NextDouble());
+                    } else
+                    {
+                        z = Math.Log(random.NextDouble())/l;
+                    }
 
-                result[i] = _theta * (e + sumLog);
+                    double u2 = random.NextDouble();
+
+                    nz = (z>=0) ? Math.Exp(-z) : w*l*Math.Exp(l*z);
+                    hz = Math.Exp(-z-Math.Exp(-z/_k));
+                    if (hz/nz >u2)
+                    {
+                        result[i] = _theta * Math.Exp(-z / _k);
+                        i++;
+                    }
+                
+                } while (i < numberOfPoints);
+            }
+            else
+            {
+                // Marsaglia-Tsang
+                double d = _k - 1.0 / 3.0;
+                double c = 1.0 / Math.Sqrt(9.0 * d);
+                do
+                {
+                    double v, z;
+                    do
+                    { // Générer une variable normale standard Z
+                        double u1 = random.NextDouble();
+                        double u2 = random.NextDouble();
+                        z = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
+                        v = Math.Pow(1.0 + c * z, 3);
+                    } while (v <= 0);
+                
+                    double u = random.NextDouble();
+                    // Test d'acceptation
+                    if (Math.Log(u) < 0.5 * z * z + d * (1 - v + Math.Log(v)))
+                    {
+                        result[i] = d * v * _theta;
+                        i++;
+                    }
+                } while (i < numberOfPoints);
+                
             }
             return result;
         }

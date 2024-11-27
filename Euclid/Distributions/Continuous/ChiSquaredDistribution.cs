@@ -2,6 +2,7 @@
 using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -59,13 +60,22 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static ChiSquaredDistribution Fit(double[] sample)
+        {
+            return Fit(FittingMethod.Moments, sample);
+        }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static ChiSquaredDistribution Fit(FittingMethod method, double[] sample)
-        {
-            throw new NotImplementedException();
+        { 
+            if (method == FittingMethod.Moments) {
+                int k = (int)Math.Round(sample.Average());
+                return new ChiSquaredDistribution(k);
+            } else { throw new NotImplementedException();}
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>

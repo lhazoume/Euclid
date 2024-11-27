@@ -59,7 +59,16 @@ namespace Euclid.Distributions.Continuous
 
         #endregion
 
+
+
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static UniformDistribution Fit(double[] sample)
+        {
+            return Fit(FittingMethod.MaximumLikelihood, sample);
+        }
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
@@ -70,8 +79,11 @@ namespace Euclid.Distributions.Continuous
                 double avg = sample.Average(),
                     stdev = Math.Sqrt(3 * (sample.Average(x => x * x) - avg * avg));
                 return new UniformDistribution(avg - stdev, avg + stdev);
+            } else if (method == FittingMethod.MaximumLikelihood)
+            {
+                return new UniformDistribution(sample.Min(), sample.Max());
             }
-            return new UniformDistribution(sample.Min(), sample.Max());
+            throw new NotImplementedException();
         }
 
         /// <summary>

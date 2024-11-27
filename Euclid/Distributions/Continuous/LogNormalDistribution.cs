@@ -1,5 +1,6 @@
 ﻿using Euclid.Histograms;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -52,13 +53,40 @@ namespace Euclid.Distributions.Continuous
         public override double Variance => (Math.Exp(_sigma2) - 1) * Math.Exp(2 * _mu + _sigma2);
         #endregion
 
+
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static LogNormalDistribution Fit(double[] sample)
+        {
+            return Fit(FittingMethod.MaximumLikelihood, sample);    
+        }
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static LogNormalDistribution Fit(FittingMethod method, double[] sample)
         {
-            throw new NotImplementedException();
+            if (method == FittingMethod.Moments) {
+                double mean = sample.Average();
+                double variance = sample.Select(x => Math.Pow(x - mean, 2)).Sum() / sample.Length;
+
+                if (mean <= 0)
+                    throw new ArgumentException("Mean of the data must be positive for a lognormal distribution.");
+
+                double sigma = Math.Sqrt(Math.Log(1 + variance / Math.Pow(mean, 2)));
+                double mu = Math.Log(mean) - Math.Log(1 + variance / Math.Pow(mean, 2)) / 2;
+
+                return new LogNormalDistribution(mu, sigma);
+
+            } else if (method == FittingMethod.MaximumLikelihood)
+            {
+                double mean = sample.Select(x => Math.Log(x)).Average();
+                double variance = sample.Select(x => Math.Log(x) * Math.Log(x)).Average() - mean * mean;
+
+                return new LogNormalDistribution(mean, Math.Sqrt(variance));
+            } else {throw new NotImplementedException();}
+            ;
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -95,7 +123,7 @@ namespace Euclid.Distributions.Continuous
             Random random = new Random(seed);
             double[] result = new double[numberOfPoints];
             for (int i = 0; i < numberOfPoints; i++)
-                result[i] = Math.Exp(_mu + _sigma * Fn.InvPhi(Math.Log(random.NextDouble())));
+                result[i] = Math.Exp(_mu + _sigma * Fn.InvPhi(random.NextDouble()));
             return result;
         }
 

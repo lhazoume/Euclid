@@ -1,4 +1,5 @@
-﻿using Euclid.Histograms;
+﻿using Euclid.Analytics.Clustering;
+using Euclid.Histograms;
 using System;
 using System.Linq;
 
@@ -16,7 +17,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Builds a Pareto distribution</summary>
         /// <param name="xm">the scale</param>
         /// <param name="alpha">the shape</param>
-        private ParetoDistribution(double xm, double alpha)
+        public ParetoDistribution(double xm, double alpha)
         {
             if (xm <= 0) throw new ArgumentException("xm has to be positive");
             if (alpha <= 0) throw new ArgumentException("alpha has to be positive");
@@ -82,13 +83,17 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static ParetoDistribution Fit(double[] sample)
+        {
+            return Fit(FittingMethod.MaximumLikelihood, sample);
+        }
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static ParetoDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (sample == null) throw new ArgumentNullException(nameof(sample));
-
             if (sample.Min() <= 0) throw new ArgumentOutOfRangeException(nameof(sample), "The Pareto Law doesnot allow negative values");
 
             if (method == FittingMethod.MaximumLikelihood)
@@ -97,6 +102,16 @@ namespace Euclid.Distributions.Continuous
                     alpha = 1 / (-Math.Log(xm) + sample.Select(x => Math.Log(x)).Sum() / sample.Length);
 
                 return new ParetoDistribution(xm, alpha);
+            } else if (method == FittingMethod.Moments)
+            {
+                double mean = sample.Average();
+                double variance = sample.Select(x => x*x).Average() - mean*mean;
+
+                double K = mean*mean/variance;
+                double delta = 2+4*K;
+                double alpha = (2+Math.Sqrt(delta) / 2);
+                double x_m = mean * (alpha - 1) / alpha;
+                return new ParetoDistribution(x_m, alpha);
             }
             throw new NotImplementedException();
         }

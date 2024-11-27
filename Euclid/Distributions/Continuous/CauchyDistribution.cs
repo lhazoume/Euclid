@@ -1,5 +1,7 @@
 ﻿using Euclid.Histograms;
 using System;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -61,10 +63,38 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
+        public static CauchyDistribution Fit(double[] sample) { return Fit(FittingMethod.PositionalArgument, sample);}
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static CauchyDistribution Fit(FittingMethod method, double[] sample)
         {
-            throw new NotImplementedException();
+            if (method == FittingMethod.PositionalArgument) {
+                if (sample == null || sample.Length == 0)
+                    throw new ArgumentException("Le vecteur ne peut pas être vide.");
+
+                // Tri des données
+                double[] sortedData = sample.OrderBy(x => x).ToArray();
+                int n = sortedData.Length;
+
+                // Calcul de la médiane
+                double median = n % 2 == 0 ? (sortedData[n / 2 - 1] + sortedData[n / 2]) / 2.0 : sortedData[n / 2];
+
+                // Calcul des quartiles
+                double[] firstHalf = sortedData.Take(n / 2).ToArray();
+                double[] secondHalf = sortedData.Skip((n + 1) / 2).ToArray();
+                int nFirst = firstHalf.Length;
+                int nSecond = secondHalf.Length;
+                double q1 = nFirst % 2 == 0 ? (firstHalf[nFirst / 2 - 1] + firstHalf[nFirst / 2]) / 2 : firstHalf[nFirst / 2];
+                double q3 = nSecond % 2 == 0 ? (secondHalf[nSecond / 2 - 1] + secondHalf[nSecond / 2]) / 2 : secondHalf[nSecond / 2];
+
+                // Calcul de l'écart interquartile (IQR)
+                double interquartileRange = q3 - q1;
+
+                return new CauchyDistribution(median, interquartileRange / 2);
+            } else { throw new NotImplementedException(); }
+            
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>

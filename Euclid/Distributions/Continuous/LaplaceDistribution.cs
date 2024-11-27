@@ -1,5 +1,6 @@
 ﻿using Euclid.Histograms;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -51,13 +52,22 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static LaplaceDistribution Fit(double[] sample) 
+        {
+            return Fit(FittingMethod.Moments, sample);
+        }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static LaplaceDistribution Fit(FittingMethod method, double[] sample)
         {
-            throw new NotImplementedException();
+            if (method == FittingMethod.Moments) {
+                return new LaplaceDistribution(sample.Average(), Math.Sqrt((sample.Select(x => x * x).Average() - sample.Average() * sample.Average()) / 2));
+            }
+            else { throw new NotImplementedException(); }
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>

@@ -1,5 +1,7 @@
-﻿using Euclid.Histograms;
+﻿using Euclid.Analytics.Clustering;
+using Euclid.Histograms;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -54,13 +56,23 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static LogisticDistribution Fit(double[] sample) { 
+            return Fit(FittingMethod.Moments, sample);
+        }
+
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static LogisticDistribution Fit(FittingMethod method, double[] sample)
         {
-            throw new NotImplementedException();
+            if (method == FittingMethod.Moments) {
+                double mean = sample.Average();
+                double sigma2 = sample.Select(x => x * x).Average() - mean * mean;
+                return new LogisticDistribution(mean, Math.Sqrt(sigma2 * 3 / (Math.PI * Math.PI)));
+            } else { throw new NotImplementedException(); }
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>

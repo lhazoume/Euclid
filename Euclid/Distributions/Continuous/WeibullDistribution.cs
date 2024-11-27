@@ -1,5 +1,6 @@
 ﻿using Euclid.Histograms;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -65,13 +66,50 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static WeibullDistribution Fit(double[] sample)
+        {
+            return Fit(FittingMethod.MaximumLikelihood, sample);
+        }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static WeibullDistribution Fit(FittingMethod method, double[] sample)
         {
+            if (method == FittingMethod.LeastSquare) {
+                int n = sample.Length;
+                double[] xi = new double[n];
+                double[] yi = new double[n];
+                double[] Fi = new double[n];
+
+                sample = sample.OrderBy(x => x).ToArray();
+                for (int i = 0; i < n; i++)
+                {
+                    Fi[i] = (i + 0.5) / (n + 1);
+                    yi[i] = Math.Log(-Math.Log(1 - Fi[i]));
+                    xi[i] = Math.Log(sample[i]);
+                }
+
+                double Xavg = xi.Average();
+                double Yavg = yi.Average();
+
+                double numerator = 0;
+                double denominator = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    numerator += (xi[i] - Xavg) * (yi[i] - Yavg);
+                    denominator += (xi[i] - Xavg) * (xi[i] - Xavg);
+                }
+
+                double k = numerator / denominator;
+                double lambda = Math.Exp((-Yavg + k * Xavg) / k);
+
+                return new WeibullDistribution(lambda, k);
+            }
             throw new NotImplementedException();
+            
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -112,7 +150,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Weibull(λ = {0} k={1})", _lambda, _k);
+            return string.Format($"Weibull(λ = {_lambda} k={_k})");
         }
         #endregion
     }

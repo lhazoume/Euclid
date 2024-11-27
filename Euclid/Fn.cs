@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Policy;
+using Euclid.Histograms;
 
 namespace Euclid
 {
@@ -840,8 +842,99 @@ namespace Euclid
         /// <returns></returns>
         public static double IncompleteRegularizedBeta(double t, double x, double y)
         {
-            return IncompleteBeta(x, y, t) / Beta(x, y);
+            if (x <= 0.0 || y <= 0.0)
+                throw new
+                    ArithmeticException("ibeta: Domain error!");
+            if ((t < 0.0) || (t > 1.0))
+            {
+                throw new ArithmeticException("ibeta: Domain error!");
+            }
+
+            double bt = (t == 0.0 || t == 1.0)
+                ? 0.0
+                : Math.Exp(  lgamma(x + y) - lgamma(x) - lgamma(y) + (x * Math.Log(t)) + (y * Math.Log(1.0 - t))    );
+
+            bool symmetryTransformation = t >= (x + 1.0) / (x + y + 2.0);
+
+            /* Continued fraction representation */
+            double eps = Math.Pow(2, -53);
+            long intValue = BitConverter.DoubleToInt64Bits(0.0);
+            intValue += 1;
+            
+
+            // Note that long.MinValue has the same bit pattern as -0.0.
+            if (intValue == long.MinValue)
+            {
+                return 0;
+            }
+            double fpmin = BitConverter.Int64BitsToDouble(intValue);
+
+            if (symmetryTransformation)
+            {
+                t = 1.0 - t;
+                (x, y) = (y, x);
+            }
+
+            double qab = x + y;
+            double qap = x + 1.0;
+            double qam = x - 1.0;
+            double c = 1.0;
+            double d = 1.0 - (qab * t / qap);
+
+            if (Math.Abs(d) < fpmin)
+            {
+                d = fpmin;
+            }
+
+            d = 1.0 / d;
+            double h = d;
+
+            for (int m = 1, m2 = 2; m <= 50000; m++, m2 += 2)
+            {
+                double aa = m * (y - m) * t / ((qam + m2) * (x + m2));
+                d = 1.0 + (aa * d);
+
+                if (Math.Abs(d) < fpmin)
+                {
+                    d = fpmin;
+                }
+
+                c = 1.0 + (aa / c);
+                if (Math.Abs(c) < fpmin)
+                {
+                    c = fpmin;
+                }
+
+                d = 1.0 / d;
+                h *= d * c;
+                aa = -(x + m) * (qab + m) * t / ((x + m2) * (qap + m2));
+                d = 1.0 + (aa * d);
+
+                if (Math.Abs(d) < fpmin)
+                {
+                    d = fpmin;
+                }
+
+                c = 1.0 + (aa / c);
+
+                if (Math.Abs(c) < fpmin)
+                {
+                    c = fpmin;
+                }
+
+                d = 1.0 / d;
+                double del = d * c;
+                h *= del;
+
+                if (Math.Abs(del - 1.0) <= eps)
+                {
+                    return symmetryTransformation ? 1.0 - (bt * h / x) : bt * h / x;
+                }
+            }
+
+            return symmetryTransformation ? 1.0 - (bt * h / x) : bt * h / x;
         }
+
 
         /// <summary>
         /// Returns the incomplete beta function evaluated from zero to T.
@@ -852,95 +945,7 @@ namespace Euclid
         /// <returns></returns>
         public static double IncompleteBeta(double x, double y, double t)
         {
-            double a_, b_, t_, x_, xc, w, y_;
-            bool flag;
-
-            if (x <= 0.0 || y <= 0.0)
-                throw new
-                    ArithmeticException("ibeta: Domain error!");
-
-            if ((t <= 0.0) || (t >= 1.0))
-            {
-                if (t == 0.0) return 0.0;
-                if (t == 1.0) return 1.0;
-                throw new ArithmeticException("ibeta: Domain error!");
-            }
-
-            flag = false;
-            if ((y * t) <= 1.0 && t <= 0.95)
-            {
-                t_ = PowerSeries(x, y, t);
-                return t_;
-            }
-
-            w = 1.0 - t;
-
-            /* Reverse a and b if x is greater than the mean. */
-            if (t > (x / (x + y)))
-            {
-                flag = true;
-                a_ = y;
-                b_ = x;
-                xc = t;
-                x_ = w;
-            }
-            else
-            {
-                a_ = x;
-                b_ = y;
-                xc = w;
-                x_ = t;
-            }
-
-            if (flag && (b_ * x_) <= 1.0 && x_ <= 0.95)
-            {
-                t_ = PowerSeries(a_, b_, x_);
-                if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
-                else t_ = 1.0 - t_;
-                return t_;
-            }
-
-            /* Choose expansion for better convergence. */
-            y_ = x_ * (a_ + b_ - 2.0) - (a_ - 1.0);
-            if (y_ < 0.0)
-                w = incbcf(a_, b_, x_);
-            else
-                w = incbd(a_, b_, x_) / xc;
-
-            /* Multiply w by the factor
-                   a      b   _             _     _
-                  x  (1-x)   | (a+b) / ( a | (a) | (b) ) .   */
-
-            y_ = a_ * Math.Log(x_);
-            t_ = b_ * Math.Log(xc);
-            if ((a_ + b_) < MAXGAM && Math.Abs(y_) < MAXLOG && Math.Abs(t_) < MAXLOG)
-            {
-                t_ = Math.Pow(xc, b_);
-                t_ *= Math.Pow(x_, a_);
-                t_ /= a_;
-                t_ *= w;
-                t_ *= Gamma(a_ + b_) / (Gamma(a_) * Gamma(b_));
-                if (flag)
-                {
-                    if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
-                    else t_ = 1.0 - t_;
-                }
-                return t_;
-            }
-            /* Resort to logarithms.  */
-            y_ += t_ + lgamma(a_ + b_) - lgamma(a_) - lgamma(b_);
-            y_ += Math.Log(w / a_);
-            if (y_ < MINLOG)
-                t_ = 0.0;
-            else
-                t_ = Math.Exp(y_);
-
-            if (flag)
-            {
-                if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
-                else t_ = 1.0 - t_;
-            }
-            return t_;
+            return IncompleteRegularizedBeta(t,x, y) * Beta(x, y);
         }
 
         #endregion
