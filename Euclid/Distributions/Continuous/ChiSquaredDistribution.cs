@@ -36,6 +36,9 @@ namespace Euclid.Distributions.Continuous
             }
         }
 
+        /// <summary>Gets the distribution's freedom degrees</summary>
+        public double FreedomDegrees => _freedomDegrees;
+
         /// <summary>Gets the distribution's support</summary>
         public override Interval Support => _support;
 
@@ -66,7 +69,21 @@ namespace Euclid.Distributions.Continuous
         {
             return Fit(FittingMethod.Moments, sample);
         }
-
+        /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
+        /// <param name="numberOfPoints">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
+        /// <returns>an array of double</returns>
+        public override double[] Sample(int numberOfPoints, int seed)
+        {
+            double[] sample = new double[numberOfPoints];
+            NormalDistribution N = new NormalDistribution();
+            double[] normalsample = N.Sample(_freedomDegrees * numberOfPoints, seed).Select(x => x * x).ToArray();
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                sample[i] =normalsample.Skip(i*_freedomDegrees).Take(_freedomDegrees).Sum();
+            } 
+            return sample;
+        }
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
@@ -84,7 +101,7 @@ namespace Euclid.Distributions.Continuous
         public override double CumulativeDistribution(double x)
         {
             if (x <= 0) return 0;
-            return Fn.IncompleteLowerGamma(0.5 * _freedomDegrees, 0.5 * x) / Fn.Gamma(0.5 * _freedomDegrees);
+            return Fn.IncompleteRegularizedLowerGamma(0.5 * _freedomDegrees, 0.5 * x);
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
@@ -92,7 +109,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            NewtonRaphson solver = new NewtonRaphson(_freedomDegrees, CumulativeDistribution, 10);
+            Bracketing solver = new Bracketing(0,10000000, CumulativeDistribution,BracketingMethod.Dichotomy, 1000);
             solver.Solve(p);
             return solver.Result;
         }

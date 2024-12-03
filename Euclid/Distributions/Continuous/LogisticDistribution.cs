@@ -29,6 +29,9 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
+        /// <summary>Gets the distribution's scale parameter</summary>
+        public double Scale => _s;
+
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy => Math.Log(_s) + 2;
 
@@ -61,7 +64,6 @@ namespace Euclid.Distributions.Continuous
         public static LogisticDistribution Fit(double[] sample) { 
             return Fit(FittingMethod.Moments, sample);
         }
-
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>

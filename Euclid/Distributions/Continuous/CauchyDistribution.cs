@@ -34,6 +34,13 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
+
+        /// <summary>Gets the distribution's scale</summary>
+        public double Scale => _gamma;
+
+        /// <summary>Gets the distribution's location parameter</summary>
+        public double Location => _x0;
+
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy => Math.Log(_gamma) - Math.Log(4 * Math.PI);
 

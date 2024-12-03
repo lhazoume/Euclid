@@ -26,6 +26,9 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
+        /// <summary>Gets the distribution's scale parameter</summary>
+        public double Scale => _b;
+
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy => Math.Log(2 * _b * Math.E);
 

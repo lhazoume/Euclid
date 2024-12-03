@@ -33,6 +33,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
+        /// <summary>Gets the distribution's upper bound</summary>
+        public double UpperBound => _b;
+
+        /// <summary>Gets the distribution's lower bound</summary>
+        public double LowerBound => _a;
+
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy => Math.Log(_d);
 
@@ -125,6 +131,7 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints, int seed)
         {

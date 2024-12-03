@@ -63,8 +63,8 @@ namespace Euclid.Distributions.Discrete
         public override double CumulativeDistribution(double x)
         {
             if (x < 0) return 0;
-            int k = Convert.ToInt32(Math.Floor(x));
-            return Fn.IncompleteLowerGamma(k + 1, _lambda) / Fn.Factorial(k);
+            int k = Convert.ToInt32(Math.Floor(x+1));
+            return 1.0 - Fn.IncompleteRegularizedLowerGamma(k, _lambda);
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>

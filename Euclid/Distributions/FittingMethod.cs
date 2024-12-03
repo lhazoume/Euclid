@@ -10,6 +10,10 @@
         /// <summary>Fits the parameters by using the positional arguments</summary>
         PositionalArgument = 2,
         /// <summary>Fits the parameters by using the least square method</summary>
-        LeastSquare = 3
+        LeastSquare = 3,
+        /// <summary>Fits the parameters by using the hill approximate method</summary>
+        HillApproximate = 4,
+        /// <summary>Fits the parameters by using a numeric method</summary>
+        Numeric = 5,
     }
 }

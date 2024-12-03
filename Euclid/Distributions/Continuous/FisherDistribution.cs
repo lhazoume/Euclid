@@ -1,4 +1,6 @@
-﻿using Euclid.Histograms;
+﻿using Euclid.Benchmarking;
+using Euclid.Histograms;
+using Euclid.Optimizers;
 using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using System;
@@ -32,6 +34,11 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
+        /// <summary>Gets the distribution's second degree of freedom</summary>
+        public double FreedomDegree2 => _d2;
+
+        /// <summary>Gets the distribution's first degree of freedom</summary>
+        public double FreedomDegree1 => _d1;
 
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy
@@ -63,11 +70,40 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+
+        /// <summary> Builds a sample of random variables under this distribution </summary>
+        /// <param name="size">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
+        /// <returns>an array of double</returns>
+        public double[] SampleBis(int size, int seed)
+        { 
+        if (_d1-Math.Ceiling(_d1)==0 && _d2 - Math.Ceiling(_d2) == 0)
+            {
+                double[] result = new double[size];
+                ChiSquaredDistribution D1 = new ChiSquaredDistribution((int)_d1);
+                ChiSquaredDistribution D2 = new ChiSquaredDistribution((int)_d2);
+                double[] sample1 = D1.Sample(size, seed);
+                double[] sample2 = D2.Sample(size, seed);
+                for (int i =0; i<size; i++)
+                {
+                    result[i] = (sample1[i] / _d1) / (sample2[i] / _d2);
+                }
+                return result;
+            } else
+            {
+                Random random = new Random(seed);
+                double[] result = new double[size];
+                for (int i = 0; i < size; i++)
+                    result[i] = InverseCumulativeDistribution(random.NextDouble());
+                return result;
+            }
+        }
+            
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         public static FisherDistribution Fit(double[] sample)
         {
-            return Fit(FittingMethod.Moments, sample);
+            return Fit(FittingMethod.Numeric, sample);
         }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
@@ -75,23 +111,33 @@ namespace Euclid.Distributions.Continuous
         /// <param name="method">the fitting method</param>
         public static FisherDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.Moments) {
-                double mean = sample.Average();
-                double variance = sample.Select(x => Math.Pow(x, 2)).Average() - mean*mean;
+            if (method == FittingMethod.Numeric)
+            {
+                double func(Vector _x)
+                {
+                    double _D1 = _x[0];
+                    double _D2 = _x[1];
+                    FisherDistribution dist = new FisherDistribution(_D1,_D2);
+                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
+                    return l;
+                }
 
-                if (mean <= 1)
-                    throw new ArgumentException("Mean must be greater than 1 for a valid Fisher distribution.");
+                bool feasibilityFunction(Vector _x)
+                {
+                    if (_x[0] > 0 && _x[1] > 0) { return true; }
+                    return false;
+                }
 
-                double d2 = 2 * mean / (mean - 1);
-
-                if (d2 <= 4)
-                    throw new ArgumentException("Variance is undefined for d2 <= 4.");
-
-                double numerator = 2 * mean * (d2 - 2);
-                double d1 = numerator / (variance * (d2 - 4) - 2 * mean);
-
-                return new FisherDistribution(d1, d2);
-            } else { throw new NotImplementedException(); }
+                Vector[] initialSimplex = new Vector[3];
+                initialSimplex[0] = Vector.Create(1.0, 1.0);
+                initialSimplex[1] = Vector.Create(2.0, 1.0);
+                initialSimplex[2] = Vector.Create(1.0, 2.0);
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
+                nelderMead.Optimize();
+                Vector result = nelderMead.Result;
+                return new FisherDistribution(result[0], result[1]);
+            }
+            throw new NotImplementedException(); 
             
         }
 
@@ -108,7 +154,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            NewtonRaphson solver = new NewtonRaphson(1, CumulativeDistribution, 100) { SlopeTolerance = 1e-10 };
+            Bracketing solver = new Bracketing(0,Math.Pow(10,15), CumulativeDistribution, BracketingMethod.Dichotomy, 200); 
             solver.Solve(p);
             return solver.Result;
         }

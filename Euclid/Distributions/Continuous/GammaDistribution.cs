@@ -1,4 +1,6 @@
-﻿using Euclid.Histograms;
+﻿using Euclid.Benchmarking;
+using Euclid.Histograms;
+using Euclid.Optimizers;
 using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using Microsoft.Win32.SafeHandles;
@@ -34,6 +36,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
+        /// <summary>Gets the distribution's scale parameter </summary>
+        public double Scale => _theta;
+
+        /// <summary>Gets the distribution's shape parameter </summary>
+        public double Shape => _k;
+
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy => _k + Math.Log(_theta) + Math.Log(Fn.Gamma(_k)) + (1 - _k) * Fn.DiGamma(_k);
 
@@ -64,8 +72,9 @@ namespace Euclid.Distributions.Continuous
         /// <param name="sample">the sample of data to fit</param>
         public static GammaDistribution Fit(double[] sample)
         {
-            return Fit(FittingMethod.MaximumLikelihood, sample);
+            return Fit(FittingMethod.Moments, sample);
         }
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
@@ -87,11 +96,43 @@ namespace Euclid.Distributions.Continuous
                 double sumXLogX = sample.Select(x => x * Math.Log(x)).Sum();
 
                 double k = (n * sumX) / (n * sumXLogX - sumLogX * sumX);
-                double theta = (n * sumXLogX - sumLogX * sumX) / ((n-1)*n);
-                k = k - 1 / n * (3 * k - 2 / 3 * (k / (1 + k)) - 4 * k / (5 * Math.Pow(1 + k,2)));
-                return new GammaDistribution(k, theta);
+                double theta = (n * sumXLogX - sumLogX * sumX) /n / (n-1);
+                k = k - 1.0 / n * (3.0 * k - 2.0 / 3.0 * (k / (1.0 + k)) - 4.0 * k / (5.0 * Math.Pow(1.0 + k, 2)));
+                      return new GammaDistribution(k, theta);
             }
-            else { throw new NotImplementedException(); }
+            else if (method == FittingMethod.Numeric) 
+            {
+                double avg = sample.Average();
+                double sigma2 = sample.Select(x => x * x).Average() - avg * avg;
+                double theta = sigma2 / avg;
+                double k = avg * avg / sigma2;
+
+                double func(Vector _x)
+                {
+                    double _k = _x[0];
+                    double _theta = _x[1];
+                    GammaDistribution dist = new GammaDistribution(_k, _theta);
+                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
+                    return l;
+                }
+
+                bool feasibilityFunction(Vector _x)
+                {
+                    if (_x[0] > 0 && _x[1] > 0) { return true; }
+                    return false;
+                }
+
+                Vector[] initialSimplex = new Vector[3];
+                initialSimplex[0] = Vector.Create(k + 1, theta);
+                initialSimplex[1] = Vector.Create(k + 1, theta + 1);
+                initialSimplex[2] = Vector.Create(k, theta + 1);
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
+                nelderMead.Optimize();
+                Vector result = nelderMead.Result;
+
+                return new GammaDistribution(result[0], result[1]);
+            }
+            throw new NotImplementedException(); 
             
         }
 
@@ -101,7 +142,7 @@ namespace Euclid.Distributions.Continuous
         public override double CumulativeDistribution(double x)
         {
             if (x <= 0) return 0;
-            return _cdfFactor * Fn.IncompleteLowerGamma(_k, x / _theta);
+            return Fn.IncompleteRegularizedLowerGamma(_k, x / _theta);
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
@@ -109,7 +150,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            NewtonRaphson solver = new NewtonRaphson(1, CumulativeDistribution, 100);
+            Bracketing solver = new Bracketing(0, 10000000, CumulativeDistribution, BracketingMethod.Dichotomy, 1000);
             solver.Solve(p);
             return solver.Result;
         }
@@ -135,6 +176,7 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary>Generates a sequence of samples using the Ahrens-Dieter algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints, int seed)
         {
@@ -166,7 +208,6 @@ namespace Euclid.Distributions.Continuous
                         result[i] = _theta * Math.Exp(-z / _k);
                         i++;
                     }
-                
                 } while (i < numberOfPoints);
             }
             else
@@ -196,31 +237,6 @@ namespace Euclid.Distributions.Continuous
                 
             }
             return result;
-        }
-
-        private static double GenerateAhrensDieterRejection(Random random, double delta)
-        {
-            double e, n;
-            do
-            {
-                double u = 1 - random.NextDouble(),
-                    v = 1 - random.NextDouble(),
-                    w = 1 - random.NextDouble();
-
-                if (u * (Math.E + delta) <= Math.E)
-                {
-                    e = Math.Pow(v, 1 / delta);
-                    n = w * Math.Pow(e, delta - 1);
-                }
-                else
-                {
-                    e = 1 - Math.Log(v);
-                    n = w * Math.Exp(-e);
-                }
-
-            } while (n <= Math.Pow(e, delta - 1) * Math.Exp(-e));
-
-            return e;
         }
 
         /// <summary>Returns a string that represents this instance</summary>

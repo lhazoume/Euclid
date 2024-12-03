@@ -45,6 +45,12 @@ namespace Euclid.Distributions.Continuous
             }
         }
 
+        /// <summary>Gets the distribution's shape parameter</summary>
+        public  double Shape => _alpha;
+
+        /// <summary>Gets the distribution's scale parameter</summary>
+        public double Scale => _xm;
+
         /// <summary>Gets the distribution's median</summary>
         public override double Median => _xm * Math.Pow(2, 1 / _alpha);
 
@@ -154,6 +160,7 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary> Builds a sample of random variables under this distribution </summary>
         /// <param name="size">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int size, int seed)
         {

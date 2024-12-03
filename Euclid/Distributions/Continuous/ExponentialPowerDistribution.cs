@@ -1,7 +1,11 @@
-﻿using Euclid.Histograms;
+﻿using Euclid.Analytics.Clustering;
+using Euclid.Benchmarking;
+using Euclid.Histograms;
+using Euclid.Optimizers;
 using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using System;
+using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -40,6 +44,15 @@ namespace Euclid.Distributions.Continuous
 
         #region Accessors
 
+        /// <summary>Gets the distribution's scale parameter</summary>
+        public double Scale => _alpha;
+
+        /// <summary>Gets the distribution's shape parameter</summary>
+        public double Shape => _beta;
+
+        /// <summary>Gets the distribution's location parameter</summary>
+        public double Location => _mu;
+
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy => _1Beta - Math.Log(_beta / (2 * _alpha * _gamma1Beta));
 
@@ -67,12 +80,48 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static ExponentialPowerDistribution Fit(double[] sample) { return Fit(FittingMethod.Numeric, sample); }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static ExponentialPowerDistribution Fit(FittingMethod method, double[] sample)
         {
+            if (method == FittingMethod.Numeric)
+            {
+                double mu = sample.Average();
+                double alpha = 1;
+                double beta = 3;
+
+                double func(Vector _x)
+                {
+                    double _mu = _x[0];
+                    double _alpha = _x[1];
+                    double _beta = _x[2];
+                    ExponentialPowerDistribution dist = new ExponentialPowerDistribution(_mu, _alpha, _beta);
+                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
+                    return l;
+                }
+
+                bool feasibilityFunction(Vector _x)
+                {
+                    if (_x[2] > 0 && _x[1] > 0) { return true; }
+                    return false;
+                }
+
+                Vector[] initialSimplex = new Vector[4];
+                initialSimplex[0] = Vector.Create(mu + 1, alpha , beta);
+                initialSimplex[1] = Vector.Create(mu - 1, alpha, beta+1);
+                initialSimplex[2] = Vector.Create(mu - 1, alpha+1, beta);
+                initialSimplex[3] = Vector.Create(mu + 1, alpha+1, beta+1);
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
+                nelderMead.Optimize();
+                Vector result = nelderMead.Result;
+                return new ExponentialPowerDistribution(result[0], result[1], result[2]);
+
+            }
             throw new NotImplementedException();
         }
 
@@ -110,6 +159,26 @@ namespace Euclid.Distributions.Continuous
             throw new NotImplementedException("The MGF is not implemented");
         }
 
+        /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
+        /// <param name="numberOfPoints">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
+        /// <returns>an array of double</returns>
+        public override double[] Sample(int numberOfPoints, int seed)
+        {
+            double[] samples = new double[numberOfPoints];
+            GammaDistribution G = new GammaDistribution(1 + 1 / _beta, Math.Pow(2,_beta / 2));
+            double[] Y = G.Sample(numberOfPoints);
+            double delta;
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                delta =  _alpha*Math.Pow(Y[i], 1/_beta)/Math.Sqrt(2);
+                UniformDistribution uniformDistribution = new UniformDistribution(_mu - delta, _mu+delta);
+                samples[i] = uniformDistribution.Sample(1)[0];
+            }
+            return samples;
+        }
+        //https://cran.r-project.org/web/packages/gnorm/vignettes/gnormUse.html
+
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>
         public override string ToString()
@@ -120,3 +189,4 @@ namespace Euclid.Distributions.Continuous
         #endregion
     }
 }
+

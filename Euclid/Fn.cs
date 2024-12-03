@@ -703,6 +703,115 @@ namespace Euclid
 
             return ans * ax;
         }
+        /// <summary>
+        /// Returns the lower incomplete regularized gamma function.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static double IncompleteRegularizedLowerGamma(double a, double x)
+        {
+            const double epsilon = 0.000000000000001;
+            const double big = 4503599627370496.0;
+            const double bigInv = 2.22044604925031308085e-16;
+
+            if (a < 0d)
+            {
+                throw new ArgumentOutOfRangeException(nameof(a), "Value must not be negative (zero is ok).");
+            }
+
+            if (x < 0d)
+            {
+                throw new ArgumentOutOfRangeException(nameof(x), "Value must not be negative (zero is ok).");
+            }
+
+            if (a == 0.0)
+            {
+                return 1d;
+            }
+
+            if (x == 0.0)
+            {
+                return 0d;
+            }
+
+            double ax = (a * Math.Log(x)) - x - lgamma(a);
+            if (ax < -709.78271289338399)
+            {
+                return a < x ? 1d : 0d;
+            }
+
+            if (x <= 1 || x <= a)
+            {
+                double r2 = a;
+                double c2 = 1;
+                double ans2 = 1;
+
+                do
+                {
+                    r2 = r2 + 1;
+                    c2 = c2 * x / r2;
+                    ans2 += c2;
+                }
+                while ((c2 / ans2) > epsilon);
+
+                return Math.Exp(ax) * ans2 / a;
+            }
+
+            int c = 0;
+            double y = 1 - a;
+            double z = x + y + 1;
+
+            double p3 = 1;
+            double q3 = x;
+            double p2 = x + 1;
+            double q2 = z * x;
+            double ans = p2 / q2;
+
+            double error;
+
+            do
+            {
+                c++;
+                y += 1;
+                z += 2;
+                double yc = y * c;
+
+                double p = (p2 * z) - (p3 * yc);
+                double q = (q2 * z) - (q3 * yc);
+
+                if (q != 0)
+                {
+                    double nextans = p / q;
+                    error = Math.Abs((ans - nextans) / nextans);
+                    ans = nextans;
+                }
+                else
+                {
+                    // zero div, skip
+                    error = 1;
+                }
+
+                // shift
+                p3 = p2;
+                p2 = p;
+                q3 = q2;
+                q2 = q;
+
+                // normalize fraction when the numerator becomes large
+                if (Math.Abs(p) > big)
+                {
+                    p3 *= bigInv;
+                    p2 *= bigInv;
+                    q3 *= bigInv;
+                    q2 *= bigInv;
+                }
+            }
+            while (error > epsilon);
+
+            return 1d - (Math.Exp(ax) * ans);
+
+        }
 
         /// <summary>Returns the incomplete gamma function.</summary>
         /// <param name="a"></param>
@@ -710,31 +819,7 @@ namespace Euclid
         /// <returns></returns>
         public static double IncompleteLowerGamma(double a, double x)
         {
-            double ans, ax, c, r;
-
-            if (x <= 0 || a <= 0) return 0.0;
-
-            if (x > 1.0 && x > a) return 1.0 - IncompleteUpperGamma(a, x);
-
-            /* Compute  x**a * exp(-x) / gamma(a)  */
-            ax = a * Math.Log(x) - x - lgamma(a);
-            if (ax < -MAXLOG) return (0.0);
-
-            ax = Math.Exp(ax);
-
-            /* power series */
-            r = a;
-            c = 1.0;
-            ans = 1.0;
-
-            do
-            {
-                r += 1.0;
-                c *= x / r;
-                ans += c;
-            } while (c / ans > MACHEP);
-
-            return (ans * ax / a);
+            return IncompleteRegularizedLowerGamma(a, x) * Gamma(a);
 
         }
 
@@ -852,7 +937,7 @@ namespace Euclid
 
             double bt = (t == 0.0 || t == 1.0)
                 ? 0.0
-                : Math.Exp(  lgamma(x + y) - lgamma(x) - lgamma(y) + (x * Math.Log(t)) + (y * Math.Log(1.0 - t))    );
+                : Math.Exp(lgamma(x + y) - lgamma(x) - lgamma(y) + (x * Math.Log(t)) + (y * Math.Log(1.0 - t)));
 
             bool symmetryTransformation = t >= (x + 1.0) / (x + y + 2.0);
 
@@ -860,7 +945,7 @@ namespace Euclid
             double eps = Math.Pow(2, -53);
             long intValue = BitConverter.DoubleToInt64Bits(0.0);
             intValue += 1;
-            
+
 
             // Note that long.MinValue has the same bit pattern as -0.0.
             if (intValue == long.MinValue)
@@ -945,7 +1030,7 @@ namespace Euclid
         /// <returns></returns>
         public static double IncompleteBeta(double x, double y, double t)
         {
-            return IncompleteRegularizedBeta(t,x, y) * Beta(x, y);
+            return IncompleteRegularizedBeta(t, x, y) * Beta(x, y);
         }
 
         #endregion
@@ -1609,6 +1694,30 @@ namespace Euclid
                 else s = Math.Exp(t);
             }
             return s;
+        }
+
+        /// <summary>Returns harmonic function</summary>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        public static double Harmonic(double k)
+        {
+            if (Math.Round(k) == k) {
+                double harmonic = 0.0;
+
+                for (int i = 1; i <= k; i++)
+                {
+                    harmonic += 1.0 / i;
+                }
+
+                return harmonic;
+            }
+            else
+            {
+                double eulerGamma = 0.57721566490153286060;
+                return eulerGamma + DiGamma(k+1);
+            };
+
+
         }
     }
 }

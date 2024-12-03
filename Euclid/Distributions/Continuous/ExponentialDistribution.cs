@@ -39,7 +39,7 @@ namespace Euclid.Distributions.Continuous
                 int n = sample.Length;
                 double avg = sample.Average();
                 //double beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
-                return new ExponentialDistribution((n-2) / ((n-1)*avg));
+                return new ExponentialDistribution((n-2) / (n*avg));
             } else { throw new NotImplementedException(); } 
         }
 
@@ -101,6 +101,9 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
+
+        /// <summary>Gets the distribution's lambda parameter</summary>
+        public double Lambda => _lambda;
 
         /// <summary>Gets the distribution's support</summary>
         public override Interval Support => _support;
