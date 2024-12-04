@@ -6,6 +6,7 @@ using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using System;
 using System.Linq;
+using static System.Net.WebRequestMethods;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -81,14 +82,14 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static ExponentialPowerDistribution Fit(double[] sample) { return Fit(FittingMethod.Numeric, sample); }
+        public static ExponentialPowerDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static ExponentialPowerDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.Numeric)
+            if (method == FittingMethod.MaximumLikelihood)
             {
                 #region NelderMead
                 double mu = sample.Average();
@@ -160,22 +161,22 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <param name="seed">the random number generator's seed</param>
+        /// <see cref="https://cran.r-project.org/web/packages/gnorm/vignettes/gnormUse.html"/>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints, int seed)
         {
             double[] samples = new double[numberOfPoints];
-            GammaDistribution G = new GammaDistribution(1 + 1 / _beta, Math.Pow(2,_beta / 2));
+            GammaDistribution G = new GammaDistribution(1 + 1 / _beta, Math.Pow(2, _beta / 2));
             double[] Y = G.Sample(numberOfPoints);
             double delta;
             for (int i = 0; i < numberOfPoints; i++)
             {
-                delta =  _alpha*Math.Pow(Y[i], 1/_beta)/Math.Sqrt(2);
-                UniformDistribution uniformDistribution = new UniformDistribution(_mu - delta, _mu+delta);
+                delta = _alpha * Math.Pow(Y[i], 1 / _beta) / Math.Sqrt(2);
+                UniformDistribution uniformDistribution = new UniformDistribution(_mu - delta, _mu + delta);
                 samples[i] = uniformDistribution.Sample(1)[0];
             }
             return samples;
         }
-        //https://cran.r-project.org/web/packages/gnorm/vignettes/gnormUse.html
 
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>

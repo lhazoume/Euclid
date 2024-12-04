@@ -114,7 +114,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="sample">the sample of data to fit</param>
         public static StudentDistribution Fit(double[] sample)
         {
-            return Fit(FittingMethod.Numeric, sample);
+            return Fit(FittingMethod.MaximumLikelihood, sample);
         }
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -129,7 +129,7 @@ namespace Euclid.Distributions.Continuous
                 double nu = -2 * sigma / (1 - sigma);
                 return new StudentDistribution(nu);
             }
-            else if (method == FittingMethod.HillApproximate)
+            else if (method == FittingMethod.PositionalArgument)
             {
                 double lastHill = 0.00;
                 double[] sortedData = sample.OrderByDescending(x => x).ToArray();
@@ -154,7 +154,7 @@ namespace Euclid.Distributions.Continuous
                 }
                 return new StudentDistribution(2 * lastHill - 1);
             }
-            else if (method == FittingMethod.Numeric)
+            else if (method == FittingMethod.MaximumLikelihood)
             {
                 double nu;
                 double func (double _nu)

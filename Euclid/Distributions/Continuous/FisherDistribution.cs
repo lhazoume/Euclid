@@ -103,7 +103,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="sample">the sample of data to fit</param>
         public static FisherDistribution Fit(double[] sample)
         {
-            return Fit(FittingMethod.Numeric, sample);
+            return Fit(FittingMethod.MaximumLikelihood, sample);
         }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
@@ -111,7 +111,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="method">the fitting method</param>
         public static FisherDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.Numeric)
+            if (method == FittingMethod.MaximumLikelihood)
             {
                 double d1 = 0.1;
                 double var = sample.Select(x => x * x).Average() - Math.Pow(sample.Average(),2);

@@ -64,3 +64,5 @@ Benchmarking/obj/project.assets.json
 /.vs/ProjectEvaluation/euclid.strings.v8.bin
 /.vs/VSWorkspaceState.json
 *.bin
+/EuclidBenchmark/bin/Debug/Euclid.xml
+/EuclidBenchmark/obj/Debug/EuclidBe.64998FDA.Up2Date

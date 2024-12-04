@@ -100,7 +100,7 @@ namespace Euclid.Distributions.Continuous
                 k = k - 1.0 / n * (3.0 * k - 2.0 / 3.0 * (k / (1.0 + k)) - 4.0 * k / (5.0 * Math.Pow(1.0 + k, 2)));
                       return new GammaDistribution(k, theta);
             }
-            else if (method == FittingMethod.Numeric) 
+            else if (method == FittingMethod.MaximumLikelihood) 
             {
                 double avg = sample.Average();
                 double sigma2 = sample.Select(x => x * x).Average() - avg * avg;
