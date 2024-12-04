@@ -6,9 +6,7 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Weibull distribution class
-    /// </summary>
+    /// <summary>Weibull distribution class</summary>
     public class WeibullDistribution : ContinuousDistribution
     {
         #region Declarations
@@ -19,13 +17,12 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Builds a Weibull distribution</summary>
         /// <param name="lambda">the scale</param>
         /// <param name="k">the shape</param>
-        public WeibullDistribution(double lambda, double k )
+        public WeibullDistribution(double lambda, double k)
         {
             if (lambda <= 0) throw new ArgumentException("The scale can not be negative");
             if (k <= 0) throw new ArgumentException("The shape can not be negative");
             _lambda = lambda;
             _k = k;
-
 
             _support = new Interval(0, double.PositiveInfinity, true, false);
 
@@ -80,7 +77,7 @@ namespace Euclid.Distributions.Continuous
         /// <param name="sample">the sample of data to fit</param>
         public static WeibullDistribution Fit(double[] sample)
         {
-            return Fit(FittingMethod.LeastSquare, sample);
+            return Fit(FittingMethod.PositionalArgument, sample);
         }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
@@ -88,59 +85,62 @@ namespace Euclid.Distributions.Continuous
         /// <param name="method">the fitting method</param>
         public static WeibullDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.LeastSquare) {
+            if (method == FittingMethod.PositionalArgument)
+            {
                 int n = sample.Length;
-                double[] xi = new double[n];
-                double[] yi = new double[n];
-                double[] Fi = new double[n];
+                double[] x = new double[n],
+                    y = new double[n],
+                    f = new double[n];
 
-                sample = sample.OrderBy(x => x).ToArray();
+                double xAvg = 0,
+                    yAvg = 0;
+
+                sample = sample.OrderBy(d => d).ToArray();
                 for (int i = 0; i < n; i++)
                 {
-                    Fi[i] = (i + 0.5) / (n + 1);
-                    yi[i] = Math.Log(-Math.Log(1 - Fi[i]));
-                    xi[i] = Math.Log(sample[i]);
+                    f[i] = (i + 0.5) / (n + 1);
+                    y[i] = Math.Log(-Math.Log(1 - f[i]));
+                    x[i] = Math.Log(sample[i]);
+                    xAvg += x[i];
+                    yAvg += y[i];
                 }
+                xAvg /= n;
+                yAvg /= n;
 
-                double Xavg = xi.Average();
-                double Yavg = yi.Average();
 
-                double numerator = 0;
-                double denominator = 0;
+                double numerator = 0,
+                    denominator = 0;
                 for (int i = 0; i < n; i++)
                 {
-                    numerator += (xi[i] - Xavg) * (yi[i] - Yavg);
-                    denominator += (xi[i] - Xavg) * (xi[i] - Xavg);
+                    numerator += (x[i] - xAvg) * (y[i] - yAvg);
+                    denominator += (x[i] - xAvg) * (x[i] - xAvg);
                 }
 
-                double k = numerator / denominator;
-                double lambda = Math.Exp((-Yavg + k * Xavg) / k);
+                double k = numerator / denominator,
+                    lambda = Math.Exp((-yAvg + k * xAvg) / k);
 
                 return new WeibullDistribution(lambda, k);
-            } else if (method == FittingMethod.Numeric)
+            }
+            else if (method == FittingMethod.MaximumLikelihood)
             {
-                double shape = 1;
-                double scale = sample.Average();
+                double shape = 1,
+                    scale = sample.Average();
 
-                double func(Vector _x)
+                double func(Vector v)
                 {
-                    double _scale = _x[0];
-                    double _shape = _x[1];
-                    WeibullDistribution dist = new WeibullDistribution(_scale, _shape);
-                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
-                    return l;
+                    WeibullDistribution dist = new WeibullDistribution(v[0], v[1]);
+                    return -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
                 }
 
-                bool feasibilityFunction(Vector _x)
-                {
-                    if (_x[0] > 0 && _x[1] > 0) { return true; }
-                    return false;
-                }
+                bool feasibilityFunction(Vector v) => v[0] > 0 && v[1] > 0;
 
-                Vector[] initialSimplex = new Vector[3];
-                initialSimplex[0] = Vector.Create(scale + 1, shape);
-                initialSimplex[1] = Vector.Create(scale + 1, shape + 1);
-                initialSimplex[2] = Vector.Create(scale, shape + 1);
+                Vector[] initialSimplex = new Vector[]
+                {
+                    Vector.Create(scale + 1, shape),
+                    Vector.Create(scale + 1, shape + 1),
+                    Vector.Create(scale, shape + 1)
+                };
+
                 NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
                 Vector result = nelderMead.Result;
@@ -181,16 +181,16 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double MomentGeneratingFunction(double t)
         {
-            if (_k<1) { throw new ArgumentOutOfRangeException(nameof(_k)); }
+            if (_k < 1) { throw new ArgumentOutOfRangeException(nameof(_k)); }
             double res = 0;
             int n = 0;
             double incr;
             do
             {
-                incr = Math.Pow(t*_lambda, n)*Fn.Gamma(1+n/_k)/Fn.Factorial(n);
+                incr = Math.Pow(t * _lambda, n) * Fn.Gamma(1 + n / _k) / Fn.Factorial(n);
                 res += incr;
                 n++;
-            } while (incr > Math.Pow(10,-14));
+            } while (incr > Math.Pow(10, -14));
             return res;
         }
 

@@ -60,7 +60,7 @@ namespace Euclid.Distributions.Continuous
         public double MeanParameter => _mu;
 
         /// <summary>Gets the standard deviation parameter of the distribution</summary>
-        public double StandardDeviationParameter =>  _sigma;
+        public double StandardDeviationParameter => _sigma;
 
         /// <summary>Gets the distribution's upper bound</summary>
         public double UpperBound => _b;
@@ -120,14 +120,14 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static BoundedNormalDistribution Fit(double[] sample) { return Fit(FittingMethod.Numeric,sample); }
+        public static BoundedNormalDistribution Fit(double[] sample) { return Fit(FittingMethod.MaximumLikelihood, sample); }
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static BoundedNormalDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.Numeric)
+            if (method == FittingMethod.MaximumLikelihood)
             {
                 double mu = sample.Average();
                 double sigma = Math.Sqrt(sample.Select(x => x * x).Average() - mu * mu);
@@ -136,18 +136,17 @@ namespace Euclid.Distributions.Continuous
 
                 double func(Vector _x)
                 {
-                    double _mu = _x[0];
-                    double _sigma = _x[1];
+                    double _mu = _x[0],
+                        _sigma = _x[1];
                     BoundedNormalDistribution dist = new BoundedNormalDistribution(_mu, _sigma, a, b);
-                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
-                    return l;
+                    return -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
                 }
 
                 Vector[] initialSimplex = new Vector[3];
-                initialSimplex[0] = Vector.Create(mu-5, sigma);
-                initialSimplex[1] = Vector.Create(mu + 5, sigma+5);
-                initialSimplex[2] = Vector.Create(mu+5, sigma);
-                NelderMead nelderMead = new NelderMead(x=>(x[1]>0), func, initialSimplex, OptimizationType.Min, 100);
+                initialSimplex[0] = Vector.Create(mu - 5, sigma);
+                initialSimplex[1] = Vector.Create(mu + 5, sigma + 5);
+                initialSimplex[2] = Vector.Create(mu + 5, sigma);
+                NelderMead nelderMead = new NelderMead(x => (x[1] > 0), func, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
                 Vector result = nelderMead.Result;
                 return new BoundedNormalDistribution(result[0], result[1], a, b);
@@ -197,12 +196,12 @@ namespace Euclid.Distributions.Continuous
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints, int seed)
         {
-            if (_phiBeta - _phiAlpha > 0.0) 
+            if (_phiBeta - _phiAlpha > 0.0)
             {
                 double[] result = new double[numberOfPoints];
                 int i = 0;
                 NormalDistribution N = new NormalDistribution(_mu, _sigma);
-                double[] random = N.Sample(2*numberOfPoints, seed);
+                double[] random = N.Sample(2 * numberOfPoints, seed);
                 int cpt = 0;
                 do
                 {
@@ -212,15 +211,17 @@ namespace Euclid.Distributions.Continuous
                         i++;
                     }
                     cpt++;
-                    if (cpt == 2*numberOfPoints) { 
-                        random = N.Sample(2*numberOfPoints,seed);
+                    if (cpt == 2 * numberOfPoints)
+                    {
+                        random = N.Sample(2 * numberOfPoints, seed);
                         cpt = 0;
                     }
                 } while (i < numberOfPoints);
 
 
                 return result;
-            } else 
+            }
+            else
             {
                 Random random = new Random(seed);
                 double[] result = new double[numberOfPoints];
