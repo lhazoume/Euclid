@@ -113,6 +113,9 @@ namespace Euclid.Distributions.Continuous
         {
             if (method == FittingMethod.Numeric)
             {
+                double d1 = 0.1;
+                double var = sample.Select(x => x * x).Average() - Math.Pow(sample.Average(),2);
+                double d2 = (var > 1) ? 2*var/(var - 2) :1;
                 double func(Vector _x)
                 {
                     double _D1 = _x[0];
@@ -129,9 +132,9 @@ namespace Euclid.Distributions.Continuous
                 }
 
                 Vector[] initialSimplex = new Vector[3];
-                initialSimplex[0] = Vector.Create(1.0, 1.0);
-                initialSimplex[1] = Vector.Create(2.0, 1.0);
-                initialSimplex[2] = Vector.Create(1.0, 2.0);
+                initialSimplex[0] = Vector.Create(d1 + 1.0, d2 +1.0);
+                initialSimplex[1] = Vector.Create(d1, d2);
+                initialSimplex[2] = Vector.Create(d1, d2 + 2.0);
                 NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
                 Vector result = nelderMead.Result;

@@ -119,8 +119,8 @@ namespace Euclid.Distributions.Continuous
                 return new WeibullDistribution(lambda, k);
             } else if (method == FittingMethod.Numeric)
             {
-                double shape = 1;
-                double scale = sample.Average();
+                double shape = 0.1;
+                double scale = 1/sample.Average();
 
                 double func(Vector _x)
                 {

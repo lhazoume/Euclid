@@ -29,7 +29,6 @@ namespace Euclid.Distributions.Continuous
             _beta = beta;
             _1Beta = 1 / _beta;
             _gamma1Beta = Fn.Gamma(_1Beta);
-
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
 
@@ -91,36 +90,35 @@ namespace Euclid.Distributions.Continuous
         {
             if (method == FittingMethod.Numeric)
             {
+                #region NelderMead
                 double mu = sample.Average();
-                double alpha = 1;
-                double beta = 3;
+                double alpha = sample.Select(x => x * x).Average() - mu * mu;
+                double beta = 1;
 
                 double func(Vector _x)
                 {
-                    double _mu = _x[0];
-                    double _alpha = _x[1];
-                    double _beta = _x[2];
-                    ExponentialPowerDistribution dist = new ExponentialPowerDistribution(_mu, _alpha, _beta);
-                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
+                    double _alpha = _x[0];
+                    double _beta = _x[1];
+                    ExponentialPowerDistribution dist = new ExponentialPowerDistribution(mu, _alpha, _beta);
+                    double l =-sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
                     return l;
                 }
 
                 bool feasibilityFunction(Vector _x)
                 {
-                    if (_x[2] > 0 && _x[1] > 0) { return true; }
+                    if (_x[0] > 0 && _x[1] > 0) { return true; }
                     return false;
                 }
 
-                Vector[] initialSimplex = new Vector[4];
-                initialSimplex[0] = Vector.Create(mu + 1, alpha , beta);
-                initialSimplex[1] = Vector.Create(mu - 1, alpha, beta+1);
-                initialSimplex[2] = Vector.Create(mu - 1, alpha+1, beta);
-                initialSimplex[3] = Vector.Create(mu + 1, alpha+1, beta+1);
+                Vector[] initialSimplex = new Vector[3];
+                initialSimplex[0] = Vector.Create(alpha, beta);
+                initialSimplex[1] = Vector.Create(alpha, beta + 10);
+                initialSimplex[2] = Vector.Create(alpha + 10, beta);
                 NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
                 Vector result = nelderMead.Result;
-                return new ExponentialPowerDistribution(result[0], result[1], result[2]);
-
+                return new ExponentialPowerDistribution(mu, result[0], result[1]);
+                #endregion
             }
             throw new NotImplementedException();
         }
