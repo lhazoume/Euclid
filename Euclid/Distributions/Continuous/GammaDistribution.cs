@@ -115,42 +115,6 @@ namespace Euclid.Distributions.Continuous
                 
                 return new GammaDistribution(k, theta);
             }
-            else if (method == FittingMethod.MaximumLikelihood)
-            {
-                double mean = 0,
-                    variance = 0;
-
-                for (int i = 0; i < n; i++)
-                {
-                    mean += sample[i];
-                    variance += sample[i] * sample[i];
-                }
-                mean /= n;
-                variance = variance / n - mean * mean;
-                double theta = variance / mean,
-                    k = mean * mean / variance;
-
-                double fitness(Vector v)
-                {
-                    GammaDistribution dist = new GammaDistribution(v[0], v[1]);
-                    double sum = 0;
-                    for (int i = 0; i < n; i++)
-                    {
-                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
-                    }
-                    return -sum;
-                }
-
-                bool feasibilityFunction(Vector v) => (v[0] > 0 && v[1] > 0);
-
-                Vector[] initialSimplex = {
-                    Vector.Create(k + 1, theta),
-                    Vector.Create(k + 1, theta + 1),
-                    Vector.Create(k, theta + 1) };
-                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
-                nelderMead.Optimize();
-                return new GammaDistribution(nelderMead.Result[0], nelderMead.Result[1]);
-            }
             throw new NotImplementedException(); 
         }
 

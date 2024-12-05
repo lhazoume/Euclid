@@ -135,19 +135,6 @@ namespace Euclid.Distributions.Continuous
                 variance = variance / n - mean * mean;
                 return new StudentDistribution(-2 * variance / (1 - variance));
             }
-            else if (method == FittingMethod.PositionalArgument)
-            {
-                double[] sortedData = sample.OrderByDescending(x => x).ToArray();
-                double hillSum = 0;
-                int max_it = n / 1000;
-                if (max_it <= 10) { throw new ArgumentException(nameof(sample), "The  sample size is too small, it should be > 10000"); }
-                for (int cpt = 1; cpt < max_it; cpt++)
-                {
-                    hillSum += Math.Log(sortedData[cpt]);
-                }
-                hillSum = hillSum / max_it - Math.Log(sortedData[max_it]);
-                return new StudentDistribution(1 / hillSum);
-            }
             else if (method == FittingMethod.MaximumLikelihood)
             { 
                 double fitness (double _nu)

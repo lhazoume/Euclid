@@ -207,34 +207,11 @@ namespace Euclid.Distributions.Continuous
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints, int seed)
         {
-
             double[] result = new double[numberOfPoints];
-            if (_phiBeta - _phiAlpha > 0.5)
-            {
-                int i = 0, cpt = 0;
-                NormalDistribution N = new NormalDistribution(_mu, _sigma);
-                double[] random = N.Sample(2 * numberOfPoints, seed);
-                do
-                {
-                    if (_a < random[cpt] && _b > random[cpt])
-                    {
-                        result[i] = random[cpt];
-                        i++;
-                    }
-                    cpt++;
-                    if (cpt == 2 * numberOfPoints)
-                    {
-                        random = N.Sample(2 * numberOfPoints, seed);
-                        cpt = 0;
-                    }
-                } while (i < numberOfPoints);
-                
-            } else {
-                Random random = new Random(seed);
-                for (int i = 0; i < numberOfPoints; i++)
-                    result[i] = InverseCumulativeDistribution(random.NextDouble());
+            Random random = new Random(seed);
+            for (int i = 0; i < numberOfPoints; i++){
+                result[i] = InverseCumulativeDistribution(random.NextDouble());
             }
-
             return result;
         }
 
