@@ -5,9 +5,7 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Cauchy distribution class
-    /// </summary>
+    /// <summary> Cauchy distribution class </summary>
     public class CauchyDistribution : ContinuousDistribution
     {
         #region Declarations
@@ -70,7 +68,7 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static CauchyDistribution Fit(double[] sample) { return Fit(FittingMethod.PositionalArgument, sample);}
+        public static CauchyDistribution Fit(double[] sample) => Fit(FittingMethod.PositionalArgument, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -81,26 +79,25 @@ namespace Euclid.Distributions.Continuous
                 if (sample == null || sample.Length == 0)
                     throw new ArgumentException("Le vecteur ne peut pas être vide.");
 
-                // Tri des données
+                //Sort data
                 double[] sortedData = sample.OrderBy(x => x).ToArray();
                 int n = sortedData.Length;
 
-                // Calcul de la médiane
+                // Compute median
                 double median = n % 2 == 0 ? (sortedData[n / 2 - 1] + sortedData[n / 2]) / 2.0 : sortedData[n / 2];
 
-                // Calcul des quartiles
-                double[] firstHalf = sortedData.Take(n / 2).ToArray();
-                double[] secondHalf = sortedData.Skip((n + 1) / 2).ToArray();
-                int nFirst = firstHalf.Length;
-                int nSecond = secondHalf.Length;
-                double q1 = nFirst % 2 == 0 ? (firstHalf[nFirst / 2 - 1] + firstHalf[nFirst / 2]) / 2 : firstHalf[nFirst / 2];
-                double q3 = nSecond % 2 == 0 ? (secondHalf[nSecond / 2 - 1] + secondHalf[nSecond / 2]) / 2 : secondHalf[nSecond / 2];
-
-                // Calcul de l'écart interquartile (IQR)
-                double interquartileRange = q3 - q1;
+                // Compute first and third quartile
+                double[] firstHalf = sortedData.Take(n / 2).ToArray(),
+                    secondHalf = sortedData.Skip((n + 1) / 2).ToArray();
+                int nFirst = firstHalf.Length,
+                    nSecond = secondHalf.Length;
+                double q1 = nFirst % 2 == 0 ? (firstHalf[nFirst / 2 - 1] + firstHalf[nFirst / 2]) / 2 : firstHalf[nFirst / 2],
+                    q3 = nSecond % 2 == 0 ? (secondHalf[nSecond / 2 - 1] + secondHalf[nSecond / 2]) / 2 : secondHalf[nSecond / 2],
+                    interquartileRange = q3 - q1;
 
                 return new CauchyDistribution(median, interquartileRange / 2);
-            } else { throw new NotImplementedException(); }
+            }
+            throw new NotImplementedException();
             
         }
 
@@ -142,7 +139,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Cauchy(x0 = {0} γ = {1})", _x0, _gamma);
+            return string.Format($"Cauchy(x0 = {_x0} γ = {_gamma})");
         }
         #endregion
     }

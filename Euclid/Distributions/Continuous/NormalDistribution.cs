@@ -34,10 +34,8 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static NormalDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.MaximumLikelihood, sample);
-        }
+        public static NormalDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
@@ -45,10 +43,20 @@ namespace Euclid.Distributions.Continuous
         {
             if (method == FittingMethod.Moments || method == FittingMethod.MaximumLikelihood)
             {
-                double avg = sample.Average(),
-                stdev = Math.Sqrt(sample.Select(x => x * x).Average() - avg * avg);
+                double avg = 0, 
+                    stdev = 0;
+                int n = sample.Length;
+                for (int i = 0; i < n; i++)
+                {
+                    avg += sample[i];
+                    stdev += sample[i]*sample[i];
+                }
+                avg /= n;
+                stdev /= n;
+                stdev = Math.Sqrt(stdev - avg * avg);
                 return new NormalDistribution(avg, stdev);
-            } else { throw new NotImplementedException(); }
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -130,7 +138,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("N(μ = {0}, σ = {1})", _mean, _standardDeviation);
+            return string.Format($"N(μ = {_mean}, σ = {_standardDeviation})");
         }
 
         #endregion

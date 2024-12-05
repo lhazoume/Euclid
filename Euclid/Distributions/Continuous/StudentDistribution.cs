@@ -94,12 +94,14 @@ namespace Euclid.Distributions.Continuous
         public override double[] Sample(int numberOfPoints, int seed)
         {
             if ( _k == Math.Ceiling(_k)) {
-                double[] sample = new double[numberOfPoints];
-                NormalDistribution N = new NormalDistribution();
-                ChiSquaredDistribution Chi = new ChiSquaredDistribution((int)_k);
-                double[] Y1 = N.Sample(numberOfPoints, seed);
-                double[] Y2 = Chi.Sample(numberOfPoints, seed);
-                for (int i = 0; i < numberOfPoints; i++) { sample[i] = Y1[i] / Math.Sqrt(Y2[i] / _k); }
+                NormalDistribution normal = new NormalDistribution();
+                ChiSquaredDistribution chi = new ChiSquaredDistribution((int)_k);
+                double[] y1 = normal.Sample(numberOfPoints, seed),
+                    y2 = chi.Sample(numberOfPoints, seed),
+                    sample = new double[numberOfPoints];
+                for (int i = 0; i < numberOfPoints; i++) { 
+                    sample[i] = y1[i] / Math.Sqrt(y2[i] / _k); 
+                }
                 return sample;
             } else {
                 Random random = new Random(seed);
@@ -108,14 +110,12 @@ namespace Euclid.Distributions.Continuous
                     result[i] = InverseCumulativeDistribution(random.NextDouble());
                 return result;
             }
-            
         }
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static StudentDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.MaximumLikelihood, sample);
-        }
+        public static StudentDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
@@ -124,56 +124,57 @@ namespace Euclid.Distributions.Continuous
             int n = sample.Length;
             if (method == FittingMethod.Moments)
             {
-                double mean = sample.Average();
-                double sigma = sample.Select(x => x * x).Average() - mean * mean;
-                double nu = -2 * sigma / (1 - sigma);
-                return new StudentDistribution(nu);
+                double mean = 0.0,
+                    variance = 0.0;
+                for (int i = 0;i<n; i++)
+                {
+                    mean += sample[i];
+                    variance += sample[i]*sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+                return new StudentDistribution(-2 * variance / (1 - variance));
             }
             else if (method == FittingMethod.PositionalArgument)
             {
-                double lastHill = 0.00;
                 double[] sortedData = sample.OrderByDescending(x => x).ToArray();
-                double hillEstimate = 0.0;
-                for (int cpt = 1; cpt <= sample.Length / 2; cpt++)
+                double hillSum = 0;
+                int max_it = n / 1000;
+                if (max_it <= 10) { throw new ArgumentException(nameof(sample), "The  sample size is too small, it should be > 10000"); }
+                for (int cpt = 1; cpt < max_it; cpt++)
                 {
-                    // Extraction des k plus grandes valeurs
-                    double[] topK = sortedData.Take(cpt).ToArray();
-                    double threshold = sortedData[cpt];
-
-                    // Calcul de l'estimateur de Hill
-                    double hillSum = topK.Select(x => Math.Log(x) - Math.Log(threshold)).Average();
-                    hillEstimate = 1.0 / hillSum;
-
-                    // Vérification du palier
-                    if (Math.Abs(hillEstimate - lastHill) / hillEstimate < 0.5)
-                    {
-
-                        break;
-                    }
-                    lastHill = hillEstimate;
+                    hillSum += Math.Log(sortedData[cpt]);
                 }
-                return new StudentDistribution(2 * lastHill - 1);
+                hillSum = hillSum / max_it - Math.Log(sortedData[max_it]);
+                return new StudentDistribution(1 / hillSum);
             }
             else if (method == FittingMethod.MaximumLikelihood)
-            {
-                double nu;
-                double func (double _nu)
+            { 
+                double fitness (double _nu)
                 {
                     StudentDistribution dist = new StudentDistribution(_nu);
-                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
-                    return l;
+                    double sum = 0.0;
+                    for (int i = 0; i<n; i++)
+                    {
+                        sum += Math.Log(dist.ProbabilityDensity(sample[i])); 
+                    }
+                    return -sum;
                 }
-                GaussianHillClimb1D opti = new GaussianHillClimb1D(1, func, x=>x>0, OptimizationType.Min, 5, 0.5, 100);
+
+                bool feasibilityFunction(double x) => (x > 0);
+
+                GaussianHillClimb1D opti = new GaussianHillClimb1D(1, fitness, feasibilityFunction, OptimizationType.Min, 5, 0.5, 100);
                 opti.Optimize();
-                nu = opti.Result;
-                return new StudentDistribution(nu);
+                
+                return new StudentDistribution(opti.Result);
             }
             throw new NotImplementedException();
         }
         #region Methods
-            /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
-            /// <param name="x">The location at which to compute the density</param>
-            /// <returns>a <c>double</c></returns>
+
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+        /// <param name = "x" > The location at which to compute the density</param>
+        /// <returns>a<c> double</c></returns>
         public override double ProbabilityDensity(double x)
         {
             return Fn.Gamma(0.5 * (_k + 1)) * Math.Pow(1 + x * x / _k, -0.5 * (_k + 1)) / (Math.Sqrt(Math.PI * _k) * Fn.Gamma(0.5 * _k));
@@ -185,7 +186,6 @@ namespace Euclid.Distributions.Continuous
         {
             return $"StudentT( ν = {_k})";
         }
-
         #endregion
     }
 }

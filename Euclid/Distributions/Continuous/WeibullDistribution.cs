@@ -75,19 +75,16 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static WeibullDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.PositionalArgument, sample);
-        }
+        public static WeibullDistribution Fit(double[] sample) => Fit(FittingMethod.PositionalArgument, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static WeibullDistribution Fit(FittingMethod method, double[] sample)
         {
+            int n = sample.Length;
             if (method == FittingMethod.PositionalArgument)
             {
-                int n = sample.Length;
                 double[] x = new double[n],
                     y = new double[n],
                     f = new double[n];
@@ -107,7 +104,6 @@ namespace Euclid.Distributions.Continuous
                 xAvg /= n;
                 yAvg /= n;
 
-
                 double numerator = 0,
                     denominator = 0;
                 for (int i = 0; i < n; i++)
@@ -123,13 +119,18 @@ namespace Euclid.Distributions.Continuous
             }
             else if (method == FittingMethod.MaximumLikelihood)
             {
-                double shape = 1,
-                    scale = sample.Average();
+                double shape = 0.1,
+                    scale = 1/sample.Average();
 
-                double func(Vector v)
+                double fitness(Vector v)
                 {
                     WeibullDistribution dist = new WeibullDistribution(v[0], v[1]);
-                    return -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
+                    double sum = 0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
+                    }
+                    return -sum;
                 }
 
                 bool feasibilityFunction(Vector v) => v[0] > 0 && v[1] > 0;
@@ -141,11 +142,10 @@ namespace Euclid.Distributions.Continuous
                     Vector.Create(scale, shape + 1)
                 };
 
-                NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
-                Vector result = nelderMead.Result;
 
-                return new WeibullDistribution(result[0], result[1]);
+                return new WeibullDistribution(nelderMead.Result[0], nelderMead.Result[1]);
             }
             throw new NotImplementedException();
         }
@@ -182,9 +182,9 @@ namespace Euclid.Distributions.Continuous
         public override double MomentGeneratingFunction(double t)
         {
             if (_k < 1) { throw new ArgumentOutOfRangeException(nameof(_k)); }
-            double res = 0;
-            int n = 0;
-            double incr;
+            double res = 0,
+                incr;
+            int n = 0;             
             do
             {
                 incr = Math.Pow(t * _lambda, n) * Fn.Gamma(1 + n / _k) / Fn.Factorial(n);

@@ -61,9 +61,7 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static LogisticDistribution Fit(double[] sample) { 
-            return Fit(FittingMethod.Moments, sample);
-        }
+        public static LogisticDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -71,10 +69,20 @@ namespace Euclid.Distributions.Continuous
         public static LogisticDistribution Fit(FittingMethod method, double[] sample)
         {
             if (method == FittingMethod.Moments) {
-                double mean = sample.Average();
-                double sigma2 = sample.Select(x => x * x).Average() - mean * mean;
-                return new LogisticDistribution(mean, Math.Sqrt(sigma2 * 3 / (Math.PI * Math.PI)));
-            } else { throw new NotImplementedException(); }
+                int n = sample.Length;
+                double mean = 0,
+                    variance = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+
+                return new LogisticDistribution(mean, Math.Sqrt(variance * 3 / (Math.PI * Math.PI)));
+            } 
+            throw new NotImplementedException();
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -116,7 +124,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Logistic(μ = {0} s = {1})", _mu, _s);
+            return string.Format($"Logistic(μ = {_mu} s = {_s})");
         }
         #endregion
     }

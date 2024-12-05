@@ -70,10 +70,7 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static UniformDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.MaximumLikelihood, sample);
-        }
+        public static UniformDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -82,9 +79,17 @@ namespace Euclid.Distributions.Continuous
         {
             if (method == FittingMethod.Moments)
             {
-                double avg = sample.Average(),
-                    stdev = Math.Sqrt(3 * (sample.Average(x => x * x) - avg * avg));
-                return new UniformDistribution(avg - stdev, avg + stdev);
+                int n = sample.Length;
+                double avg = 0,
+                    dev = 0;
+                for (int i = 0;i<n; i++)
+                {
+                    avg += sample[i];
+                    dev += sample[i]*sample[i];
+                }
+                avg /= n;
+                dev = Math.Sqrt(3 * (dev/n - avg * avg));
+                return new UniformDistribution(avg - dev, avg + dev);
             } else if (method == FittingMethod.MaximumLikelihood)
             {
                 return new UniformDistribution(sample.Min(), sample.Max());
@@ -92,9 +97,7 @@ namespace Euclid.Distributions.Continuous
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)
-        /// </summary>
+        /// <summary> Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x) </summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
@@ -146,7 +149,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Uniform(a = {0} b = {1})", _a, _b);
+            return string.Format($"Uniform(a = {_a} b = {_b})");
         }
         #endregion
     }

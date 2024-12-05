@@ -1,4 +1,5 @@
-﻿using Euclid.Histograms;
+﻿using Euclid.Extensions;
+using Euclid.Histograms;
 using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using System;
@@ -63,27 +64,30 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Methods
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        public static ChiSquaredDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.Moments, sample);
-        }
         /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <param name="seed">the random number generator's seed</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints, int seed)
         {
-            double[] sample = new double[numberOfPoints];
             NormalDistribution N = new NormalDistribution();
-            double[] normalsample = N.Sample(_freedomDegrees * numberOfPoints, seed).Select(x => x * x).ToArray();
+            double[] normalsample = N.Sample(_freedomDegrees * numberOfPoints, seed),
+                sample = new double[numberOfPoints];
             for (int i = 0; i < numberOfPoints; i++)
             {
-                sample[i] =normalsample.Skip(i*_freedomDegrees).Take(_freedomDegrees).Sum();
+                sample[i] = 0;
+                for (int j = 0; j<_freedomDegrees; j++)
+                {
+                    sample[i] += normalsample[i * _freedomDegrees + j] * normalsample[i * _freedomDegrees + j];
+                }
             } 
             return sample;
         }
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static ChiSquaredDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
@@ -92,7 +96,8 @@ namespace Euclid.Distributions.Continuous
             if (method == FittingMethod.Moments) {
                 int k = (int)Math.Round(sample.Average());
                 return new ChiSquaredDistribution(k);
-            } else { throw new NotImplementedException();}
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -137,7 +142,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Χ²(k = {0})", _freedomDegrees);
+            return string.Format($"Χ²(k = {_freedomDegrees})");
         }
         #endregion
     }

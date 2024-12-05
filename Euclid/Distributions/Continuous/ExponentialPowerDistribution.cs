@@ -19,27 +19,23 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private ExponentialPowerDistribution(double mu, double alpha, double beta, Random randomSource)
+        /// <summary>Builds an exponential power distribution</summary>
+        /// <param name="mu">the location</param>
+        /// <param name="alpha">the scale</param>
+        /// <param name="beta">the shape</param>
+        public ExponentialPowerDistribution(double mu, double alpha, double beta)
         {
             _mu = mu;
 
-            if (alpha <= 0) throw new ArgumentException("scale has to be positive");
+            if (alpha <= 0) throw new ArgumentException("The scale has to be positive");
             _alpha = alpha;
 
-            if (beta <= 0) throw new ArgumentException("shape has to be positive");
+            if (beta <= 0) throw new ArgumentException("The shape has to be positive");
             _beta = beta;
             _1Beta = 1 / _beta;
             _gamma1Beta = Fn.Gamma(_1Beta);
             _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
         }
-
-        /// <summary> Builds a Exponential power distribution</summary>
-        /// <param name="mu">the location</param>
-        /// <param name="alpha">the scale</param>
-        /// <param name="beta">the shape</param>
-        public ExponentialPowerDistribution(double mu, double alpha, double beta)
-            : this(mu, alpha, beta, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors
@@ -91,35 +87,39 @@ namespace Euclid.Distributions.Continuous
         {
             if (method == FittingMethod.MaximumLikelihood)
             {
-                #region NelderMead
-                double mu = sample.Average();
-                double alpha = sample.Select(x => x * x).Average() - mu * mu;
-                double beta = 1;
+                int n = sample.Length;
+                double mu = 0, 
+                    alpha = 0, 
+                    beta=1;
 
-                double func(Vector _x)
+                for (int i = 0; i<n; i++)
                 {
-                    double _alpha = _x[0];
-                    double _beta = _x[1];
-                    ExponentialPowerDistribution dist = new ExponentialPowerDistribution(mu, _alpha, _beta);
-                    double l =-sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
-                    return l;
+                    mu += sample[i];
+                    alpha += sample[i]*sample[i];
+                }
+                mu /= n;
+                alpha = alpha / n + mu * mu;
+                
+                double fitness(Vector v)
+                {
+                    ExponentialPowerDistribution dist = new ExponentialPowerDistribution(mu, v[0], v[1]);
+                    double sum = 0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
+                    }
+                    return -sum;
                 }
 
-                bool feasibilityFunction(Vector _x)
-                {
-                    if (_x[0] > 0 && _x[1] > 0) { return true; }
-                    return false;
-                }
+                bool feasibilityFunction(Vector v) => (v[0] > 0 && v[1] > 0);
 
-                Vector[] initialSimplex = new Vector[3];
-                initialSimplex[0] = Vector.Create(alpha, beta);
-                initialSimplex[1] = Vector.Create(alpha, beta + 10);
-                initialSimplex[2] = Vector.Create(alpha + 10, beta);
-                NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
+                Vector[] initialSimplex = {
+                    Vector.Create(alpha, beta), 
+                    Vector.Create(alpha, beta + 10), 
+                    Vector.Create(alpha + 10, beta)};
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
-                Vector result = nelderMead.Result;
-                return new ExponentialPowerDistribution(mu, result[0], result[1]);
-                #endregion
+                return new ExponentialPowerDistribution(mu, nelderMead.Result[0], nelderMead.Result[1]);
             }
             throw new NotImplementedException();
         }
@@ -165,13 +165,13 @@ namespace Euclid.Distributions.Continuous
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints, int seed)
         {
-            double[] samples = new double[numberOfPoints];
-            GammaDistribution G = new GammaDistribution(1 + 1 / _beta, Math.Pow(2, _beta / 2));
-            double[] Y = G.Sample(numberOfPoints);
+            GammaDistribution gamma = new GammaDistribution(1 + 1 / _beta, Math.Pow(2, _beta / 2));
+            double[] y = gamma.Sample(numberOfPoints), 
+                samples = new double[numberOfPoints];
             double delta;
             for (int i = 0; i < numberOfPoints; i++)
             {
-                delta = _alpha * Math.Pow(Y[i], 1 / _beta) / Math.Sqrt(2);
+                delta = _alpha * Math.Pow(y[i], 1 / _beta) / Math.Sqrt(2);
                 UniformDistribution uniformDistribution = new UniformDistribution(_mu - delta, _mu + delta);
                 samples[i] = uniformDistribution.Sample(1)[0];
             }
@@ -182,7 +182,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("ExponentialPower(μ = {0}, α = {1}, β = {2})", _mu, _alpha, _beta);
+            return string.Format($"ExponentialPower(μ = {_mu}, α = {_alpha}, β = {_beta})");
         }
 
         #endregion

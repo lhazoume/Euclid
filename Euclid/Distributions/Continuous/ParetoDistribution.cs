@@ -2,6 +2,7 @@
 using Euclid.Histograms;
 using System;
 using System.Linq;
+using System.Management.Instrumentation;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -91,32 +92,50 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static ParetoDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.MaximumLikelihood, sample);
-        }
+        public static ParetoDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+
         /// <summary>Fits the distribution to a sample of data</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static ParetoDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (sample.Min() <= 0) throw new ArgumentOutOfRangeException(nameof(sample), "The Pareto Law doesnot allow negative values");
+            int n = sample.Length;
 
             if (method == FittingMethod.MaximumLikelihood)
             {
-                double xm = sample.Min(),
-                    alpha = 1 / (-Math.Log(xm) + sample.Select(x => Math.Log(x)).Sum() / sample.Length);
+                double logXavg = 0,
+                    xm = double.PositiveInfinity;
+
+                for (int i = 0; i < n; i++)
+                {
+                    if (sample[i] <= 0) throw new ArgumentException(nameof(sample), "The Pareto Law doesnot allow negative values");
+
+                    logXavg += Math.Log(sample[i]);
+                    xm = Math.Min(xm, sample[i]);
+                }
+                logXavg /= n;
+                double alpha = 1 / (-Math.Log(xm) + logXavg);
 
                 return new ParetoDistribution(xm, alpha);
             } else if (method == FittingMethod.Moments)
             {
-                double mean = sample.Average();
-                double variance = sample.Select(x => x*x).Average() - mean*mean;
+                double mean = 0, 
+                    variance = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    if (sample[i] <= 0) throw new ArgumentException(nameof(sample), "The Pareto Law doesnot allow negative values");
 
-                double K = mean*mean/variance;
-                double delta = 2+4*K;
-                double alpha = (2+Math.Sqrt(delta) / 2);
-                double x_m = mean * (alpha - 1) / alpha;
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance /= n;
+                
+                double K = mean*mean/variance,
+                    delta = 2+4*K,
+                    alpha = (2+Math.Sqrt(delta) / 2),
+                    x_m = mean * (alpha - 1) / alpha;
+                
                 return new ParetoDistribution(x_m, alpha);
             }
             throw new NotImplementedException();
@@ -175,7 +194,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Pareto(xm = {0} k = {1})", _xm, _alpha);
+            return string.Format($"Pareto(xm = {_xm} k = {_alpha})");
         }
         #endregion
     }

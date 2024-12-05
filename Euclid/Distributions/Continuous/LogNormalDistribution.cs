@@ -4,9 +4,7 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Log Normal distribution class
-    /// </summary>
+    /// <summary> Log Normal distribution class </summary>
     public class LogNormalDistribution : ContinuousDistribution
     {
         #region Declarations
@@ -57,36 +55,47 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static LogNormalDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.MaximumLikelihood, sample);    
-        }
+        public static LogNormalDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static LogNormalDistribution Fit(FittingMethod method, double[] sample)
         {
+            int n = sample.Length;
+            double mean = 0,
+                    variance = 0;
+            
             if (method == FittingMethod.Moments) {
-                double mean = sample.Average();
-                double variance = sample.Select(x => Math.Pow(x - mean, 2)).Sum() / sample.Length;
-
-                if (mean <= 0)
-                    throw new ArgumentException("Mean of the data must be positive for a lognormal distribution.");
-
-                double sigma = Math.Sqrt(Math.Log(1 + variance / Math.Pow(mean, 2)));
-                double mu = Math.Log(mean) - Math.Log(1 + variance / Math.Pow(mean, 2)) / 2;
+                for (int i = 0; i<n; i++)
+                {
+                    if (sample[i] <= 0) throw new ArgumentOutOfRangeException(nameof(sample), "The LogNormal Law doesnot allow negative values");
+                    
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance/n - mean*mean;
+                double sigma = Math.Sqrt(Math.Log(1 + variance / Math.Pow(mean, 2))),
+                    mu = Math.Log(mean) - Math.Log(1 + variance / Math.Pow(mean, 2)) / 2;
 
                 return new LogNormalDistribution(mu, sigma);
 
             } else if (method == FittingMethod.MaximumLikelihood)
             {
-                double mean = sample.Select(x => Math.Log(x)).Average();
-                double variance = sample.Select(x => Math.Log(x) * Math.Log(x)).Average() - mean * mean;
+                for (int i = 0; i < n; i++)
+                {
+                    if (sample[i] <= 0) throw new ArgumentOutOfRangeException(nameof(sample), "The LogNormal Law doesnot allow negative values");
+                    
+                    mean += Math.Log(sample[i]);
+                    variance += Math.Log(sample[i]) * Math.Log(sample[i]);
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
 
                 return new LogNormalDistribution(mean, Math.Sqrt(variance));
-            } else {throw new NotImplementedException();}
-            ;
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -139,7 +148,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Log-N(μ = {0}, σ = {1})", _mu, _sigma);
+            return string.Format($"Log-N(μ = {_mu}, σ = {_sigma})");
         }
         #endregion
     }

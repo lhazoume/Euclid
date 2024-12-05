@@ -70,10 +70,7 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static GammaDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.Moments, sample);
-        }
+        public static GammaDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -83,57 +80,78 @@ namespace Euclid.Distributions.Continuous
             int n = sample.Length;
             if (method == FittingMethod.Moments)
             {
-                double avg = sample.Average();
-                double sigma2 = sample.Select(x => x * x).Average() - avg * avg;
-                double theta = sigma2 / avg;
-                double k = avg * avg / sigma2;
+                double mean = 0, 
+                    variance = 0;
+
+                for (int i = 0; i < n; i++)
+                {
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+
+                double theta = variance / mean,
+                    k = mean * mean / variance;
+                
                 return new GammaDistribution(k, theta);
             }
             else if (method == FittingMethod.MaximumLikelihood)
             {
-                double sumX = sample.Sum();
-                double sumLogX = sample.Select(x => Math.Log(x)).Sum();
-                double sumXLogX = sample.Select(x => x * Math.Log(x)).Sum();
+                double sumX = 0, 
+                    sumLogX = 0, 
+                    sumXLogX = 0;
+                
+                for(int i = 0;i < n;i++)
+                {
+                    sumX += sample[i];
+                    sumXLogX += sample[i] * Math.Log(sample[i]);
+                    sumLogX += Math.Log(sample[i]);
+                }
 
-                double k = (n * sumX) / (n * sumXLogX - sumLogX * sumX);
-                double theta = (n * sumXLogX - sumLogX * sumX) /n / (n-1);
+                double k = (n * sumX) / (n * sumXLogX - sumLogX * sumX),
+                    theta = (n * sumXLogX - sumLogX * sumX) / (n * (n-1));
                 k = k - 1.0 / n * (3.0 * k - 2.0 / 3.0 * (k / (1.0 + k)) - 4.0 * k / (5.0 * Math.Pow(1.0 + k, 2)));
-                      return new GammaDistribution(k, theta);
+                
+                return new GammaDistribution(k, theta);
             }
-            else if (method == FittingMethod.MaximumLikelihood) 
+            else if (method == FittingMethod.MaximumLikelihood)
             {
-                double avg = sample.Average();
-                double sigma2 = sample.Select(x => x * x).Average() - avg * avg;
-                double theta = sigma2 / avg;
-                double k = avg * avg / sigma2;
+                double mean = 0,
+                    variance = 0;
 
-                double func(Vector _x)
+                for (int i = 0; i < n; i++)
                 {
-                    double _k = _x[0];
-                    double _theta = _x[1];
-                    GammaDistribution dist = new GammaDistribution(_k, _theta);
-                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
-                    return l;
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+                double theta = variance / mean,
+                    k = mean * mean / variance;
+
+                double fitness(Vector v)
+                {
+                    GammaDistribution dist = new GammaDistribution(v[0], v[1]);
+                    double sum = 0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
+                    }
+                    return -sum;
                 }
 
-                bool feasibilityFunction(Vector _x)
-                {
-                    if (_x[0] > 0 && _x[1] > 0) { return true; }
-                    return false;
-                }
+                bool feasibilityFunction(Vector v) => (v[0] > 0 && v[1] > 0);
 
-                Vector[] initialSimplex = new Vector[3];
-                initialSimplex[0] = Vector.Create(k + 1, theta);
-                initialSimplex[1] = Vector.Create(k + 1, theta + 1);
-                initialSimplex[2] = Vector.Create(k, theta + 1);
-                NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
+                Vector[] initialSimplex = {
+                    Vector.Create(k + 1, theta),
+                    Vector.Create(k + 1, theta + 1),
+                    Vector.Create(k, theta + 1) };
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
-                Vector result = nelderMead.Result;
-
-                return new GammaDistribution(result[0], result[1]);
+                return new GammaDistribution(nelderMead.Result[0], nelderMead.Result[1]);
             }
             throw new NotImplementedException(); 
-            
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -185,12 +203,13 @@ namespace Euclid.Distributions.Continuous
             int i = 0;
             if (_k < 1)
             {
-                double w = _k / Math.Exp(1) / (1 - _k);
-                double l = 1 / _k - 1;
-                double r = 1 / (1 + w);
-                double z, nz, hz;
+                double w = _k / Math.Exp(1) / (1 - _k),
+                    l = 1 / _k - 1,
+                    r = 1 / (1 + w),
+                    z, nz, hz;
                 do { 
-                    double u1 = random.NextDouble();
+                    double u1 = random.NextDouble(), 
+                        u2 = random.NextDouble();
 
                     if (u1<=r) {
                         z = -Math.Log(random.NextDouble());
@@ -198,8 +217,6 @@ namespace Euclid.Distributions.Continuous
                     {
                         z = Math.Log(random.NextDouble())/l;
                     }
-
-                    double u2 = random.NextDouble();
 
                     nz = (z>=0) ? Math.Exp(-z) : w*l*Math.Exp(l*z);
                     hz = Math.Exp(-z-Math.Exp(-z/_k));
@@ -213,21 +230,21 @@ namespace Euclid.Distributions.Continuous
             else
             {
                 // Marsaglia-Tsang
-                double d = _k - 1.0 / 3.0;
-                double c = 1.0 / Math.Sqrt(9.0 * d);
+                double d = _k - 1.0 / 3.0,
+                    c = 1.0 / Math.Sqrt(9.0 * d);
                 do
                 {
                     double v, z;
                     do
-                    { // Générer une variable normale standard Z
-                        double u1 = random.NextDouble();
-                        double u2 = random.NextDouble();
+                    { // Create a normal standard variable Z
+                        double u1 = random.NextDouble(), 
+                            u2 = random.NextDouble();
                         z = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
                         v = Math.Pow(1.0 + c * z, 3);
                     } while (v <= 0);
                 
                     double u = random.NextDouble();
-                    // Test d'acceptation
+                    // Acceptation test
                     if (Math.Log(u) < 0.5 * z * z + d * (1 - v + Math.Log(v)))
                     {
                         result[i] = d * v * _theta;
@@ -243,7 +260,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Γ(k = {0} θ = {1})", _k, _theta);
+            return string.Format($"Γ(k = {_k} θ = {_theta})");
         }
         #endregion
     }

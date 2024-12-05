@@ -8,9 +8,7 @@ using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Fisher distribution class
-    /// </summary>
+    /// <summary> Fisher distribution class </summary>
     public class FisherDistribution : ContinuousDistribution
     {
         #region Declarations
@@ -35,10 +33,10 @@ namespace Euclid.Distributions.Continuous
 
         #region Accessors
         /// <summary>Gets the distribution's second degree of freedom</summary>
-        public double FreedomDegree2 => _d2;
+        public double FreedomDegrees2 => _d2;
 
         /// <summary>Gets the distribution's first degree of freedom</summary>
-        public double FreedomDegree1 => _d1;
+        public double FreedomDegrees1 => _d1;
 
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy
@@ -75,15 +73,16 @@ namespace Euclid.Distributions.Continuous
         /// <param name="size">the sample's size</param>
         /// <param name="seed">the random number generator's seed</param>
         /// <returns>an array of double</returns>
-        public double[] SampleBis(int size, int seed)
+        public override double[] Sample(int size, int seed)
         { 
         if (_d1-Math.Ceiling(_d1)==0 && _d2 - Math.Ceiling(_d2) == 0)
             {
-                double[] result = new double[size];
-                ChiSquaredDistribution D1 = new ChiSquaredDistribution((int)_d1);
-                ChiSquaredDistribution D2 = new ChiSquaredDistribution((int)_d2);
-                double[] sample1 = D1.Sample(size, seed);
-                double[] sample2 = D2.Sample(size, seed);
+                ChiSquaredDistribution chi1 = new ChiSquaredDistribution((int)_d1),
+                    chi2 = new ChiSquaredDistribution((int)_d2);
+                
+                double[] result = new double[size],
+                    sample1 = chi1.Sample(size, seed),
+                    sample2 = chi2.Sample(size, seed);
                 for (int i =0; i<size; i++)
                 {
                     result[i] = (sample1[i] / _d1) / (sample2[i] / _d2);
@@ -101,10 +100,8 @@ namespace Euclid.Distributions.Continuous
             
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static FisherDistribution Fit(double[] sample)
-        {
-            return Fit(FittingMethod.MaximumLikelihood, sample);
-        }
+        public static FisherDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+        
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -113,32 +110,42 @@ namespace Euclid.Distributions.Continuous
         {
             if (method == FittingMethod.MaximumLikelihood)
             {
-                double d1 = 0.1;
-                double var = sample.Select(x => x * x).Average() - Math.Pow(sample.Average(),2);
-                double d2 = (var > 1) ? 2*var/(var - 2) :1;
-                double func(Vector _x)
+                int n = sample.Length;
+                double variance = 0, mean = 0;
+
+                for (int i = 0; i < n; i++)
                 {
-                    double _D1 = _x[0];
-                    double _D2 = _x[1];
-                    FisherDistribution dist = new FisherDistribution(_D1,_D2);
-                    double l = -sample.Select(x => Math.Log(dist.ProbabilityDensity(x))).Sum();
-                    return l;
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+
+                double d1 = 0.1, 
+                    d2 = (variance > 2) ? 2 * variance / (variance - 2) : 1;
+
+
+                double fitness(Vector v)
+                {
+                    FisherDistribution dist = new FisherDistribution(v[0], v[1]);
+                    double sum = 0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
+                    }
+                    return -sum;
                 }
 
-                bool feasibilityFunction(Vector _x)
-                {
-                    if (_x[0] > 0 && _x[1] > 0) { return true; }
-                    return false;
-                }
+                bool feasibilityFunction(Vector v) => v[0] > 0 && v[1] > 0;
 
-                Vector[] initialSimplex = new Vector[3];
-                initialSimplex[0] = Vector.Create(d1 + 1.0, d2 +1.0);
-                initialSimplex[1] = Vector.Create(d1, d2);
-                initialSimplex[2] = Vector.Create(d1, d2 + 2.0);
-                NelderMead nelderMead = new NelderMead(feasibilityFunction, func, initialSimplex, OptimizationType.Min, 100);
+                Vector[] initialSimplex = { 
+                    Vector.Create(d1 + 1.0, d2 + 1.0),  
+                    Vector.Create(d1, d2), 
+                    Vector.Create(d1, d2 + 2.0)};
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
-                Vector result = nelderMead.Result;
-                return new FisherDistribution(result[0], result[1]);
+
+                return new FisherDistribution(nelderMead.Result[0], nelderMead.Result[1]);
             }
             throw new NotImplementedException(); 
             
@@ -182,7 +189,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Fisher(d1 = {0} d2 = {1})", _d1, _d2);
+            return string.Format($"Fisher(d1 = {_d1} d2 = {_d2})");
         }
 
         #endregion

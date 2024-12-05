@@ -538,9 +538,7 @@ namespace Euclid
 
         #region Gamma functions
 
-        /// <summary>
-        /// Returns the gamma function of the specified number.
-        /// </summary>
+        /// <summary> Returns the gamma function of the specified number </summary>
         /// <param name="x"></param>
         /// <returns></returns>
         public static double Gamma(double x)
@@ -553,8 +551,8 @@ namespace Euclid
                          2.07448227648435975150E-1,
                          4.94214826801497100753E-1,
                          9.99999999999999996796E-1
-                     };
-            double[] Q = {
+                     },
+                     Q = {
                          -2.31581873324120129819E-5,
                          5.39605580493303397842E-4,
                          -4.45641913851797240494E-3,
@@ -565,9 +563,8 @@ namespace Euclid
                          1.00000000000000000320E0
                      };
 
-            double p, z;
-
-            double q = Math.Abs(x);
+            double p, z,
+                q = Math.Abs(x);
 
             if (q > 33.0)
             {
@@ -639,18 +636,16 @@ namespace Euclid
 
         }
 
-        /// <summary>
-        /// Returns the complemented incomplete gamma function.
-        /// </summary>
+        /// <summary> Returns the complemented incomplete gamma function </summary>
         /// <param name="a"></param>
         /// <param name="x"></param>
         /// <returns></returns>
         public static double IncompleteUpperGamma(double a, double x)
         {
-            double big = 4.503599627370496e15;
-            double biginv = 2.22044604925031308085e-16;
-            double ans, ax, c, yc, r, t, y, z;
-            double pk, pkm1, pkm2, qk, qkm1, qkm2;
+            double big = 4.503599627370496e15,
+                biginv = 2.22044604925031308085e-16,
+                ans, ax, c, yc, r, t, y, z,
+                pk, pkm1, pkm2, qk, qkm1, qkm2;
 
             if (x <= 0 || a <= 0) return 1.0;
 
@@ -703,17 +698,16 @@ namespace Euclid
 
             return ans * ax;
         }
-        /// <summary>
-        /// Returns the lower incomplete regularized gamma function.
-        /// </summary>
+
+        /// <summary> Returns the lower incomplete regularized gamma function </summary>
         /// <param name="a"></param>
         /// <param name="x"></param>
         /// <returns></returns>
         public static double IncompleteRegularizedLowerGamma(double a, double x)
         {
-            const double epsilon = 0.000000000000001;
-            const double big = 4503599627370496.0;
-            const double bigInv = 2.22044604925031308085e-16;
+            const double epsilon = 0.000000000000001,
+                big = 4503599627370496.0,
+                bigInv = 2.22044604925031308085e-16;
 
             if (a < 0d)
             {
@@ -743,9 +737,9 @@ namespace Euclid
 
             if (x <= 1 || x <= a)
             {
-                double r2 = a;
-                double c2 = 1;
-                double ans2 = 1;
+                double r2 = a,
+                    c2 = 1,
+                    ans2 = 1;
 
                 do
                 {
@@ -759,26 +753,23 @@ namespace Euclid
             }
 
             int c = 0;
-            double y = 1 - a;
-            double z = x + y + 1;
-
-            double p3 = 1;
-            double q3 = x;
-            double p2 = x + 1;
-            double q2 = z * x;
-            double ans = p2 / q2;
-
-            double error;
+            double y = 1 - a,
+                z = x + y + 1, 
+                p3 = 1, 
+                q3 = x,
+                p2 = x + 1,
+                q2 = z * x, 
+                ans = p2 / q2,
+                error;
 
             do
             {
                 c++;
                 y += 1;
                 z += 2;
-                double yc = y * c;
-
-                double p = (p2 * z) - (p3 * yc);
-                double q = (q2 * z) - (q3 * yc);
+                double yc = y * c,
+                    p = (p2 * z) - (p3 * yc),
+                    q = (q2 * z) - (q3 * yc);
 
                 if (q != 0)
                 {
@@ -829,14 +820,14 @@ namespace Euclid
         /// </summary>
         public static double DiGamma(double x)
         {
-            double y;
-            double nz = 0.0;
+            double y,
+                nz = 0.0;
             bool negative = (x <= 0);
 
             if (negative)
             {
-                double q = x;
-                double p = Math.Floor(q);
+                double q = x,
+                    p = Math.Floor(q);
                 negative = true;
 
                 if (Math.Abs(p - q) < 1E-9)
@@ -871,8 +862,7 @@ namespace Euclid
             }
             else
             {
-                double s = x;
-                double w = 0.0;
+                double s = x, w = 0.0;
 
                 while (s < 10.0)
                 {
@@ -907,9 +897,7 @@ namespace Euclid
 
         #region Beta functions
 
-        /// <summary>
-        /// Returns the beta function
-        /// </summary>
+        /// <summary> Returns the beta function </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
@@ -918,9 +906,7 @@ namespace Euclid
             return Gamma(x) * Gamma(y) / Gamma(x + y);
         }
 
-        /// <summary>
-        /// Return the incomplete regularized beta function
-        /// </summary>
+        /// <summary> Return the incomplete regularized beta function </summary>
         /// <param name="t">the integral's upper bound</param>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -960,11 +946,11 @@ namespace Euclid
                 (x, y) = (y, x);
             }
 
-            double qab = x + y;
-            double qap = x + 1.0;
-            double qam = x - 1.0;
-            double c = 1.0;
-            double d = 1.0 - (qab * t / qap);
+            double qab = x + y,
+                qap = x + 1.0,
+                qam = x - 1.0,
+                c = 1.0,
+                d = 1.0 - (qab * t / qap);
 
             if (Math.Abs(d) < fpmin)
             {
@@ -1016,14 +1002,11 @@ namespace Euclid
                     return symmetryTransformation ? 1.0 - (bt * h / x) : bt * h / x;
                 }
             }
-
             return symmetryTransformation ? 1.0 - (bt * h / x) : bt * h / x;
         }
 
 
-        /// <summary>
-        /// Returns the incomplete beta function evaluated from zero to T.
-        /// </summary>
+        /// <summary> Returns the incomplete beta function evaluated from zero to T </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="t"></param>
@@ -1141,9 +1124,9 @@ namespace Euclid
         public static double SupBrownianBridgeCDF(double x)
         {
             if (x <= 0) return 0; // the probability that the sup of an absolute value of a brownian bridge is zero is null. 
-            double sum = 0;
-            double numberOfStep = Math.Min(1000, (3 / x));
-            double u = -1, v = 1, c1 = Math.Exp(-2 * x * x), c2 = Math.Exp(-4 * x * x);
+            double sum = 0,
+                numberOfStep = Math.Min(1000, (3 / x)),
+                u = -1, v = 1, c1 = Math.Exp(-2 * x * x), c2 = Math.Exp(-4 * x * x);
 
             for (int i = 0; i < numberOfStep; i++)
             {
@@ -1151,7 +1134,6 @@ namespace Euclid
                 sum += u;
                 v *= c2;
             }
-
             return 2 * sum;
         }
 

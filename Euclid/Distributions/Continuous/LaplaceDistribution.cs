@@ -57,10 +57,7 @@ namespace Euclid.Distributions.Continuous
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static LaplaceDistribution Fit(double[] sample) 
-        {
-            return Fit(FittingMethod.Moments, sample);
-        }
+        public static LaplaceDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -68,9 +65,20 @@ namespace Euclid.Distributions.Continuous
         public static LaplaceDistribution Fit(FittingMethod method, double[] sample)
         {
             if (method == FittingMethod.Moments) {
-                return new LaplaceDistribution(sample.Average(), Math.Sqrt((sample.Select(x => x * x).Average() - sample.Average() * sample.Average()) / 2));
+                int n = sample.Length;
+                double mean = 0,
+                    variance = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+
+                return new LaplaceDistribution(mean, Math.Sqrt(variance / 2));
             }
-            else { throw new NotImplementedException(); }
+            throw new NotImplementedException();
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -126,7 +134,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Laplace(μ = {0} b = {1} )", _mu, _b);
+            return string.Format($"Laplace(μ = {_mu} b = {_b} )");
         }
         #endregion
     }
