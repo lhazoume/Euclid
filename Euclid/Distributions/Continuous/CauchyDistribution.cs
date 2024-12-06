@@ -75,7 +75,8 @@ namespace Euclid.Distributions.Continuous
         /// <param name="method">the fitting method</param>
         public static CauchyDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.PositionalArgument) {
+            if (method == FittingMethod.PositionalArgument)
+            {
                 if (sample == null || sample.Length == 0)
                     throw new ArgumentException("Le vecteur ne peut pas être vide.");
 
@@ -98,7 +99,7 @@ namespace Euclid.Distributions.Continuous
                 return new CauchyDistribution(median, interquartileRange / 2);
             }
             throw new NotImplementedException();
-            
+
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -106,7 +107,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
-            return 0.5 + Math.Atan((x - _x0) / _gamma)/Math.PI;
+            return 0.5 + Math.Atan((x - _x0) / _gamma) / Math.PI;
         }
 
         /// <summary>

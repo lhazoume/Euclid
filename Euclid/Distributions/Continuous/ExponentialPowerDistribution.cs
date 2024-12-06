@@ -1,12 +1,7 @@
-﻿using Euclid.Analytics.Clustering;
-using Euclid.Benchmarking;
-using Euclid.Histograms;
+﻿using Euclid.Histograms;
 using Euclid.Optimizers;
-using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using System;
-using System.Linq;
-using static System.Net.WebRequestMethods;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -105,9 +100,7 @@ namespace Euclid.Distributions.Continuous
                     ExponentialPowerDistribution dist = new ExponentialPowerDistribution(mu, v[0], v[1]);
                     double sum = 0;
                     for (int i = 0; i < n; i++)
-                    {
                         sum += Math.Log(dist.ProbabilityDensity(sample[i]));
-                    }
                     return -sum;
                 }
 
@@ -153,10 +146,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Evaluates the moment-generating function for a given t</summary>
         /// <param name="t">the argument</param>
         /// <returns>a double</returns>
-        public override double MomentGeneratingFunction(double t)
-        {
-            throw new NotImplementedException("The MGF is not implemented");
-        }
+        public override double MomentGeneratingFunction(double t) => double.NaN;
 
         /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
         /// <param name="numberOfPoints">the sample's size</param>

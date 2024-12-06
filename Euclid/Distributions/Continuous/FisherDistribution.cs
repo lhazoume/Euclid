@@ -1,10 +1,7 @@
-﻿using Euclid.Benchmarking;
-using Euclid.Histograms;
+﻿using Euclid.Histograms;
 using Euclid.Optimizers;
-using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
 using System;
-using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -74,21 +71,21 @@ namespace Euclid.Distributions.Continuous
         /// <param name="seed">the random number generator's seed</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int size, int seed)
-        { 
-        if (_d1-Math.Ceiling(_d1)==0 && _d2 - Math.Ceiling(_d2) == 0)
+        {
+            if (_d1 - Math.Ceiling(_d1) == 0 && _d2 - Math.Ceiling(_d2) == 0)
             {
                 ChiSquaredDistribution chi1 = new ChiSquaredDistribution((int)_d1),
                     chi2 = new ChiSquaredDistribution((int)_d2);
-                
+
                 double[] result = new double[size],
                     sample1 = chi1.Sample(size, seed),
                     sample2 = chi2.Sample(size, seed);
-                for (int i =0; i<size; i++)
-                {
+                for (int i = 0; i < size; i++)
                     result[i] = (sample1[i] / _d1) / (sample2[i] / _d2);
-                }
+
                 return result;
-            } else
+            }
+            else
             {
                 Random random = new Random(seed);
                 double[] result = new double[size];
@@ -97,11 +94,11 @@ namespace Euclid.Distributions.Continuous
                 return result;
             }
         }
-            
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         public static FisherDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
-        
+
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -121,7 +118,7 @@ namespace Euclid.Distributions.Continuous
                 mean /= n;
                 variance = variance / n - mean * mean;
 
-                double d1 = 0.1, 
+                double d1 = 0.1,
                     d2 = (variance > 2) ? 2 * variance / (variance - 2) : 1;
 
 
@@ -131,24 +128,24 @@ namespace Euclid.Distributions.Continuous
                     double sum = 0;
                     for (int i = 0; i < n; i++)
                     {
-                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
+                        sum -= Math.Log(dist.ProbabilityDensity(sample[i]));
                     }
-                    return -sum;
+                    return sum;
                 }
 
                 bool feasibilityFunction(Vector v) => v[0] > 0 && v[1] > 0;
 
-                Vector[] initialSimplex = { 
-                    Vector.Create(d1 + 1.0, d2 + 1.0),  
-                    Vector.Create(d1, d2), 
+                Vector[] initialSimplex = {
+                    Vector.Create(d1 + 1.0, d2 + 1.0),
+                    Vector.Create(d1, d2),
                     Vector.Create(d1, d2 + 2.0)};
                 NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
                 nelderMead.Optimize();
 
                 return new FisherDistribution(nelderMead.Result[0], nelderMead.Result[1]);
             }
-            throw new NotImplementedException(); 
-            
+            throw new NotImplementedException();
+
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
@@ -164,7 +161,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            Bracketing solver = new Bracketing(0,Math.Pow(10,15), CumulativeDistribution, BracketingMethod.Dichotomy, 200); 
+            Bracketing solver = new Bracketing(0, Math.Pow(10, 15), CumulativeDistribution, BracketingMethod.Dichotomy, 200);
             solver.Solve(p);
             return solver.Result;
         }

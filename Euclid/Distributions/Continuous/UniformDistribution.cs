@@ -65,8 +65,6 @@ namespace Euclid.Distributions.Continuous
 
         #endregion
 
-
-
         #region Methods
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
@@ -90,7 +88,8 @@ namespace Euclid.Distributions.Continuous
                 avg /= n;
                 dev = Math.Sqrt(3 * (dev/n - avg * avg));
                 return new UniformDistribution(avg - dev, avg + dev);
-            } else if (method == FittingMethod.MaximumLikelihood)
+            }
+            else if (method == FittingMethod.MaximumLikelihood)
             {
                 return new UniformDistribution(sample.Min(), sample.Max());
             }

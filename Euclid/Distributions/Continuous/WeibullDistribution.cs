@@ -1,5 +1,4 @@
-﻿using Euclid.Analytics.ErrorFunctions;
-using Euclid.Histograms;
+﻿using Euclid.Histograms;
 using Euclid.Optimizers;
 using System;
 using System.Linq;

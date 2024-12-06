@@ -1,12 +1,7 @@
-﻿using Euclid.DataStructures;
-using Euclid.Histograms;
+﻿using Euclid.Histograms;
 using Euclid.Optimizers;
 using Euclid.Solvers.SingleVariableSolver;
-using Microsoft.Win32.SafeHandles;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Euclid.Distributions.Continuous
 {

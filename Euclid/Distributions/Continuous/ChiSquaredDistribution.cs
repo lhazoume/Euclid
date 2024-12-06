@@ -76,11 +76,9 @@ namespace Euclid.Distributions.Continuous
             for (int i = 0; i < numberOfPoints; i++)
             {
                 sample[i] = 0;
-                for (int j = 0; j<_freedomDegrees; j++)
-                {
-                    sample[i] += normalsample[i * _freedomDegrees + j] * normalsample[i * _freedomDegrees + j];
-                }
-            } 
+                for (int j = 0; j < _freedomDegrees; j++)
+                    sample[i] += Math.Pow(normalsample[i * _freedomDegrees + j], 2);
+            }
             return sample;
         }
 
@@ -92,8 +90,9 @@ namespace Euclid.Distributions.Continuous
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static ChiSquaredDistribution Fit(FittingMethod method, double[] sample)
-        { 
-            if (method == FittingMethod.Moments) {
+        {
+            if (method == FittingMethod.Moments)
+            {
                 int k = (int)Math.Round(sample.Average());
                 return new ChiSquaredDistribution(k);
             }
@@ -114,7 +113,15 @@ namespace Euclid.Distributions.Continuous
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            Bracketing solver = new Bracketing(0,10000000, CumulativeDistribution,BracketingMethod.Dichotomy, 1000);
+            double epsilon = 1e-8;
+            int m = 1;
+            while (CumulativeDistribution(Math.Pow(2, m)) < p)
+                m++;
+            double bracketingLowBound = m == 1 ? 0 : Math.Pow(2, m - 1),
+                bracketingUpBound = Math.Pow(2, m);
+            int optimalSteps = (int)Math.Ceiling(m - 1 - Math.Log(epsilon) / Math.Log(2));
+
+            Bracketing solver = new Bracketing(bracketingLowBound, bracketingUpBound, CumulativeDistribution, BracketingMethod.Dichotomy, optimalSteps);
             solver.Solve(p);
             return solver.Result;
         }

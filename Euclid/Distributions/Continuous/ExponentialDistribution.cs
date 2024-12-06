@@ -28,17 +28,21 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         public static ExponentialDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
         public static ExponentialDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (method == FittingMethod.Moments || method == FittingMethod.MaximumLikelihood) {
+            if (sample.Any(d => d < 0))
+                throw new ArgumentOutOfRangeException(nameof(sample));
+            if (method == FittingMethod.Moments || method == FittingMethod.MaximumLikelihood)
+            {
                 int n = sample.Length;
                 double avg = sample.Average();
-                return new ExponentialDistribution((n-2) / (n*avg));
+                return new ExponentialDistribution((n - 2) / (n * avg));
             }
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
         }
 
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>

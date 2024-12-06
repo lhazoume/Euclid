@@ -55,10 +55,10 @@ namespace Euclid.Distributions.Continuous
         #region Accessors
 
         /// <summary>Gets the mean parameter of the distribution</summary>
-        public double MeanParameter => _mu;
+        public double Mu => _mu;
 
         /// <summary>Gets the standard deviation parameter of the distribution</summary>
-        public double StandardDeviationParameter => _sigma;
+        public double Sigma => _sigma;
 
         /// <summary>Gets the distribution's upper bound</summary>
         public double UpperBound => _b;
@@ -89,9 +89,7 @@ namespace Euclid.Distributions.Continuous
             }
         }
 
-        /// <summary>
-        /// Gets the distribution's skewness
-        /// </summary>
+        /// <summary>Gets the distribution's skewness</summary>
         /// <remarks>using Shah and Jaiswal (1966)</remarks>
         public override double Skewness
         {
