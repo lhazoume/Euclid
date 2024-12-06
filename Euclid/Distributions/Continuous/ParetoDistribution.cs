@@ -146,7 +146,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
-            if (x >= _xm) return Math.Pow(1 - (_xm / x), _alpha);
+            if (x >= _xm) return 1 - Math.Pow((_xm / x), _alpha);
             else return 0;
         }
 

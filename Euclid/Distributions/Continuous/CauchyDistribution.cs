@@ -106,7 +106,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double CumulativeDistribution(double x)
         {
-            return 0.5 + Math.Atan((x - _x0) / _gamma); //Mathieu : On devrait diviser par pi ici
+            return 0.5 + Math.Atan((x - _x0) / _gamma)/Math.PI;
         }
 
         /// <summary>
