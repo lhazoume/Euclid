@@ -1,7 +1,6 @@
-﻿using Euclid.Histograms;
+﻿using System;
+using Euclid.Histograms;
 using Euclid.Optimizers;
-using System;
-using System.Linq;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -53,25 +52,6 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
-
-        /// <summary>Gets the mean parameter of the distribution</summary>
-        public double Mu => _mu;
-
-        /// <summary>Gets the standard deviation parameter of the distribution</summary>
-        public double Sigma => _sigma;
-
-        /// <summary>Gets the distribution's upper bound</summary>
-        public double UpperBound => _b;
-
-        /// <summary>Gets the distribution's lower bound</summary>
-        public double LowerBound => _a;
-
-        /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + _dGb / (2 * _Z);
-
-        /// <summary>Gets the distribution's support</summary>
-        public override Interval Support => _support;
-
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean => _mu + (_gbAlpha - _gbBeta) * _sigma / _Z;
 
@@ -88,6 +68,12 @@ namespace Euclid.Distributions.Continuous
                 return _mu;
             }
         }
+
+        /// <summary>Gets the distribution's standard deviation</summary>
+        public override double StandardDeviation => Math.Sqrt(Variance);
+
+        /// <summary>Gets the distribution's variance</summary>
+        public override double Variance => _sigma2 * (1 + _dGb / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2));
 
         /// <summary>Gets the distribution's skewness</summary>
         /// <remarks>using Shah and Jaiswal (1966)</remarks>
@@ -106,64 +92,26 @@ namespace Euclid.Distributions.Continuous
             }
         }
 
-        /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation => Math.Sqrt(Variance);
+        /// <summary>Gets the distribution's entropy</summary>
+        public override double Entropy => Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + _dGb / (2 * _Z);
 
-        /// <summary>Gets the distribution's variance</summary>
-        public override double Variance => _sigma2 * (1 + _dGb / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2));
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support => _support;
+
+        /// <summary>Gets the mean parameter of the distribution</summary>
+        public double Mu => _mu;
+
+        /// <summary>Gets the standard deviation parameter of the distribution</summary>
+        public double Sigma => _sigma;
+
+        /// <summary>Gets the distribution's upper bound</summary>
+        public double UpperBound => _b;
+
+        /// <summary>Gets the distribution's lower bound</summary>
+        public double LowerBound => _a;
         #endregion
 
         #region Methods
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        public static BoundedNormalDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample); 
-
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static BoundedNormalDistribution Fit(FittingMethod method, double[] sample)
-        {
-            if (method == FittingMethod.MaximumLikelihood)
-            {
-                int n = sample.Length;
-                double mean = 0.0,
-                    sigma = 0.0,
-                    a=double.PositiveInfinity,
-                    b=double.NegativeInfinity;
-                for (int i = 0; i < n; i++)
-                {
-                    mean += sample[i];
-                    sigma += sample[i] * sample[i];
-                    a = (sample[i]>a) ? a : sample[i];
-                    b = (sample[i]<b) ? b : sample[i];
-                }
-                mean /= n;
-                sigma = Math.Sqrt(sigma / n - mean * mean);
-
-                double fitness(Vector v)
-                {
-                    BoundedNormalDistribution dist = new BoundedNormalDistribution(v[0], v[1], a, b);
-                    double sum = 0.0;
-                    for (int i = 0; i < n; i++)
-                    {
-                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
-                    }
-                    return -sum;
-                }
-
-                bool feasibilityFunction(Vector v) => (v[1] > 0);
-
-                Vector[] initialSimplex = { 
-                    Vector.Create(mean - 5, sigma), 
-                    Vector.Create(mean + 5, sigma + 5), 
-                    Vector.Create(mean + 5, sigma) };
-                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
-                nelderMead.Optimize();
-                return new BoundedNormalDistribution(nelderMead.Result[0], nelderMead.Result[1], a, b);
-            }
-            throw new NotImplementedException();
-        }
-
         /// <summary>Computes the cumulative distribution function at x</summary>
         /// <param name="x">the location at which to compute the function</param>
         /// <returns>a double</returns>
@@ -199,18 +147,54 @@ namespace Euclid.Distributions.Continuous
             return Math.Exp(_mu * t + _sigma2 * t * t / 2) * (Fn.Phi(_beta - _sigma * t) - Fn.Phi(_alpha - _sigma * t)) / (Fn.Phi(_beta) - Fn.Phi(_alpha));
         }
 
-        /// <summary>Generates a sequence of samples using the Ahrens-Dieter algorithm</summary>
-        /// <param name="numberOfPoints">the sample's size</param>
-        /// <param name="seed">the random number generator's seed</param>
-        /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints, int seed)
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static BoundedNormalDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
+        public static BoundedNormalDistribution Fit(FittingMethod method, double[] sample)
         {
-            double[] result = new double[numberOfPoints];
-            Random random = new Random(seed);
-            for (int i = 0; i < numberOfPoints; i++){
-                result[i] = InverseCumulativeDistribution(random.NextDouble());
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (method == FittingMethod.MaximumLikelihood)
+            {
+                int n = sample.Length;
+                double mean = 0.0,
+                    sigma = 0.0,
+                    a = sample[0],
+                    b = sample[0];
+                for (int i = 0; i < n; i++)
+                {
+                    mean += sample[i];
+                    sigma += sample[i] * sample[i];
+                    a = (sample[i] > a) ? a : sample[i];
+                    b = (sample[i] < b) ? b : sample[i];
+                }
+                mean /= n;
+                sigma = Math.Sqrt(sigma / n - mean * mean);
+
+                double fitness(Vector v)
+                {
+                    BoundedNormalDistribution dist = new BoundedNormalDistribution(v[0], v[1], a, b);
+                    double sum = 0.0;
+                    for (int i = 0; i < n; i++)
+                        sum -= Math.Log(dist.ProbabilityDensity(sample[i]));
+                    return sum;
+                }
+
+                bool feasibilityFunction(Vector v) => (v[1] > 0);
+
+                Vector[] initialSimplex = {
+                    Vector.Create(mean - 5, sigma),
+                    Vector.Create(mean + 5, sigma + 5),
+                    Vector.Create(mean + 5, sigma) };
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 1000);
+                nelderMead.Optimize();
+                return new BoundedNormalDistribution(nelderMead.Result[0], nelderMead.Result[1], a, b);
             }
-            return result;
+            throw new NotImplementedException();
         }
 
         /// <summary>Returns a string that represents this instance</summary>

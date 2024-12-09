@@ -1,5 +1,5 @@
-﻿using Euclid.Histograms;
-using System;
+﻿using System;
+using Euclid.Histograms;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -12,12 +12,6 @@ namespace Euclid.Distributions.Continuous
         protected Interval _support;
 
         #region Accessors
-        /// <summary>Gets the distribution's entropy</summary>
-        public abstract double Entropy { get; }
-
-        /// <summary>Gets the distribution's support</summary>
-        public abstract Interval Support { get; }
-
         /// <summary>Gets the distribution's mean</summary>
         public abstract double Mean { get; }
 
@@ -27,15 +21,20 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's mode</summary>
         public abstract double Mode { get; }
 
-        /// <summary>Gets the distribution's skewness</summary>
-        public abstract double Skewness { get; }
-
         /// <summary>Gets the distribution's standard deviation</summary>
         public abstract double StandardDeviation { get; }
 
         /// <summary>Gets the distribution's variance</summary>
         public abstract double Variance { get; }
 
+        /// <summary>Gets the distribution's skewness</summary>
+        public abstract double Skewness { get; }
+
+        /// <summary>Gets the distribution's entropy</summary>
+        public abstract double Entropy { get; }
+
+        /// <summary>Gets the distribution's support</summary>
+        public abstract Interval Support { get; }
         #endregion
 
         #region Methods
@@ -71,6 +70,11 @@ namespace Euclid.Distributions.Continuous
             return Math.Log(ProbabilityDensity(x));
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public abstract double MomentGeneratingFunction(double t);
+
         /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
@@ -88,12 +92,6 @@ namespace Euclid.Distributions.Continuous
                 result[i] = InverseCumulativeDistribution(random.NextDouble());
             return result;
         }
-
-        /// <summary>Evaluates the moment-generating function for a given t</summary>
-        /// <param name="t">the argument</param>
-        /// <returns>a double</returns>
-        public abstract double MomentGeneratingFunction(double t);
-
         #endregion
     }
 }

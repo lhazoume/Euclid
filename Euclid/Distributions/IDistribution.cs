@@ -18,7 +18,6 @@
         /// <returns>a double</returns>
         double ProbabilityDensity(double x);
 
-
         /// <summary>Evaluates the moment-generating function for a given t</summary>
         /// <param name="t">the argument</param>
         /// <returns>a double</returns>
@@ -29,9 +28,6 @@
         /// <returns>a double</returns>
         double ProbabilityLnDensity(double x);
 
-        /// <summary>Returns the distribution's entropy</summary>
-        double Entropy { get; }
-
         /// <summary>Returns the distribution's mean</summary>
         double Mean { get; }
 
@@ -41,13 +37,16 @@
         /// <summary>Returns the distribution's mode</summary>
         double Mode { get; }
 
-        /// <summary>Returns the distribution's skewness</summary>
-        double Skewness { get; }
-
         /// <summary>Returns the distribution's standard deviation</summary>
         double StandardDeviation { get; }
 
         /// <summary>Returns the distribution's variance</summary>
         double Variance { get; }
+
+        /// <summary>Returns the distribution's skewness</summary>
+        double Skewness { get; }
+
+        /// <summary>Returns the distribution's entropy</summary>
+        double Entropy { get; }
     }
 }

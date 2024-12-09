@@ -1,7 +1,7 @@
-﻿using Euclid.Histograms;
+﻿using System;
+using Euclid.Histograms;
 using Euclid.Optimizers;
 using Euclid.Solvers.SingleVariableSolver;
-using System;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -22,10 +22,10 @@ namespace Euclid.Distributions.Continuous
         {
             _mu = mu;
 
-            if (alpha <= 0) throw new ArgumentException("The scale has to be positive");
+            if (alpha <= 0) throw new ArgumentException("scale has to be positive");
             _alpha = alpha;
 
-            if (beta <= 0) throw new ArgumentException("The shape has to be positive");
+            if (beta <= 0) throw new ArgumentException("shape has to be positive");
             _beta = beta;
             _1Beta = 1 / _beta;
             _gamma1Beta = Fn.Gamma(_1Beta);
@@ -34,19 +34,6 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
-
-        /// <summary>Gets the distribution's scale parameter</summary>
-        public double Scale => _alpha;
-
-        /// <summary>Gets the distribution's shape parameter</summary>
-        public double Shape => _beta;
-
-        /// <summary>Gets the distribution's location parameter</summary>
-        public double Location => _mu;
-
-        /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => _1Beta - Math.Log(_beta / (2 * _alpha * _gamma1Beta));
-
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean => _mu;
 
@@ -56,67 +43,32 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode => _mu;
 
-        /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness => 0.0;
-
         /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation => _alpha * Math.Sqrt(Fn.Gamma(3 / _beta) / _gamma1Beta);
-
-        /// <summary>Gets the distribution's support</summary>
-        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's variance</summary>
         public override double Variance => _alpha * _alpha * Fn.Gamma(3 / _beta) / _gamma1Beta;
 
+        /// <summary>Gets the distribution's skewness</summary>
+        public override double Skewness => 0.0;
+
+        /// <summary>Gets the distribution's entropy</summary>
+        public override double Entropy => _1Beta - Math.Log(_beta / (2 * _alpha * _gamma1Beta));
+
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support => _support;
+
+        /// <summary>Gets the distribution's scale parameter</summary>
+        public double Scale => _alpha;
+
+        /// <summary>Gets the distribution's shape parameter</summary>
+        public double Shape => _beta;
+
+        /// <summary>Gets the distribution's location parameter</summary>
+        public double Location => _mu;
         #endregion
 
         #region Methods
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        public static ExponentialPowerDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
-
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static ExponentialPowerDistribution Fit(FittingMethod method, double[] sample)
-        {
-            if (method == FittingMethod.MaximumLikelihood)
-            {
-                int n = sample.Length;
-                double mu = 0, 
-                    alpha = 0, 
-                    beta=1;
-
-                for (int i = 0; i<n; i++)
-                {
-                    mu += sample[i];
-                    alpha += sample[i]*sample[i];
-                }
-                mu /= n;
-                alpha = alpha / n + mu * mu;
-                
-                double fitness(Vector v)
-                {
-                    ExponentialPowerDistribution dist = new ExponentialPowerDistribution(mu, v[0], v[1]);
-                    double sum = 0;
-                    for (int i = 0; i < n; i++)
-                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
-                    return -sum;
-                }
-
-                bool feasibilityFunction(Vector v) => (v[0] > 0 && v[1] > 0);
-
-                Vector[] initialSimplex = {
-                    Vector.Create(alpha, beta), 
-                    Vector.Create(alpha, beta + 10), 
-                    Vector.Create(alpha + 10, beta)};
-                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
-                nelderMead.Optimize();
-                return new ExponentialPowerDistribution(mu, nelderMead.Result[0], nelderMead.Result[1]);
-            }
-            throw new NotImplementedException();
-        }
-
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">the location at which to compute the function</param>
         /// <returns>a double</returns>
@@ -130,7 +82,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            NewtonRaphson solver = new NewtonRaphson(_mu, CumulativeDistribution, 10);
+            NewtonRaphson solver = new NewtonRaphson(_mu, CumulativeDistribution, 1000);
             solver.Solve(p);
             return solver.Result;
         }
@@ -148,10 +100,10 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a double</returns>
         public override double MomentGeneratingFunction(double t) => double.NaN;
 
-        /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
+        /// <summary>Builds a sample of random variables under this distribution</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <param name="seed">the random number generator's seed</param>
-        /// <see cref="https://cran.r-project.org/web/packages/gnorm/vignettes/gnormUse.html"/>
+        /// <see href="https://cran.r-project.org/web/packages/gnorm/vignettes/gnormUse.html/"></see>
         /// <returns>an array of double</returns>
         public override double[] Sample(int numberOfPoints, int seed)
         {
@@ -168,13 +120,60 @@ namespace Euclid.Distributions.Continuous
             return samples;
         }
 
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static ExponentialPowerDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
+        public static ExponentialPowerDistribution Fit(FittingMethod method, double[] sample)
+        {
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (method == FittingMethod.MaximumLikelihood)
+            {
+                int n = sample.Length;
+                double mu = 0,
+                    alpha = 0,
+                    beta = 1;
+
+                for (int i = 0; i < n; i++)
+                {
+                    mu += sample[i];
+                    alpha += sample[i] * sample[i];
+                }
+                mu /= n;
+                alpha = alpha / n + mu * mu;
+
+                double fitness(Vector v)
+                {
+                    ExponentialPowerDistribution dist = new ExponentialPowerDistribution(mu, v[0], v[1]);
+                    double sum = 0;
+                    for (int i = 0; i < n; i++)
+                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
+                    return -sum;
+                }
+
+                bool feasibilityFunction(Vector v) => (v[0] > 0 && v[1] > 0);
+
+                Vector[] initialSimplex = {
+                    Vector.Create(alpha, beta),
+                    Vector.Create(alpha, beta + 10),
+                    Vector.Create(alpha + 10, beta)};
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 1000);
+                nelderMead.Optimize();
+                return new ExponentialPowerDistribution(mu, nelderMead.Result[0], nelderMead.Result[1]);
+            }
+            throw new NotImplementedException();
+        }
+
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>
         public override string ToString()
         {
             return string.Format($"ExponentialPower(μ = {_mu}, α = {_alpha}, β = {_beta})");
         }
-
         #endregion
     }
 }

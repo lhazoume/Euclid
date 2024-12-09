@@ -1,7 +1,7 @@
-﻿using Euclid.Histograms;
-using Euclid.Optimizers;
-using System;
+﻿using System;
 using System.Linq;
+using Euclid.Histograms;
+using Euclid.Optimizers;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -32,15 +32,6 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
-        /// <summary>Gets the distribution's shape parameter</summary>
-        public double Shape => _k;
-
-        /// <summary>Gets the distribution's scale parameter</summary>
-        public double Scale => _lambda;
-
-        /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => Fn.EulerGamma * (1 - 1 / _k) + Math.Log(_lambda / _k) + 1;
-
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean => _mu;
 
@@ -58,20 +49,85 @@ namespace Euclid.Distributions.Continuous
             }
         }
 
+        /// <summary>Gets the distribution's standard deviation</summary>
+        public override double StandardDeviation => _sigma;
+
+        /// <summary>Gets the distribution's variance</summary>
+        public override double Variance => _sigma2;
+
         /// <summary>Gets the distribution's skewness</summary>
         public override double Skewness => Fn.Gamma(1 + 3 / _k) * Math.Pow(_lambda / _sigma, 3) - 3 * _mu / _sigma - Math.Pow(_mu / _sigma, 3);
 
-        /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation => _sigma;
+        /// <summary>Gets the distribution's entropy</summary>
+        public override double Entropy => Fn.EulerGamma * (1 - 1 / _k) + Math.Log(_lambda / _k) + 1;
 
         /// <summary>Gets the distribution's support</summary>
         public override Interval Support => _support;
 
-        /// <summary>Gets the distribution's variance</summary>
-        public override double Variance => _sigma2;
+        /// <summary>Gets the distribution's shape parameter</summary>
+        public double Shape => _k;
+
+        /// <summary>Gets the distribution's scale parameter</summary>
+        public double Scale => _lambda;
         #endregion
 
         #region Methods
+        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
+        /// <param name="x">The location at which to compute the cumulative distribution function</param>
+        /// <returns>the cumulative distribution at location x</returns>
+        public override double CumulativeDistribution(double x)
+        {
+            return (x < 0) ? 0 : 1 - Math.Exp(-Math.Pow(x / _lambda, _k));
+        }
+
+        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
+        /// <param name="p">The location at which to compute the inverse cumulative density</param>
+        /// <returns>the inverse cumulative density at p</returns>
+        public override double InverseCumulativeDistribution(double p)
+        {
+            return _lambda * Math.Pow(-Math.Log(1 - p), 1 / _k);
+        }
+
+        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
+        /// <param name="x">The location at which to compute the density</param>
+        /// <returns>a <c>double</c></returns>
+        public override double ProbabilityDensity(double x)
+        {
+            return (x <= 0) ? 0 : 
+                (_k / _lambda) * Math.Pow(x / _lambda, _k - 1) * Math.Exp(-Math.Pow(x / _lambda, _k));
+        }
+
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (_k < 1) { throw new ArgumentOutOfRangeException(nameof(_k), "the shape parameter has to be bigger than 1"); }
+            double res = 0,
+                incr;
+            int n = 0;             
+            do
+            {
+                incr = Math.Pow(t * _lambda, n) * Fn.Gamma(1 + n / _k) / Fn.Factorial(n);
+                res += incr;
+                n++;
+            } while (incr > 1e-14);
+            return res;
+        }
+
+        /// <summary>Builds a sample of random variables under this distribution</summary>
+        /// <param name="numberOfPoints">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
+        /// <returns>an array of double</returns>
+        public override double[] Sample(int numberOfPoints, int seed)
+        {
+            Random random = new Random(seed);
+            double[] result = new double[numberOfPoints];
+            for (int i = 0; i < numberOfPoints; i++)
+                result[i] = _lambda * Math.Pow(-Math.Log(random.NextDouble()), 1 / _k);
+            return result;
+        }
+
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         public static WeibullDistribution Fit(double[] sample) => Fit(FittingMethod.PositionalArgument, sample);
@@ -81,6 +137,10 @@ namespace Euclid.Distributions.Continuous
         /// <param name="method">the fitting method</param>
         public static WeibullDistribution Fit(FittingMethod method, double[] sample)
         {
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (sample.Any(d => d <= 0))
+                throw new ArgumentOutOfRangeException(nameof(sample), "the sample can't be lower or equal to 0");
             int n = sample.Length;
             if (method == FittingMethod.PositionalArgument)
             {
@@ -119,78 +179,30 @@ namespace Euclid.Distributions.Continuous
             else if (method == FittingMethod.MaximumLikelihood)
             {
                 double shape = 0.1,
-                    scale = 1/sample.Average();
+                    scale = 1 / sample.Average();
 
                 double fitness(Vector v)
                 {
                     WeibullDistribution dist = new WeibullDistribution(v[0], v[1]);
                     double sum = 0;
                     for (int i = 0; i < n; i++)
-                    {
-                        sum += Math.Log(dist.ProbabilityDensity(sample[i]));
-                    }
-                    return -sum;
+                        sum -= Math.Log(dist.ProbabilityDensity(sample[i]));
+                    return sum;
                 }
 
                 bool feasibilityFunction(Vector v) => v[0] > 0 && v[1] > 0;
 
-                Vector[] initialSimplex = new Vector[]
-                {
+                Vector[] initialSimplex = new Vector[]{
                     Vector.Create(scale + 1, shape),
                     Vector.Create(scale + 1, shape + 1),
-                    Vector.Create(scale, shape + 1)
-                };
+                    Vector.Create(scale, shape + 1)};
 
-                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 100);
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 1000);
                 nelderMead.Optimize();
 
                 return new WeibullDistribution(nelderMead.Result[0], nelderMead.Result[1]);
             }
             throw new NotImplementedException();
-        }
-
-        /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
-        /// <param name="x">The location at which to compute the cumulative distribution function</param>
-        /// <returns>the cumulative distribution at location x</returns>
-        public override double CumulativeDistribution(double x)
-        {
-            if (x < 0) return 0;
-            return 1 - Math.Exp(-Math.Pow(x / _lambda, _k));
-        }
-
-        /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
-        /// <param name="p">The location at which to compute the inverse cumulative density</param>
-        /// <returns>the inverse cumulative density at p</returns>
-        public override double InverseCumulativeDistribution(double p)
-        {
-            return _lambda * Math.Pow(-Math.Log(1 - p), 1 / _k);
-        }
-
-        /// <summary>Computes the probability density of the distribution(PDF) at x, i.e. ∂P(X ≤ x)/∂x</summary>
-        /// <param name="x">The location at which to compute the density</param>
-        /// <returns>a <c>double</c></returns>
-        public override double ProbabilityDensity(double x)
-        {
-            if (x < 0) return 0;
-            return (_k / _lambda) * Math.Pow(x / _lambda, _k - 1) * Math.Exp(-Math.Pow(x / _lambda, _k));
-        }
-
-        /// <summary>Evaluates the moment-generating function for a given t</summary>
-        /// <param name="t">the argument</param>
-        /// <returns>a double</returns>
-        public override double MomentGeneratingFunction(double t)
-        {
-            if (_k < 1) { throw new ArgumentOutOfRangeException(nameof(_k)); }
-            double res = 0,
-                incr;
-            int n = 0;             
-            do
-            {
-                incr = Math.Pow(t * _lambda, n) * Fn.Gamma(1 + n / _k) / Fn.Factorial(n);
-                res += incr;
-                n++;
-            } while (incr > Math.Pow(10, -14));
-            return res;
         }
 
         /// <summary>Returns a string that represents this instance</summary>

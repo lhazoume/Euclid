@@ -1,6 +1,5 @@
-﻿using Euclid.Histograms;
-using System;
-using System.Linq;
+﻿using System;
+using Euclid.Histograms;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -12,12 +11,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        /// <summary>Initializes a new instance of the Laplace distribution</summary>
+        /// <summary>Builds a Laplace distribution</summary>
         /// <param name="mu">the location</param>
         /// <param name="b">the scale</param>
         public LaplaceDistribution(double mu, double b)
         {
-            if (b <= 0) throw new ArgumentException("scale has to be positive");
+            if (b <= 0) throw new ArgumentException("the scale has to be positive");
             _mu = mu;
             _b = b;
 
@@ -26,15 +25,6 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
-        /// <summary>Gets the distribution's scale parameter</summary>
-        public double Scale => _b;
-
-        /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => Math.Log(2 * _b * Math.E);
-
-        /// <summary>Gets the distribution's support</summary>
-        public override Interval Support => _support;
-
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean => _mu;
 
@@ -44,43 +34,26 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode => _mu;
 
-        /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness => 0;
-
         /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation => Math.Sqrt(2) * _b;
 
         /// <summary>Gets the distribution's variance</summary>
         public override double Variance => 2 * _b * _b;
+
+        /// <summary>Gets the distribution's skewness</summary>
+        public override double Skewness => 0;
+
+        /// <summary>Gets the distribution's entropy</summary>
+        public override double Entropy => Math.Log(2 * _b * Math.E);
+
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support => _support;
+
+        /// <summary>Gets the distribution's scale parameter</summary>
+        public double Scale => _b;
         #endregion
 
         #region Methods
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        public static LaplaceDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
-
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static LaplaceDistribution Fit(FittingMethod method, double[] sample)
-        {
-            if (method == FittingMethod.Moments) {
-                int n = sample.Length;
-                double mean = 0,
-                    variance = 0;
-                for (int i = 0; i < n; i++)
-                {
-                    mean += sample[i];
-                    variance += sample[i] * sample[i];
-                }
-                mean /= n;
-                variance = variance / n - mean * mean;
-
-                return new LaplaceDistribution(mean, Math.Sqrt(variance / 2));
-            }
-            throw new NotImplementedException();
-        }
-
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">the location at which to compute the function</param>
         /// <returns>a double</returns>
@@ -112,6 +85,16 @@ namespace Euclid.Distributions.Continuous
             return Math.Exp(-Math.Abs(x - _mu) / _b) / (2 * _b);
         }
 
+        /// <summary>Evaluates the moment-generating function for a given t</summary>
+        /// <param name="t">the argument</param>
+        /// <returns>a double</returns>
+        public override double MomentGeneratingFunction(double t)
+        {
+            if (Math.Abs(t) * _b < 1)
+                return Math.Exp(_mu * t) / (1 - _b * _b * t * t);
+            throw new ArgumentOutOfRangeException(nameof(t), "the argument of the MGF should be lower -in absolute value- than the inverse of the scale");
+        }
+
         /// <summary>Computes the probability density function's logarithm at x</summary>
         /// <param name="x">the location at which to compute the density</param>
         /// <returns>a double</returns>
@@ -120,14 +103,33 @@ namespace Euclid.Distributions.Continuous
             return -Math.Abs(x - _mu) / _b - Math.Log(2 * _b);
         }
 
-        /// <summary>Evaluates the moment-generating function for a given t</summary>
-        /// <param name="t">the argument</param>
-        /// <returns>a double</returns>
-        public override double MomentGeneratingFunction(double t)
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static LaplaceDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
+        public static LaplaceDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (Math.Abs(t) * _b < 1)
-                return Math.Exp(_mu * t) / (1 - _b * _b * t * t);
-            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower -in absolute- than the inverse of the scale");
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (method == FittingMethod.Moments)
+            {
+                int n = sample.Length;
+                double mean = 0,
+                    variance = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+
+                return new LaplaceDistribution(mean, Math.Sqrt(variance / 2));
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>Returns a string that represents this instance</summary>

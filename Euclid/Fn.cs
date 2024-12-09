@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Security.Policy;
-using Euclid.Histograms;
 
 namespace Euclid
 {
@@ -743,7 +741,7 @@ namespace Euclid
 
                 do
                 {
-                    r2 = r2 + 1;
+                    r2++;
                     c2 = c2 * x / r2;
                     ans2 += c2;
                 }

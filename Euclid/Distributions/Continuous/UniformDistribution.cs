@@ -1,6 +1,6 @@
-﻿using Euclid.Histograms;
-using System;
+﻿using System;
 using System.Linq;
+using Euclid.Histograms;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -33,15 +33,6 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
-        /// <summary>Gets the distribution's upper bound</summary>
-        public double UpperBound => _b;
-
-        /// <summary>Gets the distribution's lower bound</summary>
-        public double LowerBound => _a;
-
-        /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => Math.Log(_d);
-
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean => _m;
 
@@ -51,51 +42,29 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode => _m;
 
-        /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness => 0;
-
         /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation => _d / Math.Sqrt(12);
-
-        /// <summary>Gets the distribution's support</summary>
-        public override Interval Support => _support;
 
         /// <summary>Gets the distribution's variance</summary>
         public override double Variance => _d * _d / 12;
 
+        /// <summary>Gets the distribution's skewness</summary>
+        public override double Skewness => 0;
+
+        /// <summary>Gets the distribution's entropy</summary>
+        public override double Entropy => Math.Log(_d);
+
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support => _support;
+
+        /// <summary>Gets the distribution's support upper bound</summary>
+        public double UpperBound => _b;
+
+        /// <summary>Gets the distribution's support lower bound</summary>
+        public double LowerBound => _a;
         #endregion
 
         #region Methods
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        public static UniformDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
-
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static UniformDistribution Fit(FittingMethod method, double[] sample)
-        {
-            if (method == FittingMethod.Moments)
-            {
-                int n = sample.Length;
-                double avg = 0,
-                    dev = 0;
-                for (int i = 0;i<n; i++)
-                {
-                    avg += sample[i];
-                    dev += sample[i]*sample[i];
-                }
-                avg /= n;
-                dev = Math.Sqrt(3 * (dev/n - avg * avg));
-                return new UniformDistribution(avg - dev, avg + dev);
-            }
-            else if (method == FittingMethod.MaximumLikelihood)
-            {
-                return new UniformDistribution(sample.Min(), sample.Max());
-            }
-            throw new NotImplementedException();
-        }
-
         /// <summary> Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x) </summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>the cumulative distribution at location x</returns>
@@ -119,8 +88,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            if (_support.Contains(x)) return 1 / _d;
-            return 0;
+            return _support.Contains(x) ? 1/_d : 0;
         }
 
         /// <summary>Evaluates the moment-generating function for a given t</summary>
@@ -131,17 +99,36 @@ namespace Euclid.Distributions.Continuous
             return (Math.Exp(t * _b) - Math.Exp(t * _a)) / (t * (_b - _a));
         }
 
-        /// <summary>Generates a sequence of samples from the normal distribution using the algorithm</summary>
-        /// <param name="numberOfPoints">the sample's size</param>
-        /// <param name="seed">the random number generator's seed</param>
-        /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints, int seed)
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static UniformDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
+        public static UniformDistribution Fit(FittingMethod method, double[] sample)
         {
-            Random random = new Random(seed);
-            double[] result = new double[numberOfPoints];
-            for (int i = 0; i < numberOfPoints; i++)
-                result[i] = _a + _d * random.NextDouble();
-            return result;
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (method == FittingMethod.Moments)
+            {
+                int n = sample.Length;
+                double avg = 0,
+                    dev = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    avg += sample[i];
+                    dev += sample[i] * sample[i];
+                }
+                avg /= n;
+                dev = Math.Sqrt(3 * (dev / n - avg * avg));
+                return new UniformDistribution(avg - dev, avg + dev);
+            }
+            else if (method == FittingMethod.MaximumLikelihood)
+            {
+                return new UniformDistribution(sample.Min(), sample.Max());
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>Returns a string that represents this instance</summary>

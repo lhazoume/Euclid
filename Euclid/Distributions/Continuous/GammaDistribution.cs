@@ -1,19 +1,14 @@
-﻿using Euclid.Benchmarking;
-using Euclid.Histograms;
-using Euclid.Optimizers;
-using Euclid.Solvers;
-using Euclid.Solvers.SingleVariableSolver;
-using Microsoft.Win32.SafeHandles;
-using System;
-using System.CodeDom;
+﻿using System;
 using System.Linq;
+using Euclid.Histograms;
+using Euclid.Solvers.SingleVariableSolver;
 
 namespace Euclid.Distributions.Continuous
 {
     /// <summary>Gamma distribution class</summary>
     public class GammaDistribution : ContinuousDistribution
     {
-        #region Variables
+        #region Declarations
         private readonly double _k, _theta, _cdfFactor, _pdfFactor;
         #endregion
 
@@ -36,18 +31,6 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Accessors
-        /// <summary>Gets the distribution's scale parameter </summary>
-        public double Scale => _theta;
-
-        /// <summary>Gets the distribution's shape parameter </summary>
-        public double Shape => _k;
-
-        /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => _k + Math.Log(_theta) + Math.Log(Fn.Gamma(_k)) + (1 - _k) * Fn.DiGamma(_k);
-
-        /// <summary>Gets the distribution's support </summary>
-        public override Interval Support => _support;
-
         /// <summary>Gets the distribution's mean </summary>
         public override double Mean => _k * _theta;
 
@@ -57,74 +40,35 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode => _k >= 1 ? (_k - 1) * _theta : double.NaN;
 
-        /// <summary>Gets the distribution's skewness </summary>
-        public override double Skewness => 2 / Math.Sqrt(_k);
-
         /// <summary>Gets the distribution's standard deviation </summary>
         public override double StandardDeviation => _theta * Math.Sqrt(_k);
 
         /// <summary>Gets the distribution's variance </summary>
         public override double Variance => _k * _theta * _theta;
+
+        /// <summary>Gets the distribution's skewness </summary>
+        public override double Skewness => 2 / Math.Sqrt(_k);
+
+        /// <summary>Gets the distribution's entropy</summary>
+        public override double Entropy => _k + Math.Log(_theta) + Math.Log(Fn.Gamma(_k)) + (1 - _k) * Fn.DiGamma(_k);
+
+        /// <summary>Gets the distribution's support </summary>
+        public override Interval Support => _support;
+
+        /// <summary>Gets the distribution's scale parameter </summary>
+        public double Scale => _theta;
+
+        /// <summary>Gets the distribution's shape parameter </summary>
+        public double Shape => _k;
         #endregion
 
         #region Methods
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        public static GammaDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
-
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static GammaDistribution Fit(FittingMethod method, double[] sample)
-        {
-            int n = sample.Length;
-            if (method == FittingMethod.Moments)
-            {
-                double mean = 0, 
-                    variance = 0;
-
-                for (int i = 0; i < n; i++)
-                {
-                    mean += sample[i];
-                    variance += sample[i] * sample[i];
-                }
-                mean /= n;
-                variance = variance / n - mean * mean;
-
-                double theta = variance / mean,
-                    k = mean * mean / variance;
-                
-                return new GammaDistribution(k, theta);
-            }
-            else if (method == FittingMethod.MaximumLikelihood)
-            {
-                double sumX = 0, 
-                    sumLogX = 0, 
-                    sumXLogX = 0;
-                
-                for(int i = 0;i < n;i++)
-                {
-                    sumX += sample[i];
-                    sumXLogX += sample[i] * Math.Log(sample[i]);
-                    sumLogX += Math.Log(sample[i]);
-                }
-
-                double k = (n * sumX) / (n * sumXLogX - sumLogX * sumX),
-                    theta = (n * sumXLogX - sumLogX * sumX) / (n * (n-1));
-                k = k - 1.0 / n * (3.0 * k - 2.0 / 3.0 * (k / (1.0 + k)) - 4.0 * k / (5.0 * Math.Pow(1.0 + k, 2)));
-                
-                return new GammaDistribution(k, theta);
-            }
-            throw new NotImplementedException(); 
-        }
-
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
         {
-            if (x <= 0) return 0;
-            return Fn.IncompleteRegularizedLowerGamma(_k, x / _theta);
+            return (x <= 0) ? 0: Fn.IncompleteRegularizedLowerGamma(_k, x / _theta);
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
@@ -132,7 +76,15 @@ namespace Euclid.Distributions.Continuous
         /// <returns>the inverse cumulative density at p</returns>
         public override double InverseCumulativeDistribution(double p)
         {
-            Bracketing solver = new Bracketing(0, 10000000, CumulativeDistribution, BracketingMethod.Dichotomy, 1000);
+            double epsilon = 1e-8;
+            int m = 1;
+            while (CumulativeDistribution(Math.Pow(2, m)) < p)
+                m++;
+            double bracketingLowBound = m == 1 ? 0 : Math.Pow(2, m - 1),
+                bracketingUpBound = Math.Pow(2, m);
+            int optimalSteps = (int)Math.Ceiling(m - 1 - Math.Log(epsilon) / Math.Log(2));
+
+            Bracketing solver = new Bracketing(bracketingLowBound, bracketingUpBound, CumulativeDistribution, BracketingMethod.Dichotomy, optimalSteps);
             solver.Solve(p);
             return solver.Result;
         }
@@ -142,8 +94,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            if (x <= 0) return 0;
-            return _pdfFactor * Math.Pow(x, _k - 1) * Math.Exp(-x / _theta);
+            return (x <= 0) ? 0 : _pdfFactor * Math.Pow(x, _k - 1) * Math.Exp(-x / _theta);
         }
 
         /// <summary>Evaluates the moment-generating function for a given t</summary>
@@ -153,10 +104,10 @@ namespace Euclid.Distributions.Continuous
         {
             if (_theta * t < 1)
                 return Math.Pow(1 - _theta * t, -_k);
-            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower than the rate");
+            throw new ArgumentOutOfRangeException(nameof(t), "the argument of the MGF should be lower than inverse of the rate");
         }
 
-        /// <summary>Generates a sequence of samples using the Ahrens-Dieter algorithm</summary>
+        /// <summary>Builds a sample of random variables under this distribution</summary>
         /// <param name="numberOfPoints">the sample's size</param>
         /// <param name="seed">the random number generator's seed</param>
         /// <returns>an array of double</returns>
@@ -171,16 +122,15 @@ namespace Euclid.Distributions.Continuous
                     l = 1 / _k - 1,
                     r = 1 / (1 + w),
                     z, nz, hz;
-                do { 
+                do 
+                { 
                     double u1 = random.NextDouble(), 
                         u2 = random.NextDouble();
 
-                    if (u1<=r) {
+                    if (u1<=r) 
                         z = -Math.Log(random.NextDouble());
-                    } else
-                    {
+                    else
                         z = Math.Log(random.NextDouble())/l;
-                    }
 
                     nz = (z>=0) ? Math.Exp(-z) : w*l*Math.Exp(l*z);
                     hz = Math.Exp(-z-Math.Exp(-z/_k));
@@ -200,7 +150,8 @@ namespace Euclid.Distributions.Continuous
                 {
                     double v, z;
                     do
-                    { // Create a normal standard variable Z
+                    {
+                        // Create a normal standard variable Z
                         double u1 = random.NextDouble(), 
                             u2 = random.NextDouble();
                         z = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
@@ -215,9 +166,62 @@ namespace Euclid.Distributions.Continuous
                         i++;
                     }
                 } while (i < numberOfPoints);
-                
             }
             return result;
+        }
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static GammaDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
+        public static GammaDistribution Fit(FittingMethod method, double[] sample)
+        {
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (sample.Any(d => d < 0))
+                throw new ArgumentOutOfRangeException(nameof(sample), "the sample can't be lower or equal to 0");
+            int n = sample.Length;
+            if (method == FittingMethod.Moments)
+            {
+                double mean = 0,
+                    variance = 0;
+
+                for (int i = 0; i < n; i++)
+                {
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+
+                double theta = variance / mean,
+                    k = mean * mean / variance;
+
+                return new GammaDistribution(k, theta);
+            }
+            else if (method == FittingMethod.MaximumLikelihood)
+            {
+                double sumX = 0,
+                    sumLogX = 0,
+                    sumXLogX = 0;
+
+                for (int i = 0; i < n; i++)
+                {
+                    sumX += sample[i];
+                    sumXLogX += sample[i] * Math.Log(sample[i]);
+                    sumLogX += Math.Log(sample[i]);
+                }
+
+                double k = (n * sumX) / (n * sumXLogX - sumLogX * sumX),
+                    theta = (n * sumXLogX - sumLogX * sumX) / (n * (n - 1));
+                k -= 1.0 / n * (3.0 * k - 2.0 / 3.0 * (k / (1.0 + k)) - 4.0 * k / (5.0 * Math.Pow(1.0 + k, 2)));
+
+                return new GammaDistribution(k, theta);
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>Returns a string that represents this instance</summary>
