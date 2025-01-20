@@ -33,7 +33,7 @@ namespace Euclid.Distributions.Continuous
         public override double Median => _mu;
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode=> _mu;
+        public override double Mode => _mu;
 
         /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation => _s * Math.PI / Math.Sqrt(3);
@@ -42,7 +42,7 @@ namespace Euclid.Distributions.Continuous
         public override double Variance => Math.Pow(_s * Math.PI, 2) / 3;
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness=>0.0;
+        public override double Skewness => 0.0;
 
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy => Math.Log(_s) + 2;
@@ -117,7 +117,7 @@ namespace Euclid.Distributions.Continuous
                 mean /= n;
                 variance = variance / n - mean * mean;
 
-                return new LogisticDistribution(mean, Math.Sqrt(variance * 3 / (Math.PI * Math.PI)));
+                return new LogisticDistribution(mean, Math.Sqrt(variance * 3) / Math.PI);
             }
             throw new NotImplementedException();
         }
