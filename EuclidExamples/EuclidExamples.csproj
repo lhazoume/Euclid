@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program1.cs" />
-    <Compile Include="DistributionExamples1.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="DistributionExamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Euclid\Euclid.csproj">

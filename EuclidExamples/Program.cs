@@ -8,13 +8,15 @@ namespace EuclidExamples
         {
             Console.WriteLine("Lancement du projet EuclidExamples...");
 
-            
+            #region Distributions
             DistributionExample.Binomial();
             DistributionExample.Poisson();
             DistributionExample.Normal();
             DistributionExample.Exponential();
             DistributionExample.Uniform();
             DistributionExample.Cauchy();
+            #endregion
+
         }
     }
 }

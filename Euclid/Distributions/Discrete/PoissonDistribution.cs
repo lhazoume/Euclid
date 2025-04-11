@@ -15,8 +15,6 @@ namespace Euclid.Distributions.Discrete
 
         private PoissonDistribution(double lambda, Random randomSource)
         {
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
-
             if (lambda <= 0) throw new ArgumentOutOfRangeException(nameof(lambda), "The lambda should be >0");
             _lambda = lambda;
 
@@ -131,8 +129,9 @@ namespace Euclid.Distributions.Discrete
         /// <summary>Generates a sequence of samples from the distribution</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int size)
+        public override double[] Sample(int size, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[size];
             for (int i = 0; i < size; i++)
             {
@@ -142,7 +141,7 @@ namespace Euclid.Distributions.Discrete
                 do
                 {
                     k++;
-                    p *= (1 - _randomSource.NextDouble());
+                    p *= (1 - random.NextDouble());
 
                 } while (p > L);
                 result[i] = k - 1;
@@ -152,10 +151,10 @@ namespace Euclid.Distributions.Discrete
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static PoissonDistribution Fit(FittingMethod method, double[] sample)
+        public static PoissonDistribution Fit(double[] sample)
         {
-            if (sample.Min() < 0) throw new ArgumentOutOfRangeException(nameof(sample), "The sample can not fit a Poisson law (all data should be>0)");
+            if (sample.Min() < 0 || sample.Any(x => x != Convert.ToInt32(x)))
+                    throw new ArgumentOutOfRangeException(nameof(sample), "The sample can not fit a Poisson law (all data should be positive integers)");
             return new PoissonDistribution(sample.Average());
         }
 

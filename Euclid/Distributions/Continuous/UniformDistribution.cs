@@ -101,8 +101,10 @@ namespace Euclid.Distributions.Continuous
         }
 
 
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
+        /// <summary> Builds a sample of random variables under this distribution </summary>
+        /// <param name="size">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
+        /// <returns>an array of double</returns>
 
         public override double[] Sample(int size, int seed)
         {
@@ -118,12 +120,14 @@ namespace Euclid.Distributions.Continuous
             return sample;
         }
 
-        public static UniformDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static UniformDistribution Fit(double[] sample) => Fit(sample, FittingMethod.MaximumLikelihood);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public static UniformDistribution Fit(FittingMethod method, double[] sample)
+        public static UniformDistribution Fit(double[] sample, FittingMethod method)
         {
             if (sample.Length == 0)
                 throw new ArgumentException("the sample can't be empty");

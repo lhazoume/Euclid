@@ -87,7 +87,7 @@ namespace EuclidExamples
             // Simulation and parameter estimation
             Console.WriteLine(">> Simulation & Fitting");
             double[] sample = poisson.Sample(5000);
-            PoissonDistribution estimatedPoisson = PoissonDistribution.Fit(FittingMethod.Moments, sample);
+            PoissonDistribution estimatedPoisson = PoissonDistribution.Fit(sample);
             Console.WriteLine($"Estimated from sample: {estimatedPoisson}");
             Console.WriteLine();
 

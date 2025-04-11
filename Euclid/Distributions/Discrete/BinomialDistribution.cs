@@ -15,10 +15,11 @@ namespace Euclid.Distributions.Discrete
         #endregion
 
         #region Constructors
-        private BinomialDistribution(int n, double p, Random randomSource)
+        /// <summary>Initializes a new instance of the binomial distribution</summary>
+        /// <param name="n">the number of runs</param>
+        /// <param name="p">the unitary probability</param>
+        public BinomialDistribution(int n, double p)
         {
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
-
             if (p > 1 || p < 0) throw new ArgumentOutOfRangeException(nameof(p), "The probability should be in [0,1]");
             if (n <= 0) throw new ArgumentOutOfRangeException(nameof(n), "The number of trials should be >0");
             _p = p;
@@ -26,13 +27,6 @@ namespace Euclid.Distributions.Discrete
             _n = n;
             _bc = new BinomialCoefficients(_n);
         }
-
-        /// <summary>Initializes a new instance of the binomial distribution</summary>
-        /// <param name="n">the number of runs</param>
-        /// <param name="p">the unitary probability</param>
-        public BinomialDistribution(int n, double p)
-            : this(n, p, new Random(Guid.NewGuid().GetHashCode()))
-        { }
 
         #endregion
 
@@ -44,7 +38,7 @@ namespace Euclid.Distributions.Discrete
         public override double Mean => _n * _p;
 
         /// <summary>Gets the distribution's median</summary>
-        public override double Median=> 0.5 * (Math.Floor(_n * _p) + Math.Ceiling(_n * _p));
+        public override double Median => 0.5 * (Math.Floor(_n * _p) + Math.Ceiling(_n * _p));
 
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode => 0.5 * (Math.Floor((_n + 1) * _p) + Math.Ceiling((_n + 1) * _p) - 1);
@@ -112,12 +106,13 @@ namespace Euclid.Distributions.Discrete
         /// <summary>Generates a sequence of samples from the distribution</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int size)
+        public override double[] Sample(int size, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[size];
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < _n; j++)
-                    result[i] += _randomSource.NextDouble() <= _p ? 1 : 0;
+                    result[i] += random.NextDouble() <= _p ? 1 : 0;
             return result;
         }
 

@@ -2610,7 +2610,7 @@
             <param name="t">the argument</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.Fit(System.Double[])">
+        <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.Sample(System.Int32,System.Int32)">
             <summary>Creates a new instance of the distribution fitted on the data sample</summary>
             <param name="sample">the sample of data to fit</param>
         </member>
@@ -3765,11 +3765,17 @@
             <param name="t">the argument</param>
             <returns>a double</returns>
         </member>
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Sample(System.Int32,System.Int32)">
+            <summary> Builds a sample of random variables under this distribution </summary>
+            <param name="size">the sample's size</param>
+            <param name="seed">the random number generator's seed</param>
+            <returns>an array of double</returns>
+        </member>
         <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Fit(System.Double[])">
             <summary>Creates a new instance of the distribution fitted on the data sample</summary>
             <param name="sample">the sample of data to fit</param>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Fit(System.Double[],Euclid.Distributions.FittingMethod)">
             <summary>Creates a new instance of the distribution fitted on the data sample</summary>
             <param name="sample">the sample of data to fit</param>
             <param name="method">the fitting method</param>
@@ -3907,7 +3913,7 @@
             <param name="t">the argument</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.Sample(System.Int32)">
+        <member name="M:Euclid.Distributions.Discrete.BinomialDistribution.Sample(System.Int32,System.Int32)">
             <summary>Generates a sequence of samples from the distribution</summary>
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
@@ -3923,9 +3929,6 @@
         </member>
         <member name="T:Euclid.Distributions.Discrete.DiscreteDistribution">
             <summary>Abstract class base for continuous distributions</summary>
-        </member>
-        <member name="F:Euclid.Distributions.Discrete.DiscreteDistribution._randomSource">
-            <summary>The random number generator</summary>
         </member>
         <member name="F:Euclid.Distributions.Discrete.DiscreteDistribution._support">
             <summary>The distribution's support </summary>
@@ -3954,11 +3957,6 @@
         <member name="P:Euclid.Distributions.Discrete.DiscreteDistribution.Variance">
             <summary>Gets the distribution's variance</summary>
         </member>
-        <member name="P:Euclid.Distributions.Discrete.DiscreteDistribution.RandomSource">
-            <summary>
-            Gets or sets the random number generator which is used to draw random samples
-            </summary>
-        </member>
         <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.CumulativeDistribution(System.Double)">
             <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
             <param name="x">the location at which to compute the function</param>
@@ -3986,8 +3984,14 @@
             <returns>a double</returns>
         </member>
         <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.Sample(System.Int32)">
+            <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
+            <param name="size">the sample's size</param>
+            <returns>an array of double</returns>
+        </member>
+        <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.Sample(System.Int32,System.Int32)">
             <summary>Generates a sequence of samples from the distribution using the algorithm</summary>
             <param name="size">the sample's size</param>
+            <param name="seed">the random number generator's seed</param>
             <returns>an array of double</returns>
         </member>
         <member name="M:Euclid.Distributions.Discrete.DiscreteDistribution.MomentGeneratingFunction(System.Double)">
@@ -4064,15 +4068,14 @@
             <param name="t">the argument</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.Sample(System.Int32)">
+        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.Sample(System.Int32,System.Int32)">
             <summary>Generates a sequence of samples from the distribution</summary>
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
+        <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.Fit(System.Double[])">
             <summary>Creates a new instance of the distribution fitted on the data sample</summary>
             <param name="sample">the sample of data to fit</param>
-            <param name="method">the fitting method</param>
         </member>
         <member name="M:Euclid.Distributions.Discrete.PoissonDistribution.ToString">
             <summary>Returns a string that represents this instance</summary>
@@ -4131,7 +4134,7 @@
             <param name="t">the argument</param>
             <returns>a double</returns>
         </member>
-        <member name="M:Euclid.Distributions.Discrete.SkellamDistribution.Sample(System.Int32)">
+        <member name="M:Euclid.Distributions.Discrete.SkellamDistribution.Sample(System.Int32,System.Int32)">
             <summary>Generates a sequence of samples from the distribution</summary>
             <param name="size">the sample's size</param>
             <returns>an array of double</returns>
