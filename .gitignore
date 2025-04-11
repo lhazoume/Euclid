@@ -66,3 +66,11 @@ Benchmarking/obj/project.assets.json
 *.bin
 /EuclidBenchmark/bin/Debug/Euclid.xml
 /EuclidBenchmark/obj/Debug/EuclidBe.64998FDA.Up2Date
+/Euclid/.gitignore
+/EuclidExamples/bin/Debug/Euclid.xml
+/Euclid/EuclidBenchmark/obj/Debug/EuclidBenchmark.csproj.CopyComplete
+/Euclid/EuclidBenchmark/bin/Debug/Euclid.xml
+/Euclid/EuclidBenchmark/obj/Release/EuclidBenchmark.csproj.CopyComplete
+/Euclid/EuclidBenchmark/obj/Release/EuclidBenchmark.csproj.FileListAbsolute.txt
+/EuclidExamples/obj/Debug/EuclidExamples.csproj.FileListAbsolute.txt
+/Euclid/.vs/slnx.sqlite
