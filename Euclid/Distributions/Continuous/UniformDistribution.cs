@@ -88,19 +88,36 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            return _support.Contains(x) ? 1/_d : 0;
+            return _support.Contains(x) ? 1 / _d : 0;
         }
 
         /// <summary>Evaluates the moment-generating function for a given t</summary>
         /// <param name="t">the argument</param>
         /// <returns>a double</returns>
+
         public override double MomentGeneratingFunction(double t)
         {
-            return (Math.Exp(t * _b) - Math.Exp(t * _a)) / (t * (_b - _a));
+            return t == 0 ? 1.0 : (Math.Exp(t * _b) - Math.Exp(t * _a)) / (t * _d);
         }
+
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
+
+        public override double[] Sample(int size, int seed)
+        {
+            Random random = new Random(seed);
+            double[] sample = new double[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                double u = random.NextDouble();
+                sample[i] = _a + _d * u;
+            }
+
+            return sample;
+        }
+
         public static UniformDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>

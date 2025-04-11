@@ -40,7 +40,7 @@ namespace Euclid.Distributions.Discrete
         public override double Median => Math.Round(_lambda + 1.0 / 3.0 - 0.02 / _lambda);
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode => Math.Round(_lambda);
+        public override double Mode => Math.Floor(_lambda);
 
         /// <summary>Gets the distribution's skewness</summary>
         public override double Skewness => 1 / Math.Sqrt(_lambda);
@@ -163,7 +163,7 @@ namespace Euclid.Distributions.Discrete
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Poisson(λ = {0})", _lambda);
+            return string.Format("Poisson(λ  = {0})", _lambda);
         }
         #endregion
     }

@@ -42,7 +42,7 @@ namespace Euclid.Distributions.Discrete
         public override double Mean => _mu1 - _mu2;
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness => (_mu1 - _mu2) * Math.Pow(_mu1 + _mu2, 1.5);
+        public override double Skewness => (_mu1 - _mu2) * Math.Pow(_mu1 + _mu2, -1.5);
 
         /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation => Math.Sqrt(_mu1 + _mu2);

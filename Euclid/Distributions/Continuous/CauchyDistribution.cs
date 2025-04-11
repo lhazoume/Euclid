@@ -46,7 +46,7 @@ namespace Euclid.Distributions.Continuous
         public override double Skewness => double.NaN;
 
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => Math.Log(_gamma) - Math.Log(4 * Math.PI);
+        public override double Entropy => Math.Log(_gamma * 4 * Math.PI);
 
         /// <summary>Gets the distribution's support</summary>
         public override Interval Support => _support;
@@ -92,6 +92,21 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
+
+        public override double[] Sample(int size, int seed)
+        {
+            Random random = new Random(seed);
+            double[] sample = new double[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                double u = random.NextDouble();
+                sample[i] = InverseCumulativeDistribution(u);
+            }
+
+            return sample;
+        }
+
         public static CauchyDistribution Fit(double[] sample) => Fit(FittingMethod.PositionalArgument, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
