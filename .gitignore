@@ -74,3 +74,5 @@ Benchmarking/obj/project.assets.json
 /.vs/Euclid/CopilotIndices/17.13.431.34963/SemanticSymbols.db-shm
 /.vs/Euclid/CopilotIndices/17.13.431.34963/SemanticSymbols.db
 /.vs/Euclid/copilot-chat/000f6861/sessions/3cfab062-d729-4560-9d6f-173070f73da3
+/EuclidExamples/bin/Debug/Euclid.xml
+/EuclidExamples/obj/Debug/EuclidExamples.csproj.FileListAbsolute.txt
