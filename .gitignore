@@ -66,17 +66,3 @@ Benchmarking/obj/project.assets.json
 *.bin
 /EuclidBenchmark/bin/Debug/Euclid.xml
 /EuclidBenchmark/obj/Debug/EuclidBe.64998FDA.Up2Date
-/Euclid/.gitignore
-/EuclidExamples/bin/Debug/Euclid.xml
-/Euclid/EuclidBenchmark/obj/Debug/EuclidBenchmark.csproj.CopyComplete
-/Euclid/EuclidBenchmark/bin/Debug/Euclid.xml
-/Euclid/EuclidBenchmark/obj/Release/EuclidBenchmark.csproj.CopyComplete
-/Euclid/EuclidBenchmark/obj/Release/EuclidBenchmark.csproj.FileListAbsolute.txt
-/EuclidExamples/obj/Debug/EuclidExamples.csproj.FileListAbsolute.txt
-/Euclid/.vs/slnx.sqlite
-/.vs/Euclid/CopilotIndices/17.13.431.34963/CodeChunks.db
-/.vs/Euclid/CopilotIndices/17.13.431.34963/SemanticSymbols.db
-/.vs/Euclid/CopilotIndices/17.13.431.34963/SemanticSymbols.db-wal
-/.vs/Euclid/CopilotIndices/17.13.431.34963/CodeChunks.db-wal
-/.vs/Euclid/CopilotIndices/17.13.431.34963/CodeChunks.db-shm
-/.vs/Euclid/CopilotIndices/17.13.431.34963/SemanticSymbols.db-shm
