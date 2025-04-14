@@ -133,23 +133,21 @@ namespace Euclid
             Complex buf = Complex.One;
 
             for (int j = 0; j < z.Count; j++)
-                if (j != k) buf *= (z[k] - z[j]);
+                if (j != k)
+                    buf *= (z[k] - z[j]);
 
             return buf;
         }
 
-        /// <summary>
-        /// Computes the roots of polynomial p via Weierstrass iteration.
-        /// </summary>
+        /// <summary>Computes the roots of polynomial p via Weierstrass iteration</summary>
         /// <returns>the complex roots of the <c>Polynomial</c></returns>
         public List<Tuple<Complex, int>> ComplexRoots()
         {
-            double tolerance = 1e-30;
-            int max_iterations = 300;
+            double tolerance = 1e-15;
+            int max_iterations = 30000;
 
             Polynomial q = this.Clone;
             q.Normalize();
-            //Polynomial q = p;
 
             List<Complex> z = new List<Complex>(q.Degree); // approx. for roots
             Complex[] w = new Complex[q.Degree]; // Weierstraß corrections
@@ -160,7 +158,7 @@ namespace Euclid
 
 
             for (int iter = 0; iter < max_iterations && MaxValue(q, z) > tolerance; iter++)
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 100; i++)
                 {
                     for (int k = 0; k < q.Degree; k++)
                         w[k] = q.Evaluate(z[k]) / WeierNull(z, k);
@@ -172,8 +170,8 @@ namespace Euclid
             // clean...
             for (int k = 0; k < q.Degree; k++)
             {
-                z[k].Re = Math.Round(z[k].Re, 5);
-                z[k].Im = Math.Round(z[k].Im, 5);
+                z[k].Re = Math.Round(z[k].Re, 15);
+                z[k].Im = Math.Round(z[k].Im, 15);
             }
 
             List<Tuple<Complex, int>> roots = new List<Tuple<Complex, int>>();

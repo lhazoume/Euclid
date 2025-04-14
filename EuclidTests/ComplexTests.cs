@@ -125,7 +125,7 @@ namespace Euclid.Tests
         public void ToStringTest1()
         {
             Complex c = new Complex(1, 1);
-            Assert.AreEqual("1.0+i", c.ToString("0.0"));
+            Assert.AreEqual("1,0+i", c.ToString("0.0"));
         }
 
         #endregion
