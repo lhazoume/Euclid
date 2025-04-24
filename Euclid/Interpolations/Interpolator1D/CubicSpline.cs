@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.Interpolations.Interpolations1D
+namespace Euclid.Interpolations.Interpolator1D
 {
     /// <summary>Helps cubic spline interpolations</summary>
-    internal class CubicSpline : IInterpolation1D
+    public class CubicSpline : IInterpolator1D
     {
         #region Private fields
         private double _min, _max;
@@ -135,6 +135,8 @@ namespace Euclid.Interpolations.Interpolations1D
             _m = A.SolveWith(d);
             #endregion
         }
+
+        public IInterpolator1D Clone() => new CubicSpline(_extrapolate);
         #endregion
     }
 }

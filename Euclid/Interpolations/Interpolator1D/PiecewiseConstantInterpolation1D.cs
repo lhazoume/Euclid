@@ -124,6 +124,8 @@ namespace Euclid.Interpolations.Interpolator1D
             _min = _values[0].X;
             _max = _values.Last().X;
         }
+
+        public IInterpolator1D Clone() => new PiecewiseConstantInterpolation1D(_mode, _extrapolate);
         #endregion
     }
 }

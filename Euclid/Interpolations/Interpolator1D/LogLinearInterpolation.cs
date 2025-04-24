@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.Interpolations.Interpolations1D
+namespace Euclid.Interpolations.Interpolator1D
 {
     /// <summary>Helps log-linear interpolation </summary>
-    public class LogLinearInterpolation : IInterpolation1D
+    public class LogLinearInterpolation : IInterpolator1D
     {
         private double _min, _max;
         private readonly bool _extrapolate;
@@ -102,6 +102,8 @@ namespace Euclid.Interpolations.Interpolations1D
             _min = _values[0].X;
             _max = _values.Last().X;
         }
+
+        public IInterpolator1D Clone() => new LogLinearInterpolation(_extrapolate);
         #endregion
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Euclid.Histograms;
 using System.Collections.Generic;
 
-namespace Euclid.Interpolations.Interpolations1D
+namespace Euclid.Interpolations.Interpolator1D
 {
     /// <summary>Interface for all the 1D interpolators</summary>
-    public interface IInterpolation1D
+    public interface IInterpolator1D
     {
         #region Accessors
         /// <summary>The natural range of the x values</summary>
@@ -35,6 +35,9 @@ namespace Euclid.Interpolations.Interpolations1D
         /// <param name="x">the x-value</param>
         /// <returns>the interpolated result</returns>
         double ValueAt(double x);
+
+        /// <summary>Returns a clone of the current interpolator</summary>
+        IInterpolator1D Clone();
         #endregion
     }
 }

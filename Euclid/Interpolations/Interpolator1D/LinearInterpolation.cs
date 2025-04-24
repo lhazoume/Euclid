@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Euclid.Interpolations.Interpolations1D
+namespace Euclid.Interpolations.Interpolator1D
 {
     /// <summary>Helps linear interpolations</summary>
-    public class LinearInterpolation : IInterpolation1D
+    public class LinearInterpolation : IInterpolator1D
     {
         private double _min, _max;
         private readonly bool _extrapolate;
@@ -95,6 +95,8 @@ namespace Euclid.Interpolations.Interpolations1D
             _min = _values[0].X;
             _max = _values.Last().X;
         }
+
+        public IInterpolator1D Clone() => new LinearInterpolation(_extrapolate);
         #endregion
     }
 }
