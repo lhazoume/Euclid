@@ -55,7 +55,7 @@ namespace Euclid.Interpolations.Interpolator1D
             {
                 if (x <= _values[1].X)
                     i = 0;
-                else if (x > _values[_values.Count - 2].Y)
+                else if (x > _values[_values.Count - 2].X)
                     i = _values.Count - 2;
                 else
                     i = _values.FindIndex(t => t.X > x) - 1;
