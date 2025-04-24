@@ -1163,6 +1163,231 @@
         <member name="P:Euclid.Benchmarking.CaseResult.SerialNumber">
             <summary>Get the motherboard's serial number</summary>
         </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.Hyman">
+            <summary>Helps cubic spline interpolations</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.#ctor(System.Boolean)">
+            <summary>Builds the hyman spline interpolator</summary>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.Hyman.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.Hyman.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.Hyman.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.CubicSpline">
+            <summary>Helps cubic spline interpolations</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.#ctor(System.Boolean)">
+            <summary>Builds the cubic spline interpolator</summary>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.CubicSpline.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.CubicSpline.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.CubicSpline.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation">
+            <summary>Helps log-linear interpolation </summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.#ctor(System.Boolean)">
+            <summary>Builds a log linear interpolator</summary>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.LinearInterpolation">
+            <summary>Helps linear interpolations</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.#ctor(System.Boolean)">
+            <summary>Builds a linear interpolator</summary>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LinearInterpolation.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LinearInterpolation.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LinearInterpolation.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode">
+            <summary>Defines the interpolation mode when using piecewise constant</summary>
+        </member>
+        <member name="F:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode.Right">
+            <summary>Piecewise constant right interpolation</summary>
+        </member>
+        <member name="F:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode.Left">
+            <summary>Piecewise constant left interpolation</summary>
+        </member>
+        <member name="F:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode.Nearest">
+            <summary>Piecewise constant nearest interpolation</summary>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D">
+            <summary>Allows piecewise constant interpolation</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.#ctor(Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode,System.Boolean)">
+            <summary>Buils a piecewise constant interpolator</summary>
+            <param name="mode">the mode (left, right, nearest)</param>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Extrapolation">
+            <summary>Indicates if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Mode">
+            <summary>Returns the interpolation mode</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the abscisses</param>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.IInterpolator1D">
+            <summary>Interface for all the 1D interpolators</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.IInterpolator1D.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.IInterpolator1D.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.IInterpolator1D.Local">
+            <summary>Specifies if the interpolation is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.Clone">
+            <summary>Returns a clone of the current interpolator</summary>
+        </member>
         <member name="T:Euclid.Numerics.PiecewiseFunction">
             <summary>Represents a piecewise function</summary>
         </member>
@@ -2618,6 +2843,12 @@
             <summary>Creates a new instance of the distribution fitted on the data sample</summary>
             <param name="sample">the sample of data to fit</param>
             <param name="method">the fitting method</param>
+            
+        </member>
+        <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.ComputeMedian(System.Double[])">
+            <summary> Computes the median of a sorted array of numbers</summary>
+            <param name="data">A sorted array of values.</param>
+            <returns>The median of the values</returns>
         </member>
         <member name="M:Euclid.Distributions.Continuous.CauchyDistribution.ToString">
             <summary>Returns a string that represents this instance</summary>
@@ -2928,7 +3159,7 @@
             <summary>Gets the distribution's mode</summary>
         </member>
         <member name="P:Euclid.Distributions.Continuous.GammaDistribution.StandardDeviation">
-            <summary>Gets the distribution's standard deviation </summary>
+            <summary>Gets the distribution's standard deviation </summary>k-
         </member>
         <member name="P:Euclid.Distributions.Continuous.GammaDistribution.Variance">
             <summary>Gets the distribution's variance </summary>
@@ -3775,7 +4006,7 @@
             <summary>Creates a new instance of the distribution fitted on the data sample</summary>
             <param name="sample">the sample of data to fit</param>
         </member>
-        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Fit(System.Double[],Euclid.Distributions.FittingMethod)">
+        <member name="M:Euclid.Distributions.Continuous.UniformDistribution.Fit(Euclid.Distributions.FittingMethod,System.Double[])">
             <summary>Creates a new instance of the distribution fitted on the data sample</summary>
             <param name="sample">the sample of data to fit</param>
             <param name="method">the fitting method</param>
@@ -5722,9 +5953,7 @@
             <returns>a <c>Complex</c></returns>
         </member>
         <member name="M:Euclid.Polynomial.ComplexRoots">
-            <summary>
-            Computes the roots of polynomial p via Weierstrass iteration.
-            </summary>
+            <summary>Computes the roots of polynomial p via Weierstrass iteration</summary>
             <returns>the complex roots of the <c>Polynomial</c></returns>
         </member>
         <member name="M:Euclid.Polynomial.Roots">

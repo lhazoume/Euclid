@@ -140,7 +140,7 @@ namespace EuclidExamples
         public static void Exponential()
         {
             // Distribution parameter
-            double lambda = 0.4;
+            double lambda = 4.5;
 
             // Create an exponential distribution
             ExponentialDistribution exponential = new ExponentialDistribution(lambda);
@@ -174,8 +174,10 @@ namespace EuclidExamples
             // Simulation and parameter estimation
             Console.WriteLine(">> Simulation & Fitting");
             double[] sample = exponential.Sample(5000, seed: 42);
-            ExponentialDistribution estimatedExp = ExponentialDistribution.Fit(sample);
-            Console.WriteLine($"Estimated from sample: {estimatedExp}");
+            ExponentialDistribution estimatedMLE = ExponentialDistribution.Fit(sample);
+            Console.WriteLine($"Estimated using Maximum Likelihood or Method of Moments : {estimatedMLE}");
+            ExponentialDistribution estimatedPositional = ExponentialDistribution.Fit(FittingMethod.PositionalArgument, sample);
+            Console.WriteLine($"Estimated using Positional Argument: {estimatedPositional}");
             Console.WriteLine();
 
             Console.WriteLine("=== END OF EXAMPLE ===\n");
@@ -198,10 +200,10 @@ namespace EuclidExamples
                 Console.WriteLine(">> Descriptive Statistics");
                 Console.WriteLine($"Median             : {cauchy.Median:N2}");
                 Console.WriteLine($"Mode               : {cauchy.Mode:N2}");
-                Console.WriteLine($"Mean               : undefined");
-                Console.WriteLine($"Variance           : undefined");
-                Console.WriteLine($"Standard Deviation : undefined");
-                Console.WriteLine($"Skewness           : undefined");
+                Console.WriteLine($"Mean               : {cauchy.Mean:N2}");///
+                Console.WriteLine($"Variance           : {cauchy.Variance:N2}");
+                Console.WriteLine($"Standard Deviation : {cauchy.StandardDeviation:N2}");
+                Console.WriteLine($"Skewness           : {cauchy.Skewness:N2}");
                 Console.WriteLine($"Entropy            : {cauchy.Entropy:N4}");
                 Console.WriteLine($"Support            : {cauchy.Support}");
                 Console.WriteLine();
@@ -218,8 +220,11 @@ namespace EuclidExamples
                 // Simulation & Fitting
                 Console.WriteLine(">> Simulation & Fitting");
                 double[] sample = cauchy.Sample(5000, seed: 42);
-                CauchyDistribution estimatedCauchy = CauchyDistribution.Fit(sample);
-                Console.WriteLine($"Estimated from sample: {estimatedCauchy}");
+
+                CauchyDistribution estimatedPos = CauchyDistribution.Fit(sample);
+                Console.WriteLine($"Estimated from Positional Argument Fit: {estimatedPos}");
+                CauchyDistribution estimatedMLE = CauchyDistribution.Fit(FittingMethod.MaximumLikelihood, sample);
+                Console.WriteLine($"Estimated using MLE : {estimatedMLE}");
                 Console.WriteLine();
                 Console.WriteLine("=== END OF EXAMPLE ===\n");
             }
@@ -260,13 +265,12 @@ namespace EuclidExamples
 
             // Simulation & Fitting
             Console.WriteLine(">> Simulation & Fitting");
-            Random rand = new Random(42);
-            double[] sample = new double[5000];
-            for (int i = 0; i < sample.Length; i++)
-                sample[i] = a + (b - a) * rand.NextDouble();
+            double[] sample = uniform.Sample(5000, seed: 42);
 
             UniformDistribution estimated = UniformDistribution.Fit(sample);
-            Console.WriteLine($"Estimated from sample: {estimated}");
+            Console.WriteLine($"Estimated using MLE: {estimated}");
+            UniformDistribution estimatedMoments = UniformDistribution.Fit(FittingMethod.Moments, sample);
+            Console.WriteLine($"Estimated using Moments: {estimatedMoments}");
             Console.WriteLine();
 
             Console.WriteLine("=== END OF EXAMPLE ===\n");
@@ -317,6 +321,152 @@ namespace EuclidExamples
                 Console.WriteLine("=== END OF EXAMPLE ===\n");
             }
 
+        public static void Weibull()
+        {
+            // Distribution parameters
+            double lambda = 5.0;
+            double k = 2.5;
 
-    }   
+            // Create a Weibull distribution
+            WeibullDistribution weibull = new WeibullDistribution(lambda, k);
+
+            Console.WriteLine("=== WEIBULL DISTRIBUTION EXAMPLE ===");
+            Console.WriteLine($"Parameters: λ = {lambda}, k = {k}");
+            Console.WriteLine();
+
+            // Descriptive statistics
+            Console.WriteLine(">> Descriptive Statistics");
+            Console.WriteLine($"Mean               : {weibull.Mean:N2}");
+            Console.WriteLine($"Median             : {weibull.Median:N2}");
+            Console.WriteLine($"Mode               : {(double.IsNaN(weibull.Mode) ? "undefined" : weibull.Mode.ToString("N2"))}");
+            Console.WriteLine($"Standard Deviation : {weibull.StandardDeviation:N2}");
+            Console.WriteLine($"Variance           : {weibull.Variance:N2}");
+            Console.WriteLine($"Skewness           : {weibull.Skewness:N2}");
+            Console.WriteLine($"Entropy            : {weibull.Entropy:N2}");
+            Console.WriteLine($"Support            : {weibull.Support}");
+
+            Console.WriteLine();
+
+            // Distribution functions
+            Console.WriteLine(">> Distribution Functions");
+            Console.WriteLine($"Density at x = 3   : f(3) = {weibull.ProbabilityDensity(3):N4}");
+            Console.WriteLine($"CDF at x = 4       : P(X ≤ 4) = {weibull.CumulativeDistribution(4):P4}");
+            Console.WriteLine($"P(2 < X < 5)       : {weibull.CumulativeDistribution(5) - weibull.CumulativeDistribution(2):P4}");
+
+            Console.WriteLine($"1st Quartile (Q1)  : {weibull.InverseCumulativeDistribution(0.25):N2}");
+            Console.WriteLine($"3rd Quartile (Q3)  : {weibull.InverseCumulativeDistribution(0.75):N2}");
+            Console.WriteLine();
+
+            // Simulation and parameter estimation
+            Console.WriteLine(">> Simulation & Fitting");
+            double[] sample = weibull.Sample(5000, seed: 42);
+
+            WeibullDistribution estimatedPos = WeibullDistribution.Fit(sample);
+            Console.WriteLine($"Estimated from Positional Argument Fit: {estimatedPos}");
+            WeibullDistribution estimatedMLE = WeibullDistribution.Fit(FittingMethod.MaximumLikelihood, sample);
+            Console.WriteLine($"Estimated from Maximum Likelihood Fit: {estimatedMLE}");
+            WeibullDistribution estimatedMoments = WeibullDistribution.Fit(FittingMethod.Moments, sample);
+            Console.WriteLine($"Estimated from Moments : {estimatedMoments}");
+            Console.WriteLine();
+            Console.WriteLine("=== END OF EXAMPLE ===\n");
+        }
+
+        public static void ChiSquared()
+        {
+            // Distribution parameters
+            int degreesOfFreedom = 10;
+
+            // Create a Chi-Squared distribution
+            ChiSquaredDistribution chiSquared = new ChiSquaredDistribution(degreesOfFreedom);
+
+            Console.WriteLine("=== CHI-SQUARED DISTRIBUTION EXAMPLE ===");
+            Console.WriteLine($"Parameters: Degrees of Freedom = {degreesOfFreedom}");
+            Console.WriteLine();
+
+            // Descriptive statistics
+            Console.WriteLine(">> Descriptive Statistics");
+            Console.WriteLine($"Mean               : {chiSquared.Mean:N2}");
+            Console.WriteLine($"Median             : {chiSquared.Median:N2}");
+            Console.WriteLine($"Mode               : {chiSquared.Mode:N2}");
+            Console.WriteLine($"Standard Deviation : {chiSquared.StandardDeviation:N2}");
+            Console.WriteLine($"Variance           : {chiSquared.Variance:N2}");
+            Console.WriteLine($"Skewness           : {chiSquared.Skewness:N2}");
+            Console.WriteLine($"Entropy            : {chiSquared.Entropy:N2}");
+            Console.WriteLine($"Support            : {chiSquared.Support}");
+            Console.WriteLine();
+
+            // Distribution functions
+            Console.WriteLine(">> Distribution Functions");
+            double x = 5.0;
+            Console.WriteLine($"Density at x = {x}   : f({x}) = {chiSquared.ProbabilityDensity(x):N4}");
+            Console.WriteLine($"CDF at x = {x + 1}     : P(X ≤ {x + 1}) = {chiSquared.CumulativeDistribution(x + 1):P4}");
+            Console.WriteLine($"P({x} < X < {x + 5})    : {chiSquared.CumulativeDistribution(x + 5) - chiSquared.CumulativeDistribution(x):P4}");
+            Console.WriteLine($"1st Quartile (Q1)  : {chiSquared.InverseCumulativeDistribution(0.25):N2}");
+            Console.WriteLine($"3rd Quartile (Q3)  : {chiSquared.InverseCumulativeDistribution(0.75):N2}");
+            Console.WriteLine();
+
+            // Simulation and parameter estimation
+            Console.WriteLine(">> Simulation & Fitting");
+            double[] sample = chiSquared.Sample(5000, seed: 42);
+
+            // Fit the distribution to the sample 
+            ChiSquaredDistribution estimatedMoments = ChiSquaredDistribution.Fit(FittingMethod.Moments, sample);
+            Console.WriteLine($"Estimated using Moments: {estimatedMoments}");
+            ChiSquaredDistribution estimatedMLE = ChiSquaredDistribution.Fit(FittingMethod.MaximumLikelihood, sample);
+            Console.WriteLine($"Estimated using MLE: {estimatedMLE}");
+            Console.WriteLine();
+
+            Console.WriteLine("=== END OF EXAMPLE ===\n");
+        }
+
+        public static void Gamma()
+        {
+            // Distribution parameters
+            double shape = 2.0;   
+            double scale = 3.0;
+
+            // Create a Gamma distribution
+            GammaDistribution gamma = new GammaDistribution(shape, scale);
+
+            Console.WriteLine("=== GAMMA DISTRIBUTION EXAMPLE ===");
+            Console.WriteLine($"Parameters: shape = {shape}, scale = {scale}");
+            Console.WriteLine();
+
+            // Descriptive statistics
+            Console.WriteLine(">> Descriptive Statistics");
+            Console.WriteLine($"Mean               : {gamma.Mean:N2}");
+            Console.WriteLine($"Mode               : {gamma.Mode:N2}");
+            Console.WriteLine($"Variance           : {gamma.Variance:N2}");
+            Console.WriteLine($"Standard Deviation : {gamma.StandardDeviation:N2}");
+            Console.WriteLine($"Skewness           : {gamma.Skewness:N2}");
+            Console.WriteLine($"Entropy            : {gamma.Entropy:N4}");
+            Console.WriteLine($"Support            : {gamma.Support}");
+            Console.WriteLine();
+
+            // Distribution functions
+            Console.WriteLine(">> Distribution Functions");
+            Console.WriteLine($"Density at x = 1   : f(1) = {gamma.ProbabilityDensity(1):N4}");
+            Console.WriteLine($"CDF at x = 2       : P(X ≤ 2) = {gamma.CumulativeDistribution(2):P4}");
+            Console.WriteLine($"P(1 < X < 4)       : {gamma.CumulativeDistribution(4) - gamma.CumulativeDistribution(1):P4}");
+            Console.WriteLine($"1st Quartile (Q1)  : {gamma.InverseCumulativeDistribution(0.25):N2}");
+            Console.WriteLine($"3rd Quartile (Q3)  : {gamma.InverseCumulativeDistribution(0.75):N2}");
+            Console.WriteLine();
+
+            // Simulation & Fitting
+            Console.WriteLine(">> Simulation & Fitting");
+            // Génération d'un échantillon de taille 5000
+            double[] sample = gamma.Sample(5000, seed: 42);
+
+            // Ajustement par méthode des moments
+            GammaDistribution estimatedMoments = GammaDistribution.Fit(sample);
+            Console.WriteLine($"Estimated using Moments : {estimatedMoments}");
+
+            GammaDistribution estimatedMLE = GammaDistribution.Fit(FittingMethod.MaximumLikelihood, sample);
+            Console.WriteLine($"Estimated using Maximum Likelihood : {estimatedMLE}");
+            Console.WriteLine();
+
+            Console.WriteLine("=== END OF EXAMPLE ===\n");
+        }
+
+    }
 }

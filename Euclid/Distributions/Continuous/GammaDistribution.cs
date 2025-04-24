@@ -23,7 +23,7 @@ namespace Euclid.Distributions.Continuous
             _k = k;
             _theta = theta;
 
-            _support = new Interval(0, double.PositiveInfinity, false, false);
+            _support = new Interval(0, double.PositiveInfinity, true, false);
 
             _cdfFactor = 1 / Fn.Gamma(_k);
             _pdfFactor = Math.Pow(_theta, -_k) * _cdfFactor;
@@ -40,7 +40,7 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode => _k >= 1 ? (_k - 1) * _theta : double.NaN;
 
-        /// <summary>Gets the distribution's standard deviation </summary>
+        /// <summary>Gets the distribution's standard deviation </summary>k-
         public override double StandardDeviation => _theta * Math.Sqrt(_k);
 
         /// <summary>Gets the distribution's variance </summary>
@@ -50,7 +50,7 @@ namespace Euclid.Distributions.Continuous
         public override double Skewness => 2 / Math.Sqrt(_k);
 
         /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => _k + Math.Log(_theta) + Math.Log(Fn.Gamma(_k)) + (1 - _k) * Fn.DiGamma(_k);
+        public override double Entropy => _k * _theta + (1 - _k) * Math.Log(_theta) + Math.Log(Fn.Gamma(_k)) + (1 - _k) * Fn.DiGamma(_k);
 
         /// <summary>Gets the distribution's support </summary>
         public override Interval Support => _support;

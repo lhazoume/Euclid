@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using Euclid.Histograms;
+using Euclid.Optimizers;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -101,7 +103,7 @@ namespace Euclid.Distributions.Continuous
             for (int i = 0; i < size; i++)
             {
                 double u = random.NextDouble();
-                sample[i] = InverseCumulativeDistribution(u);
+                sample[i] = _x0 + _gamma * Math.Tan(Math.PI * (u - 0.5));
             }
 
             return sample;
@@ -112,29 +114,75 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
+        /// 
+
         public static CauchyDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (sample.Length == 0)
-                throw new ArgumentException("the sample can't be empty");
+            if (sample == null || sample.Length < 3)
+                throw new ArgumentException("The sample must contain at least three data points.", nameof(sample));
+
+            double[] sortedData = sample.OrderBy(x => x).ToArray();
+            int n = sortedData.Length;
+            double median = ComputeMedian(sortedData);
+
+            double[] lowerHalf = sortedData.Take(n / 2).ToArray();
+            double[] upperHalf = sortedData.Skip((n + 1) / 2).ToArray();
+
+            double q1 = ComputeMedian(lowerHalf);
+            double q3 = ComputeMedian(upperHalf);
+            double interquartileRange = q3 - q1;
+
+
             if (method == FittingMethod.PositionalArgument)
             {
-                double[] sortedData = sample.OrderBy(x => x).ToArray();
-                int n = sortedData.Length;
-
-                double median = n % 2 == 0 ? (sortedData[n / 2 - 1] + sortedData[n / 2]) / 2.0 : sortedData[n / 2];
-
-                double[] firstHalf = sortedData.Take(n / 2).ToArray(),
-                    secondHalf = sortedData.Skip((n + 1) / 2).ToArray();
-                int nFirst = firstHalf.Length,
-                    nSecond = secondHalf.Length;
-                double q1 = nFirst % 2 == 0 ? (firstHalf[nFirst / 2 - 1] + firstHalf[nFirst / 2]) / 2 : firstHalf[nFirst / 2],
-                    q3 = nSecond % 2 == 0 ? (secondHalf[nSecond / 2 - 1] + secondHalf[nSecond / 2]) / 2 : secondHalf[nSecond / 2],
-                    interquartileRange = q3 - q1;
-
                 return new CauchyDistribution(median, interquartileRange / 2);
+            }
+            else if (method == FittingMethod.MaximumLikelihood)
+            { 
+                double initialLocation = median;              
+                double initialScale = interquartileRange / 2;
+
+                double fitness(Vector v)
+                {
+                    double loc = v[0];
+                    double sc = v[1];
+                    double sum = 0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        sum -= (-Math.Log(Math.PI) - Math.Log(sc) - Math.Log(1 + Math.Pow((sample[i] - loc) / sc, 2)));
+                    }
+                    return sum;
+                }
+
+                bool feasibilityFunction(Vector v) => v[1] > 0;
+
+                double epsi = 0.1;
+
+                Vector[] initialSimplex = new Vector[]
+                {
+            Vector.Create(initialLocation, initialScale),
+            Vector.Create(initialLocation * ( epsi + 1), initialScale),
+            Vector.Create(initialLocation, initialScale  * ( epsi + 1))
+                };
+
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 1000);
+                nelderMead.Optimize();
+
+                return new CauchyDistribution(nelderMead.Result[0], nelderMead.Result[1]);
             }
             throw new NotImplementedException();
         }
+
+        /// <summary> Computes the median of a sorted array of numbers</summary>
+        /// <param name="data">A sorted array of values.</param>
+        /// <returns>The median of the values</returns>
+        private static double ComputeMedian(double[] data)
+        {
+            int count = data.Length;
+            return (count % 2 == 0) ? (data[count / 2 - 1] + data[count / 2]) / 2.0 : data[count / 2];
+        }
+
+
 
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>

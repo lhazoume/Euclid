@@ -122,12 +122,12 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
-        public static UniformDistribution Fit(double[] sample) => Fit(sample, FittingMethod.MaximumLikelihood);
+        public static UniformDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
-        public static UniformDistribution Fit(double[] sample, FittingMethod method)
+        public static UniformDistribution Fit(FittingMethod method, double[] sample)
         {
             if (sample.Length == 0)
                 throw new ArgumentException("the sample can't be empty");

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Euclid.Histograms;
+using Euclid.Numerics;
 using Euclid.Optimizers;
+using Euclid.Solvers.SingleVariableSolver;
+
+
 
 namespace Euclid.Distributions.Continuous
 {
@@ -124,7 +128,7 @@ namespace Euclid.Distributions.Continuous
             Random random = new Random(seed);
             double[] result = new double[numberOfPoints];
             for (int i = 0; i < numberOfPoints; i++)
-                result[i] = _lambda * Math.Pow(-Math.Log(random.NextDouble()), 1 / _k);
+                result[i] = _lambda * Math.Pow(-Math.Log(1 - random.NextDouble()), 1 / _k);
             return result;
         }
 
@@ -137,19 +141,17 @@ namespace Euclid.Distributions.Continuous
         /// <param name="method">the fitting method</param>
         public static WeibullDistribution Fit(FittingMethod method, double[] sample)
         {
-            if (sample.Length == 0)
+            if (sample == null || sample.Length < 3)
                 throw new ArgumentException("the sample can't be empty");
             if (sample.Any(d => d <= 0))
                 throw new ArgumentOutOfRangeException(nameof(sample), "the sample can't be lower or equal to 0");
             int n = sample.Length;
+            
             if (method == FittingMethod.PositionalArgument)
             {
-                double[] x = new double[n],
-                    y = new double[n],
-                    f = new double[n];
+                double[] x = new double[n], y = new double[n], f = new double[n];
 
-                double xAvg = 0,
-                    yAvg = 0;
+                double xAvg = 0, yAvg = 0;
 
                 sample = sample.OrderBy(d => d).ToArray();
                 for (int i = 0; i < n; i++)
@@ -163,16 +165,14 @@ namespace Euclid.Distributions.Continuous
                 xAvg /= n;
                 yAvg /= n;
 
-                double numerator = 0,
-                    denominator = 0;
+                double numerator = 0, denominator = 0;
                 for (int i = 0; i < n; i++)
                 {
                     numerator += (x[i] - xAvg) * (y[i] - yAvg);
                     denominator += (x[i] - xAvg) * (x[i] - xAvg);
                 }
 
-                double k = numerator / denominator,
-                    lambda = Math.Exp((-yAvg + k * xAvg) / k);
+                double k = numerator / denominator, lambda = Math.Exp((-yAvg + k * xAvg) / k);
 
                 return new WeibullDistribution(lambda, k);
             }
@@ -191,16 +191,45 @@ namespace Euclid.Distributions.Continuous
                 }
 
                 bool feasibilityFunction(Vector v) => v[0] > 0 && v[1] > 0;
+                double epsi = 0.1;
 
                 Vector[] initialSimplex = new Vector[]{
-                    Vector.Create(scale + 1, shape),
-                    Vector.Create(scale + 1, shape + 1),
-                    Vector.Create(scale, shape + 1)};
+                    Vector.Create(scale , shape),
+                    Vector.Create(scale * (1 + epsi) , shape ),
+                    Vector.Create(scale, shape *(epsi + 1))};
 
                 NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 1000);
                 nelderMead.Optimize();
 
                 return new WeibullDistribution(nelderMead.Result[0], nelderMead.Result[1]);
+            }
+            else if (method == FittingMethod.Moments)
+            {        
+                double m = sample.Average();
+                double variance = sample.Sum(x => Math.Pow(x - m, 2)) / n;
+                double cv2 = variance / (m * m);
+
+                Func<double, double> f = k =>
+                {
+                    double gamma1 = Fn.Gamma(1 + 1 / k);
+                    double gamma2 = Fn.Gamma(1 + 2 / k);
+                    return gamma2 / (gamma1 * gamma1) - 1 - cv2;
+                };
+                Func<double, double> df = f.Differentiate(DifferenceForm.Central, 1e-6);
+
+                var solver = new NewtonRaphson(1.0, f, df, 1000)
+                {
+                    AbsoluteTolerance = 1e-10,
+                    SlopeTolerance = 1e-10,
+                    TrackConvergence = false
+                };
+
+                solver.Solve();     
+
+                double kEstimate = solver.Result;
+                double lambda = m / Fn.Gamma(1 + 1 / kEstimate);
+    
+                return new WeibullDistribution(lambda, kEstimate);
             }
             throw new NotImplementedException();
         }

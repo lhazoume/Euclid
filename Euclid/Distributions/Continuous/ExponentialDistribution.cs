@@ -113,13 +113,21 @@ namespace Euclid.Distributions.Continuous
                 throw new ArgumentException("the sample can't be empty");
             if (sample.Any(d => d < 0))
                 throw new ArgumentOutOfRangeException(nameof(sample), "the sample can't be lower or equal to 0");
+            
+            int n = sample.Length;
+
             if (method == FittingMethod.Moments || method == FittingMethod.MaximumLikelihood)
             {
-                int n = sample.Length;
                 double avg = sample.Average();
-                return new ExponentialDistribution((n - 2) / (n * avg));
+                return new ExponentialDistribution((n - 2) / (n * avg) );   
             }
-            throw new NotImplementedException();
+            else if (method == FittingMethod.PositionalArgument)
+            {
+                double[] sortedData = sample.OrderBy(x => x).ToArray();
+                double median = n % 2 == 0 ? (sortedData[n / 2 - 1] + sortedData[n / 2]) / 2.0 : sortedData[n / 2];
+                return new ExponentialDistribution(Math.Log(2) / median);
+            }
+                throw new NotImplementedException();
         }
 
         /// <summary>Returns a string that represents this instance</summary>

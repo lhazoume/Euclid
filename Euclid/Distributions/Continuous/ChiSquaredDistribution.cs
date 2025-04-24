@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Euclid.Histograms;
+using Euclid.Solvers;
 using Euclid.Solvers.SingleVariableSolver;
+using Euclid.Numerics;
+
 
 namespace Euclid.Distributions.Continuous
 {
@@ -95,6 +98,7 @@ namespace Euclid.Distributions.Continuous
             return (x <= 0) ? 0 : Math.Pow(0.5 * x, 0.5 * _freedomDegrees - 1) * Math.Exp(-0.5 * x) / (2 * Fn.Gamma(0.5 * _freedomDegrees));
         }
 
+
         /// <summary>Evaluates the moment-generating function for a given t</summary>
         /// <param name="t">the argument</param>
         /// <returns>a double</returns>
@@ -130,19 +134,54 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
         /// <param name="sample">the sample of data to fit</param>
         /// <param name="method">the fitting method</param>
+
         public static ChiSquaredDistribution Fit(FittingMethod method, double[] sample)
         {
             if (sample.Length == 0)
                 throw new ArgumentException("the sample can't be empty");
+
             if (sample.Any(d => d < 0))
-                throw new ArgumentOutOfRangeException(nameof(sample), "the sample can't be lower or equal to 0");
+                throw new ArgumentOutOfRangeException(nameof(sample), "the sample can't be lower than 0");
+
+            int n = sample.Length;
+
             if (method == FittingMethod.Moments)
             {
-                int k = (int)Math.Round(sample.Average());
+                double mean = sample.Average();
+                double variance = sample.Select(x => Math.Pow(x - mean, 2)).Average();
+
+                double estimatedK = 2 * Math.Pow(mean, 2) / variance;
+
+                int k = (int)Math.Round(estimatedK);
                 return new ChiSquaredDistribution(k);
             }
+            else if (method == FittingMethod.MaximumLikelihood)
+            {
+                double logxMean = sample.Select(x => Math.Log(x)).Average();
+
+                Func<double, double> f = k => Fn.DiGamma(k / 2.0) - logxMean + Math.Log(2);
+
+                Func<double, double> df = f.Differentiate(DifferenceForm.Central, 1e-6);
+
+                double initialGuess = 2 * Math.Pow(sample.Average(), 2) / sample.Select(x => Math.Pow(x - sample.Average(), 2)).Average();
+                NewtonRaphson solver = new NewtonRaphson(initialGuess, f, df, 1000)
+                {
+                    AbsoluteTolerance = 1e-10,
+                    SlopeTolerance = 1e-10,
+                    TrackConvergence = false
+                };
+
+                solver.Solve();
+
+                double kMLE = solver.Result;
+                int kRounded = (int)Math.Round(kMLE);
+                return new ChiSquaredDistribution(kRounded);
+            }
+
+
             throw new NotImplementedException();
         }
+
 
 
         /// <summary>Returns a string that represents this instance</summary>
