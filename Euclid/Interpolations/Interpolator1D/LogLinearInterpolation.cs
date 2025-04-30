@@ -105,5 +105,6 @@ namespace Euclid.Interpolations.Interpolator1D
 
         public IInterpolator1D Clone() => new LogLinearInterpolation(_extrapolate);
         #endregion
+      
     }
 }

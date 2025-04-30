@@ -42,11 +42,14 @@ namespace Euclid.Interpolations.Interpolator1D
         /// <summary>Interpolates (or extrapolates) for a given value</summary>
         /// <param name="x">the x-value</param>
         /// <returns>the interpolated result</returns>
-        public double ValueAt(double x)
+    
+        public double ValueAt(double x) 
         {
-            if (!IsInRange(x)) throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range");
+            if (!IsInRange(x)) 
+                throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range"); 
 
-            int i;
+            int i = 0;
+
             if (_extrapolate)
             {
                 if (x <= _values[1].X)
@@ -54,13 +57,23 @@ namespace Euclid.Interpolations.Interpolator1D
                 else if (x > _values[_values.Count - 2].X)
                     i = _values.Count - 2;
                 else
-                    i = _values.FindIndex(t => t.X > x) - 1;
+                {
+                    int idx = _values.FindIndex(t => t.X > x);
+                    i = idx > 0 ? idx - 1 : 0;
+                }
             }
             else
-                i = _values.FindIndex(t => t.X > x) - 1;
+            {
+                int idx = _values.FindIndex(t => t.X > x);
+                if (idx == -1)
+                    i = _values.Count - 2;
+                else
+                    i = idx > 0 ? idx - 1 : 0;//limite
+            }
 
             return _values[i].Y + (x - _values[i].X) * (_values[i + 1].Y - _values[i].Y) / (_values[i + 1].X - _values[i].X);
         }
+
 
         /// <summary>Sets the data for the interpolation</summary>
         /// <param name="x">the abscisses</param>

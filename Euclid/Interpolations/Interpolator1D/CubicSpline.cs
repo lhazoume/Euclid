@@ -5,7 +5,15 @@ using System.Linq;
 
 namespace Euclid.Interpolations.Interpolator1D
 {
-    /// <summary>Helps cubic spline interpolations</summary>
+    /// <summary>
+    /// Represents a natural boundary condition for the cubic spline interpolation.
+    /// </summary>
+
+    public enum BoundaryType
+    {
+        Natural,
+        Clamped,
+    }
     public class CubicSpline : IInterpolator1D
     {
         #region Private fields
@@ -13,14 +21,17 @@ namespace Euclid.Interpolations.Interpolator1D
         private readonly bool _extrapolate;
         private List<Point2D> _values;
         private Vector _m, _h;
+
+        private readonly BoundaryType _bcType;
         #endregion
 
         #region Constructors
         /// <summary>Builds the cubic spline interpolator</summary>
         /// <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
-        public CubicSpline(bool allowExtrapolation)
+        public CubicSpline(bool allowExtrapolation, BoundaryType bcType)
         {
             _extrapolate = allowExtrapolation;
+            _bcType = bcType;
         }
         #endregion
 
@@ -52,6 +63,13 @@ namespace Euclid.Interpolations.Interpolator1D
         {
             if (!IsInRange(x)) throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range");
 
+            if (_values.Count == 2)
+            {
+                double x0 = _values[0].X, y0 = _values[0].Y;
+                double x1 = _values[1].X, y1 = _values[1].Y;
+                return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+            }
+
             int i;
             if (_extrapolate)
             {
@@ -63,12 +81,18 @@ namespace Euclid.Interpolations.Interpolator1D
                     i = _values.FindIndex(t => t.X > x);
             }
             else
+            {
+                // x==max renvoie la valeur terminale
+                if (x == _max)
+                    return _values.Last().Y;
                 i = _values.FindIndex(t => t.X > x);
+            }
 
-            return (_m[i - 1] * Math.Pow(_values[i].X - x, 3) + _m[i] * Math.Pow(x - _values[i - 1].X, 3)) / (6 * _h[i - 1]) +
-                (_values[i - 1].Y - _m[i - 1] * _h[i] * _h[i] / 6) * (_values[i].X - x) / _h[i] +
-                (_values[i].Y - _m[i] * _h[i] * _h[i] / 6) * (x - _values[i - 1].X) / _h[i];
+            return (_m[i - 1] * Math.Pow(_values[i].X - x, 3) + _m[i] * Math.Pow(x - _values[i - 1].X, 3)) / (6 * _h[i]) +
+                  ((_values[i - 1].Y - _m[i - 1] * _h[i] * _h[i] / 6) * (_values[i].X - x) / _h[i]) +
+                  ((_values[i].Y - _m[i] * _h[i] * _h[i] / 6) * (x - _values[i - 1].X) / _h[i]);
         }
+        
 
         /// <summary>Sets the data for the interpolation</summary>
         /// <param name="x">the abscisses</param>
@@ -100,7 +124,9 @@ namespace Euclid.Interpolations.Interpolator1D
 
             OrganizeTheData();
         }
-
+        /// <summary>
+        /// Organizes the data for the interpolation
+        /// </summary>
         private void OrganizeTheData()
         {
             _values.Sort((a, b) => a.X.CompareTo(b.X));
@@ -116,27 +142,67 @@ namespace Euclid.Interpolations.Interpolator1D
             _h = Vector.Create(n);
             Vector d = Vector.Create(n);
             for (int i = 1; i < n; i++)
-            {
                 _h[i] = _values[i].X - _values[i - 1].X;
-                if (i < n - 1)
-                    d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / ((_values[i + 1].X - _values[i].X) * (_values[i + 1].X - _values[i - 1].X)) - (_values[i].Y - _values[i - 1].Y) / (_values[i + 1].X - _values[i - 1].X) * (_values[i + 1].X - _values[i - 1].X));
+            // Natural Spline
+            d[0] = 0;
+            for (int i = 1; i < n - 1; i++)
+                d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1] - (_values[i].Y - _values[i - 1].Y) / _h[i]);
+            d[n - 1] = 0;
+
+            Matrix A = Matrix.Create(n, n);
+            // Possibility to add new BC types
+            switch (_bcType)
+            {
+                case BoundaryType.Natural:
+                    d[0] = 0;
+                    d[n - 1] = 0;
+                    A[0, 0] = 1;
+                    A[n - 1, n - 1] = 1;
+                    for (int i = 1; i < n - 1; i++)
+                    {
+                        A[i, i - 1] = _h[i];
+                        A[i, i] = 2 * (_h[i] + _h[i + 1]);
+                        A[i, i + 1] = _h[i + 1];
+                        d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1]
+                                  - (_values[i].Y - _values[i - 1].Y) / _h[i]);
+                    }
+                    break;
+
+                case BoundaryType.Clamped:
+                    // first derivative zero at endpoints
+                    A[0, 0] = 2 * _h[1];
+                    A[0, 1] = _h[1];
+                    d[0] = 6 * (((_values[1].Y - _values[0].Y) / _h[1]) - 0);
+                    A[n - 1, n - 2] = _h[n - 1];
+                    A[n - 1, n - 1] = 2 * _h[n - 1];
+                    d[n - 1] = 6 * (0 - ((_values[n - 1].Y - _values[n - 2].Y) / _h[n - 1]));
+                    for (int i = 1; i < n - 1; i++)
+                    {
+                        A[i, i - 1] = _h[i];
+                        A[i, i] = 2 * (_h[i] + _h[i + 1]);
+                        A[i, i + 1] = _h[i + 1];
+                        d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1]
+                                  - (_values[i].Y - _values[i - 1].Y) / _h[i]);
+                    }
+                    break;
+
+                 
+                default:
+                    throw new NotSupportedException($"BC type {_bcType} not supported");
             }
 
-            Matrix A = 2 * Matrix.CreateIdentityMatrix(n, n);
-            A[0, 1] = 1;
-            for (int i = 1; i < n - 1; i++)
-            {
-                A[i, i - 1] = _h[i] / (_h[i + 1] + _h[i]);
-                A[i, i + 1] = 1 - A[i, i - 1];
-            }
-            A[n - 1, n - 2] = _h[n - 2] / (_h[n - 2] + _h[n - 1]);
+            // Resolve the system A * m = d
+            _m = A.SolveWith(d);
+         
             #endregion
 
-            _m = A.SolveWith(d);
             #endregion
         }
-
-        public IInterpolator1D Clone() => new CubicSpline(_extrapolate);
+        /// <summary>
+        /// Clones the interpolator
+        /// </summary>
+        /// <returns></returns>
+        public IInterpolator1D Clone() => new CubicSpline(_extrapolate, _bcType);
         #endregion
     }
 }
