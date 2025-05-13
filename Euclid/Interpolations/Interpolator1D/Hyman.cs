@@ -96,6 +96,7 @@ namespace Euclid.Interpolations.Interpolator1D
               .Select(g => g.First())
               .ToList();
             OrganizeTheData();
+
         }
 
         /// <summary>Organizes the data and computes slopes for Hyman's interpolator</summary>

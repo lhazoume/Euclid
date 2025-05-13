@@ -492,6 +492,7 @@ namespace Euclid.Optimizers
                 direction = ConstrainedDirection(_result, _sign * gradient, lowBound, upBound);
 
             _descentDirections.Add(direction.Clone);
+            Console.WriteLine($"{_descentDirections.Count} :  {direction.ToString()}");
             _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations, maxStaticIterations: _maxLineSearchIterations, gradientEpsilon: _gradientThreshold);
 
@@ -507,6 +508,7 @@ namespace Euclid.Optimizers
 
                 _descentDirections.Add(direction.Clone);
                 _convergence.Add(new Tuple<double, double>(gradient.Norm2, _error));
+                Console.WriteLine($"{_descentDirections.Count} : { direction.NormSup:e2} / {_error:e2}");
             }
 
             _status = endCriteria.Status;

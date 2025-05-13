@@ -35,6 +35,7 @@ namespace Euclid.Optimizers
         /// <param name="maxStaticIterations">the maximum number of static iterations</param>
         /// <param name="epsilon">the convergence threshold</param>
         /// <param name="shrinkageFactor">the shrinkage factor</param>
+        /// <param name="expandFactor">the expansion factor</param>
         public PatternSearch(Func<Vector, bool> feasabilityFunction,
             Func<Vector, double> fitnessFunction,
             Vector initialPoint, Vector shocks,
