@@ -127,6 +127,7 @@
     <Compile Include="Benchmarking\Case.cs" />
     <Compile Include="Benchmarking\CaseResult.cs" />
     <Compile Include="Benchmarking\CaseSet.cs" />
+    <Compile Include="Interpolations\Interpolator1D\MonotoneConvex .cs" />
     <Compile Include="Interpolations\Interpolator1D\Hyman.cs" />
     <Compile Include="Interpolations\Interpolator1D\CubicSpline.cs" />
     <Compile Include="Interpolations\Interpolator1D\LogLinearInterpolation.cs" />

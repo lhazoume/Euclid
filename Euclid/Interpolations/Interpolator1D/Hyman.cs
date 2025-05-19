@@ -2,8 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Euclid.Interpolations.Interpolator1D
 {
@@ -23,6 +22,7 @@ namespace Euclid.Interpolations.Interpolator1D
         public Hyman(bool allowExtrapolation)
         {
             _extrapolate = allowExtrapolation;
+
         }
         #endregion
 
@@ -34,7 +34,7 @@ namespace Euclid.Interpolations.Interpolator1D
         public bool Extrapolation => _extrapolate;
 
         /// <summary>Specifies if the interpolator is local (vs global)</summary>
-        public bool Local => true;
+        public bool Local => false;
         #endregion
 
         #region Method
@@ -155,6 +155,8 @@ namespace Euclid.Interpolations.Interpolator1D
                     {
                         _b[i] = (w1 + w2) / denom;
                     }
+
+
                 }
             }
 
