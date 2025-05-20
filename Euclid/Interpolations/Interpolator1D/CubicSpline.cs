@@ -43,7 +43,7 @@ namespace Euclid.Interpolations.Interpolator1D
         public bool Extrapolation => _extrapolate;
 
         /// <summary>Specifies if the interpolator is local (vs global)</summary>
-        public bool Local => true;
+        public bool Local => false;
 
         #endregion
 

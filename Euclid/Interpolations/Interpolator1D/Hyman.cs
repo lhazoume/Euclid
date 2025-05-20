@@ -22,7 +22,6 @@ namespace Euclid.Interpolations.Interpolator1D
         public Hyman(bool allowExtrapolation)
         {
             _extrapolate = allowExtrapolation;
-
         }
         #endregion
 
@@ -71,7 +70,6 @@ namespace Euclid.Interpolations.Interpolator1D
         
         }
 
-
         /// <summary>Sets the data for the interpolation</summary>
         public void SetData(IList<double> x, IList<double> y)
         {
@@ -92,7 +90,7 @@ namespace Euclid.Interpolations.Interpolator1D
             if (points is null) throw new ArgumentNullException(nameof(points));
             _values = points
               .OrderBy(p => p.X)
-              .GroupBy(p => p.X)     // enlève les doublons de X
+              .GroupBy(p => p.X)     // remove duplicates
               .Select(g => g.First())
               .ToList();
             OrganizeTheData();
@@ -155,8 +153,6 @@ namespace Euclid.Interpolations.Interpolator1D
                     {
                         _b[i] = (w1 + w2) / denom;
                     }
-
-
                 }
             }
 
@@ -197,7 +193,7 @@ namespace Euclid.Interpolations.Interpolator1D
         }
 
         /// <summary>
-        /// Returns a deep copy of the interpolator
+        /// Returns a copy of the interpolator
         /// </summary>
         /// <returns></returns>
         public IInterpolator1D Clone() => new Hyman(_extrapolate);
