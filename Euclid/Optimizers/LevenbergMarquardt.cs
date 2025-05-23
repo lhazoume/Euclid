@@ -1,6 +1,8 @@
-﻿using Euclid.Solvers;
+﻿using Euclid.Numerics;
+using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Euclid.Optimizers
 {
@@ -10,23 +12,21 @@ namespace Euclid.Optimizers
     public class LevenbergMarquardt
     {
         #region Declarations
-        private readonly Func<Vector, Vector> _residuals;   // r(x)
-        private readonly Func<Vector, Matrix> _jacobian;    // J(x)  can be null (=> numerical Jacobian)
-
+        private readonly Func<Vector, Vector> _residuals;
+        private readonly Func<Vector, Matrix> _jacobian; 
         private readonly int _maxIter;
-        private readonly double _tau;           // lambda0 = tau * max(diag(Jtranspose J))
-        private readonly double _gradientTolerance;  // Tolerance on the gradient norm
-        private readonly double _parameterTolerance; // Tolerance on the variation of x
-        private readonly double _functionTolerance;      // Tolerance on the variation of the cost function
+        private readonly int _maxStaticIter;
+        private readonly double _tau;
+        private readonly double _gradientTolerance;
+        private readonly double _functionTolerance;
         private readonly double _vInit;
-        private readonly double _stepSize;      // Step size for numerical Jacobian
-
+        private readonly double _stepSize; // Step size for numerical Jacobian
         private SolverStatus _status = SolverStatus.NotRan;
-        private Vector _x;      // current solution
-        private double _error;  // current (0.5 * ||r(x)||^2)
-        private int _nResidualEvals; // Number of residual function evaluations
-        private int _nJacobianEvals; // Number of Jacobian evaluations (if analytical)
-
+        private Vector _result;      // current solution
+        private double _error;
+        private readonly OptimizationType _optimizationType;
+        private readonly DifferenceForm _differenceForm = DifferenceForm.Central;
+        private readonly int _sign;
         private readonly List<double> _errors = new List<double>();
         private readonly List<double> _lambdas = new List<double>();
         #endregion
@@ -38,37 +38,44 @@ namespace Euclid.Optimizers
         /// <param name="initialGuess">Initial parameter estimate.</param>
         /// <param name="residuals">Function computing the residual vector r(x).</param>
         /// <param name="jacobian">Function computing the Jacobian matrix J(x) of the residuals. If null, finite differences will be used.</param>
+        /// <param name="optimizationType">Optimization type (minimization or maximization).</param>
         /// <param name="maxIter">Maximum number of iterations.</param>
         /// <param name="tau">Initial factor for the Levenberg‑Marquardt parameter (lambda).</param>
         /// <param name="gradientTolerance">Tolerance for the gradient norm. Optimization stops if ||J^T r|| ≤ gradientTolerance.</param>
-        /// <param name="parameterTolerance">Tolerance for parameter variation. Optimization stops if ||delta x|| ≤ parameterTolerance * (||x|| + parameterTolerance).</param>
-        /// <param name="functionTolerance">Tolerance for cost function variation. Optimization stops if |Δerror| ≤ functionTolerance * (error + functionTolerance).</param>
-        /// <param name="vInit">Initial factor for increasing λ when a step is rejected.</param>
+        /// < param name="functionTolerance">Tolerance for the function value. Optimization stops if ||r|| ≤ functionTolerance.</param>
+        /// <param name="vInit">Initial factor for increasing lmabda when a step is rejected.</param>
         /// <param name="stepSize">Relative step size for finite differences in numerical Jacobian.</param>
         public LevenbergMarquardt(
             Vector initialGuess,
             Func<Vector, Vector> residuals,
             Func<Vector, Matrix> jacobian = null,
+            OptimizationType optimizationType = OptimizationType.Min,
+            DifferenceForm scheme = DifferenceForm.Central,
             int maxIter = 100,
+            int maxStaticIter = 50,
             double tau = 1e-3,
-            double gradientTolerance = 1e-8,
-            double parameterTolerance = 1e-8,
+            double gradientTolerance = Descents.GRADIENT_EPSILON,
             double functionTolerance = 1e-8,
             double vInit = 2.0,
             double stepSize = 1e-8)
         {
-            _x = initialGuess?.Clone ?? throw new ArgumentNullException(nameof(initialGuess));
+            _result = initialGuess ?? throw new ArgumentNullException(nameof(initialGuess));
             _residuals = residuals ?? throw new ArgumentNullException(nameof(residuals));
             _jacobian = jacobian;
+            _differenceForm = scheme;
+
+            _optimizationType = optimizationType;
+            _sign = _optimizationType == OptimizationType.Min ? -1 : 1;   
 
             _maxIter = maxIter;
+            _maxStaticIter = maxStaticIter;
             _tau = tau;
             _gradientTolerance = gradientTolerance;
-            _parameterTolerance = parameterTolerance;
             _functionTolerance = functionTolerance;
             _vInit = vInit;
             _stepSize = stepSize;
         }
+
         #endregion
 
         #region Properties 
@@ -79,17 +86,11 @@ namespace Euclid.Optimizers
         /// <summary>
         /// Gets the current result of the optimization.
         /// </summary>
-        public Vector Result => _x;
+        public Vector Result => _result;
         /// <summary>
         /// Gets the current error value.
         /// </summary>
         public double Error => _error;
-        /// <summary>
-        /// Number of residual evaluations.
-        /// </summary>
-        public int ResidualEvaluations => _nResidualEvals;
-        /// <summary>Total number of Jacobian function evaluations (if provided analytically).</summary>
-        public int JacobianEvaluations => _nJacobianEvals;
         /// <summary>
         /// Gets the list of error values during the optimization process.
         /// </summary>
@@ -98,177 +99,196 @@ namespace Euclid.Optimizers
         /// Gets the list of lambda values used during the optimization process.
         /// </summary>
         public IEnumerable<double> Lambdas => _lambdas;
+        /// <summary>Gets the optimization type</summary>
+        public OptimizationType OptimizationType => _optimizationType;
+
         #endregion
         #region Methods
         #region Numerical Jacobian
-
         /// <summary>
-        /// Computes the Jacobian numerically using central finite differences.
-        /// Each call to this method performs 2 * x.Size evaluations of the residual function.
+        /// Computes the Jacobian numerically using forward finite differences.
         /// </summary>
-        /// <param name="rFunc">The residual function.</param>
+        /// <param name="function">The residual function.</param>
         /// <param name="x">The point at which to evaluate the Jacobian.</param>
-        /// <param name="incrementResidualEvals">Action to increment the residual evaluation counter.</param>
-        /// <param name="eps">The relative step size for finite differences.</param>
+        /// <param name="increment">The relative step size for finite differences.</param>
+        /// <param name="scheme">The finite difference scheme to use (forward, backward, or central).</param>
         /// <returns>The estimated Jacobian matrix.</returns>
-        private static Matrix NumericalJacobian(
-            Func<Vector, Vector> rFunc,
-            Vector x,
-            Action incrementResidualEvals,
-            double eps)
+        private static Matrix NumericalJacobian(Func<Vector, Vector> function, Vector x,double increment, DifferenceForm scheme)
         {
+            if (increment <= 0) throw new ArgumentOutOfRangeException(nameof(increment), "eps doit être strictement positif.");
+
             int n = x.Size;
-            Matrix J = null;
+            Vector f0 = function(x);
+            int m = f0.Size;
+            Matrix J = Matrix.Create(m, n);
 
             for (int j = 0; j < n; j++)
             {
-                double xjOriginal = x[j];
-                double h = Math.Max(1.0, Math.Abs(xjOriginal)) * eps;
-                if (h == 0) h = eps;
-                // Evaluate r(x + h e_j)
-                x[j] = xjOriginal + h;
-                Vector rPlusH = rFunc(x);
-                incrementResidualEvals();
-                // Evaluate r(x - h e_j)
-                x[j] = xjOriginal - h;
-                Vector rMinusH = rFunc(x);
-                incrementResidualEvals();
+                double xj0 = x[j];
 
-                x[j] = xjOriginal;
+                Vector rPlus = null, rMinus = null;
 
-                if (J == null)
-                    J = Matrix.Create(rPlusH.Size, n);
-
-                for (int i = 0; i < rPlusH.Size; i++)
+                if (scheme == DifferenceForm.Forward || scheme == DifferenceForm.Central)
                 {
-                    J[i, j] = (rPlusH[i] - rMinusH[i]) / (2 * h);
+                    x[j] = xj0 + increment;
+                    rPlus = function(x);
+                }
+                if (scheme == DifferenceForm.Backward || scheme == DifferenceForm.Central)
+                {
+                    x[j] = xj0 - increment;
+                    rMinus = function(x);
+                }
+                x[j] = xj0;
+
+                for (int i = 0; i < m; i++)
+                {
+                    if (scheme == DifferenceForm.Forward)
+                    {
+                        J[i, j] = (rPlus[i] - f0[i]) / increment;
+                    }
+                    else if (scheme == DifferenceForm.Backward)
+                    {
+                        J[i, j] = (f0[i] - rMinus[i]) / increment;
+                    }
+                    else
+                    {
+                        J[i, j] = (rPlus[i] - rMinus[i]) / (2 * increment);
+                    }
                 }
             }
-            return J ?? Matrix.Create(0, n);
+
+            return J;
         }
 
         #endregion
 
         #region Optimisation
         /// <summary>
-        /// Performs the optimization using the Levenberg‑Marquardt algorithm.
+        /// Performs the optimization using the Levenberg‑Marquardt algorithm from J.Moré 
         /// </summary>
-        public void Optimize()
+        public void OptimizeAdaptive()
         {
-            // Initialisation
-            _nResidualEvals = 0;
-            _nJacobianEvals = 0;
             _errors.Clear();
             _lambdas.Clear();
             _status = SolverStatus.NotRan;
 
-            // Compute initial residual vector and error
-            Vector r = _residuals(_x);
-            _nResidualEvals++;
-            _error = 0.5 * Vector.Scalar(r, r);
-            // Compute Jacobian (analytical if provided, otherwise n
-            Matrix J;
-            if (_jacobian != null)
-            {
-                J = _jacobian(_x);
-                _nJacobianEvals++;
-            }
-            else
-            {
-                J = NumericalJacobian(_residuals, _x, () => _nResidualEvals++, _stepSize);
-            }
+            EndCriteria endCriteria = new EndCriteria(
+                maxIterations: _maxIter,
+                maxStaticIterations: _maxStaticIter,
+                functionEpsilon: _functionTolerance,
+                gradientEpsilon: _gradientTolerance
+            );
 
-            Vector g = J.Transpose * r; // Gradient 
-            // Compute JTJ and its largest diagonal element
-            Matrix JTJ = Matrix.TransposeBySelf(J);
-            double diagMax = 0;
-            if (JTJ.Rows > 0)
-            {
-                for (int i = 0; i < JTJ.Rows; i++)
-                    diagMax = Math.Max(diagMax, Math.Abs(JTJ[i, i]));
-            }
-            if (diagMax == 0) diagMax = 1.0;
-
-            double lambda = _tau * diagMax;
+            double lambda =0;
             double v = _vInit;
 
-            _errors.Add(_error);
-            _lambdas.Add(lambda);
-           
-            if (g.Norm2 <= _gradientTolerance)
+            while (true)
             {
-                _status = SolverStatus.GradientConvergence;
-                return;
-            }
-
-            _status = SolverStatus.IterationExceeded;
-            // Main optimization loop
-            for (int k = 0; k < _maxIter; k++)
-            {
-                Matrix A = JTJ + (lambda * Matrix.CreateIdentityMatrix(JTJ.Rows, JTJ.Columns));
-                Vector delta = A.SolveWith(-g);
-
-                if (delta.Norm2 <= _parameterTolerance * (_x.Norm2 + _parameterTolerance))
+                Vector residual = _residuals(_result);
+                _error = 0.5 * residual.SumOfSquares;
+                Matrix jacobian = _jacobian != null ? _jacobian(_result) : NumericalJacobian(_residuals, _result, _stepSize, _differenceForm);
+                Vector gradient = jacobian.Transpose * residual;
+                Matrix JTJ = Matrix.TransposeBySelf(jacobian);
+                if (_errors.Count == 0)
                 {
-                    _status = SolverStatus.StationaryFunction;
-                    break;
+                    double diagMax = JTJ.Rows > 0 ? Enumerable.Range(0, JTJ.Rows).Max(i => Math.Abs(JTJ[i, i])) : 1.0;
+                    lambda = _tau * diagMax;
                 }
 
-                Vector xNew = _x + delta;
-                Vector rNew = _residuals(xNew);
-                _nResidualEvals++;
-                double errorNew = 0.5 * Vector.Scalar(rNew, rNew);
-                // Compute gain denominator and gain ratio
-                double gainDen = 0.5 * Vector.Scalar(delta, lambda * delta - g);
-                double rho = (gainDen > double.Epsilon) ? (_error - errorNew) / gainDen : -1;
+                double gradNorm = gradient.Norm2;
+                Matrix A = JTJ + Matrix.CreateIdentityMatrix(JTJ.Rows, JTJ.Columns) * lambda;
+                Vector delta = _sign * A.SolveWith(gradient);
 
-                if (rho > 0 && !double.IsInfinity(errorNew) && !double.IsNaN(errorNew))
+                Vector xNew = _result + delta;
+                Vector residualNew = _residuals(xNew);
+                double errorNew = 0.5 * residualNew.SumOfSquares;
+
+                double predictedReduction = 0.5 * Vector.Scalar(delta, lambda * delta - gradient);
+                double actualReduction = _error - errorNew;
+                double reductionRatio = (predictedReduction > double.Epsilon) ? actualReduction / predictedReduction : -1.0;
+
+                // Moré's rule for updating lambda
+                if (reductionRatio > 0 && !double.IsInfinity(errorNew) && !double.IsNaN(errorNew))
                 {
-                    double errorOld = _error;
-                    _x = xNew;
+                    _result = xNew;
                     _error = errorNew;
-                    r = rNew;
-
-                    if (_jacobian != null)
-                    {
-                        J = _jacobian(_x);
-                        _nJacobianEvals++;
-                    }
-                    else
-                    {
-                        J = NumericalJacobian(_residuals, _x, () => _nResidualEvals++, _stepSize);
-                    }
-
-                    g = J.Transpose * r;
-                    JTJ = Matrix.TransposeBySelf(J);
-
-                    lambda *= Math.Max(1.0 / 3.0, 1.0 - Math.Pow(2.0 * rho - 1.0, 3));
+                    lambda *= Math.Max(1.0 / 3.0, 1.0 - Math.Pow(2.0 * reductionRatio - 1.0, 3.0));
                     v = _vInit;
-
-                    _errors.Add(_error);
-                    _lambdas.Add(lambda);
-
-                    if (g.Norm2 <= _gradientTolerance)
+                    if (endCriteria.ShouldStop(value: _error, gradient: gradNorm))
                     {
-                        _status = SolverStatus.GradientConvergence;
-                        break;
-                    }
-                    if (Math.Abs(errorOld - _error) <= _functionTolerance * (Math.Abs(errorOld) + _functionTolerance))
-                    {
-                        _status = SolverStatus.FunctionConvergence;
-                        break;
+                        _status = endCriteria.Status;
+                        return;
                     }
                 }
                 else
                 {
                     lambda *= v;
                     v *= 2.0;
-
-                    _errors.Add(_error);
-                    _lambdas.Add(lambda);
                 }
+                _errors.Add(_error);
+                _lambdas.Add(lambda);
             }
         }
+
+        /// <summary>
+        /// Performs the optimization using the Levenberg‑Marquardt algorithm.
+        /// </summary>
+        public void Optimize()
+        {
+            _errors.Clear();
+            _lambdas.Clear();
+            _status = SolverStatus.NotRan;
+
+            EndCriteria endCriteria = new EndCriteria(
+                maxIterations: _maxIter,
+                maxStaticIterations: _maxStaticIter,
+                functionEpsilon: _functionTolerance,
+                gradientEpsilon: _gradientTolerance
+            );
+
+            double lambda = _tau;
+            double v = _vInit;
+            while (true)
+            {
+                Vector residual = _residuals(_result);
+                _error = 0.5 * residual.SumOfSquares;
+                Matrix jacobian = _jacobian != null ? _jacobian(_result) : NumericalJacobian(_residuals, _result, _stepSize,_differenceForm);
+                Vector gradient = jacobian.Transpose * residual;
+                Matrix JTJ = Matrix.TransposeBySelf(jacobian);
+
+                Matrix A = JTJ + Matrix.CreateIdentityMatrix(JTJ.Rows, JTJ.Columns) * lambda;
+                Vector delta = _sign * A.SolveWith(gradient);
+                double gradNorm = gradient.Norm2;
+
+                Vector xNew = _result + delta;
+                Vector residualNew = _residuals(xNew);
+                double errorNew = 0.5 * residualNew.SumOfSquares;
+
+                double predictedReduction = -_sign * 0.5 * Vector.Scalar(delta, lambda * delta - gradient);
+                double actualReduction = -_sign * (_error - errorNew);
+                double reductionRatio = (predictedReduction > double.Epsilon) ? actualReduction / predictedReduction : -1;
+
+                if (reductionRatio > 0 && !double.IsInfinity(errorNew) && !double.IsNaN(errorNew))
+                {
+                    _result = xNew;
+                    residual = residualNew;
+                    _error = errorNew;
+                    lambda /= v;
+                    if (endCriteria.ShouldStop(value: _error, gradient: gradNorm))
+                    {
+                        _status = endCriteria.Status;
+                        return;
+                    }
+                }
+                else
+                {
+                    lambda *= v;
+                }
+                _errors.Add(_error);
+                _lambdas.Add(lambda);
+            }
+        }
+
         #endregion
         #endregion
     }
