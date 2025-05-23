@@ -91,7 +91,7 @@ namespace Euclid.Solvers
             _status = SolverStatus.FunctionConvergence;
             return true;
         }
-        // a corriger 
+
         private bool BelowFunctionChangeEpsilon(double currentValue)
         {
             if (!_functionEpsilon.HasValue) return false;
