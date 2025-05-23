@@ -39,10 +39,13 @@ namespace Euclid.Optimizers
         /// <param name="residuals">Function computing the residual vector r(x).</param>
         /// <param name="jacobian">Function computing the Jacobian matrix J(x) of the residuals. If null, finite differences will be used.</param>
         /// <param name="optimizationType">Optimization type (minimization or maximization).</param>
+        /// <param name="scheme">Finite difference scheme for numerical Jacobian (forward, backward, or central).</param>
         /// <param name="maxIter">Maximum number of iterations.</param>
+         /// <param name="maxStaticIter">Maximum number of static iterations allowed without improvement.</param>
+
         /// <param name="tau">Initial factor for the Levenberg‑Marquardt parameter (lambda).</param>
         /// <param name="gradientTolerance">Tolerance for the gradient norm. Optimization stops if ||J^T r|| ≤ gradientTolerance.</param>
-        /// < param name="functionTolerance">Tolerance for the function value. Optimization stops if ||r|| ≤ functionTolerance.</param>
+        /// <param name="functionTolerance">Tolerance for the function value. Optimization stops if ||r|| ≤ functionTolerance.</param>
         /// <param name="vInit">Initial factor for increasing lmabda when a step is rejected.</param>
         /// <param name="stepSize">Relative step size for finite differences in numerical Jacobian.</param>
         public LevenbergMarquardt(
@@ -203,8 +206,8 @@ namespace Euclid.Optimizers
                 Vector residualNew = _residuals(xNew);
                 double errorNew = 0.5 * residualNew.SumOfSquares;
 
-                double predictedReduction = 0.5 * Vector.Scalar(delta, lambda * delta - gradient);
-                double actualReduction = _error - errorNew;
+                double predictedReduction = -_sign * 0.5 * Vector.Scalar(delta, lambda * delta - gradient);
+                double actualReduction = -_sign *( _error - errorNew);
                 double reductionRatio = (predictedReduction > double.Epsilon) ? actualReduction / predictedReduction : -1.0;
 
                 // Moré's rule for updating lambda
