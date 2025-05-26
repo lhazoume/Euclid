@@ -73,7 +73,7 @@ namespace Euclid.Solvers
 
             return ExceededIterations() || ExceededMaxStaticIterations() || (_maxStaticIterations.HasValue ? BelowFunctionChangeEpsilon(value): BelowFunctionEpsilon(value));
         }
-
+       
         /// <summary>Specifies whether the end criteria are met for the current value</summary>
         /// <returns>a boolean</returns>
         public bool ShouldStop()
