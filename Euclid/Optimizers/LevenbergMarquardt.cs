@@ -6,9 +6,7 @@ using System.Linq;
 
 namespace Euclid.Optimizers
 {
-    /// <summary>
-    /// Nonlinear least‑squares optimizer based on the Levenberg–Marquardt algorithm.
-    /// </summary>
+    /// <summary> Nonlinear least‑squares optimizer based on the Levenberg–Marquardt algorithm./// </summary>
     public class LevenbergMarquardt
     {
         #region Declarations
@@ -51,10 +49,10 @@ namespace Euclid.Optimizers
             double functionThreshold = Descents.ERR_EPSILON
             )
         {
+            if (initialGuess == null) throw new ArgumentNullException(nameof(initialGuess));
             _initialGuess = initialGuess.Clone;
             _residuals = residuals ?? throw new ArgumentNullException(nameof(residuals));
             _bump = bump;
-
             _jacobian = jacobian ?? _residuals.Jacobian(Bump);
 
             _optimizationType = optimizationType;
@@ -65,8 +63,6 @@ namespace Euclid.Optimizers
             _gradientThreshold = gradientThreshold;
             _functionThreshold = functionThreshold;
         }
-
-
 
         #endregion
 
@@ -153,61 +149,68 @@ namespace Euclid.Optimizers
 
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter,maxStaticIterations: _maxStaticIter,functionEpsilon: _functionThreshold,gradientEpsilon: _gradientThreshold);
 
+            // Initialization
             double lambda = 0;
-            double v = vInit;
+            double penaltyFactor = vInit;
             int dimension = _result.Size;
-            while (true)
+            // First iteration used to set the initial error and gradient norms
+            _error = 0.5 * _residuals(_result).SumOfSquares;
+            double gradNorm = (_jacobian(_result).Transpose * _residuals(_result)).Norm2;
+
+            bool stepAccepted = false;
+
+            while (!(stepAccepted && endCriteria.ShouldStop(value: _error, gradient: gradNorm)))
             {
                 Vector residual = _residuals(_result);
                 _error = 0.5 * residual.SumOfSquares;
+
                 Matrix jacobian = _jacobian(_result);
                 Vector gradient = jacobian.Transpose * residual;
+
                 Matrix JTJ = Matrix.TransposeBySelf(jacobian);
                 if (_errors.Count == 0)
-                {
-                    double diagMax = JTJ.Rows > 0 ? Enumerable.Range(0, JTJ.Rows).Max(i => Math.Abs(JTJ[i, i])) : 1.0;
-                    lambda = tau * diagMax;
-                }
+                    lambda = tau * JTJ.Rows > 0? Enumerable.Range(0, JTJ.Rows).Max(i => Math.Abs(JTJ[i, i])) : 1.0;
 
-                double gradNorm = gradient.Norm2;
-                Matrix A = JTJ + Matrix.CreateIdentityMatrix(dimension,dimension) * lambda;
+                Matrix A = JTJ + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
                 Vector delta = _sign * A.SolveWith(gradient);
 
                 Vector resultNew = _result + delta;
                 Vector residualNew = _residuals(resultNew);
                 double errorNew = 0.5 * residualNew.SumOfSquares;
 
+                // Verification of the step using a predicted reduction ratio where the value indicates how much the error is expected to decrease.
                 double predictedReduction = -_sign * 0.5 * Vector.Scalar(delta, lambda * delta - gradient);
                 double actualReduction = -_sign * (_error - errorNew);
-                double reductionRatio = (predictedReduction > double.Epsilon) ? actualReduction / predictedReduction : -1.0;
+                double reductionRatio = (predictedReduction > 0) ? actualReduction / predictedReduction: -1.0;// closer to 1.0 means better step acceptance
 
-                if (reductionRatio > 0)
+                if (reductionRatio > 0.0)
                 {
                     _result = resultNew;
                     _error = errorNew;
                     lambda *= Math.Max(1.0 / 3.0, 1.0 - Math.Pow(2.0 * reductionRatio - 1.0, 3.0));
-                    v = vInit;
-                    if (endCriteria.ShouldStop(value: _error, gradient: gradNorm))
-                    {
-                        _status = endCriteria.Status;
-                        return;
-                    }
+                    penaltyFactor = vInit;
+                    gradNorm = (_jacobian(_result).Transpose * residualNew).Norm2;
+                    stepAccepted = true;
                 }
                 else
                 {
-                    lambda *= v;
-                    v *= 2.0;
+                    lambda *= penaltyFactor;
+                    penaltyFactor *= 2.0;
+                    stepAccepted = false;
                 }
+
                 _errors.Add(_error);
                 _lambdas.Add(lambda);
             }
+            _status = endCriteria.Status;
         }
+
         /// <summary>
         /// Performs the optimization using the Levenberg‑Marquardt algorithm with a fixed tau and vInit.
         /// </summary>
         /// <param name="tau"></param>
-        /// <param name="vInit"></param>
-        public void Optimize(double tau = 1e-3, double vInit = 2.0)
+        /// <param name="penaltyFactor"></param>
+        public void Optimize(double tau = 1e-3, double penaltyFactor = 2.0)
         {
             _result = _initialGuess.Clone;
             _errors.Clear();
@@ -215,47 +218,47 @@ namespace Euclid.Optimizers
             _status = SolverStatus.Diverged;
 
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter,maxStaticIterations: _maxStaticIter,functionEpsilon: _functionThreshold,gradientEpsilon: _gradientThreshold);
-
+            // Initalization
             double lambda = tau;
-            double v = vInit;
             int dimension = _result.Size;
-            while (true)
+            // First iteration used to set the initial error and gradient norms
+            _error = 0.5 * _residuals(_result).SumOfSquares;
+            double gradNorm = (_jacobian(_result).Transpose * _residuals(_result)).Norm2;
+            bool stepAccepted = false;
+
+            while (!(stepAccepted && endCriteria.ShouldStop(value: _error, gradient: gradNorm)))
             {
                 Vector residual = _residuals(_result);
                 _error = 0.5 * residual.SumOfSquares;
+
                 Matrix jacobian = _jacobian(_result);
                 Vector gradient = jacobian.Transpose * residual;
-               
-                Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension,dimension) * lambda;
+                Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
+
                 Vector delta = _sign * A.SolveWith(gradient);
-                double gradNorm = gradient.Norm2;
 
                 Vector resultNew = _result + delta;
                 Vector residualNew = _residuals(resultNew);
                 double errorNew = 0.5 * residualNew.SumOfSquares;
-
+                // Check if the step is accepted based on the error reduction
                 if (errorNew - _error < 0)
                 {
                     _result = resultNew;
                     _error = errorNew;
-                    lambda /= v;
-
-                    if (endCriteria.ShouldStop(value: _error, gradient: gradNorm))
-                    {
-                        _status = endCriteria.Status;
-                        return;
-                    }
+                    lambda /= penaltyFactor;
+                    gradNorm = (_jacobian(_result).Transpose * residualNew).Norm2;
+                    stepAccepted = true;
                 }
                 else
                 {
-                    lambda *= v;
+                    lambda *= penaltyFactor;
+                    stepAccepted = false;
                 }
-
                 _errors.Add(_error);
                 _lambdas.Add(lambda);
             }
+            _status = endCriteria.Status;
         }
-
         #endregion
     }
 }
