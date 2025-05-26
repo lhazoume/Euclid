@@ -10,6 +10,7 @@ namespace Euclid.Optimizers
     public class LevenbergMarquardt
     {
         #region Declarations
+
         private  Func<Vector, Vector> _residuals;
         private Func<Vector, Matrix> _jacobian;
         private Vector _initialGuess, _bump;
@@ -56,8 +57,7 @@ namespace Euclid.Optimizers
             _jacobian = jacobian ?? _residuals.Jacobian(Bump);
 
             _optimizationType = optimizationType;
-            _sign = _optimizationType == OptimizationType.Min ? -1 : 1;   
-
+            _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
             _maxIter = maxIter;
             _maxStaticIter = maxStaticIter;
             _gradientThreshold = gradientThreshold;
@@ -68,22 +68,15 @@ namespace Euclid.Optimizers
 
         #region Accessors
         /// <summary>Gets or sets the initial guess for the parameters.</summary>
-        /// 
         public Vector InitialGuess
         {
             get { return _initialGuess; }
             set { _initialGuess = value ?? throw new ArgumentNullException(nameof(value)); }
         }
-        /// <summary>
-        /// Gets or sets the bump vector used for finite differences in the Jacobian computation.
-        /// </summary>
+        /// <summary> Gets or sets the bump vector used for finite differences in the Jacobian computation./// </summary>
         public Vector Bump
         {
-            get
-            {
-                return _bump
-                    ?? Vector.Create(InitialGuess.Size, Descents.STEP_EPSILON);
-            }
+            get{ return _bump ?? Vector.Create(InitialGuess.Size, Descents.STEP_EPSILON);}
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(value));
@@ -92,9 +85,7 @@ namespace Euclid.Optimizers
                 _bump = value;
             }
         }
-        /// <summary>
-        /// Gets or sets the function that computes the Jacobian matrix of the residuals.
-        /// </summary>
+        /// <summary> Gets or sets the function that computes the Jacobian matrix of the residuals./// </summary>
         public Func<Vector, Matrix> Jacobian
         {
             get
@@ -105,30 +96,21 @@ namespace Euclid.Optimizers
             }
             set => _jacobian = value;
         }
+        /// <summary> Gets or sets the function that computes the residuals vector./// </summary>
         public Func<Vector, Vector> Residuals
         {
             get => _residuals;
             set => _residuals = value ?? throw new ArgumentNullException(nameof(value));
         }
-        /// <summary>
-        /// Gets the current status of the optimizer.
-        /// </summary>
+        /// <summary> Gets the current status of the optimizer. </summary>
         public SolverStatus Status => _status;
-        /// <summary>
-        /// Gets the current result of the optimization.
-        /// </summary>
+        /// <summary> Gets the current result of the optimization. </summary>
         public Vector Result => _result;
-        /// <summary>
-        /// Gets the current error value.
-        /// </summary>
+        /// <summary> Gets the current error value. </summary>
         public double Error => _error;
-        /// <summary>
-        /// Gets the list of error values during the optimization process.
-        /// </summary>
+        /// <summary>Gets the list of error values during the optimization process.</summary>
         public IEnumerable<double> Errors => _errors;
-        /// <summary>
-        /// Gets the list of lambda values used during the optimization process.
-        /// </summary>
+        /// <summary>Gets the list of lambda values used during the optimization process.</summary>
         public IEnumerable<double> Lambdas => _lambdas;
         /// <summary>Gets the optimization type</summary>
         public OptimizationType OptimizationType => _optimizationType;
