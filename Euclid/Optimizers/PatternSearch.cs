@@ -141,6 +141,7 @@ namespace Euclid.Optimizers
             while (!endCriteria.ShouldStop(reference))
             {
                 Tuple<Vector, double>[] neighbours = new Tuple<Vector, double>[2 * _initialShocks.Size];
+
                 #region Compute neighbours
                 Loops.For(0, _initialShocks.Size, parallel, i =>
                 {

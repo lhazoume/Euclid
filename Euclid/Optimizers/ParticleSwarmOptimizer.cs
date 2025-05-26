@@ -207,8 +207,7 @@ namespace Euclid.Optimizers
             _convergence.Add(new Tuple<Vector, double>(overallBest.Clone, overallBestValue));
 
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations,
-                maxStaticIterations: _maxStaticIterations,
-                gradientEpsilon: _epsilon);
+                maxStaticIterations: _maxStaticIterations,functionEpsilon: _epsilon);
 
             while (!endCriteria.ShouldStop(overallBestValue))
             {
