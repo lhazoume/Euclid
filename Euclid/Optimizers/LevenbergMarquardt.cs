@@ -120,76 +120,6 @@ namespace Euclid.Optimizers
 
         #region Methods
         /// <summary>
-        /// Performs the optimization using the Levenberg‑Marquardt algorithm with adaptive lambda adjustment based on METHODS FOR NONLINEAR LEAST SQUARES PROBLEMS by  K.Madsen,H.B.Nielsen,O.Tingleff
-        /// </summary>
-        /// <param name="tau"></param>
-        /// <param name="vInit"></param>
-        public void OptimizeAdaptive(double tau = 1e-3, double vInit = 2.0)
-        {
-            _result = _initialGuess.Clone;
-            _convergence.Clear();
-            _lambdas.Clear();
-            _status = SolverStatus.Diverged;
-
-            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold);
-
-            // Initialization
-            double lambda = 0;
-            double penaltyFactor = vInit;
-            int dimension = _result.Size;
-            // First iteration used to set the initial error and gradient norms
-            _error = 0.5 * _residuals(_result).SumOfSquares;
-            double gradNorm = (_jacobian(_result).Transpose * _residuals(_result)).Norm2;
-
-            bool stepAccepted = false;
-
-            while (!(stepAccepted && endCriteria.ShouldStop(value: _error, gradient: gradNorm)))
-            {
-                Vector residual = _residuals(_result);
-                _error = 0.5 * residual.SumOfSquares;
-
-                Matrix jacobian = _jacobian(_result);
-                Vector gradient = jacobian.Transpose * residual;
-
-                Matrix JTJ = Matrix.TransposeBySelf(jacobian);
-                if (_convergence.Count == 0)
-                    lambda = tau * JTJ.Rows > 0 ? Enumerable.Range(0, JTJ.Rows).Max(i => Math.Abs(JTJ[i, i])) : 1.0;
-
-                Matrix A = JTJ + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
-                Vector delta = _sign * A.SolveWith(gradient);
-
-                Vector resultNew = _result + delta;
-                Vector residualNew = _residuals(resultNew);
-                double errorNew = 0.5 * residualNew.SumOfSquares;
-
-                // Verification of the step using a predicted reduction ratio where the value indicates how much the error is expected to decrease.
-                double predictedReduction = -_sign * 0.5 * Vector.Scalar(delta, lambda * delta - gradient);
-                double actualReduction = -_sign * (_error - errorNew);
-                double reductionRatio = (predictedReduction > 0) ? actualReduction / predictedReduction : -1.0;// closer to 1.0 means better step acceptance
-
-                if (reductionRatio > 0.0)
-                {
-                    _result = resultNew;
-                    _error = errorNew;
-                    lambda *= Math.Max(1.0 / 3.0, 1.0 - Math.Pow(2.0 * reductionRatio - 1.0, 3.0));
-                    penaltyFactor = vInit;
-                    gradNorm = (_jacobian(_result).Transpose * residualNew).Norm2;
-                    stepAccepted = true;
-                }
-                else
-                {
-                    lambda *= penaltyFactor;
-                    penaltyFactor *= 2.0;
-                    stepAccepted = false;
-                }
-
-                _convergence.Add(_error);
-                _lambdas.Add(lambda);
-            }
-            _status = endCriteria.Status;
-        }
-
-        /// <summary>
         /// Performs the optimization using the Levenberg‑Marquardt algorithm with a fixed tau and vInit.
         /// </summary>
         /// <param name="tau"></param>
@@ -210,9 +140,9 @@ namespace Euclid.Optimizers
 
             _status = SolverStatus.Diverged;
 
-            #region Estimation de la direction de descente
+            #region Estimation of the initial direction of descent
             Matrix jacobian = _jacobian(_result);
-            Vector gradient = jacobian.Transpose * residual;
+            Vector gradient =  jacobian.Transpose * residual;
             Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
             Vector delta = _sign * A.SolveWith(gradient);
             #endregion
@@ -220,32 +150,120 @@ namespace Euclid.Optimizers
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold);
             while (!endCriteria.ShouldStop(value: _error, gradient: gradient.Norm2))
             {
-                //Recherche du lambda optimal
                 lambda = OptimalLambda(_error, _result, delta, lambda, penaltyFactor);
 
                 A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
                 delta = _sign * A.SolveWith(gradient);
-                
+
                 _result += delta;
                 residual = _residuals(_result);
+                _evaluations++;
                 _error = residual.SumOfSquares;
                 _convergence.Add(_error);
 
-                #region Mise à jour de la direction de descente
+                #region Update of the direction of descent
                 jacobian = _jacobian(_result);
                 gradient = jacobian.Transpose * residual;
                 #endregion
             }
             _status = endCriteria.Status;
         }
+        /// <summary>
+        /// Computes the optimal lambda for the Levenberg-Marquardt algorithm based on the current error and solution.
+        /// </summary>
+        /// <param name="error">Current error (||r||^2).</param>
+        /// <param name="solution">Current solution vector.</param>
+        /// <param name="delta">Proposed step vector.</param>
+        /// <param name="lambda">Current value of the damping parameter lambda.</param>
+        /// <param name="penaltyFactor">Current penalty factor used to adjust lambda.</param>
+        /// <returns>The updated value of lambda.</returns>
 
         private double OptimalLambda(double error, Vector solution, Vector delta, double lambda, double penaltyFactor)
         {
-            // Check if the step is accepted based on the error reduction
-            if (_residuals(solution + delta).SumOfSquares < error)
+            if (_sign * (error - _residuals(solution + delta).SumOfSquares) > 0)
                 return lambda / penaltyFactor;
             else
                 return lambda * penaltyFactor;
+        }
+        /// <summary>
+        /// Performs the optimization using the Levenberg‑Marquardt algorithm with adaptive lambda adjustment based on METHODS FOR NONLINEAR LEAST SQUARES PROBLEMS by  K.Madsen,H.B.Nielsen,O.Tingleff
+        /// </summary>
+        /// <param name="tau"> tau is a small positive number used to scale the initial damping factor.</param>
+        /// <param name="vInit"> vInit 
+        public void OptimizeAdaptive(double tau = 1e-3, double vInit = 2.0)
+        {
+            int dimension = _initialGuess.Size;
+            double penaltyFactor = vInit;
+            _evaluations = 0;
+            _convergence.Clear();
+
+            _result = _initialGuess.Clone;
+            Vector residual = _residuals(_result);
+            _error = residual.SumOfSquares;
+            _convergence.Add(_error);
+            _evaluations++;
+
+            _status = SolverStatus.Diverged;
+
+            #region Estimation of the initial direction of descent
+            Matrix jacobian = _jacobian(_result);
+            Vector gradient = jacobian.Transpose * residual;
+            Matrix JTJ = Matrix.TransposeBySelf(jacobian);
+            double lambda = tau * JTJ.Rows > 0 ? Enumerable.Range(0, JTJ.Rows).Max(i => Math.Abs(JTJ[i, i])) : 1.0; // lambda is initialized to a small positive value based on the maximum diagonal element
+            Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
+            Vector delta = _sign * A.SolveWith(gradient);
+            #endregion
+
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold);
+            while (!(endCriteria.ShouldStop(value: _error, gradient: gradient.Norm2)))
+            {
+                (lambda, penaltyFactor) = OptimalLambdaAdaptive(_error, _result, delta, gradient, lambda, penaltyFactor, vInit);
+                A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
+                delta = _sign * A.SolveWith(gradient);
+
+                _result += delta;
+                residual = _residuals(_result);
+                _evaluations++;
+                _error = residual.SumOfSquares;
+                _convergence.Add(_error);
+
+                #region Update of the direction of descent
+                jacobian = _jacobian(_result);
+                gradient = jacobian.Transpose * residual;
+                #endregion
+            }
+            _status = endCriteria.Status;
+        }
+        /// <summary>
+        /// Computes the optimal lambda and penalty factor for the Levenberg-Marquardt algorithm with adaptive adjustment.
+        /// </summary>
+        /// <param name="error">Current error (||r||^2).</param>
+        /// <param name="solution">Current solution.</param>
+        /// <param name="delta">Proposed step.</param>
+        /// <param name="gradient">Current gradient.</param>
+        /// <param name="lambda">Current value of lambda.</param>
+        /// <param name="penaltyFactor">Current penalty factor.</param>
+        /// <param name="vInit">Initial value of the penalty factor.</param>
+        /// <returns>Updated tuple (lambda, penaltyFactor).</returns>
+        private (double lambda, double penaltyFactor) OptimalLambdaAdaptive(double error,Vector solution,Vector delta,Vector gradient,double lambda,double penaltyFactor,double vInit)
+        {
+            // Verification of the step using a predicted reduction ratio where the value indicates how much the error is expected to decrease.
+            double predictedReduction = -_sign * 0.5 * Vector.Scalar(delta, lambda * delta - gradient);
+            double actualReduction = -_sign * (error - _residuals(solution + delta).SumOfSquares);
+            double reductionRatio = (predictedReduction > 0) ? actualReduction / predictedReduction : -1.0; // closer to 1.0 means better step acceptance
+
+            if (reductionRatio > 0.0)
+            {
+                lambda = lambda * Math.Max(1.0 / 3.0,1.0 - Math.Pow(2.0 * reductionRatio - 1.0, 3.0));
+                penaltyFactor = vInit;
+            }
+            else
+            {
+                lambda *= penaltyFactor;
+                penaltyFactor *= 2.0;
+            }
+
+            return (lambda, penaltyFactor);
         }
         #endregion
     }
