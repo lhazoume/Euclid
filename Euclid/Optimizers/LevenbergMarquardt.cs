@@ -169,18 +169,17 @@ namespace Euclid.Optimizers
             _status = endCriteria.Status;
         }
         /// <summary>
-        /// Computes the optimal lambda for the Levenberg-Marquardt algorithm based on the current error and solution.
+        /// Computes the optimal lambda value for the Levenberg-Marquardt algorithm based on the current error and solution.
         /// </summary>
-        /// <param name="error">Current error (||r||^2).</param>
-        /// <param name="solution">Current solution vector.</param>
-        /// <param name="delta">Proposed step vector.</param>
-        /// <param name="lambda">Current value of the damping parameter lambda.</param>
-        /// <param name="penaltyFactor">Current penalty factor used to adjust lambda.</param>
-        /// <returns>The updated value of lambda.</returns>
-
+        /// <param name="error"></param>
+        /// <param name="solution"></param>
+        /// <param name="delta"></param>
+        /// <param name="lambda"></param>
+        /// <param name="penaltyFactor"></param>
+        /// <returns></returns>
         private double OptimalLambda(double error, Vector solution, Vector delta, double lambda, double penaltyFactor)
         {
-            if (_sign * (error - _residuals(solution + delta).SumOfSquares) > 0)
+            if (_sign * (error - _residuals(solution + delta).SumOfSquares) < 0)
                 return lambda / penaltyFactor;
             else
                 return lambda * penaltyFactor;
@@ -189,7 +188,7 @@ namespace Euclid.Optimizers
         /// Performs the optimization using the Levenberg‑Marquardt algorithm with adaptive lambda adjustment based on METHODS FOR NONLINEAR LEAST SQUARES PROBLEMS by  K.Madsen,H.B.Nielsen,O.Tingleff
         /// </summary>
         /// <param name="tau"> tau is a small positive number used to scale the initial damping factor.</param>
-        /// <param name="vInit"> vInit 
+        /// <param name="vInit"> Initial value of the penalty factor.</param>
         public void OptimizeAdaptive(double tau = 1e-3, double vInit = 2.0)
         {
             int dimension = _initialGuess.Size;
