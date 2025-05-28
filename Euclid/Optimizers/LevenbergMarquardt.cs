@@ -3,11 +3,22 @@ using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 
 namespace Euclid.Optimizers
 {
-    /// <summary> Nonlinear least‑squares optimizer based on the Levenberg–Marquardt algorithm./// </summary>
+    /// <summary>
+    /// Nonlinear least‑squares optimizer based on the Levenberg–Marquardt algorithm.
+    /// This optimizer is specifically designed to minimize the sum of squared residuals in a system of nonlinear equations,
+    /// making it highly effective for curve fitting and parameter estimation problems in scientific computing and engineering.
+    /// 
+    /// The Levenberg–Marquardt algorithm combines the gradient descent method and the Gauss–Newton method to achieve
+    /// stable and efficient convergence, particularly near local minima. It interpolates between these two methods
+    /// depending on the current distance to the solution.
+    /// 
+    /// It is important to note that the Levenberg–Marquardt algorithm is fundamentally a *minimization* algorithm.
+    /// It cannot be used to *maximize* a function because it is not designed to locate maxima, and it does not 
+    /// follow gradients in the direction of increasing function values.
+    /// </summary>
     public class LevenbergMarquardt
     {
         #region Declarations
@@ -20,7 +31,6 @@ namespace Euclid.Optimizers
         private Vector _result;
         private double _error;
         private int _evaluations;
-        private readonly OptimizationType _optimizationType;
         private SolverStatus _status = SolverStatus.NotRan;
         private readonly List<double> _convergence = new List<double>();
         private readonly List<double> _lambdas = new List<double>();
@@ -34,7 +44,6 @@ namespace Euclid.Optimizers
         /// <param name="residuals">Function computing the residual vector r(x).</param>
         /// <param name="jacobian">Function computing the Jacobian matrix J(x) of the residuals. If null, finite differences will be used.</param>
         /// <param name="bump">Initial step size for finite differences in the Jacobian. If null, a default value will be used.</param>
-        /// <param name="optimizationType">Optimization type (minimization or maximization).</param>
         /// <param name="maxIter">Maximum number of iterations.</param>
         /// <param name="maxStaticIter">Maximum number of static iterations allowed without improvement.</param>
         /// <param name="gradientThreshold">Tolerance for the gradient norm. Optimization stops if ||J^T r|| ≤ gradientTolerance.</param>
@@ -44,7 +53,6 @@ namespace Euclid.Optimizers
             Func<Vector, Vector> residuals,
             Func<Vector, Matrix> jacobian = null,
             Vector bump = null,
-            OptimizationType optimizationType = OptimizationType.Min,
             int maxIter = 100,
             int maxStaticIter = 50,
             double gradientThreshold = Descents.GRADIENT_EPSILON,
@@ -57,12 +65,11 @@ namespace Euclid.Optimizers
             _bump = bump;
             _jacobian = jacobian ?? _residuals.Jacobian(Bump);
 
-            _optimizationType = optimizationType;
-            _sign = _optimizationType == OptimizationType.Min ? -1 : 1;
             _maxIter = maxIter;
             _maxStaticIter = maxStaticIter;
             _gradientThreshold = gradientThreshold;
             _functionThreshold = functionThreshold;
+
         }
 
         #endregion
@@ -113,8 +120,6 @@ namespace Euclid.Optimizers
         public IEnumerable<double> Errors => _convergence;
         /// <summary>Gets the list of lambda values used during the optimization process.</summary>
         public IEnumerable<double> Lambdas => _lambdas;
-        /// <summary>Gets the optimization type</summary>
-        public OptimizationType OptimizationType => _optimizationType;
 
         #endregion
 
@@ -144,7 +149,7 @@ namespace Euclid.Optimizers
             Matrix jacobian = _jacobian(_result);
             Vector gradient =  jacobian.Transpose * residual;
             Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
-            Vector delta = _sign * A.SolveWith(gradient);
+            Vector delta = - A.SolveWith(gradient);
             #endregion
 
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold);
@@ -153,7 +158,7 @@ namespace Euclid.Optimizers
                 lambda = OptimalLambda(_error, _result, delta, lambda, penaltyFactor);
 
                 A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
-                delta = _sign * A.SolveWith(gradient);
+                delta = - A.SolveWith(gradient);
 
                 _result += delta;
                 residual = _residuals(_result);
@@ -210,7 +215,7 @@ namespace Euclid.Optimizers
             Matrix JTJ = Matrix.TransposeBySelf(jacobian);
             double lambda = tau * JTJ.Rows > 0 ? Enumerable.Range(0, JTJ.Rows).Max(i => Math.Abs(JTJ[i, i])) : 1.0; // lambda is initialized to a small positive value based on the maximum diagonal element
             Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
-            Vector delta = _sign * A.SolveWith(gradient);
+            Vector delta = -A.SolveWith(gradient);
             #endregion
 
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold);
@@ -218,7 +223,7 @@ namespace Euclid.Optimizers
             {
                 (lambda, penaltyFactor) = OptimalLambdaAdaptive(_error, _result, delta, gradient, lambda, penaltyFactor, vInit);
                 A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
-                delta = _sign * A.SolveWith(gradient);
+                delta = - A.SolveWith(gradient);
 
                 _result += delta;
                 residual = _residuals(_result);
@@ -247,8 +252,8 @@ namespace Euclid.Optimizers
         private (double lambda, double penaltyFactor) OptimalLambdaAdaptive(double error,Vector solution,Vector delta,Vector gradient,double lambda,double penaltyFactor,double vInit)
         {
             // Verification of the step using a predicted reduction ratio where the value indicates how much the error is expected to decrease.
-            double predictedReduction = -_sign * 0.5 * Vector.Scalar(delta, lambda * delta - gradient);
-            double actualReduction = -_sign * (error - _residuals(solution + delta).SumOfSquares);
+            double predictedReduction =  Vector.Scalar(delta, lambda * delta - gradient);
+            double actualReduction =  error - _residuals(solution + delta).SumOfSquares;
             double reductionRatio = (predictedReduction > 0) ? actualReduction / predictedReduction : -1.0; // closer to 1.0 means better step acceptance
 
             if (reductionRatio > 0.0)
