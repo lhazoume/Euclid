@@ -122,7 +122,7 @@ namespace Euclid.Optimizers
 
         #region Methods
         /// <summary>
-        /// Performs the optimization using the Levenberg‑Marquardt algorithm with a fixed tau and vInit.
+        /// Performs the optimization using the Levenberg‑Marquardt algorithm with a fixed tau and penaltyFactor.
         /// </summary>
         /// <param name="tau"></param>
         /// <param name="penaltyFactor"></param>
