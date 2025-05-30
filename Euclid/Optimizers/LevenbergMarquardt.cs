@@ -118,9 +118,6 @@ namespace Euclid.Optimizers
         public double Error => _error;
         /// <summary>Gets the list of error values during the optimization process.</summary>
         public IEnumerable<double> Errors => _convergence;
-        /// <summary>Gets the list of lambda values used during the optimization process.</summary>
-        public IEnumerable<double> Lambdas => _lambdas;
-
         #endregion
 
         #region Methods
@@ -147,26 +144,26 @@ namespace Euclid.Optimizers
 
             #region Estimation of the initial direction of descent
             Matrix jacobian = _jacobian(_result);
-            Vector gradient =  jacobian.Transpose * residual;
+            Vector gradient = jacobian.Transpose * residual;
             Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
-            Vector delta = - A.SolveWith(gradient);
+            Vector delta = -A.SolveWith(gradient);
             #endregion
 
-            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold);
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter,maxStaticIterations: _maxStaticIter,functionEpsilon: _functionThreshold,gradientEpsilon: _gradientThreshold);
+
             while (!endCriteria.ShouldStop(value: _error, gradient: gradient.Norm2))
             {
                 lambda = OptimalLambda(_error, _result, delta, lambda, penaltyFactor);
 
                 A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
-                delta = - A.SolveWith(gradient);
+                delta = -A.SolveWith(gradient);
 
                 _result += delta;
                 residual = _residuals(_result);
-                _evaluations++;
                 _error = residual.SumOfSquares;
                 _convergence.Add(_error);
 
-                #region Update of the direction of descent
+                #region  Update of the direction of descent
                 jacobian = _jacobian(_result);
                 gradient = jacobian.Transpose * residual;
                 #endregion
@@ -184,7 +181,7 @@ namespace Euclid.Optimizers
         /// <returns></returns>
         private double OptimalLambda(double error, Vector solution, Vector delta, double lambda, double penaltyFactor)
         {
-            if (_sign * (error - _residuals(solution + delta).SumOfSquares) < 0)
+            if (_residuals(solution + delta).SumOfSquares < error)
                 return lambda / penaltyFactor;
             else
                 return lambda * penaltyFactor;
