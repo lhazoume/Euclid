@@ -26,14 +26,13 @@ namespace Euclid.Optimizers
         private Func<Vector, Vector> _residuals;
         private Func<Vector, Matrix> _jacobian;
         private Vector _initialGuess, _bump;
-        private readonly int _maxIter, _maxStaticIter, _sign;
+        private readonly int _maxIter, _maxStaticIter;
         private readonly double _gradientThreshold, _functionThreshold;
         private Vector _result;
         private double _error;
         private int _evaluations;
         private SolverStatus _status = SolverStatus.NotRan;
         private readonly List<double> _convergence = new List<double>();
-        private readonly List<double> _lambdas = new List<double>();
         #endregion
 
         #region Constructors
