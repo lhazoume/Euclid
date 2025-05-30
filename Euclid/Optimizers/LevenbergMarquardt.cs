@@ -266,7 +266,6 @@ namespace Euclid.Optimizers
                 lambda *= penaltyFactor;
                 penaltyFactor *= 2.0;
             }
-
             return (lambda, penaltyFactor);
         }
         #endregion
