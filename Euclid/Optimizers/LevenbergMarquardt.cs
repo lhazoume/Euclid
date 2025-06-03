@@ -173,14 +173,18 @@ namespace Euclid.Optimizers
             _status = endCriteria.Status;
         }
         /// <summary>
-        /// Computes the optimal lambda value for the Levenberg-Marquardt algorithm based on the current error and solution.
+        /// Computes the updated lambda value for the Levenberg-Marquardt algorithm based on the current error and proposed step.
+        /// If the new solution reduces the error, lambda is decreased (making the step closer to Gauss-Newton).
+        /// Otherwise, lambda is increased (making the step closer to gradient descent).
         /// </summary>
-        /// <param name="error"></param>
-        /// <param name="solution"></param>
-        /// <param name="delta"></param>
-        /// <param name="lambda"></param>
-        /// <param name="penaltyFactor"></param>
-        /// <returns></returns>
+        /// <param name="error">The current error (sum of squared residuals) at the current solution.</param>
+        /// <param name="solution">The current solution vector.</param>
+        /// <param name="delta">The proposed step vector.</param>
+        /// <param name="lambda">The current value of the damping parameter lambda.</param>
+        /// <param name="penaltyFactor">The factor by which lambda is increased or decreased.</param>
+        /// <returns>
+        /// The updated value of lambda to be used in the next iteration.
+        /// </returns>
         private double OptimalLambda(double error, Vector solution, Vector delta, double lambda, double penaltyFactor)
         {
             if (_residuals(solution + delta).SumOfSquares < error)
