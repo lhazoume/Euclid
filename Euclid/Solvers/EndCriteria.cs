@@ -4,6 +4,14 @@ using System.Linq;
 
 namespace Euclid.Solvers
 {
+
+    public enum FunctionToleranceMode
+    {
+        AbsoluteOnly,
+        RelativeOnly,
+        Both
+    }
+
     /// <summary>
     /// Class used to specify the end criterion or criteria for all iterative optimisation classes
     /// </summary>
@@ -14,7 +22,7 @@ namespace Euclid.Solvers
         private int _iterations;
         private readonly double? _functionEpsilon, _gradientEpsilon;
         private readonly List<double> _history;
-        private double _previousValue; // Pour suivre la variation de la fonction
+        private readonly FunctionToleranceMode _funcMode;
         private SolverStatus _status;
         #endregion
 
@@ -27,18 +35,19 @@ namespace Euclid.Solvers
             int? maxIterations = null,
             int? maxStaticIterations = null,
             double? functionEpsilon = null,
-            double? gradientEpsilon = null
+            double? gradientEpsilon = null,
+            FunctionToleranceMode mode = FunctionToleranceMode.AbsoluteOnly
         )
         {
             _iterations = 0;
             _history = new List<double>();
             _status = SolverStatus.NotRan;
-            _previousValue = double.NaN;
 
             _maxIterations = maxIterations;
             _maxStaticIterations = maxStaticIterations;
             _functionEpsilon = functionEpsilon;
             _gradientEpsilon = gradientEpsilon;
+            _funcMode = mode;
         }
 
         /// <summary>Specifies whether the end criteria are met for the current value</summary>
@@ -49,13 +58,12 @@ namespace Euclid.Solvers
         {
             _iterations++;
             _history.Add(value);
-            if (_maxStaticIterations.HasValue
-                && _history.Count > _maxStaticIterations.Value)
+            if (_maxStaticIterations.HasValue && _history.Count > _maxStaticIterations.Value)
             {
                 _history.RemoveRange(0, _history.Count - _maxStaticIterations.Value);
             }
 
-            return ExceededIterations() || ExceededMaxStaticIterations() || BelowGradientEpsilon(gradient) || (_maxStaticIterations.HasValue ? BelowFunctionChangeEpsilon(value) : BelowFunctionEpsilon(value));
+            return ExceededIterations() || ExceededMaxStaticIterations() || BelowGradientEpsilon(gradient) || CheckFunctionTolerance(value);
         }
         /// <summary>Specifies whether the end criteria are met for the current value</summary>
         /// <param name="value">the current value of the optimizated function</param>
@@ -65,15 +73,14 @@ namespace Euclid.Solvers
         {
             _iterations++;
             _history.Add(value);
-            if (_maxStaticIterations.HasValue
-                && _history.Count > _maxStaticIterations.Value)
+            if (_maxStaticIterations.HasValue && _history.Count > _maxStaticIterations.Value)
             {
                 _history.RemoveRange(0, _history.Count - _maxStaticIterations.Value);
             }
 
-            return ExceededIterations() || ExceededMaxStaticIterations() || (_maxStaticIterations.HasValue ? BelowFunctionChangeEpsilon(value): BelowFunctionEpsilon(value));
+            return ExceededIterations() || ExceededMaxStaticIterations() || CheckFunctionTolerance(value);
         }
-       
+
         /// <summary>Specifies whether the end criteria are met for the current value</summary>
         /// <returns>a boolean</returns>
         public bool ShouldStop()
@@ -92,26 +99,39 @@ namespace Euclid.Solvers
             return true;
         }
 
-        private bool BelowFunctionChangeEpsilon(double currentValue)
+        private bool BelowFunctionChangeEpsilon()
         {
-            if (!_functionEpsilon.HasValue) return false;
-
-            if (double.IsNaN(_previousValue))
-            {
-                _previousValue = currentValue;
+            if (!_functionEpsilon.HasValue || _history.Count < 2)
                 return false;
-            }
 
             // relative change
-            if (Math.Abs(_previousValue - currentValue) <= _functionEpsilon.Value * (Math.Abs(_previousValue) + _functionEpsilon.Value))
+            if (Math.Abs(_history[_history.Count - 2] - _history[_history.Count - 1]) <= _functionEpsilon.Value * (Math.Abs(_history[_history.Count - 2]) + _functionEpsilon.Value))
             {
                 _status = SolverStatus.FunctionConvergence;
                 return true;
             }
-            _previousValue = currentValue;
+
             return false;
         }
-  
+        private bool CheckFunctionTolerance(double value)
+        {
+            switch (_funcMode)
+            {
+                case FunctionToleranceMode.AbsoluteOnly:
+                    return BelowFunctionEpsilon(value);
+
+                case FunctionToleranceMode.RelativeOnly:
+                    return BelowFunctionChangeEpsilon();
+
+                case FunctionToleranceMode.Both:
+                    if (BelowFunctionEpsilon(value))
+                        return true;
+                    return BelowFunctionChangeEpsilon();
+
+                default:
+                    return false;
+            }
+        }
         private bool BelowGradientEpsilon(double gradientValue)
         {
             if (!_gradientEpsilon.HasValue || Math.Abs(gradientValue) >= _gradientEpsilon) return false;
@@ -132,6 +152,5 @@ namespace Euclid.Solvers
             _status = SolverStatus.StationaryFunction;
             return true;
         }
-        
     }
 }

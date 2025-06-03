@@ -5,10 +5,7 @@ using System.Linq;
 
 namespace Euclid.Interpolations.Interpolator1D
 {
-    /// <summary>
-    /// Represents a natural boundary condition for the cubic spline interpolation.
-    /// </summary>
-
+    /// <summary> Represents a natural boundary condition for the cubic spline interpolation. </summary>
     public enum BoundaryType
     {
         Natural,
@@ -17,12 +14,13 @@ namespace Euclid.Interpolations.Interpolator1D
     public class CubicSpline : IInterpolator1D
     {
         #region Private fields
+
         private double _min, _max;
         private readonly bool _extrapolate;
         private List<Point2D> _values;
         private Vector _m, _h;
+        private readonly BoundaryType _boundaryType;
 
-        private readonly BoundaryType _bcType;
         #endregion
 
         #region Constructors
@@ -31,7 +29,7 @@ namespace Euclid.Interpolations.Interpolator1D
         public CubicSpline(bool allowExtrapolation, BoundaryType bcType)
         {
             _extrapolate = allowExtrapolation;
-            _bcType = bcType;
+            _boundaryType = bcType;
         }
         #endregion
 
@@ -44,6 +42,9 @@ namespace Euclid.Interpolations.Interpolator1D
 
         /// <summary>Specifies if the interpolator is local (vs global)</summary>
         public bool Local => false;
+
+        /// <summary>Returns the interpolation method</summary>
+        public IInterpolator1D Clone() => new CubicSpline(_extrapolate, _boundaryType);
 
         #endregion
 
@@ -151,7 +152,7 @@ namespace Euclid.Interpolations.Interpolator1D
 
             Matrix A = Matrix.Create(n, n);
             // Possibility to add new BC types
-            switch (_bcType)
+            switch (_boundaryType)
             {
                 case BoundaryType.Natural:
                     d[0] = 0;
@@ -188,7 +189,7 @@ namespace Euclid.Interpolations.Interpolator1D
 
                  
                 default:
-                    throw new NotSupportedException($"BC type {_bcType} not supported");
+                    throw new NotSupportedException($"BC type {_boundaryType} not supported");
             }
 
             // Resolve the system A * m = d
@@ -198,11 +199,7 @@ namespace Euclid.Interpolations.Interpolator1D
 
             #endregion
         }
-        /// <summary>
-        /// Clones the interpolator
-        /// </summary>
-        /// <returns></returns>
-        public IInterpolator1D Clone() => new CubicSpline(_extrapolate, _bcType);
+
         #endregion
     }
 }

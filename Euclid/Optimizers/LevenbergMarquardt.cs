@@ -26,14 +26,13 @@ namespace Euclid.Optimizers
         private Func<Vector, Vector> _residuals;
         private Func<Vector, Matrix> _jacobian;
         private Vector _initialGuess, _bump;
-        private readonly int _maxIter, _maxStaticIter, _sign;
+        private readonly int _maxIter, _maxStaticIter;
         private readonly double _gradientThreshold, _functionThreshold;
         private Vector _result;
         private double _error;
         private int _evaluations;
         private SolverStatus _status = SolverStatus.NotRan;
         private readonly List<double> _convergence = new List<double>();
-        private readonly List<double> _lambdas = new List<double>();
         #endregion
 
         #region Constructors
@@ -118,6 +117,8 @@ namespace Euclid.Optimizers
         public double Error => _error;
         /// <summary>Gets the list of error values during the optimization process.</summary>
         public IEnumerable<double> Errors => _convergence;
+        /// <summary>Gets the number of evaluations performed during the optimization.</summary>
+        public int Evaluations => _evaluations;
         #endregion
 
         #region Methods
@@ -149,7 +150,7 @@ namespace Euclid.Optimizers
             Vector delta = -A.SolveWith(gradient);
             #endregion
 
-            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter,maxStaticIterations: _maxStaticIter,functionEpsilon: _functionThreshold,gradientEpsilon: _gradientThreshold);
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter,maxStaticIterations: _maxStaticIter,functionEpsilon: _functionThreshold,gradientEpsilon: _gradientThreshold,FunctionToleranceMode.RelativeOnly);
 
             while (!endCriteria.ShouldStop(value: _error, gradient: gradient.Norm2))
             {
@@ -160,6 +161,7 @@ namespace Euclid.Optimizers
 
                 _result += delta;
                 residual = _residuals(_result);
+                _evaluations++;
                 _error = residual.SumOfSquares;
                 _convergence.Add(_error);
 
@@ -190,11 +192,11 @@ namespace Euclid.Optimizers
         /// Performs the optimization using the Levenberg‑Marquardt algorithm with adaptive lambda adjustment based on METHODS FOR NONLINEAR LEAST SQUARES PROBLEMS by  K.Madsen,H.B.Nielsen,O.Tingleff
         /// </summary>
         /// <param name="tau"> tau is a small positive number used to scale the initial damping factor.</param>
-        /// <param name="vInit"> Initial value of the penalty factor.</param>
-        public void OptimizeAdaptive(double tau = 1e-3, double vInit = 2.0)
+        /// <param name="initialPenaltyFactor"> Initial value of the penalty factor.</param>
+        public void OptimizeAdaptive(double tau = 1e-3, double initialPenaltyFactor = 2.0)
         {
             int dimension = _initialGuess.Size;
-            double penaltyFactor = vInit;
+            double penaltyFactor = initialPenaltyFactor;
             _evaluations = 0;
             _convergence.Clear();
 
@@ -215,10 +217,10 @@ namespace Euclid.Optimizers
             Vector delta = -A.SolveWith(gradient);
             #endregion
 
-            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold);
-            while (!(endCriteria.ShouldStop(value: _error, gradient: gradient.Norm2)))
+            EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold, FunctionToleranceMode.RelativeOnly);
+            while (!endCriteria.ShouldStop(value: _error, gradient: gradient.Norm2))
             {
-                (lambda, penaltyFactor) = OptimalLambdaAdaptive(_error, _result, delta, gradient, lambda, penaltyFactor, vInit);
+                (lambda, penaltyFactor) = OptimalLambdaAdaptive(_error, _result, delta, gradient, lambda, penaltyFactor, initialPenaltyFactor);
                 A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
                 delta = - A.SolveWith(gradient);
 
