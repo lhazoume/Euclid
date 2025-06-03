@@ -31,13 +31,7 @@ namespace Euclid.Solvers
         /// <param name="maxStaticIterations">the maximum number of iterations without substancial change</param>
         /// <param name="functionEpsilon">the error tolerance (beyond that value, convergence is assumed)</param>
         /// <param name="gradientEpsilon">the gradient tolerance (beyond that value, convergence is assumed)</param>
-        public EndCriteria(
-            int? maxIterations = null,
-            int? maxStaticIterations = null,
-            double? functionEpsilon = null,
-            double? gradientEpsilon = null,
-            FunctionToleranceMode mode = FunctionToleranceMode.AbsoluteOnly
-        )
+        public EndCriteria(int? maxIterations = null,int? maxStaticIterations = null,double? functionEpsilon = null,double? gradientEpsilon = null,FunctionToleranceMode mode = FunctionToleranceMode.AbsoluteOnly)
         {
             _iterations = 0;
             _history = new List<double>();
