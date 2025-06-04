@@ -26,10 +26,10 @@ namespace Euclid.Interpolations.Interpolator1D
         #region Constructors
         /// <summary>Builds the cubic spline interpolator</summary>
         /// <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
-        public CubicSpline(bool allowExtrapolation, BoundaryType bcType)
+        public CubicSpline(bool allowExtrapolation, BoundaryType boundaryType)
         {
             _extrapolate = allowExtrapolation;
-            _boundaryType = bcType;
+            _boundaryType = boundaryType;
         }
         #endregion
 
