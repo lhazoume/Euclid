@@ -252,24 +252,25 @@ namespace Euclid.Optimizers
         /// <param name="penaltyFactor">Current penalty factor.</param>
         /// <param name="initialPenaltyFactor">Initial value of the penalty factor.</param>
         /// <returns>Updated tuple (lambda, penaltyFactor).</returns>
-        private (double lambdaOutput, double penaltyFactor) OptimalLambdaAdaptive(double error,Vector solution,Vector delta,Vector gradient,double lambda,double penaltyFactor,double initialPenaltyFactor)
+        private (double, double) OptimalLambdaAdaptive(double error,Vector solution,Vector delta,Vector gradient,double lambda,double penaltyFactor,double initialPenaltyFactor)
         {
             // Verification of the step using a predicted reduction ratio where the value indicates how much the error is expected to decrease.
             double predictedReduction =  Vector.Scalar(delta, lambda * delta - gradient);
             double actualReduction =  error - _residuals(solution + delta).SumOfSquares;
+            double lambdaOutput = 1;
 
-            if (predictedReduction != 0.0 && Math.Sign(predictedReduction) == Math.Sign(actualReduction))
+            if (predictedReduction >0 && actualReduction>0)
             {
                 double reductionRatio = actualReduction / predictedReduction; // closer to 1.0 means better step acceptance
-                lambda = lambda * Math.Max(1.0 / 3.0,1.0 - Math.Pow(2.0 * reductionRatio - 1.0, 3.0));
+                lambdaOutput = lambda * Math.Max(1.0 / 3.0,1.0 - Math.Pow(2.0 * reductionRatio - 1.0, 3.0));
                 penaltyFactor = initialPenaltyFactor;
             }
             else
             {
-                lambda *= penaltyFactor;
+                lambdaOutput *= penaltyFactor;
                 penaltyFactor *= 2.0;
             }
-            return (lambda, penaltyFactor);
+            return (lambdaOutput, penaltyFactor);
         }
         #endregion
     }
