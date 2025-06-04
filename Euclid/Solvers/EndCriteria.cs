@@ -9,7 +9,7 @@ namespace Euclid.Solvers
     {
         AbsoluteOnly,
         RelativeOnly,
-        Both
+        Any
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ namespace Euclid.Solvers
                 _history.RemoveRange(0, _history.Count - _maxStaticIterations.Value);
             }
 
-            return ExceededIterations() || ExceededMaxStaticIterations() || BelowGradientEpsilon(gradient) || CheckFunctionTolerance(value);
+            return ExceededIterations() || ExceededMaxStaticIterations() || BelowGradientEpsilon(gradient) || CheckFunctionTolerance();
         }
         /// <summary>Specifies whether the end criteria are met for the current value</summary>
         /// <param name="value">the current value of the optimizated function</param>
@@ -72,7 +72,7 @@ namespace Euclid.Solvers
                 _history.RemoveRange(0, _history.Count - _maxStaticIterations.Value);
             }
 
-            return ExceededIterations() || ExceededMaxStaticIterations() || CheckFunctionTolerance(value);
+            return ExceededIterations() || ExceededMaxStaticIterations() || CheckFunctionTolerance();
         }
 
         /// <summary>Specifies whether the end criteria are met for the current value</summary>
@@ -86,9 +86,14 @@ namespace Euclid.Solvers
         /// <summary>Gets the current status of the optimization controlled by this end criteria</summary>
         public SolverStatus Status => _status;
 
-        private bool BelowFunctionEpsilon(double value)
+        private bool BelowFunctionEpsilon()
         {
-            if (!_functionEpsilon.HasValue || Math.Abs(value) >= _functionEpsilon) return false;
+            if (!_functionEpsilon.HasValue || _history.Count == 0)
+                return false;
+
+            if (Math.Abs(_history[_history.Count - 1]) >= _functionEpsilon.Value)
+                return false;
+
             _status = SolverStatus.FunctionConvergence;
             return true;
         }
@@ -107,20 +112,18 @@ namespace Euclid.Solvers
 
             return false;
         }
-        private bool CheckFunctionTolerance(double value)
+        private bool CheckFunctionTolerance()
         {
             switch (_funcMode)
             {
                 case FunctionToleranceMode.AbsoluteOnly:
-                    return BelowFunctionEpsilon(value);
+                    return BelowFunctionEpsilon();
 
                 case FunctionToleranceMode.RelativeOnly:
                     return BelowFunctionChangeEpsilon();
 
-                case FunctionToleranceMode.Both:
-                    if (BelowFunctionEpsilon(value))
-                        return true;
-                    return BelowFunctionChangeEpsilon();
+                case FunctionToleranceMode.Any:
+                    return BelowFunctionEpsilon() || BelowFunctionChangeEpsilon();
 
                 default:
                     return false;

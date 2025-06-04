@@ -144,12 +144,7 @@ namespace Euclid.Interpolations.Interpolator1D
             Vector d = Vector.Create(n);
             for (int i = 1; i < n; i++)
                 _h[i] = _values[i].X - _values[i - 1].X;
-            // Natural Spline
-            d[0] = 0;
-            for (int i = 1; i < n - 1; i++)
-                d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1] - (_values[i].Y - _values[i - 1].Y) / _h[i]);
-            d[n - 1] = 0;
-
+           
             Matrix A = Matrix.Create(n, n);
             // Possibility to add new BC types
             switch (_boundaryType)

@@ -105,6 +105,10 @@ namespace Euclid.Interpolations.Interpolator1D
             _max = _values[_values.Count - 1].X;
 
             int n = _values.Count;
+            if (n <= 1)
+            {
+                throw new InvalidOperationException(" Two or more points are required for interpolation.");
+            }
 
             _h = Vector.Create(n - 1, 0.0); 
             _m = Vector.Create(n - 1, 0.0); 
