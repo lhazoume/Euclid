@@ -146,7 +146,7 @@ namespace Euclid.Interpolations.Interpolator1D
                 _h[i] = _values[i].X - _values[i - 1].X;
            
             Matrix A = Matrix.Create(n, n);
-            // Possibility to add new BC types
+            // Possibility to add new Boundary types
             switch (_boundaryType)
             {
                 case BoundaryType.Natural:
@@ -159,8 +159,7 @@ namespace Euclid.Interpolations.Interpolator1D
                         A[i, i - 1] = _h[i];
                         A[i, i] = 2 * (_h[i] + _h[i + 1]);
                         A[i, i + 1] = _h[i + 1];
-                        d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1]
-                                  - (_values[i].Y - _values[i - 1].Y) / _h[i]);
+                        d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1] - (_values[i].Y - _values[i - 1].Y) / _h[i]);
                     }
                     break;
 
@@ -168,17 +167,16 @@ namespace Euclid.Interpolations.Interpolator1D
                     // first derivative zero at endpoints
                     A[0, 0] = 2 * _h[1];
                     A[0, 1] = _h[1];
-                    d[0] = 6 * (((_values[1].Y - _values[0].Y) / _h[1]) - 0);
                     A[n - 1, n - 2] = _h[n - 1];
                     A[n - 1, n - 1] = 2 * _h[n - 1];
+                    d[0] = 6 * (((_values[1].Y - _values[0].Y) / _h[1]) - 0);
                     d[n - 1] = 6 * (0 - ((_values[n - 1].Y - _values[n - 2].Y) / _h[n - 1]));
                     for (int i = 1; i < n - 1; i++)
                     {
                         A[i, i - 1] = _h[i];
                         A[i, i] = 2 * (_h[i] + _h[i + 1]);
                         A[i, i + 1] = _h[i + 1];
-                        d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1]
-                                  - (_values[i].Y - _values[i - 1].Y) / _h[i]);
+                        d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1] - (_values[i].Y - _values[i - 1].Y) / _h[i]);
                     }
                     break;
 
