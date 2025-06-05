@@ -46,7 +46,9 @@ namespace Euclid.Optimizers
         /// <param name="maxIter">Maximum number of iterations.</param>
         /// <param name="maxStaticIter">Maximum number of static iterations allowed without improvement.</param>
         /// <param name="gradientThreshold">Tolerance for the gradient norm. Optimization stops if ||J^T r|| ≤ gradientTolerance.</param>
-        /// <param name="functionThreshold">Tolerance for the function value. Optimization stops if ||r|| ≤ functionTolerance.</param>
+        /// <param name="functionThreshold"> Relative tolerance on the change in function value.Optimization stops if:|f_n - f_{n-1}| ≤ functionThreshold × (f_{n-1} + functionThreshold)
+        /// </param>
+
         public LevenbergMarquardt(
             Vector initialGuess,
             Func<Vector, Vector> residuals,

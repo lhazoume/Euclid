@@ -34,9 +34,15 @@ namespace Euclid.Interpolations.Interpolator1D
 
         /// <summary>Specifies if the interpolator is local (vs global)</summary>
         public bool Local => false;
+
         #endregion
 
         #region Method
+        /// <summary>
+        /// Returns a copy of the interpolator
+        /// </summary>
+        /// <returns></returns>
+        public IInterpolator1D Clone() => new Hyman(_extrapolate);
         /// <summary>Checks if the value is inside the interpolator's range</summary>
         public bool IsInRange(double x)
         {
@@ -196,11 +202,6 @@ namespace Euclid.Interpolations.Interpolator1D
             return d;
         }
 
-        /// <summary>
-        /// Returns a copy of the interpolator
-        /// </summary>
-        /// <returns></returns>
-        public IInterpolator1D Clone() => new Hyman(_extrapolate);
         #endregion
     }
 }

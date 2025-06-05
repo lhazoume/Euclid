@@ -43,12 +43,13 @@ namespace Euclid.Interpolations.Interpolator1D
         /// <summary>Specifies if the interpolator is local (vs global)</summary>
         public bool Local => false;
 
-        /// <summary>Returns the interpolation method</summary>
-        public IInterpolator1D Clone() => new CubicSpline(_extrapolate, _boundaryType);
-
         #endregion
 
         #region Method
+
+        /// <summary>Returns the interpolation method</summary>
+        public IInterpolator1D Clone() => new CubicSpline(_extrapolate, _boundaryType);
+
         /// <summary>Checks if the value is inside the interpolalor's range</summary>
         /// <param name="x">the value</param>
         /// <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
@@ -90,8 +91,8 @@ namespace Euclid.Interpolations.Interpolator1D
             }
 
             return (_m[i - 1] * Math.Pow(_values[i].X - x, 3) + _m[i] * Math.Pow(x - _values[i - 1].X, 3)) / (6 * _h[i]) +
-                  ((_values[i - 1].Y - _m[i - 1] * _h[i] * _h[i] / 6) * (_values[i].X - x) / _h[i]) +
-                  ((_values[i].Y - _m[i] * _h[i] * _h[i] / 6) * (x - _values[i - 1].X) / _h[i]);
+                   ((_values[i - 1].Y - _m[i - 1] * _h[i] * _h[i] / 6) * (_values[i].X - x) / _h[i]) +
+                   ((_values[i].Y - _m[i] * _h[i] * _h[i] / 6) * (x - _values[i - 1].X) / _h[i]);
         }
         
 
@@ -134,18 +135,17 @@ namespace Euclid.Interpolations.Interpolator1D
             _min = _values[0].X;
             _max = _values.Last().X;
 
-
             #region Build and solve spline
 
             int n = _values.Count;
 
-            #region vectors and matrices
             _h = Vector.Create(n);
             Vector d = Vector.Create(n);
             for (int i = 1; i < n; i++)
                 _h[i] = _values[i].X - _values[i - 1].X;
            
             Matrix A = Matrix.Create(n, n);
+            #region BoundaryConditions
             // Possibility to add new Boundary types
             switch (_boundaryType)
             {
@@ -154,13 +154,6 @@ namespace Euclid.Interpolations.Interpolator1D
                     d[n - 1] = 0;
                     A[0, 0] = 1;
                     A[n - 1, n - 1] = 1;
-                    for (int i = 1; i < n - 1; i++)
-                    {
-                        A[i, i - 1] = _h[i];
-                        A[i, i] = 2 * (_h[i] + _h[i + 1]);
-                        A[i, i + 1] = _h[i + 1];
-                        d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1] - (_values[i].Y - _values[i - 1].Y) / _h[i]);
-                    }
                     break;
 
                 case BoundaryType.Clamped:
@@ -171,24 +164,22 @@ namespace Euclid.Interpolations.Interpolator1D
                     A[n - 1, n - 1] = 2 * _h[n - 1];
                     d[0] = 6 * (((_values[1].Y - _values[0].Y) / _h[1]) - 0);
                     d[n - 1] = 6 * (0 - ((_values[n - 1].Y - _values[n - 2].Y) / _h[n - 1]));
-                    for (int i = 1; i < n - 1; i++)
-                    {
-                        A[i, i - 1] = _h[i];
-                        A[i, i] = 2 * (_h[i] + _h[i + 1]);
-                        A[i, i + 1] = _h[i + 1];
-                        d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1] - (_values[i].Y - _values[i - 1].Y) / _h[i]);
-                    }
                     break;
 
-                 
                 default:
                     throw new NotSupportedException($"BC type {_boundaryType} not supported");
             }
-
+            #endregion
+            //Fill the matrix A and vector d for the central points
+            for (int i = 1; i < n - 1; i++)
+            {
+                A[i, i - 1] = _h[i];
+                A[i, i] = 2 * (_h[i] + _h[i + 1]);
+                A[i, i + 1] = _h[i + 1];
+                d[i] = 6 * ((_values[i + 1].Y - _values[i].Y) / _h[i + 1] - (_values[i].Y - _values[i - 1].Y) / _h[i]);
+            }
             // Resolve the system A * m = d
             _m = A.SolveWith(d);
-         
-            #endregion
 
             #endregion
         }
