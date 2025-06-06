@@ -31,6 +31,9 @@ namespace Euclid.Interpolations.Interpolator1D
         #endregion
 
         #region Method
+
+        /// <summary>Returns the interpolation method</summary>
+        public IInterpolator1D Clone() => new LogLinearInterpolation(_extrapolate);
         /// <summary>Checks if the value is inside the interpolalor's range</summary>
         /// <param name="x">the value</param>
         /// <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
@@ -102,8 +105,7 @@ namespace Euclid.Interpolations.Interpolator1D
             _min = _values[0].X;
             _max = _values.Last().X;
         }
-
-        public IInterpolator1D Clone() => new LogLinearInterpolation(_extrapolate);
         #endregion
+      
     }
 }

@@ -88,5 +88,121 @@ namespace Euclid.Numerics
                 return result;
             };
         }
+        /// <summary>
+        /// Gradient of a function
+        /// </summary>
+        /// <param name="function"></param>
+        /// <param name="bump"></param>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static Func<Vector, Vector> Gradient(this Func<Vector, double> function,Vector bump,DifferenceForm form)
+        {
+            if (bump.Data.Any(d => d <= 0))
+                throw new ArgumentException("bump sign irrelevant", nameof(bump));
+            int n = bump.Size;
+            switch (form)
+            {
+                case DifferenceForm.Forward:
+                    return x =>
+                    {
+                        Vector result = Vector.Create(n);
+                        for (int i = 0; i < n; i++)
+                        {
+                            Vector iBump = Vector.ExtractIthDimension(bump, i);
+                            result[i] = (function(x + iBump) - function(x)) / bump[i];
+                        }
+                        return result;
+                    };
+
+                case DifferenceForm.Backward:
+                    return x =>
+                    {
+                        Vector result = Vector.Create(n);
+                        for (int i = 0; i < n; i++)
+                        {
+                            Vector iBump = Vector.ExtractIthDimension(bump, i);
+                            result[i] = (function(x) - function(x - iBump)) / bump[i];
+                        }
+                        return result;
+                    };
+
+                default: // Central
+                    return x =>
+                    {
+                        Vector result = Vector.Create(n);
+                        for (int i = 0; i < n; i++)
+                        {
+                            Vector iBump = Vector.ExtractIthDimension(bump, i);
+                            result[i] = (function(x + iBump) - function(x - iBump)) / (2 * bump[i]);
+                        }
+                        return result;
+                    };
+            }
+        }
+        /// <summary>
+        /// Jacobian of a function
+        /// </summary>
+        /// <param name="function"></param>
+        /// <param name="bump"></param>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static Func<Vector, Matrix> Jacobian(this Func<Vector, Vector> function,Vector bump,DifferenceForm form = DifferenceForm.Central)
+        {
+            if (bump.Data.Any(d => d <= 0))
+                throw new ArgumentException("bump sign irrelevant", nameof(bump));
+            int n = bump.Size;
+            switch (form)
+            {
+                case DifferenceForm.Forward:
+                    return x =>
+                    {
+                        Vector f0 = function(x);
+                        int m = f0.Size;
+                        Matrix result = Matrix.Create(m, n);
+                        for (int i = 0; i < n; i++)
+                        {
+                            Vector iBump = Vector.ExtractIthDimension(bump, i);
+                            Vector fPlus = function(x + iBump);
+                            for (int j = 0; j < m; j++)
+                                result[j, i] = (fPlus[j] - f0[j]) / bump[i];
+                        }
+                        return result;
+                    };
+
+                case DifferenceForm.Backward:
+                    return x =>
+                    {
+                        Vector f0 = function(x);
+                        int m = f0.Size;
+                        Matrix result = Matrix.Create(m, n);
+                        for (int i = 0; i < n; i++)
+                        {
+                            Vector iBump = Vector.ExtractIthDimension(bump, i);
+                            Vector fMinus = function(x - iBump);
+                            for (int j = 0; j < m; j++)
+                                result[j, i] = (f0[j] - fMinus[j]) / bump[i];
+                        }
+                        return result;
+                    };
+
+                default: // Central
+                    return x =>
+                    {
+                        int m = function(x).Size;
+                        Matrix result = Matrix.Create(m, n);
+                        for (int i = 0; i < n; i++)
+                        {
+                            Vector iBump = Vector.ExtractIthDimension(bump, i);
+                            Vector fPlus = function(x + iBump);
+                            Vector fMinus = function(x - iBump);
+                            for (int j = 0; j < m; j++)
+                                result[j, i] = (fPlus[j] - fMinus[j]) / (2 * bump[i]);
+                        }
+                        return result;
+                    };
+            }
+        }
     }
 }

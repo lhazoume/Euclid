@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Euclid.Interpolations.Interpolator1D
 {
-    /// <summary>Helps cubic spline interpolations</summary>
+    /// <summary>Helps monotonicity-preserving cubic spline (Hyman) interpolations</summary>
     public class Hyman : IInterpolator1D
     {
         #region Private fields
@@ -15,12 +14,10 @@ namespace Euclid.Interpolations.Interpolator1D
         private readonly bool _extrapolate;
         private List<Point2D> _values;
         private Vector _b, _m, _h;
-
-        private Vector f, f_d;
         #endregion
 
         #region Constructors
-        /// <summary>Builds the hyman spline interpolator</summary>
+        /// <summary>Builds the Hyman spline interpolator</summary>
         /// <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
         public Hyman(bool allowExtrapolation)
         {
@@ -36,49 +33,50 @@ namespace Euclid.Interpolations.Interpolator1D
         public bool Extrapolation => _extrapolate;
 
         /// <summary>Specifies if the interpolator is local (vs global)</summary>
-        public bool Local => true;
+        public bool Local => false;
+
         #endregion
 
         #region Method
-        /// <summary>Checks if the value is inside the interpolalor's range</summary>
-        /// <param name="x">the value</param>
-        /// <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        /// <summary>
+        /// Returns a copy of the interpolator
+        /// </summary>
+        /// <returns></returns>
+        public IInterpolator1D Clone() => new Hyman(_extrapolate);
+        /// <summary>Checks if the value is inside the interpolator's range</summary>
         public bool IsInRange(double x)
         {
             return _extrapolate || (x >= _min && x <= _max);
         }
 
-        /// <summary>Interpolates (or extrapolates) for a given value</summary>
-        /// <param name="x">the x-value</param>
-        /// <returns>the interpolated result</returns>
+        /// <summary>Interpolates (or extrapolates) for a given value using Hyman's scheme</summary>
         public double ValueAt(double x)
         {
-            if (!IsInRange(x)) throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range");
+            if (!IsInRange(x))
+                throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range");
 
             int i;
-            if (_extrapolate)
+
+            if (_values.Count == 2)
             {
-                if (x <= _values[1].X)
-                    i = 0;
-                else if (x > _values[_values.Count - 2].X)
-                    i = _values.Count - 2;
-                else
-                    i = _values.FindIndex(H => H.X > x) - 1;
+                double x0 = _values[0].X, y0 = _values[0].Y;
+                double x1 = _values[1].X, y1 = _values[1].Y;
+                return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
             }
+            if (x == _max)
+                return _values[_values.Count - 1].Y;
+            if (_values.FindIndex(p => p.X > x) <= 0)
+                i = 0;
+            else if (_values.FindIndex(p => p.X > x) == -1)
+                i = _values.Count - 2;
             else
-                i = _values.FindIndex(H => H.X > x) - 1;
+                i = _values.FindIndex(p => p.X > x) - 1;
 
-            double t = (x - _values[i].X);
-            double a = _values[i].Y;
-            double c = 3 * _m[i] - _b[i - 1] - 2 * _b[i];
-            double d = (_b[i + 1] + _b[i] - 2 * _m[i]) / (_h[i] * _h[i]);
-
-            return a + _b[i] * t + c * Math.Pow(t, 2) + d * Math.Pow(t, 3);
+            return _values[i].Y + _b[i] * (x - _values[i].X) + ((3 * _m[i] - 2 * _b[i] - _b[i + 1]) / _h[i]) * (x - _values[i].X) * (x - _values[i].X) + ((_b[i] + _b[i + 1] - 2 * _m[i]) / (_h[i] * _h[i])) * (x - _values[i].X) * (x - _values[i].X) * (x - _values[i].X);
+        
         }
 
         /// <summary>Sets the data for the interpolation</summary>
-        /// <param name="x">the abscisses</param>
-        /// <param name="y">the ordinates </param>
         public void SetData(IList<double> x, IList<double> y)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
@@ -86,73 +84,124 @@ namespace Euclid.Interpolations.Interpolator1D
             if (x.Distinct().Count() != x.Count) throw new ArgumentException("duplicate x-values", nameof(x));
             if (x.Count != y.Count) throw new Exception("the x-values and y-values do not match");
 
-            #region Collect the data
             _values = new List<Point2D>();
-
-            for (int i = 0; i < x.Count; i++)
-                _values.Add(new Point2D(x[i], y[i]));
-            #endregion
-
+            for (int k = 0; k < x.Count; k++)
+                _values.Add(new Point2D(x[k], y[k]));
             OrganizeTheData();
         }
 
         /// <summary>Sets the data for the interpolation</summary>
-        /// <param name="points">the points</param>
         public void SetData(IEnumerable<Point2D> points)
         {
             if (points is null) throw new ArgumentNullException(nameof(points));
-
-            _values = points.ToList();
-
+            _values = points
+              .OrderBy(p => p.X)
+              .GroupBy(p => p.X)     // remove duplicates
+              .Select(g => g.First())
+              .ToList();
             OrganizeTheData();
+
         }
 
+        /// <summary>Organizes the data and computes slopes for Hyman's interpolator</summary>
         private void OrganizeTheData()
         {
-            _values.Sort((a, b) => a.X.CompareTo(b.X));
+     
             _min = _values[0].X;
-            _max = _values.Last().X;
+            _max = _values[_values.Count - 1].X;
 
             int n = _values.Count;
+            if (n <= 1)
+            {
+                throw new InvalidOperationException(" Two or more points are required for interpolation.");
+            }
 
-            #region vectors
-            _m = Vector.Create(n - 1);
-            _b = Vector.Create(n);
-            _h = Vector.Create(n - 1);
-
+            _h = Vector.Create(n - 1, 0.0); 
+            _m = Vector.Create(n - 1, 0.0); 
+            _b = Vector.Create(n, 0.0);
+        
             for (int i = 0; i < n - 1; i++)
             {
                 _h[i] = _values[i + 1].X - _values[i].X;
+                if (_h[i] <= 0) throw new InvalidOperationException("X values must be strictly increasing.");
                 _m[i] = (_values[i + 1].Y - _values[i].Y) / _h[i];
             }
 
-            _b[0] = 0;
-            _b[n - 1] = 0;
+            // Special case for n = 2
+            if (n == 2)
+            {
+                _b[0] = _m[0];
+                _b[1] = _m[0];
+                return; 
+            }
 
             for (int i = 1; i < n - 1; i++)
             {
-                if (_m[i - 1] * _m[i] > 0)
-                {
-                    _b[i] = 3 * _m[i] * _m[i - 1] / (Math.Max(_m[i], _m[i - 1]) + 2 * Math.Min(_m[i], _m[i - 1]));
+ 
+                double dPrev = _m[i - 1]; 
+                double dCurr = _m[i];
+                double hPrev = _h[i - 1]; 
+                double hNext = _h[i];
 
-                    if (_b[i] > 0)
-                    {
-                        _b[i] = Math.Min(Math.Max(0, _b[i]), 3 * Math.Min(Math.Abs(_m[i]), Math.Abs(_m[i - 1])));
-                    }
-                    else
-                    {
-                        _b[i] = Math.Max(Math.Min(0, _b[i]), 3 * Math.Max(Math.Abs(_m[i]), Math.Abs(_m[i - 1])));
-                    }
-                }
-                else
+                // Monotonicity check
+                if (dPrev * dCurr <= 0.0)
                 {
                     _b[i] = 0.0;
                 }
+                else
+                {
+                    //  Fritsch-Butland
+                    double w1 = 2 * hNext + hPrev;
+                    double w2 = hNext + 2 * hPrev;
+
+                    double denom = w1 / dPrev + w2 / dCurr;
+                    if (Math.Abs(denom) < 1e-15) 
+                    {
+                        _b[i] = 0.0;
+                    }
+                    else
+                    {
+                        _b[i] = (w1 + w2) / denom;
+                    }
+                }
             }
-            #endregion
+
+            _b[0] = ComputeEdgeDerivative(_h[0], _h[1], _m[0], _m[1]);
+            _b[n - 1] = ComputeEdgeDerivative(_h[n - 2], _h[n - 3], _m[n - 2], _m[n - 3]);
+        }
+        /// <summary>
+        /// Computes the derivative at the edge of the data 
+        /// </summary>
+        /// <param name="h_adj"></param>
+        /// <param name="h_next"></param>
+        /// <param name="m_adj"></param>
+        /// <param name="m_next"></param>
+        /// <returns></returns>
+        private static double ComputeEdgeDerivative(double h_adj, double h_next, double m_adj, double m_next)
+        {
+            double h_sum = h_adj + h_next;
+
+            // Estimation of the derivative
+            double d = ((2 * h_adj + h_next) * m_adj - h_adj * m_next) / h_sum;
+
+            int sign_d = Math.Sign(d);
+            int sign_m_adj = Math.Sign(m_adj);
+
+            if (sign_d != sign_m_adj) 
+            {
+                d = 0.0;
+            }
+            else
+            {
+                int sign_m_next = Math.Sign(m_next);
+                if (sign_m_adj != sign_m_next && Math.Abs(d) > 3.0 * Math.Abs(m_adj))
+                {
+                    d = 3.0 * m_adj;
+                }
+            }
+            return d;
         }
 
-        public IInterpolator1D Clone() => new Hyman(_extrapolate);
         #endregion
     }
 }

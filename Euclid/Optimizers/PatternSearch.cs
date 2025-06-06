@@ -35,6 +35,7 @@ namespace Euclid.Optimizers
         /// <param name="maxStaticIterations">the maximum number of static iterations</param>
         /// <param name="epsilon">the convergence threshold</param>
         /// <param name="shrinkageFactor">the shrinkage factor</param>
+        /// <param name="expandFactor">the expansion factor</param>
         public PatternSearch(Func<Vector, bool> feasabilityFunction,
             Func<Vector, double> fitnessFunction,
             Vector initialPoint, Vector shocks,
@@ -140,6 +141,7 @@ namespace Euclid.Optimizers
             while (!endCriteria.ShouldStop(reference))
             {
                 Tuple<Vector, double>[] neighbours = new Tuple<Vector, double>[2 * _initialShocks.Size];
+
                 #region Compute neighbours
                 Loops.For(0, _initialShocks.Size, parallel, i =>
                 {

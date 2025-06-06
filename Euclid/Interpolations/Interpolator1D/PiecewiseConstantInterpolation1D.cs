@@ -64,31 +64,38 @@ namespace Euclid.Interpolations.Interpolator1D
         /// <returns>the interpolated result</returns>
         public double ValueAt(double x)
         {
-            if (!IsInRange(x)) throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range");
+            if (!IsInRange(x))
+                throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range");
 
             int i;
             if (_extrapolate)
             {
                 if (x <= _values[1].X)
                     i = 0;
-                else if (x > _values[_values.Count - 2].Y)
+                else if (x > _values[_values.Count - 2].X)
                     i = _values.Count - 2;
                 else
                     i = _values.FindIndex(t => t.X > x) - 1;
             }
             else
+            {
                 i = _values.FindIndex(t => t.X > x) - 1;
+            }
 
             if (_mode == PiecewiseConstantInterpolationMode.Right)
-                return _values[i].Y;
-            else if (_mode == PiecewiseConstantInterpolationMode.Left)
+                // Right-continuous : we take the value to the right of the cut point
                 return _values[i + 1].Y;
+            else if (_mode == PiecewiseConstantInterpolationMode.Left)
+                // Left-continuous : we take the value to the left of the cut point
+                return _values[i].Y;
             else
             {
+                // Nearest
                 double mid = 0.5 * (_values[i].X + _values[i + 1].X);
                 return _values[x <= mid ? i : i + 1].Y;
             }
         }
+
 
 
         /// <summary>Sets the data for the interpolation</summary>
@@ -124,7 +131,10 @@ namespace Euclid.Interpolations.Interpolator1D
             _min = _values[0].X;
             _max = _values.Last().X;
         }
-
+        /// <summary>
+        /// Returns a clone of the current interpolator
+        /// </summary>
+        /// <returns></returns>
         public IInterpolator1D Clone() => new PiecewiseConstantInterpolation1D(_mode, _extrapolate);
         #endregion
     }
