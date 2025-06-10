@@ -133,6 +133,7 @@
     <Compile Include="Interpolations\Interpolator1D\LinearInterpolation.cs" />
     <Compile Include="Interpolations\Interpolator1D\PiecewiseConstantInterpolation1D.cs" />
     <Compile Include="Interpolations\Interpolator1D\IInterpolator1D.cs" />
+    <Compile Include="Interpolations\Interpolator1D\Transformator.cs" />
     <Compile Include="Interpolations\KernelInterpolation.cs" />
     <Compile Include="Numerics\PiecewiseFunction.cs" />
     <Compile Include="Optimizers\LevenbergMarquardt.cs" />
