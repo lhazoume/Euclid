@@ -62,23 +62,25 @@ namespace Euclid.Tests
         [TestMethod]
         public void PerformanceBenchmark_ValueAt()
         {
+            const int N = 100000;
             List<double> x = new List<double> { 0.0, 1.0, 2.0, 3.0, 4.0 };
             List<double> y = x.Select(xx => Math.Exp(-0.03 * xx)).ToList();
 
-            TransformedInterpolator transformed = new TransformedInterpolator(interpolator: new Hyman(false),forward: (t, df) => -Math.Log(df),backward: (t, zt) => Math.Exp(-zt));
+            TransformedInterpolator transformed = new TransformedInterpolator(interpolator: new Hyman(false), forward: (t, df) => -Math.Log(df), backward: (t, zt) => Math.Exp(-zt));
             transformed.SetData(x, y);
             transformed.ValueAt(2.3);
 
             Stopwatch sw = Stopwatch.StartNew();
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < N; i++)
             {
                 double t = 4.0 * (i % 5000) / 5000.0; // [0,4] cycle
                 transformed.ValueAt(t);
             }
             sw.Stop();
 
-            Assert.IsTrue(sw.ElapsedMilliseconds < 200,$"Trop lent : {sw.ElapsedMilliseconds} ms pour {N} appels");
+            Assert.IsTrue(sw.ElapsedMilliseconds < 20, $"Trop lent : {sw.ElapsedMilliseconds} ms pour {N} appels");
         }
+
         #endregion
 
         #region Error
