@@ -148,7 +148,8 @@ namespace Euclid.Optimizers
             #region Estimation of the initial direction of descent
             Matrix jacobian = _jacobian(_result);
             Vector gradient = jacobian.Transpose * residual;
-            Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
+            Matrix identity = Matrix.CreateIdentityMatrix(dimension, dimension);
+            Matrix A = Matrix.TransposeBySelf(jacobian) + identity * lambda;
             Vector delta = -A.SolveWith(gradient);
             #endregion
 
@@ -158,7 +159,7 @@ namespace Euclid.Optimizers
             {
                 lambda = OptimalLambda(_error, _result, delta, lambda, penaltyFactor);
 
-                A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
+                A = Matrix.TransposeBySelf(jacobian) + identity * lambda;
                 delta = -A.SolveWith(gradient);
 
                 _result += delta;
@@ -219,15 +220,17 @@ namespace Euclid.Optimizers
             Vector gradient = jacobian.Transpose * residual;
             Matrix JTJ = Matrix.TransposeBySelf(jacobian);
             double lambda = tau * JTJ.Rows > 0 ? Enumerable.Range(0, JTJ.Rows).Max(i => Math.Abs(JTJ[i, i])) : 1.0; // lambda is initialized to a small positive value based on the maximum diagonal element
-            Matrix A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
+            Matrix identity = Matrix.CreateIdentityMatrix(dimension, dimension);
+            Matrix A = JTJ + identity * lambda;
             Vector delta = -A.SolveWith(gradient);
             #endregion
 
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIter, maxStaticIterations: _maxStaticIter, functionEpsilon: _functionThreshold, gradientEpsilon: _gradientThreshold, FunctionToleranceMode.RelativeOnly);
             while (!endCriteria.ShouldStop(value: _error, gradient: gradient.Norm2))
             {
+               
                 (lambda, penaltyFactor) = OptimalLambdaAdaptive(_error, _result, delta, gradient, lambda, penaltyFactor, initialPenaltyFactor);
-                A = Matrix.TransposeBySelf(jacobian) + Matrix.CreateIdentityMatrix(dimension, dimension) * lambda;
+                A = Matrix.TransposeBySelf(jacobian) + identity * lambda;
                 delta = - A.SolveWith(gradient);
 
                 _result += delta;

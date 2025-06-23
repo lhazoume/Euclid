@@ -133,6 +133,7 @@
     <Compile Include="Interpolations\Interpolator1D\LinearInterpolation.cs" />
     <Compile Include="Interpolations\Interpolator1D\PiecewiseConstantInterpolation1D.cs" />
     <Compile Include="Interpolations\Interpolator1D\IInterpolator1D.cs" />
+    <Compile Include="Interpolations\Interpolator1D\QuadraticSpline.cs" />
     <Compile Include="Interpolations\Interpolator1D\TransformedInterpolator.cs" />
     <Compile Include="Interpolations\KernelInterpolation.cs" />
     <Compile Include="Numerics\PiecewiseFunction.cs" />
