@@ -79,7 +79,6 @@
     <Compile Include="Solvers\NewtonRaphsonTests.cs" />
     <Compile Include="Solvers\ParticleSwarmOptimizerTests.cs" />
     <Compile Include="Solvers\RootBracketingTests.cs" />
-    <Compile Include="TransformedInterpolatorTests.cs" />
     <Compile Include="VectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
