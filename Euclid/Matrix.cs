@@ -1162,6 +1162,7 @@ namespace Euclid
             }
             return sb.ToString();
         }
+
         #endregion
     }
 }

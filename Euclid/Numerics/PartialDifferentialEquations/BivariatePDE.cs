@@ -44,7 +44,7 @@ namespace Euclid.Numerics.PartialDifferentialEquations
         /// <summary>Index of the y second order derivative matrix</summary>
         public const int YCONVEXITY = 4;
         /// <summary>Index of the xy cross derivative matrix</summary>
-        public const int XYCONVECITY = 5;
+        public const int XYCONVEXITY = 5;
 
         /// <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
         /// <param name="t">the date index</param>
@@ -87,29 +87,29 @@ namespace Euclid.Numerics.PartialDifferentialEquations
                 if (i == 0)
                 {
                     if (j == 0)
-                        result[XYCONVECITY][0, 0] = (_slices[t][1, 1] - _slices[t][0, 1] + _slices[t][0, 0] - _slices[t][1, 0]) / (_config.YIncrements[0] * _config.XIncrements[0]);
+                        result[XYCONVEXITY][0, 0] = (_slices[t][1, 1] - _slices[t][0, 1] + _slices[t][0, 0] - _slices[t][1, 0]) / (_config.YIncrements[0] * _config.XIncrements[0]);
                     else if (j < _config.YCount - 1)
-                        result[XYCONVECITY][0, j] = (_slices[t][1, j + 1] - _slices[t][0, j + 1] + _slices[t][0, j - 1] - _slices[t][1, j - 1]) / ((_config.YBuckets[j + 1] - _config.YBuckets[j - 1]) * _config.XIncrements[0]);
+                        result[XYCONVEXITY][0, j] = (_slices[t][1, j + 1] - _slices[t][0, j + 1] + _slices[t][0, j - 1] - _slices[t][1, j - 1]) / ((_config.YBuckets[j + 1] - _config.YBuckets[j - 1]) * _config.XIncrements[0]);
                     else
-                        result[XYCONVECITY][0, _config.YCount - 2] = -(_slices[t][1, _config.YCount - 1] - _slices[t][0, _config.YCount - 1] + _slices[t][0, _config.YCount - 2] - _slices[t][1, _config.YCount - 2]) / (_config.YIncrements[_config.YCount - 2] * _config.XIncrements[0]);
+                        result[XYCONVEXITY][0, _config.YCount - 2] = -(_slices[t][1, _config.YCount - 1] - _slices[t][0, _config.YCount - 1] + _slices[t][0, _config.YCount - 2] - _slices[t][1, _config.YCount - 2]) / (_config.YIncrements[_config.YCount - 2] * _config.XIncrements[0]);
                 }
                 else if (i < _config.XCount - 1)
                 {
                     if (j == 0)
-                        result[XYCONVECITY][i, 0] = (_slices[t][i + 1, 1] - _slices[t][i - 1, 1] + _slices[t][i - 1, 0] - _slices[t][i + 1, 0]) / (_config.YIncrements[0] * (_config.XIncrements[i] + _config.XIncrements[i - 1]));
+                        result[XYCONVEXITY][i, 0] = (_slices[t][i + 1, 1] - _slices[t][i - 1, 1] + _slices[t][i - 1, 0] - _slices[t][i + 1, 0]) / (_config.YIncrements[0] * (_config.XIncrements[i] + _config.XIncrements[i - 1]));
                     else if (j < _config.YCount - 1)
-                        result[XYCONVECITY][i, j] = (_slices[t][i + 1, j + 1] - _slices[t][i - 1, j + 1] + _slices[t][i - 1, j - 1] - _slices[t][i + 1, j - 1]) / ((_config.YBuckets[j + 1] - _config.YBuckets[j - 1]) * (_config.XBuckets[i + 1] - _config.XBuckets[i - 1]));
+                        result[XYCONVEXITY][i, j] = (_slices[t][i + 1, j + 1] - _slices[t][i - 1, j + 1] + _slices[t][i - 1, j - 1] - _slices[t][i + 1, j - 1]) / ((_config.YBuckets[j + 1] - _config.YBuckets[j - 1]) * (_config.XBuckets[i + 1] - _config.XBuckets[i - 1]));
                     else
-                        result[XYCONVECITY][i, _config.YCount - 1] = -(_slices[t][i + 1, _config.YCount - 1] - _slices[t][i - 1, _config.YCount - 1] + _slices[t][i - 1, _config.YCount - 2] - _slices[t][i + 1, _config.YCount - 2]) / (_config.YIncrements[_config.YCount - 2] * (_config.XBuckets[i + 1] - _config.XBuckets[i - 1]));
+                        result[XYCONVEXITY][i, _config.YCount - 1] = -(_slices[t][i + 1, _config.YCount - 1] - _slices[t][i - 1, _config.YCount - 1] + _slices[t][i - 1, _config.YCount - 2] - _slices[t][i + 1, _config.YCount - 2]) / (_config.YIncrements[_config.YCount - 2] * (_config.XBuckets[i + 1] - _config.XBuckets[i - 1]));
                 }
                 else
                 {
                     if (j == 0)
-                        result[XYCONVECITY][_config.XCount - 1, 0] = -(_slices[t][_config.XCount - 1, 1] - _slices[t][_config.XCount - 2, 1] + _slices[t][_config.XCount - 2, 0] - _slices[t][_config.XCount - 1, 0]) / (_config.YIncrements[0] * _config.XIncrements[_config.XCount - 2]);
+                        result[XYCONVEXITY][_config.XCount - 1, 0] = -(_slices[t][_config.XCount - 1, 1] - _slices[t][_config.XCount - 2, 1] + _slices[t][_config.XCount - 2, 0] - _slices[t][_config.XCount - 1, 0]) / (_config.YIncrements[0] * _config.XIncrements[_config.XCount - 2]);
                     else if (j < _config.YCount - 1)
-                        result[XYCONVECITY][_config.XCount - 1, j] = -(_slices[t][_config.XCount - 1, j + 1] - _slices[t][_config.XCount - 2, j + 1] + _slices[t][_config.XCount - 2, j - 1] - _slices[t][_config.XCount - 1, j - 1]) / ((_config.YBuckets[j + 1] - _config.YBuckets[j - 1]) * _config.XIncrements[_config.XCount - 2]);
+                        result[XYCONVEXITY][_config.XCount - 1, j] = -(_slices[t][_config.XCount - 1, j + 1] - _slices[t][_config.XCount - 2, j + 1] + _slices[t][_config.XCount - 2, j - 1] - _slices[t][_config.XCount - 1, j - 1]) / ((_config.YBuckets[j + 1] - _config.YBuckets[j - 1]) * _config.XIncrements[_config.XCount - 2]);
                     else
-                        result[XYCONVECITY][_config.XCount - 1, _config.YCount - 1] = (_slices[t][_config.XCount - 1, _config.YCount - 1] - _slices[t][_config.XCount - 2, _config.YCount - 1] + _slices[t][_config.XCount - 2, _config.YCount - 2] - _slices[t][_config.XCount - 1, _config.YCount - 2]) / (_config.YIncrements[_config.YCount - 2] * _config.XIncrements[_config.XCount - 2]);
+                        result[XYCONVEXITY][_config.XCount - 1, _config.YCount - 1] = (_slices[t][_config.XCount - 1, _config.YCount - 1] - _slices[t][_config.XCount - 2, _config.YCount - 1] + _slices[t][_config.XCount - 2, _config.YCount - 2] - _slices[t][_config.XCount - 1, _config.YCount - 2]) / (_config.YIncrements[_config.YCount - 2] * _config.XIncrements[_config.XCount - 2]);
                 }
 
                 #endregion
@@ -145,6 +145,17 @@ namespace Euclid.Numerics.PartialDifferentialEquations
                 result[i, j] = intrinsic[i, j] > expected[i, j] ? 1 : 0;
             });
             return result;
+        }
+        #endregion
+
+        #region Accessors
+        /// <summary>Gets or sets the grid value for a given time index</summary>
+        /// <param name="t">the time index</param>
+        /// <returns>the value grid as a Matrix</returns>
+        public Matrix this[int t]
+        {
+            get => _slices[t];
+            set => _slices[t] = value;
         }
         #endregion
     }
