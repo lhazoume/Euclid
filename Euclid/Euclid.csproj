@@ -134,6 +134,7 @@
     <Compile Include="Interpolations\Interpolator1D\PiecewiseConstantInterpolation1D.cs" />
     <Compile Include="Interpolations\Interpolator1D\IInterpolator1D.cs" />
     <Compile Include="Interpolations\KernelInterpolation.cs" />
+    <Compile Include="Numerics\PartialDifferentialEquations\SpatialOperator.cs" />
     <Compile Include="Numerics\PiecewiseFunction.cs" />
     <Compile Include="Point3D.cs" />
     <Compile Include="Point2D.cs" />

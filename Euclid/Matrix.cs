@@ -523,6 +523,156 @@ namespace Euclid
 
             return x;
         }
+        /// <summary>
+        /// Solves the equation Ax = d using the Thomas algorithm (a specialized method for tridiagonal matrices).
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public Vector SolveTridiagonalFast(Vector d)
+        {
+            #region Initial validations
+            if (d == null)
+                throw new ArgumentNullException(nameof(d));
+
+            if (!this.IsSquare)
+                throw new InvalidOperationException("Thomas algorithm can only be applied to square matrices.");
+
+            int n = this.Rows;
+            if (d.Size != n)
+                throw new InvalidOperationException("The dimension of vector d must match the dimension of the matrix.");
+
+            // Trivial case
+            if (n == 0)
+                return Vector.Create(0);
+
+            #endregion
+
+            #region 2. Diagonal extraction (O(n))
+            // a: sub-diagonal (size n-1)
+            // b: main diagonal (size n)
+            // c: super-diagonal (size n-1)
+            double[] b = new double[n];
+            if (n == 1)
+            {
+                if (Math.Abs(this[0, 0]) < _ACCURACY_) throw new InvalidOperationException("Singular matrix (zero diagonal element).");
+                return Vector.Create(new[] { d[0] / this[0, 0] });
+            }
+
+            double[] a = new double[n - 1];
+            double[] c = new double[n - 1];
+
+            for (int i = 0; i < n; i++)
+            {
+                b[i] = this[i, i];
+                if (i < n - 1) c[i] = this[i, i + 1];
+                if (i > 0) a[i - 1] = this[i, i - 1];
+            }
+            #endregion
+
+            #region 3. Thomas algorithm
+
+            double[] cPrime = new double[n - 1];
+            double[] dPrime = new double[n];
+
+            // Forward elimination
+            if (Math.Abs(b[0]) < _ACCURACY_)
+                throw new InvalidOperationException("Algorithm failed: the first pivot is zero. The matrix is singular.");
+
+            cPrime[0] = c[0] / b[0];
+            dPrime[0] = d[0] / b[0];
+
+            for (int i = 1; i < n; i++)
+            {
+                double m = b[i] - a[i - 1] * cPrime[i - 1];
+                if (Math.Abs(m) < _ACCURACY_)
+                    throw new InvalidOperationException($"Algorithm failed: null pivot at step {i}. The matrix is singular.");
+
+                if (i < n - 1)
+                {
+                    cPrime[i] = c[i] / m;
+                }
+                dPrime[i] = (d[i] - a[i - 1] * dPrime[i - 1]) / m;
+            }
+
+            // Back substitution
+            Vector x = Vector.Create(n);
+            x[n - 1] = dPrime[n - 1];
+            for (int i = n - 2; i >= 0; i--)
+            {
+                x[i] = dPrime[i] - cPrime[i] * x[i + 1];
+            }
+
+            #endregion
+
+            return x;
+        }
+        /// <summary>
+        /// Résout Ax = d pour une matrice carrée bandée en utilisant l'élimination de Gauss
+        /// limitée aux bandes inférieure (lower) et supérieure (upper).
+        /// </summary>
+        /// <param name="d">Vecteur second membre</param>
+        /// <param name="lower">Nombre de sous-diagonales non nulles (lower bandwidth)</param>
+        /// <param name="upper">Nombre de sur-diagonales non nulles (upper bandwidth)</param>
+        /// <returns>Solution x du système Ax = d</returns>
+        public Vector SolveBanded(Vector d, int lower, int upper)
+        {
+            if (d == null) throw new ArgumentNullException(nameof(d));
+            if (!IsSquare)
+                throw new InvalidOperationException("SolveBanded ne s'applique qu'aux matrices carrées.");
+            int n = Rows;
+            if (d.Size != n)
+                throw new InvalidOperationException("La taille du vecteur doit correspondre à la dimension de la matrice.");
+
+            // Copie de la matrice et du vecteur pour ne pas modifier l'original
+            Matrix A = this.Clone;
+            double[] b = new double[n];
+            for (int i = 0; i < n; i++) b[i] = d[i];
+
+            // Facteur d'évitement de pivot nul
+            const double eps = 1e-12;
+
+            // Élimination de Gauss dans la bande
+            for (int k = 0; k < n; k++)
+            {
+                if (Math.Abs(A[k, k]) < eps)
+                    throw new InvalidOperationException($"Pivot nul détecté en position {k},{k}.");
+
+                int maxRow = Math.Min(n - 1, k + lower);
+                int maxCol = Math.Min(n - 1, k + upper);
+
+                for (int i = k + 1; i <= maxRow; i++)
+                {
+                    double factor = A[i, k] / A[k, k];
+                    if (Math.Abs(factor) < eps) continue;
+
+                    // Mise à jour de la bande sur [k..maxCol]
+                    for (int j = k; j <= maxCol; j++)
+                        A[i, j] -= factor * A[k, j];
+
+                    b[i] -= factor * b[k];
+                }
+            }
+
+            // Substitution arrière
+            Vector x = Vector.Create(n);
+            for (int i = n - 1; i >= 0; i--)
+            {
+                double sum = 0.0;
+                int maxCol = Math.Min(n - 1, i + upper);
+                for (int j = i + 1; j <= maxCol; j++)
+                    sum += A[i, j] * x[j];
+
+                if (Math.Abs(A[i, i]) < eps)
+                    throw new InvalidOperationException($"Pivot nul en substitution arrière en position {i},{i}.");
+
+                x[i] = (b[i] - sum) / A[i, i];
+            }
+
+            return x;
+        }
+
 
         #endregion
 
