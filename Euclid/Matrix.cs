@@ -631,15 +631,26 @@ namespace Euclid
                 throw new InvalidOperationException("The size of the vector must match the dimension of the matrix.");
             #endregion
 
-            Matrix A = this.Clone;
             double[] b = new double[n];
             for (int i = 0; i < n; i++)
                 b[i] = d[i];
 
+            double[,] ab = new double[lower + upper + 1, n];
+            for (int j = 0; j < n; j++)
+            {
+                int iMin = Math.Max(0, j - upper);
+                int iMax = Math.Min(n - 1, j + lower);
+                for (int i = iMin; i <= iMax; i++)
+                {
+                    ab[upper + (i - j), j] = this[i, j];
+                }
+            }
+
             #region Forward elimination within band
             for (int k = 0; k < n; k++)
             {
-                if (Math.Abs(A[k, k]) < _ACCURACY_)
+                double pivot = ab[upper, k];
+                if (Math.Abs(pivot) < _ACCURACY_)
                     throw new InvalidOperationException($"Null pivot detected at position {k},{k}.");
 
                 int lastRow = Math.Min(n - 1, k + lower);
@@ -647,12 +658,15 @@ namespace Euclid
 
                 for (int i = k + 1; i <= lastRow; i++)
                 {
-                    double factor = A[i, k] / A[k, k];
+                    double factor = ab[upper + (i - k), k] / pivot;
                     if (Math.Abs(factor) < _ACCURACY_) continue;
 
                     for (int j = k; j <= lastCol; j++)
-                        A[i, j] -= factor * A[k, j];
-
+                    {
+                        int rowIndex = upper + (i - j);
+                        int pivotRowIndex = upper + (k - j);
+                        ab[rowIndex, j] -= factor * ab[pivotRowIndex, j];
+                    }
                     b[i] -= factor * b[k];
                 }
             }
@@ -664,17 +678,20 @@ namespace Euclid
                 double sum = 0;
                 int lastCol = Math.Min(n - 1, i + upper);
                 for (int j = i + 1; j <= lastCol; j++)
-                    sum += A[i, j] * x[j];
-
-                if (Math.Abs(A[i, i]) < _ACCURACY_)
+                {
+                    sum += ab[upper + (i - j), j] * x[j];
+                }
+                double diag = ab[upper, i];
+                if (Math.Abs(diag) < _ACCURACY_)
                     throw new InvalidOperationException($"Null pivot in back substitution at position {i},{i}.");
 
-                x[i] = (b[i] - sum) / A[i, i];
+                x[i] = (b[i] - sum) / diag;
             }
             #endregion
 
             return x;
         }
+
         #endregion
 
         private static double Expo(int n)
