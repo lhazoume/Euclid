@@ -590,9 +590,8 @@ namespace Euclid
                     throw new InvalidOperationException($"Algorithm failed: null pivot at step {i}. The matrix is singular.");
 
                 if (i < n - 1)
-                {
                     cPrime[i] = c[i] / m;
-                }
+                
                 dPrime[i] = (d[i] - a[i - 1] * dPrime[i - 1]) / m;
             }
             #endregion
@@ -601,10 +600,9 @@ namespace Euclid
             Vector x = Vector.Create(n);
             x[n - 1] = dPrime[n - 1];
             for (int i = n - 2; i >= 0; i--)
-            {
                 x[i] = dPrime[i] - cPrime[i] * x[i + 1];
-            }
             #endregion
+
             #endregion
 
             return x;
@@ -629,9 +627,13 @@ namespace Euclid
             int n = Rows;
             if (d.Size != n)
                 throw new InvalidOperationException("The size of the vector must match the dimension of the matrix.");
+            // If the matrix is tridiagonal, use the specialized method
+            if (lower == 1 && upper == 1)
+                return SolveTridiagonalFast(d);
+
             #endregion
 
-            double[] b = new double[n];
+            double[] b = new double[n]; 
             for (int i = 0; i < n; i++)
                 b[i] = d[i];
 
@@ -641,12 +643,10 @@ namespace Euclid
                 int iMin = Math.Max(0, j - upper);
                 int iMax = Math.Min(n - 1, j + lower);
                 for (int i = iMin; i <= iMax; i++)
-                {
                     ab[upper + (i - j), j] = this[i, j];
-                }
             }
 
-            #region Forward elimination within band
+            #region Forward elimination
             for (int k = 0; k < n; k++)
             {
                 double pivot = ab[upper, k];
@@ -671,16 +671,15 @@ namespace Euclid
                 }
             }
             #endregion
-            #region Back substitution within band
+            #region Back substitution
             Vector x = Vector.Create(n);
             for (int i = n - 1; i >= 0; i--)
             {
                 double sum = 0;
                 int lastCol = Math.Min(n - 1, i + upper);
                 for (int j = i + 1; j <= lastCol; j++)
-                {
                     sum += ab[upper + (i - j), j] * x[j];
-                }
+
                 double diag = ab[upper, i];
                 if (Math.Abs(diag) < _ACCURACY_)
                     throw new InvalidOperationException($"Null pivot in back substitution at position {i},{i}.");
@@ -1332,5 +1331,6 @@ namespace Euclid
         }
 
         #endregion
+
     }
 }

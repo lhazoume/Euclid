@@ -8,6 +8,9 @@
         /// <summary>Explicit scheme</summary>
         Explicit = 1,
         /// <summary>Crank Nicholson scheme</summary>
-        CrankNicholson = 2
+        CrankNicholson = 2,
+        
+        Imex= 3,
+        Yanenko = 4,
     }
 }
