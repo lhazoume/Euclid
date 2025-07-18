@@ -9,8 +9,9 @@
         Explicit = 1,
         /// <summary>Crank Nicholson scheme</summary>
         CrankNicholson = 2,
-        
-        Imex= 3,
+        /// <summary>Imex scheme</summary>
+        Imex = 3,
+        /// <summary>Yanenko scheme</summary>
         Yanenko = 4,
     }
 }

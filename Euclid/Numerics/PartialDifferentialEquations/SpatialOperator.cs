@@ -2,8 +2,6 @@
 
 namespace Euclid.Numerics.PartialDifferentialEquations
 {
-    /// <summary> Represents a spatial operator used in solving partial differential equations (PDEs).</summary>
-
     public class SpatialOperator
     {
         #region Properties
@@ -11,7 +9,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
         public Matrix OperatorMatrix { get; }
         /// <summary>The full constant vector part resulting from boundary conditions (d).</summary>
         public Vector BoundaryVector { get; }
-
         /// <summary>The matrix for the first spatial dimension .</summary>
         public Matrix OperatorMatrixX { get; }
         /// <summary>The matrix for the second spatial dimension .</summary>
@@ -61,7 +58,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             BoundaryVectorX = boundaryVectorX ?? throw new ArgumentNullException(nameof(boundaryVectorX));
             BoundaryVectorY = boundaryVectorY ?? throw new ArgumentNullException(nameof(boundaryVectorY));
             BoundaryVectorXY = boundaryVectorXY ?? throw new ArgumentNullException(nameof(boundaryVectorXY));
-
 
             LowerBandwidth = lowerBandwidth;
             UpperBandwidth = upperBandwidth;
