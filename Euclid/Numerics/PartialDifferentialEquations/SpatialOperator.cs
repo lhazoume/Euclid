@@ -37,8 +37,8 @@ namespace Euclid.Numerics.PartialDifferentialEquations
         /// <param name="upperBandwidth">Upper bandwidth for the operator matrix, used in banded matrix solvers.</param>
         public SpatialOperator(Matrix operatorMatrix, Vector boundaryVector, int lowerBandwidth = 0, int upperBandwidth = 0)
         {
-            OperatorMatrix = operatorMatrix ?? throw new ArgumentNullException(nameof(operatorMatrix));
-            BoundaryVector = boundaryVector ?? throw new ArgumentNullException(nameof(boundaryVector));
+            OperatorMatrix = operatorMatrix;
+            BoundaryVector = boundaryVector;
             LowerBandwidth = lowerBandwidth;
             UpperBandwidth = upperBandwidth;
         }
