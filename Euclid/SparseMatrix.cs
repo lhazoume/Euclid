@@ -97,6 +97,8 @@ namespace Euclid
         #endregion
 
         #region Methods
+
+        #region Solveurs
         /// <summary>
         /// Solves the linear system Ax = b for x using the preconditioned BiConjugate Gradient Stabilized (BiCGSTAB) method.
         /// This is an iterative solver suitable for large, sparse, non-symmetric square matrices.
@@ -105,99 +107,170 @@ namespace Euclid
         /// <param name="maxIterations">The maximum number of iterations to perform.</param>
         /// <param name="tolerance">The convergence tolerance for the norm of the residual.</param>
         /// <returns>The solution vector x. May be an approximate solution if convergence is not reached.</returns>
-        public Vector SolveWithBiCGSTAB(Vector b, int maxIterations = 1000, double tolerance = 1e-9)
+
+        public Vector SolveWithBiCGSTAB(Vector b, int maxIterations = 1000, double tolerance = 1e-5)
         {
-            #region Initial Validations
-            if (!IsSquare) throw new InvalidOperationException("BiCGSTAB solver requires a square matrix.");
-            if (b.Size != _rows) throw new ArgumentException("Vector dimension must match matrix dimension.");
-            #endregion
+            if (!IsSquare)
+                throw new InvalidOperationException("BiCGSTAB solver requires a square matrix.");
+            if (b.Size != _rows)
+                throw new ArgumentException("Vector dimension must match matrix dimension.");
 
-            #region Algorithm Initialization
-            Vector x = Vector.Create(_rows);
-            Vector r = b.Clone;
+            // Préconditionneur ILU(0)
+            SparseMatrix luFactors = CreateIlu0Factors();
 
-            Vector r_hat = r.Clone;
 
-            // Pre-calculate the inverse diagonal for preconditioning
-            Vector diag_inv = Vector.Create(_rows);
-            for (int i = 0; i < _rows; i++)
-            {
-                double diag_val = this[i, i];
-                diag_inv[i] = (Math.Abs(diag_val) > _ACCURACY_) ? 1.0 / diag_val : 1.0;
-            }
+            #region Initialisation de l'algorithme BiCGSTAB
+            Vector solution = Vector.Create(_rows);
+            Vector residual = b.Clone;
+            Vector residualReference = residual.Clone;
 
             double rho_prev = 1.0;
             double alpha = 1.0;
             double omega = 1.0;
-            Vector p = Vector.Create(_rows);
-            Vector v = Vector.Create(_rows);
 
+            Vector searchDirection = Vector.Create(_rows);
+            Vector matrixProductResult = Vector.Create(_rows);
             int iter = 0;
-            double residualNorm = r.Norm2;
+
             #endregion
 
-            #region Main BiCGSTAB Loop
-            while (iter < maxIterations && residualNorm > tolerance)
+            while (iter < maxIterations && residual.Norm2 > tolerance)
             {
-                double rho_curr = Vector.Scalar(r_hat, r);
-
-                if (Math.Abs(rho_curr) < _ACCURACY_)
-                {
-                    break;
-                }
+                double rho_curr = Vector.Scalar(residualReference, residual);
+                if (Math.Abs(rho_curr) < _ACCURACY_) break;
 
                 if (iter == 0)
-                {
-                    p = r.Clone;
-                }
+                    searchDirection = residual.Clone;
                 else
                 {
                     double beta = (rho_curr / rho_prev) * (alpha / omega);
-                    p = r + beta * (p - omega * v);
+                    searchDirection = residual + (searchDirection - matrixProductResult * omega) * beta;
                 }
 
-                // Preconditioning step
-                Vector p_hat = Vector.Create(_rows);
-                for (int i = 0; i < _rows; i++) { p_hat[i] = p[i] * diag_inv[i]; }
+                Vector preconditionedSearchDirection = ApplyIlu0Preconditioner(luFactors, searchDirection);
 
-                v = this * p_hat;
+                matrixProductResult = this * preconditionedSearchDirection;
 
-                double r_hat_dot_v = Vector.Scalar(r_hat, v);
-                if (Math.Abs(r_hat_dot_v) < _ACCURACY_)
-                {
-                    break;
-                }
-                alpha = rho_curr / r_hat_dot_v;
+                double residualRef_dot_matrixProduct = Vector.Scalar(residualReference, matrixProductResult);
+                if (Math.Abs(residualRef_dot_matrixProduct) < _ACCURACY_) break;
 
-                Vector s = r - alpha * v;
+                alpha = rho_curr / residualRef_dot_matrixProduct;
 
-                // Preconditioning step
-                Vector s_hat = Vector.Create(_rows);
-                for (int i = 0; i < _rows; i++) { s_hat[i] = s[i] * diag_inv[i]; }
+                Vector temporaryResidual = residual - matrixProductResult * alpha;
 
-                Vector t = this * s_hat;
+                Vector preconditionedTemporaryResidual = ApplyIlu0Preconditioner(luFactors, temporaryResidual);
 
-                double t_dot_s = Vector.Scalar(t, s);
-                double t_dot_t = Vector.Scalar(t, t);
+                Vector secondMatrixProductResult = this * preconditionedTemporaryResidual;
 
-                if (Math.Abs(t_dot_t) < _ACCURACY_)
-                {
-                    break;
-                }
+                double t_dot_s = Vector.Scalar(secondMatrixProductResult, temporaryResidual);
+                double t_dot_t = Vector.Scalar(secondMatrixProductResult, secondMatrixProductResult);
+                if (Math.Abs(t_dot_t) < _ACCURACY_) break;
+
                 omega = t_dot_s / t_dot_t;
 
-                x += alpha * p_hat + omega * s_hat;
-                r = s - omega * t;
+                solution += preconditionedSearchDirection * alpha + preconditionedTemporaryResidual * omega;
+                residual = temporaryResidual - secondMatrixProductResult * omega;
 
                 rho_prev = rho_curr;
-                residualNorm = r.Norm2;
                 iter++;
             }
-            #endregion
-
-            return x;
+         
+            return solution;
         }
-       
+        private SparseMatrix CreateIlu0Factors()
+        {
+            SparseMatrix luFactors = this.Clone;
+
+            for (int i = 0; i < _rows; i++)
+            {
+                if (luFactors._data.TryGetValue(i, out Dictionary<int, double> rowI))
+                {
+                    List<int> j_indices = rowI.Keys.ToList();
+                    j_indices.Sort();
+
+                    foreach (int j in j_indices)
+                    {
+                        if (j >= i) continue;
+
+                        double diag_j = luFactors[j, j];
+                        if (Math.Abs(diag_j) < _ACCURACY_) continue;
+
+                        double factor = luFactors[i, j] / diag_j;
+                        luFactors[i, j] = factor;
+
+                        if (luFactors._data.TryGetValue(j, out Dictionary<int, double> rowJ))
+                        {
+                            foreach (KeyValuePair<int, double> colEntryK in rowJ)
+                            {
+                                int k = colEntryK.Key;
+                                if (k > j && rowI.ContainsKey(k))
+                                {
+                                    luFactors[i, k] -= factor * colEntryK.Value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return luFactors;
+        }
+
+        /// <summary>
+        /// Applies the ILU(0) preconditioner by solving Mz = r, where M=LU.
+        /// </summary>
+        /// <param name="luFactors">The sparse matrix containing the L and U factors.</param>
+        /// <param name="inputVector">The vector 'r' to precondition.</param>
+        /// <returns>The resulting vector 'z'.</returns>
+        private Vector ApplyIlu0Preconditioner(SparseMatrix luFactors, Vector inputVector)
+        {
+            int size = inputVector.Size;
+            Vector y = Vector.Create(size); // Résultat intermédiaire de Ly = inputVector
+
+            // Forward Substitution
+            for (int i = 0; i < size; i++)
+            {
+                double sum = 0;
+                if (luFactors._data.TryGetValue(i, out Dictionary<int, double> row))
+                {
+                    foreach (KeyValuePair<int, double> colEntry in row)
+                    {
+                        if (colEntry.Key < i)
+                        {
+                            sum += colEntry.Value * y[colEntry.Key];
+                        }
+                    }
+                }
+                y[i] = inputVector[i] - sum;
+            }
+
+            Vector z = Vector.Create(size); // Résultat final de Uz = y
+
+            // Backward Substitution
+            for (int i = size - 1; i >= 0; i--)
+            {
+                double sum = 0;
+                if (luFactors._data.TryGetValue(i, out Dictionary<int, double> row))
+                {
+                    foreach (KeyValuePair<int, double> colEntry in row)
+                    {
+                        if (colEntry.Key > i)
+                        {
+                            sum += colEntry.Value * z[colEntry.Key];
+                        }
+                    }
+                }
+
+                double diag = luFactors[i, i];
+                if (Math.Abs(diag) < _ACCURACY_)
+                    throw new DivideByZeroException($"The diagonal pivot at index {i} is close to zero. The matrix may be singular.");
+
+                z[i] = (y[i] - sum) / diag;
+            }
+
+            return z;
+        }
+
+        #endregion
 
         public override string ToString()
         {

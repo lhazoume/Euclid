@@ -2,10 +2,6 @@
 
 namespace Euclid.Numerics.PartialDifferentialEquations
 {
-    /// <summary>
-    /// Represents the spatial discretization of a PDE, in the form dV/dt = L*V + d.
-    /// This class can hold either a dense (Matrix) or a sparse (SparseMatrix) representation of the operator L.
-    /// </summary>
     public class SpatialOperator
     {
         #region Properties
@@ -51,7 +47,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
 
         #region Constructors
 
-        /// <summary>Builds a spatial operator using a dense matrix representation.</summary>
         public SpatialOperator(Matrix operatorMatrix, Vector boundaryVector, int lowerBandwidth = 0, int upperBandwidth = 0)
         {
             OperatorMatrix = operatorMatrix;
@@ -60,7 +55,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             UpperBandwidth = upperBandwidth;
         }
 
-        /// <summary>Builds a spatial operator using a sparse matrix representation.</summary>
         public SpatialOperator(SparseMatrix sparseOperatorMatrix, Vector boundaryVector, int lowerBandwidth = 0, int upperBandwidth = 0)
         {
             SparseOperatorMatrix = sparseOperatorMatrix;
@@ -68,7 +62,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             LowerBandwidth = lowerBandwidth;
             UpperBandwidth = upperBandwidth;
         }
-        // Note: Additional constructors for split sparse operators could be added here if needed.
         #endregion
     }
 }
