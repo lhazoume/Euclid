@@ -1052,6 +1052,8 @@ namespace Euclid
             return matrix;
         }
 
+        public static Matrix CreateIdentityMatrix(int n) => CreateIdentityMatrix(n, n);
+
         /// <summary>Builds a square symmetric band-matrix</summary>
         /// <param name="size">the size of the matrix</param>
         /// <param name="values">the values of the diagonals and sub-diagonals</param>

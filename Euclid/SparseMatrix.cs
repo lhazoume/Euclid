@@ -30,6 +30,30 @@ namespace Euclid
         {
             return new SparseMatrix(rows, cols);
         }
+
+        public static SparseMatrix Create(int n) => new SparseMatrix(n, n);
+
+        public static SparseMatrix Create(int rows, int cols, double value)
+        {
+            SparseMatrix m = new SparseMatrix(rows, cols);
+            if (Math.Abs(value) < _ACCURACY_) return m;
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < cols; j++)
+                    m[i, j] = value;
+            return m;
+        }
+        public static SparseMatrix Create(int rows, int cols, Func<int, int, double> generator)
+        {
+            if (generator == null) throw new ArgumentNullException(nameof(generator));
+            SparseMatrix m = new SparseMatrix(rows, cols);
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < cols; j++)
+                {
+                    double v = generator(i, j);
+                    if (Math.Abs(v) >= _ACCURACY_) m[i, j] = v;
+                }
+            return m;
+        }
         public static SparseMatrix CreateIdentityMatrix(int rows, int cols)
         {
             if (rows != cols) throw new ArgumentException("Identity matrix must be square.");
@@ -38,6 +62,7 @@ namespace Euclid
                 matrix[i, i] = 1.0;
             return matrix;
         }
+        public static SparseMatrix CreateIdentityMatrix(int n) => CreateIdentityMatrix(n, n);
         #endregion
 
         #region Accessors

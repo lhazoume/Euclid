@@ -2,66 +2,72 @@
 
 namespace Euclid.Numerics.PartialDifferentialEquations
 {
-    public class SpatialOperator
+    public sealed class SpatialOperator
     {
-        #region Properties
-
-        #region Dense Representations (for legacy or small problems)
-        /// <summary>The full operator matrix (L) as a dense matrix.</summary>
-        public Matrix OperatorMatrix { get; }
-        /// <summary>The matrix for the first spatial dimension (Lx) as a dense matrix.</summary>
-        public Matrix OperatorMatrixX { get; }
-        /// <summary>The matrix for the second spatial dimension (Ly) as a dense matrix.</summary>
-        public Matrix OperatorMatrixY { get; }
-        /// <summary>The matrix for the cross-derivative term (Lxy) as a dense matrix.</summary>
-        public Matrix OperatorMatrixXY { get; }
-        #endregion
-
-        #region Sparse Representations (for performance on large grids)
-        /// <summary>The full operator matrix (L) as a sparse matrix.</summary>
+        // FULL
+        public Matrix OperatorMatrixFull { get; }
+        public Vector BoundaryVectorFull { get; }
         public SparseMatrix SparseOperatorMatrix { get; }
-        /// <summary>The matrix for the first spatial dimension (Lx) as a sparse matrix.</summary>
-        public SparseMatrix SparseOperatorMatrixX { get; }
-        /// <summary>The matrix for the second spatial dimension (Ly) as a sparse matrix.</summary>
-        public SparseMatrix SparseOperatorMatrixY { get; }
-        /// <summary>The matrix for the cross-derivative term (Lxy) as a sparse matrix.</summary>
-        public SparseMatrix SparseOperatorMatrixXY { get; }
-        #endregion
-
-        #region Boundary Vectors
-        /// <summary>The full constant vector part resulting from boundary conditions (d).</summary>
         public Vector BoundaryVector { get; }
-        /// <summary>The boundary vector corresponding to the X operator.</summary>
-        public Vector BoundaryVectorX { get; }
-        /// <summary>The boundary vector corresponding to the Y operator.</summary>
-        public Vector BoundaryVectorY { get; }
-        /// <summary>The boundary vector corresponding to the XY operator.</summary>
-        public Vector BoundaryVectorXY { get; }
-        #endregion
 
-        /// <summary>Lower bandwidth for the dense operator matrix, used in banded matrix solvers.</summary>
+        //Split (dense) 
+        public Matrix OperatorMatrixX { get; }
+        public Matrix OperatorMatrixY { get; }
+        public Matrix OperatorMatrixXY { get; }
+
+        //  Split (sparse)
+        public SparseMatrix SparseOperatorMatrixX { get; }
+        public SparseMatrix SparseOperatorMatrixY { get; }
+        public SparseMatrix SparseOperatorMatrixXY { get; }
+
+        public double DiscountRate { get; }
         public int LowerBandwidth { get; }
-        /// <summary>Upper bandwidth for the dense operator matrix, used in banded matrix solvers.</summary>
         public int UpperBandwidth { get; }
-        #endregion
 
-        #region Constructors
-
-        public SpatialOperator(Matrix operatorMatrix, Vector boundaryVector, int lowerBandwidth = 0, int upperBandwidth = 0)
+        public SpatialOperator(SparseMatrix Lx_s, SparseMatrix Ly_s, SparseMatrix Lxy_s,Vector dx, Vector dy, Vector dxy,double rate, int lowerBandwidth, int upperBandwidth)
         {
-            OperatorMatrix = operatorMatrix;
-            BoundaryVector = boundaryVector;
+            SparseOperatorMatrixX = Lx_s;
+            SparseOperatorMatrixY = Ly_s;
+            SparseOperatorMatrixXY = Lxy_s;
+
+            DiscountRate = rate;
             LowerBandwidth = lowerBandwidth;
             UpperBandwidth = upperBandwidth;
+
+            int n = Lx_s.Rows;
+            SparseMatrix I_s = SparseMatrix.CreateIdentityMatrix(n);
+
+            SparseOperatorMatrix = (Lx_s + Ly_s) + Lxy_s - (rate * I_s);
+            BoundaryVector = dx + dy + dxy;
+
+            OperatorMatrixFull = null;
+            BoundaryVectorFull = null;
         }
 
-        public SpatialOperator(SparseMatrix sparseOperatorMatrix, Vector boundaryVector, int lowerBandwidth = 0, int upperBandwidth = 0)
+        // Constructeur "FULL sparse"
+        public SpatialOperator(SparseMatrix Lfull_s, Vector d_full, int lowerBandwidth = 0, int upperBandwidth = 0)
         {
-            SparseOperatorMatrix = sparseOperatorMatrix;
-            BoundaryVector = boundaryVector;
+            SparseOperatorMatrix = Lfull_s;
+            BoundaryVector = d_full;
             LowerBandwidth = lowerBandwidth;
             UpperBandwidth = upperBandwidth;
+
+            DiscountRate = 0.0;
+            OperatorMatrixFull = null;
+            BoundaryVectorFull = null;
         }
-        #endregion
+
+        // Constructeur "FULL dense" 
+        public SpatialOperator(Matrix Lfull, Vector d_full, int lowerBandwidth, int upperBandwidth, double rate = 0.0)
+        {
+            OperatorMatrixFull = Lfull;
+            BoundaryVectorFull = d_full;
+            LowerBandwidth = lowerBandwidth;
+            UpperBandwidth = upperBandwidth;
+            DiscountRate = rate;
+
+            SparseOperatorMatrix = null;
+            BoundaryVector = null;
+        }
     }
 }
