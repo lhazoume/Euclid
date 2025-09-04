@@ -54,7 +54,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
         /// A tuple containing the coefficients for the points (i, j-1), (i, j), (i, j+1):
         /// (minus: (i, j-1), center: (i, j), plus: (i, j+1)).
         /// </returns>
-
         public static (double minus, double center, double plus) DyyCoeffs(double hyMinus, double hyPlus)
         {
             ValidateSteps(hyMinus, hyPlus, nameof(hyMinus), nameof(hyPlus));
@@ -63,6 +62,7 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             double plus = 2.0 / (hyPlus * (hyMinus + hyPlus));
             return (minus, center, plus);
         }
+
         /// <summary>
         /// Computes the coefficients for the centered first-order partial derivative in the y direction on a non-uniform grid.
         /// </summary>
@@ -73,7 +73,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
         /// A tuple containing the coefficients for the points (i, j-1), (i, j), (i, j+1):
         /// (minus: (i, j-1), center: (i, j), plus: (i, j+1)).
         /// </returns>
-
         public static (double minus, double center, double plus) DyCoeffs(double hyMinus, double hyPlus, double driftY)
         {
             ValidateSteps(hyMinus, hyPlus, nameof(hyMinus), nameof(hyPlus));
