@@ -77,3 +77,21 @@ Benchmarking/obj/project.assets.json
 /EuclidExamples/obj/Debug/EuclidExamples.csproj.FileListAbsolute.txt
 /.vs/Euclid
 /.vs/VSWorkspaceState.json
+/Euclid/.vs/Euclid/CopilotIndices/17.14.1147.5054/CodeChunks.db
+/Euclid/.vs/Euclid/CopilotIndices/17.14.1147.5054/SemanticSymbols.db
+/Euclid/Benchmarking/obj/Debug/netstandard2.0/.NETStandard,Version=v2.0.AssemblyAttributes.cs
+/Euclid/Benchmarking/obj/Debug/netstandard2.0/Benchmarking.AssemblyInfo.cs
+/Euclid/Benchmarking/obj/Release/netstandard2.0/.NETStandard,Version=v2.0.AssemblyAttributes.cs
+/Euclid/Benchmarking/obj/Release/netstandard2.0/Benchmarking.AssemblyInfo.cs
+/Euclid/Euclid/obj/Debug/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/Euclid/obj/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/Euclid/obj/Release DEMO/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/Euclid/obj/x64/Debug/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/Euclid/obj/x64/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/Euclid/obj/x64/Release DEMO/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/EuclidBenchmark/obj/Debug/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/EuclidBenchmark/obj/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/EuclidTests/obj/Debug/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Euclid/EuclidTests/obj/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/EuclidBenchmark/obj/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/EuclidExamples/obj/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
