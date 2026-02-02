@@ -1163,6 +1163,534 @@
         <member name="P:Euclid.Benchmarking.CaseResult.SerialNumber">
             <summary>Get the motherboard's serial number</summary>
         </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.Hyman">
+            <summary>Helps monotonicity-preserving cubic spline (Hyman) interpolations</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.#ctor(System.Boolean)">
+            <summary>Builds the Hyman spline interpolator</summary>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.Hyman.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.Hyman.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.Hyman.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.Clone">
+            <summary>
+            Returns a copy of the interpolator
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolator's range</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value using Hyman's scheme</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.OrganizeTheData">
+            <summary>Organizes the data and computes slopes for Hyman's interpolator</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.Hyman.ComputeEdgeDerivative(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Computes the derivative at the edge of the data 
+            </summary>
+            <param name="h_adj"></param>
+            <param name="h_next"></param>
+            <param name="m_adj"></param>
+            <param name="m_next"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.BoundaryType">
+            <summary> Represents a natural boundary condition for the cubic spline interpolation. </summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.#ctor(System.Boolean,Euclid.Interpolations.Interpolator1D.BoundaryType)">
+            <summary>Builds the cubic spline interpolator</summary>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+            <param name="boundaryType">specifies the boundary condition type</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.CubicSpline.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.CubicSpline.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.CubicSpline.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.Clone">
+            <summary>Returns the interpolation method</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.CubicSpline.OrganizeTheData">
+            <summary>
+            Organizes the data for the interpolation
+            </summary>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation">
+            <summary>Helps log-linear interpolation </summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.#ctor(System.Boolean)">
+            <summary>Builds a log linear interpolator</summary>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.Clone">
+            <summary>Returns the interpolation method</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LogLinearInterpolation.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.LinearInterpolation">
+            <summary>Helps linear interpolations</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.#ctor(System.Boolean)">
+            <summary>Builds a linear interpolator</summary>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LinearInterpolation.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LinearInterpolation.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.LinearInterpolation.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.Clone">
+            <summary>Returns the interpolation method</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.LinearInterpolation.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode">
+            <summary>Defines the interpolation mode when using piecewise constant</summary>
+        </member>
+        <member name="F:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode.Right">
+            <summary>Piecewise constant right interpolation</summary>
+        </member>
+        <member name="F:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode.Left">
+            <summary>Piecewise constant left interpolation</summary>
+        </member>
+        <member name="F:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode.Nearest">
+            <summary>Piecewise constant nearest interpolation</summary>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D">
+            <summary>Allows piecewise constant interpolation</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.#ctor(Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolationMode,System.Boolean)">
+            <summary>Buils a piecewise constant interpolator</summary>
+            <param name="mode">the mode (left, right, nearest)</param>
+            <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Extrapolation">
+            <summary>Indicates if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Mode">
+            <summary>Returns the interpolation mode</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Local">
+            <summary>Specifies if the interpolator is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the abscisses</param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.PiecewiseConstantInterpolation1D.Clone">
+            <summary>
+            Returns a clone of the current interpolator
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Euclid.Interpolations.Interpolator1D.IInterpolator1D">
+            <summary>Interface for all the 1D interpolators</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.IInterpolator1D.Range">
+            <summary>The natural range of the x values</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.IInterpolator1D.Extrapolation">
+            <summary>Specifies if the interpolator allows extrapolation</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.IInterpolator1D.Local">
+            <summary>Specifies if the interpolation is local (vs global)</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="x">the abscisses</param>
+            <param name="y">the ordinates </param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary>Sets the data for the interpolation</summary>
+            <param name="points">the points</param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.IsInRange(System.Double)">
+            <summary>Checks if the value is inside the interpolalor's range</summary>
+            <param name="x">the value</param>
+            <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given value</summary>
+            <param name="x">the x-value</param>
+            <returns>the interpolated result</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.IInterpolator1D.Clone">
+            <summary>Returns a clone of the current interpolator</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.QuadraticSpline.#ctor(System.Boolean)">
+            <summary>
+            Builds the quadratic spline interpolator.
+            </summary>
+            <param name="allowExtrapolation">specifies whether extrapolation is allowed</param>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.QuadraticSpline.ComputeSlopes">
+            <summary>Computes first derivatives at each data point using finite differences.</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.QuadraticSpline.BuildSegments">
+            <summary> Builds quadratic coefficients for each segment based on slopes and values. </summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.TransformedInterpolator.Range">
+            <summary> Gets the natural range of the x values for the interpolation. </summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.TransformedInterpolator.Extrapolation">
+            <summary> Gets a value indicating whether the interpolator allows extrapolation outside the range.</summary>
+        </member>
+        <member name="P:Euclid.Interpolations.Interpolator1D.TransformedInterpolator.Local">
+            <summary> Gets a value indicating whether the interpolation is local (as opposed to global</summary>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.TransformedInterpolator.IsInRange(System.Double)">
+            <summary> Checks if the specified x-value is within the interpolator's range.</summary>
+            <param name="x">The x-value to check.</param>
+            <returns><c>true</c> if the value is in range; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.TransformedInterpolator.Clone">
+            <summary> Returns a clone of the current <see cref="!:Transformateur"/> instance. </summary>
+            <returns>A new <see cref="T:Euclid.Interpolations.Interpolator1D.IInterpolator1D"/> that is a copy of this instance.</returns>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.TransformedInterpolator.SetData(System.Collections.Generic.IEnumerable{Euclid.Point2D})">
+            <summary> Sets the data for the interpolation by transforming the points using the forward function.</summary>
+            <param name="points">The collection of 2D points to be transformed and used for interpolation.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="points"/> is null.</exception>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.TransformedInterpolator.SetData(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Sets the data for the interpolation using two lists of x and y values. </summary>
+            <param name="x">The list of x-values (abscissas).</param>
+            <param name="y">The list of y-values (ordinates).</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="x"/> or <paramref name="y"/> is null.</exception>
+            <exception cref="T:System.Exception">Thrown if <paramref name="x"/> and <paramref name="y"/> do not have the same length.</exception>
+        </member>
+        <member name="M:Euclid.Interpolations.Interpolator1D.TransformedInterpolator.ValueAt(System.Double)">
+            <summary>Interpolates (or extrapolates) for a given x-value using the backward transformation.</summary>
+            <param name="x">The x-value for which to interpolate.</param>
+            <returns>The interpolated (or extrapolated) y-value after applying the backward transformation.</returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.IGridGenerator.Generate(System.Double,System.Double,System.Int32)">
+            <summary>
+            Generates an array of grid points between a minimum and maximum value.
+            </summary>
+            <param name="min">The minimum value of the grid.</param>
+            <param name="max">The maximum value of the grid .</param>
+            <param name="count">The number of points in the grid.</param>
+            <returns>An array of doubles representing the grid points.</returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.QuantileGridGenerator.Generate(System.Double,System.Double,System.Int32)">
+            <remarks>min et max ignorés.</remarks>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.Stencil">
+            <summary>  Provides static methods for computing finite difference stencil coefficients for partial derivatives on non-uniform grids in two dimensions. Includes support for first and second order derivatives,
+            as well as mixed derivatives (cross-diffusion).
+            </summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.Stencil.DxxCoeffs(System.Double,System.Double)">
+            <summary>
+            Computes the coefficients for the centered second-order partial derivative in the x direction on a non-uniform grid.
+            </summary>
+            <param name="hxMinus">Grid spacing to the left of the central point in the x direction.</param>
+            <param name="hxPlus">Grid spacing to the right of the central point in the x direction.</param>
+            <returns>
+            A tuple containing the coefficients for the points (i-1, j), (i, j), (i+1, j):
+            (minus: (i-1, j), center: (i, j), plus: (i+1, j)).
+            </returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.Stencil.DxCoeffs(System.Double,System.Double,System.Double)">
+            <summary>
+            Computes the coefficients for the centered first-order partial derivative in the x direction on a non-uniform grid.
+            </summary>
+            <param name="hxMinus">Grid spacing to the left of the central point in the x direction.</param>
+            <param name="hxPlus">Grid spacing to the right of the central point in the x direction.</param>
+            <param name="driftX">Drift coefficient in the x direction.</param>
+            <returns>
+            A tuple containing the coefficients for the points (i-1, j), (i, j), (i+1, j):
+            (minus: (i-1, j), center: (i, j), plus: (i+1, j)).
+            </returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.Stencil.DyyCoeffs(System.Double,System.Double)">
+            <summary>
+            Computes the coefficients for the centered second-order partial derivative in the y direction on a non-uniform grid.
+            </summary>
+            <param name="hyMinus">Grid spacing below the central point in the y direction.</param>
+            <param name="hyPlus">Grid spacing above the central point in the y direction.</param>
+            <returns>
+            A tuple containing the coefficients for the points (i, j-1), (i, j), (i, j+1):
+            (minus: (i, j-1), center: (i, j), plus: (i, j+1)).
+            </returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.Stencil.DyCoeffs(System.Double,System.Double,System.Double)">
+            <summary>
+            Computes the coefficients for the centered first-order partial derivative in the y direction on a non-uniform grid.
+            </summary>
+            <param name="hyMinus">Grid spacing below the central point in the y direction.</param>
+            <param name="hyPlus">Grid spacing above the central point in the y direction.</param>
+            <param name="driftY">Drift coefficient in the y direction.</param>
+            <returns>
+            A tuple containing the coefficients for the points (i, j-1), (i, j), (i, j+1):
+            (minus: (i, j-1), center: (i, j), plus: (i, j+1)).
+            </returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.Stencil.DxyCornerCoeffs(System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Computes the coefficients for the mixed second-order derivative (cross-diffusion) stencil
+            on a non-uniform grid. The coefficients correspond to the four corners around the central point.
+            </summary>
+            <param name="hxMinus">Grid spacing to the left of the central point in the x-direction.</param>
+            <param name="hxPlus">Grid spacing to the right of the central point in the x-direction.</param>
+            <param name="hyMinus">Grid spacing below the central point in the y-direction.</param>
+            <param name="hyPlus">Grid spacing above the central point in the y-direction.</param>
+            <param name="crossDiffusion">The cross-diffusion coefficient.</param>
+            <returns>
+            A tuple containing the coefficients for the four corners:
+            (minusMinus: (i-1, j-1), plusMinus: (i+1, j-1), minusPlus: (i-1, j+1), plusPlus: (i+1, j+1)).
+            </returns>
+            <exception cref="T:System.ArgumentException">
+            Thrown if any grid step is non-positive or if the denominator is too small, which may lead to numerical instability.
+            </exception>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration">
+            <summary>Represents a grid configuration for univariate PDEs</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Builds a univariate EDP grid configuration</summary>
+            <param name="tBuckets">the time buckets</param>
+            <param name="xBuckets">the x-buckets</param>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeCount">
+            <summary>Returns the number of time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeBuckets">
+            <summary>Returns the time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeIncrements">
+            <summary>Returns the time increments</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XCount">
+            <summary>Returns the number of X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XBuckets">
+            <summary>Returns the X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XIncrements">
+            <summary>Returns the X increments</summary>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE">
+            <summary>Represents a bivariate partial derivative equation</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration)">
+            <summary>Builds a Bivariate Partial Derivative Equation grid</summary>
+            <param name="configuration">the grid configuration</param>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Value(System.Int32,System.Int32,System.Int32)">
+            <summary>Returns the grid value for a given date, x index, and y index</summary>
+            <param name="t">the date index</param>
+            <param name="xIndex">the x index</param>
+            <param name="yIndex">the y index</param>
+            <returns>a double</returns>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.VALUE">
+            <summary>Index of the value matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XDERIVATIVE">
+            <summary>Index of the x derivative matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.YDERIVATIVE">
+            <summary>Index of the y derivative matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XCONVEXITY">
+            <summary>Index of the x second order derivative matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.YCONVEXITY">
+            <summary>Index of the y second order derivative matrix</summary>
+        </member>
+        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XYCONVEXITY">
+            <summary>Index of the xy cross derivative matrix</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Matrices(System.Int32)">
+            <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
+            <param name="t">the date index</param>
+            <returns>a set of <c>Matrix</c></returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Set(System.Int32,Euclid.Matrix)">
+            <summary>Sets the grid value for a given date</summary>
+            <param name="t">the date index</param>
+            <param name="value">the value grid</param>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.ExerciceFrontier(Euclid.Matrix,Euclid.Matrix)">
+            <summary>Computes the exercice frontier</summary>
+            <param name="expected">the expected value matrix</param>
+            <param name="intrinsic">the intrinsic value matrix</param>
+            <returns>a <c>Matrix</c></returns>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Item(System.Int32)">
+            <summary>Gets or sets the grid value for a given time index</summary>
+            <param name="t">the time index</param>
+            <returns>the value grid as a Matrix</returns>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration">
+            <summary>Represents a grid configuration for bivariate PDEs</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
+            <summary>Builds a bivariate EDP grid configuration</summary>
+            <param name="tBuckets">the time buckets</param>
+            <param name="xBuckets">the x-buckets</param>
+            <param name="yBuckets">the y-buckets</param>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeCount">
+            <summary>Returns the number of time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeBuckets">
+            <summary>Returns the time buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeIncrements">
+            <summary>Returns the time increments</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XCount">
+            <summary>Returns the number of X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XBuckets">
+            <summary>Returns the X buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XIncrements">
+            <summary>Returns the X increments</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YCount">
+            <summary>Returns the number of Y buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YBuckets">
+            <summary>Returns the Y buckets</summary>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YIncrements">
+            <summary>Returns the Y increments</summary>
+        </member>
+        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE">
+            <summary>Represents a one-dimensional PDE</summary>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration)">
+            <summary>Builds a univariate PDE (1D)</summary>
+            <param name="configuration">the grid configuration</param>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Value(System.Int32,System.Int32)">
+            <summary>Returns the grid value for a given date, x index</summary>
+            <param name="t">the date index</param>
+            <param name="xIndex">the x index</param>
+            <returns>a double</returns>
+        </member>
+        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(Euclid.Matrix,System.Int32,System.Int32)">
+            <summary>
+            Retropropagates for the given index to the previous step
+            using the given matrix representation of the PDE operator
+            </summary>
+            <param name="operatorMatrix">the operator matrix</param>
+            <param name="anteriorIndex">the index <b>to</b> which the data is retropropagated</param>
+            <param name="posteriorIndex">the index <b>from</b> which the data is retropropagated</param>
+        </member>
+        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Item(System.Int32)">
+            <summary>Sets the grid value for a given date</summary>
+            <param name="t">the date index</param>
+            <param name="value">the value grid</param>
+        </member>
         <member name="T:Euclid.Numerics.PiecewiseFunction">
             <summary>Represents a piecewise function</summary>
         </member>
@@ -1187,6 +1715,12 @@
         </member>
         <member name="F:Euclid.Numerics.FiniteDifferenceScheme.CrankNicholson">
             <summary>Crank Nicholson scheme</summary>
+        </member>
+        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.Imex">
+            <summary>Imex scheme</summary>
+        </member>
+        <member name="F:Euclid.Numerics.FiniteDifferenceScheme.Yanenko">
+            <summary>Yanenko scheme</summary>
         </member>
         <member name="T:Euclid.Numerics.DifferenceForm">
             <summary>
@@ -1230,6 +1764,26 @@
             <param name="function">the function to differentiate</param>
             <param name="bump">the differentiation step</param>
             <returns>the hessian matrix</returns>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Gradient(System.Func{Euclid.Vector,System.Double},Euclid.Vector,Euclid.Numerics.DifferenceForm)">
+            <summary>
+            Gradient of a function
+            </summary>
+            <param name="function"></param>
+            <param name="bump"></param>
+            <param name="form"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Euclid.Numerics.Differentiator.Jacobian(System.Func{Euclid.Vector,Euclid.Vector},Euclid.Vector,Euclid.Numerics.DifferenceForm)">
+            <summary>
+            Jacobian of a function
+            </summary>
+            <param name="function"></param>
+            <param name="bump"></param>
+            <param name="form"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="T:Euclid.Numerics.IntegrationForm">
             <summary>
@@ -1363,142 +1917,513 @@
         <member name="F:Euclid.Numerics.NumericalSeriesStatus.IterationExceeded">
             <summary>The cumulator exceeded its maximum number of iterations</summary>
         </member>
-        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration">
-            <summary>Represents a grid configuration for univariate PDEs</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
-            <summary>Builds a univariate EDP grid configuration</summary>
-            <param name="tBuckets">the time buckets</param>
-            <param name="xBuckets">the x-buckets</param>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeCount">
-            <summary>Returns the number of time buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeBuckets">
-            <summary>Returns the time buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.TimeIncrements">
-            <summary>Returns the time increments</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XCount">
-            <summary>Returns the number of X buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XBuckets">
-            <summary>Returns the X buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration.XIncrements">
-            <summary>Returns the X increments</summary>
-        </member>
-        <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE">
-            <summary>Represents a bivariate partial derivative equation</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration)">
-            <summary>Builds a Bivariate Partial Derivative Equation grid</summary>
-            <param name="configuration">the grid configuration</param>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Value(System.Int32,System.Int32,System.Int32)">
-            <summary>Returns the grid value for a given date, x index, and y index</summary>
-            <param name="t">the date index</param>
-            <param name="xIndex">the x index</param>
-            <param name="yIndex">the y index</param>
-            <returns>a double</returns>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.VALUE">
-            <summary>Index of the value matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XDERIVATIVE">
-            <summary>Index of the x derivative matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.YDERIVATIVE">
-            <summary>Index of the y derivative matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XCONVEXITY">
-            <summary>Index of the x second order derivative matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.YCONVEXITY">
-            <summary>Index of the y second order derivative matrix</summary>
-        </member>
-        <member name="F:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.XYCONVECITY">
-            <summary>Index of the xy cross derivative matrix</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Matrices(System.Int32)">
-            <summary>Returns the value and spatial first and second order derivatives for a given date</summary>
-            <param name="t">the date index</param>
-            <returns>a set of <c>Matrix</c></returns>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.Set(System.Int32,Euclid.Matrix)">
-            <summary>Sets the grid value for a given date</summary>
-            <param name="t">the date index</param>
-            <param name="value">the value grid</param>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariatePDE.ExerciceFrontier(Euclid.Matrix,Euclid.Matrix)">
-            <summary>Computes the exercice frontier</summary>
-            <param name="expected">the expected value matrix</param>
-            <param name="intrinsic">the intrinsic value matrix</param>
-            <returns>a <c>Matrix</c></returns>
-        </member>
-        <member name="T:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration">
-            <summary>Represents a grid configuration for bivariate PDEs</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.#ctor(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">
-            <summary>Builds a bivariate EDP grid configuration</summary>
-            <param name="tBuckets">the time buckets</param>
-            <param name="xBuckets">the x-buckets</param>
-            <param name="yBuckets">the y-buckets</param>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeCount">
-            <summary>Returns the number of time buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeBuckets">
-            <summary>Returns the time buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.TimeIncrements">
-            <summary>Returns the time increments</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XCount">
-            <summary>Returns the number of X buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XBuckets">
-            <summary>Returns the X buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.XIncrements">
-            <summary>Returns the X increments</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YCount">
-            <summary>Returns the number of Y buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YBuckets">
-            <summary>Returns the Y buckets</summary>
-        </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.BivariateGridConfiguration.YIncrements">
-            <summary>Returns the Y increments</summary>
-        </member>
-        <member name="T:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE">
-            <summary>Represents a one-dimensional PDE</summary>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.#ctor(Euclid.Numerics.PartialDifferentialEquations.UnivariateGridConfiguration)">
-            <summary>Builds a univariate PDE (1D)</summary>
-            <param name="configuration">the grid configuration</param>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Value(System.Int32,System.Int32)">
-            <summary>Returns the grid value for a given date, x index</summary>
-            <param name="t">the date index</param>
-            <param name="xIndex">the x index</param>
-            <returns>a double</returns>
-        </member>
-        <member name="M:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Retropropagate(Euclid.Matrix,System.Int32,System.Int32)">
+        <member name="T:Euclid.Optimizers.LevenbergMarquardt">
             <summary>
-            Retropropagates for the given index to the previous step
-            using the given matrix representation of the PDE operator
+            Nonlinear least‑squares optimizer based on the Levenberg–Marquardt algorithm.
+            This optimizer is specifically designed to minimize the sum of squared residuals in a system of nonlinear equations,
+            making it highly effective for curve fitting and parameter estimation problems in scientific computing and engineering.
+            
+            The Levenberg–Marquardt algorithm combines the gradient descent method and the Gauss–Newton method to achieve
+            stable and efficient convergence, particularly near local minima. It interpolates between these two methods
+            depending on the current distance to the solution.
+            
+            It is important to note that the Levenberg–Marquardt algorithm is fundamentally a *minimization* algorithm.
+            It cannot be used to *maximize* a function because it is not designed to locate maxima, and it does not 
+            follow gradients in the direction of increasing function values.
             </summary>
-            <param name="operatorMatrix">the operator matrix</param>
-            <param name="anteriorIndex">the index <b>to</b> which the data is retropropagated</param>
-            <param name="posteriorIndex">the index <b>from</b> which the data is retropropagated</param>
         </member>
-        <member name="P:Euclid.Numerics.PartialDifferentialEquations.UnivariatePDE.Item(System.Int32)">
-            <summary>Sets the grid value for a given date</summary>
-            <param name="t">the date index</param>
-            <param name="value">the value grid</param>
+        <member name="M:Euclid.Optimizers.LevenbergMarquardt.#ctor(Euclid.Vector,System.Func{Euclid.Vector,Euclid.Vector},System.Func{Euclid.Vector,Euclid.Matrix},Euclid.Vector,System.Int32,System.Int32,System.Double,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Euclid.Optimizers.LevenbergMarquardt"/> class.
+            </summary>
+            <param name="initialGuess">Initial parameter estimate.</param>
+            <param name="residuals">Function computing the residual vector r(x).</param>
+            <param name="jacobian">Function computing the Jacobian matrix J(x) of the residuals. If null, finite differences will be used.</param>
+            <param name="bump">Initial step size for finite differences in the Jacobian. If null, a default value will be used.</param>
+            <param name="maxIter">Maximum number of iterations.</param>
+            <param name="maxStaticIter">Maximum number of static iterations allowed without improvement.</param>
+            <param name="gradientThreshold">Tolerance for the gradient norm. Optimization stops if ||J^T r|| ≤ gradientTolerance.</param>
+            <param name="functionThreshold"> Relative tolerance on the change in function value.Optimization stops if:|f_n - f_{n-1}| ≤ functionThreshold × (f_{n-1} + functionThreshold)
+            </param>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.InitialGuess">
+            <summary>Gets or sets the initial guess for the parameters.</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.Bump">
+            <summary> Gets or sets the bump vector used for finite differences in the Jacobian computation./// </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.Jacobian">
+            <summary> Gets or sets the function that computes the Jacobian matrix of the residuals./// </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.Residuals">
+            <summary> Gets or sets the function that computes the residuals vector./// </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.Status">
+            <summary> Gets the current status of the optimizer. </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.Result">
+            <summary> Gets the current result of the optimization. </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.Error">
+            <summary> Gets the current error value. </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.Errors">
+            <summary>Gets the list of error values during the optimization process.</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.LevenbergMarquardt.Evaluations">
+            <summary>Gets the number of evaluations performed during the optimization.</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.LevenbergMarquardt.Optimize(System.Double,System.Double)">
+            <summary>
+            Performs the optimization using the Levenberg‑Marquardt algorithm with a fixed tau and penaltyFactor.
+            </summary>
+            <param name="tau"></param>
+            <param name="penaltyFactor"></param>
+        </member>
+        <member name="M:Euclid.Optimizers.LevenbergMarquardt.OptimalLambda(System.Double,Euclid.Vector,Euclid.Vector,System.Double,System.Double)">
+            <summary>
+            Computes the updated lambda value for the Levenberg-Marquardt algorithm based on the current error and proposed step.
+            If the new solution reduces the error, lambda is decreased (making the step closer to Gauss-Newton).
+            Otherwise, lambda is increased (making the step closer to gradient descent).
+            </summary>
+            <param name="error">The current error (sum of squared residuals) at the current solution.</param>
+            <param name="solution">The current solution vector.</param>
+            <param name="delta">The proposed step vector.</param>
+            <param name="lambda">The current value of the damping parameter lambda.</param>
+            <param name="penaltyFactor">The factor by which lambda is increased or decreased.</param>
+            <returns>
+            The updated value of lambda to be used in the next iteration.
+            </returns>
+        </member>
+        <member name="M:Euclid.Optimizers.LevenbergMarquardt.OptimizeAdaptive(System.Double,System.Double)">
+            <summary>
+            Performs the optimization using the Levenberg‑Marquardt algorithm with adaptive lambda adjustment based on METHODS FOR NONLINEAR LEAST SQUARES PROBLEMS by  K.Madsen,H.B.Nielsen,O.Tingleff
+            </summary>
+            <param name="tau"> tau is a small positive number used to scale the initial damping factor.</param>
+            <param name="initialPenaltyFactor"> Initial value of the penalty factor.</param>
+        </member>
+        <member name="M:Euclid.Optimizers.LevenbergMarquardt.OptimalLambdaAdaptive(System.Double,Euclid.Vector,Euclid.Vector,Euclid.Vector,System.Double,System.Double,System.Double)">
+            <summary>
+            Computes the optimal lambda and penalty factor for the Levenberg-Marquardt algorithm with adaptive adjustment.
+            </summary>
+            <param name="error">Current error (||r||^2).</param>
+            <param name="solution">Current solution.</param>
+            <param name="delta">Proposed step.</param>
+            <param name="gradient">Current gradient.</param>
+            <param name="lambda">Current value of lambda.</param>
+            <param name="penaltyFactor">Current penalty factor.</param>
+            <param name="initialPenaltyFactor">Initial value of the penalty factor.</param>
+            <returns>Updated tuple (lambda, penaltyFactor).</returns>
+        </member>
+        <member name="T:Euclid.Optimizers.PatternSearch">
+            <summary>Pattern search class</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.PatternSearch.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},Euclid.Vector,Euclid.Vector,Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double,System.Double)">
+            <summary>Builds a Particle Swarm Optimizer</summary>
+            <param name="fitnessFunction">the function to optimize</param>
+            <param name="feasabilityFunction">the feasability function</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="initialPoint">the initial point</param>
+            <param name="shocks">the shocks' values</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+            <param name="maxStaticIterations">the maximum number of static iterations</param>
+            <param name="epsilon">the convergence threshold</param>
+            <param name="shrinkageFactor">the shrinkage factor</param>
+            <param name="expandFactor">the expansion factor</param>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.Epsilon">
+            <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.MaxIterations">
+            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.MaxStaticIterations">
+            <summary>Gets the maximum number of stationary iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.Status">
+            <summary>Gets the current status of the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.OptimizationType">
+            <summary>Gets the type of optimization performed (min or max)</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.ShrinkageFactor">
+            <summary>Gets the shrinkage factor</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.Result">
+            <summary>The result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.PatternSearch.Convergence">
+            <summary>Gets the details of the convergence (Vector, error)</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.PatternSearch.Optimize(System.Boolean)">
+            <summary>Optimizes the function using Pattern Search</summary>
+        </member>
+        <member name="T:Euclid.Optimizers.SimulatedAnnealing">
+            <summary>Simulated annealing optimization class </summary>
+        </member>
+        <member name="M:Euclid.Optimizers.SimulatedAnnealing.#ctor(Euclid.Vector,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},System.Func{System.Int32,System.Double},System.Func{Euclid.Vector,Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32)">
+            <summary>Builds a solver using the simulated annealing method</summary>
+            <param name="initialGuess">the initial guess</param>
+            <param name="f">the function to optimize for</param>
+            <param name="feasibility">defines the feasible territory</param>
+            <param name="temperatureFunc">provides the cooling trajectory</param>
+            <param name="neighbourGenerator">generates random neighbours</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+            <param name="optimizationType">the optimization type</param>
+        </member>
+        <member name="P:Euclid.Optimizers.SimulatedAnnealing.Function">
+            <summary>Gets and sets the function to solve for</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.SimulatedAnnealing.InitialGuess">
+            <summary>Gets and sets the initial guess</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.SimulatedAnnealing.MaxIterations">
+            <summary>Gets and sets the maximum number of iterations</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.SimulatedAnnealing.TrackConvergence">
+            <summary>Gets and sets whether the details of the convergence are tracked</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.SimulatedAnnealing.Result">
+            <summary> Gets the result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.SimulatedAnnealing.Convergence">
+            <summary>Gets the details of the convergence (value, error)</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.SimulatedAnnealing.Optimize">
+            <summary>Optimizes the function</summary>
+        </member>
+        <member name="T:Euclid.Optimizers.GaussianHillClimb1D">
+            <summary>Gaussian hill-climbing optimization  algorithm for a 1D function</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.GaussianHillClimb1D.#ctor(System.Double,System.Func{System.Double,System.Double},System.Func{System.Double,System.Boolean},Euclid.Optimizers.OptimizationType,System.Double,System.Double,System.Int32)">
+            <summary>Builds a solver using the simulated annealing method</summary>
+            <param name="initialGuess">the initial guess</param>
+            <param name="fitness">the function to solve for</param>
+            <param name="feasibility">the feasibility function</param>
+            <param name="sigma0">the initial standard deviation</param>
+            <param name="gamma">the cooling down speed</param>
+            <param name="iterations">the maximum number of iterations</param>
+            <param name="optimizationType">the optimization type</param>
+        </member>
+        <member name="M:Euclid.Optimizers.GaussianHillClimb1D.#ctor(System.Double,System.Func{System.Double,System.Double},Euclid.Optimizers.OptimizationType,System.Double,System.Double,System.Double,System.Int32)">
+            <summary>Builds a solver using the simulated annealing method</summary>
+            <param name="initialGuess">the initial guess</param>
+            <param name="fitness">the function to solve for</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="lowerBound">the lower bound of the searching scope</param>
+            <param name="upperBound">the upper bound of the searching scope</param>
+            <param name="tolerance">the final accuracy</param>
+            <param name="iterations">the maximum number of iterations</param>
+        </member>
+        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.Function">
+            <summary>Gets and sets the function to solve for</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.InitialGuess">
+            <summary>Gets and sets the initial guess</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.Iterations">
+            <summary>Gets and sets the number of iterations</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.TrackConvergence">
+            <summary>Gets and sets whether the details of the convergence are tracked</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.Result">
+            <summary> Gets the result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.Convergence">
+            <summary>Gets the details of the convergence (value, error)</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.GaussianHillClimb1D.Optimize">
+            <summary>Optimizes the function</summary>
+        </member>
+        <member name="T:Euclid.Optimizers.GradientDescent">
+            <summary>Class used to perform a gradient descent on any multivariate function</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.GradientDescent.#ctor(Euclid.Vector,Euclid.Optimizers.LineSearch,System.Func{Euclid.Vector,System.Double},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double)">
+            <summary>Builds a GradientDescent helper</summary>
+            <param name="initialGuess">the initial guess Vector</param>
+            <param name="lineSearch">the line search method</param>
+            <param name="function">the function to minimize</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="maxIterations">the maximum number of iterations in the gradient</param>
+            <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
+            <param name="gradientNormThreshold">the threshold for the gradient norm</param>
+        </member>
+        <member name="M:Euclid.Optimizers.GradientDescent.#ctor(Euclid.Vector,Euclid.Optimizers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double)">
+            <summary>Gradient descent constructor</summary>
+            <param name="initialGuess">the initial guess Vector</param>
+            <param name="lineSearch">the line search method</param>
+            <param name="function">the function to minimize</param>
+            <param name="gradient">the gradient function to minimize</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="maxIterations">the maximum number of iterations in the gradient</param>
+            <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
+            <param name="gradientNormThreshold">the threshold for the gradient norm</param>
+        </member>
+        <member name="M:Euclid.Optimizers.GradientDescent.#ctor(Euclid.Vector,Euclid.Optimizers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},System.Func{Euclid.Vector,Euclid.Matrix},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double)">
+            <summary>Gradient descent constructor</summary>
+            <param name="initialGuess">the initial guess Vector</param>
+            <param name="lineSearch">the line search method</param>
+            <param name="function">the function to minimize</param>
+            <param name="gradient">the gradient of the function to minimize</param>
+            <param name="hessian">the hessian matrix of the function to minimize</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="maxIterations">the maximum number of iterations in the gradient</param>
+            <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
+            <param name="gradientNormThreshold">the threshold for the gradient norm</param>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.LineSearch">
+            <summary>Gets and sets the line search method used to optimize the step</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.Function">
+            <summary>Gets and sets the function to minimize</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.Status">
+            <summary>The final status of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.Error">
+            <summary> Returns the final value of the function</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.Result">
+            <summary>The result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.InitialGuess">
+            <summary>Gets and sets the initial guess</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.Feasibility">
+            <summary>Gets and sets the feasibility function</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.Convergence">
+            <summary>Gets the details of the convergence (gradient norm, error)</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.Evaluations">
+            <summary>Gets the number of times the function was evaluated </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.MaxIterations">
+            <summary>Gets the maximum number of iterations </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.MaxLineSearchIterations">
+            <summary>Gets the maxium number of iterations in the line search </summary>
+        </member>
+        <member name="P:Euclid.Optimizers.GradientDescent.OptimizationType">
+            <summary>Gets the optimization type</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.GradientDescent.Optimize(System.Double)">
+            <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
+            <param name="momentum">the momentum of the descent</param>
+        </member>
+        <member name="M:Euclid.Optimizers.GradientDescent.OptimizeBFGS">
+            <summary>Minimizes the function using the BFGS gradient descent</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.GradientDescent.OptimizeConjugate">
+            <summary>Optimizes the function using the conjugate gradient descent</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.GradientDescent.OptimizeUnderBoxConstraint(System.Double,Euclid.Vector,Euclid.Vector)">
+            <summary>Optimizes the function using classic Gradient Descent inside a box</summary>
+            <param name="momentum">the momentum of the descent</param>
+            <param name="lowBound">the lower bounds of the box</param>
+            <param name="upBound">the upper bounds of the box</param>
+        </member>
+        <member name="M:Euclid.Optimizers.GradientDescent.ConstrainedDirection(Euclid.Vector,Euclid.Vector,Euclid.Vector,Euclid.Vector)">
+            <summary>Returns a corrected version of the descent direction in order to avoid breaching the box constraints</summary>
+            <param name="x">the position</param>
+            <param name="d">the direction</param>
+            <param name="l">the upper bound</param>
+            <param name="u">the lower bound</param>
+            <returns>a <c>Vector</c></returns>
+        </member>
+        <member name="T:Euclid.Optimizers.LineSearch">
+            <summary>Line search methods used for the gradient descent</summary>
+        </member>
+        <member name="F:Euclid.Optimizers.LineSearch.Naive">
+            <summary>Naïve line search by dividing the alpha until the functional is lowered</summary>
+        </member>
+        <member name="F:Euclid.Optimizers.LineSearch.Lowest">
+            <summary>Line search by finding the lowest point in all the powers of the alpha factor</summary>
+        </member>
+        <member name="F:Euclid.Optimizers.LineSearch.Armijo">
+            <summary>Armijo criteria</summary>
+        </member>
+        <member name="F:Euclid.Optimizers.LineSearch.ArmijoGoldStein">
+            <summary>Armijo Goldstein criteria </summary>
+        </member>
+        <member name="F:Euclid.Optimizers.LineSearch.StrongWolfe">
+            <summary>Strong Wolfe criteria </summary>
+        </member>
+        <member name="T:Euclid.Optimizers.OptimizationType">
+            <summary>The type of optimization</summary>
+        </member>
+        <member name="F:Euclid.Optimizers.OptimizationType.Min">
+            <summary>Minimization</summary>
+        </member>
+        <member name="F:Euclid.Optimizers.OptimizationType.Max">
+            <summary>Maximization</summary>
+        </member>
+        <member name="T:Euclid.Optimizers.NelderMead">
+            <summary>Nelder-Mead optimization class</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.NelderMead.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>Builds a Nelder Mead optimizer</summary>
+            <param name="feasibility">the feasibility function</param>
+            <param name="function">the function to optimize</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="initialSimplex">the initial population</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+            <param name="epsilon">the convergence threshold</param>
+            <param name="alpha">the reflection coefficient</param>
+            <param name="gamma">the expansion coefficient</param>
+            <param name="rho">the contaction coefficient</param>
+            <param name="sigma">the shrink coefficient</param>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Epsilon">
+            <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.MaxIterations">
+            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Status">
+            <summary>Gets the current status of the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.OptimizationType">
+            <summary>Gets the type of optimization performed (min or max)</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Dimension">
+            <summary> Returns the problem's dimension</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Alpha">
+            <summary>Returns the reflexion coefficient</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Gamma">
+            <summary>Returns the expansion coefficient</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Rho">
+            <summary>Returns the contraction coefficient</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Sigma">
+            <summary>Returns the shrink coefficient</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Result">
+            <summary>The result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.NelderMead.Convergence">
+            <summary>Gets the details of the convergence (Vector, error)</summary>
+        </member>
+        <member name="T:Euclid.Optimizers.NelderMead.VectorValuePair">
+            <summary>Minimizes the function using the Nelder Mead algorithm</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.NelderMead.Optimize">
+            <summary>Minimizes the function</summary>
+        </member>
+        <member name="T:Euclid.Optimizers.DifferentialEvolutionOptimizer">
+            <summary>Optimizes a function on a space using Differential Evolution</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.DifferentialEvolutionOptimizer.#ctor(System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},System.Int32,System.Double,System.Double)">
+            <summary>Builds a differential evolution optimizer for a constrained space</summary>
+            <param name="initialPopulation">the initial population of agents</param>
+            <param name="optimizationType">the optimization type (maximize or minimize)</param>
+            <param name="fitnessFunction">the fitness function</param>
+            <param name="feasabilityFunction">the feasability function</param>
+            <param name="maxIterations">the maximum iterations</param>
+            <param name="crossoverProbability">the crossover probability (handles the frequency of crossover)</param>
+            <param name="differentialWeight">the differential weight (handles the intensity of mutation)</param>
+        </member>
+        <member name="M:Euclid.Optimizers.DifferentialEvolutionOptimizer.#ctor(System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Func{Euclid.Vector,System.Double},System.Int32,System.Double,System.Double)">
+            <summary>Builds a differential evolution optimizer for a constrained space</summary>
+            <param name="initialPopulation">the initial population of agents</param>
+            <param name="optimizationType">the optimization type (maximize or minimize)</param>
+            <param name="fitnessFunction">the fitness function</param>
+            <param name="maxIterations">the maximum iterations</param>
+            <param name="crossoverProbability">the crossover probability (handles the frequency of crossover)</param>
+            <param name="differentialWeight">the differential weight (handles the intensity of mutation)</param>
+        </member>
+        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.MaxIterations">
+            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.Status">
+            <summary>Gets the current status of the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.OptimizationType">
+            <summary>Gets the type of optimization performed (min or max)</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.CrossoverProbability">
+            <summary>Returns the crossover probability</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.DifferentialWeight">
+            <summary>Returns the differential weight</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.Result">
+            <summary>The result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.Convergence">
+            <summary>Gets the details of the convergence (Vector, error)</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.DifferentialEvolutionOptimizer.Optimize(System.Boolean)">
+            <summary>Optimizes the fitness function using Differential Evolution</summary>
+        </member>
+        <member name="T:Euclid.Optimizers.ParticleSwarmOptimizer">
+            <summary>Particle Swarm Optimization class</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>Builds a Particle Swarm Optimizer</summary>
+            <param name="function">the function to optimize</param>
+            <param name="feasability">the feasability function</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="initialPopulation">a generator of seed vectors</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+            <param name="maxStaticIterations">the maximum number of static iterations</param>
+            <param name="epsilon">the convergence threshold</param>
+            <param name="attractionToParticleBest">the attraction to particle best factor</param>
+            <param name="attractionToOverallBest">the attraction to overall best factor</param>
+            <param name="velocityInertia">the velocity inertia</param>
+            <param name="shrinkageFactor">the shrinkage factor</param>
+        </member>
+        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.#ctor(System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
+            <summary>Builds a Particle Swarm Optimizer</summary>
+            <param name="function">the function to optimize</param>
+            <param name="optimizationType">the optimization type</param>
+            <param name="initialPopulation">a generator of seed vectors</param>
+            <param name="maxIterations">the maximum number of iterations</param>
+            <param name="maxStaticIterations">the maximum number of static iterations</param>
+            <param name="epsilon">the convergence threshold</param>
+            <param name="attractionToParticleBest">the attraction to particle best factor</param>
+            <param name="attractionToOverallBest">the attraction to overall best factor</param>
+            <param name="velocityInertia">the velocity inertia</param>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Epsilon">
+            <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.MaxIterations">
+            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.MaxStaticIterations">
+            <summary>Gets the maximum number of stationary iterations allowed to the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Status">
+            <summary>Gets the current status of the optimization process</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.OptimizationType">
+            <summary>Gets the type of optimization performed (min or max)</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.SwarmSize">
+            <summary> Gets the size of the swarm</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.VelocityInertia">
+            <summary>Gets the inertia applied to the velocity</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.AttractionToParticleBest">
+            <summary>Gets the attraction to particle best</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.AttractionToOverallBest">
+            <summary>Gets the attraction to overall best</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Result">
+            <summary>The result of the solver</summary>
+        </member>
+        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Convergence">
+            <summary>Gets the details of the convergence (Vector, error)</summary>
+        </member>
+        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.Optimize(System.Boolean)">
+            <summary>Optimizes the function using Particle Swarm Optimization</summary>
         </member>
         <member name="T:Euclid.Point3D">
             <summary>Represents a 2-dimensional point</summary>
@@ -5050,6 +5975,26 @@
             <param name="v">The right hand side of the equation</param>
             <returns>The solution x of A*x=v</returns>
         </member>
+        <member name="M:Euclid.Matrix.SolveTridiagonalFast(Euclid.Vector)">
+            <summary>
+            Solves the equation Ax = d using the Thomas algorithm (a specialized method for tridiagonal matrices).
+            </summary>
+            <param name="d"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Euclid.Matrix.SolveBanded(Euclid.Vector,System.Int32,System.Int32)">
+            <summary>
+            Solves the equation Ax = d using the banded matrix algorithm.
+            </summary>
+            <param name="d"></param>
+            <param name="lower"></param>
+            <param name="upper"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
         <member name="M:Euclid.Matrix.Column(System.Int32)">
             <summary>Extracts a specific column</summary>
             <param name="j">the specified column</param>
@@ -5272,415 +6217,6 @@
             <summary>Returns a string that represents the matrix</summary>
             <returns>a string that represents the matrix</returns>
         </member>
-        <member name="T:Euclid.Optimizers.PatternSearch">
-            <summary>Pattern search class</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.PatternSearch.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},Euclid.Vector,Euclid.Vector,Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double,System.Double)">
-            <summary>Builds a Particle Swarm Optimizer</summary>
-            <param name="fitnessFunction">the function to optimize</param>
-            <param name="feasabilityFunction">the feasability function</param>
-            <param name="optimizationType">the optimization type</param>
-            <param name="initialPoint">the initial point</param>
-            <param name="shocks">the shocks' values</param>
-            <param name="maxIterations">the maximum number of iterations</param>
-            <param name="maxStaticIterations">the maximum number of static iterations</param>
-            <param name="epsilon">the convergence threshold</param>
-            <param name="shrinkageFactor">the shrinkage factor</param>
-        </member>
-        <member name="P:Euclid.Optimizers.PatternSearch.Epsilon">
-            <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.PatternSearch.MaxIterations">
-            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.PatternSearch.MaxStaticIterations">
-            <summary>Gets the maximum number of stationary iterations allowed to the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.PatternSearch.Status">
-            <summary>Gets the current status of the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.PatternSearch.OptimizationType">
-            <summary>Gets the type of optimization performed (min or max)</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.PatternSearch.ShrinkageFactor">
-            <summary>Gets the shrinkage factor</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.PatternSearch.Result">
-            <summary>The result of the solver</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.PatternSearch.Convergence">
-            <summary>Gets the details of the convergence (Vector, error)</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.PatternSearch.Optimize(System.Boolean)">
-            <summary>Optimizes the function using Pattern Search</summary>
-        </member>
-        <member name="T:Euclid.Optimizers.SimulatedAnnealing">
-            <summary>Simulated annealing optimization class </summary>
-        </member>
-        <member name="M:Euclid.Optimizers.SimulatedAnnealing.#ctor(Euclid.Vector,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},System.Func{System.Int32,System.Double},System.Func{Euclid.Vector,Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32)">
-            <summary>Builds a solver using the simulated annealing method</summary>
-            <param name="initialGuess">the initial guess</param>
-            <param name="f">the function to optimize for</param>
-            <param name="feasibility">defines the feasible territory</param>
-            <param name="temperatureFunc">provides the cooling trajectory</param>
-            <param name="neighbourGenerator">generates random neighbours</param>
-            <param name="maxIterations">the maximum number of iterations</param>
-            <param name="optimizationType">the optimization type</param>
-        </member>
-        <member name="P:Euclid.Optimizers.SimulatedAnnealing.Function">
-            <summary>Gets and sets the function to solve for</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.SimulatedAnnealing.InitialGuess">
-            <summary>Gets and sets the initial guess</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.SimulatedAnnealing.MaxIterations">
-            <summary>Gets and sets the maximum number of iterations</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.SimulatedAnnealing.TrackConvergence">
-            <summary>Gets and sets whether the details of the convergence are tracked</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.SimulatedAnnealing.Result">
-            <summary> Gets the result of the solver</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.SimulatedAnnealing.Convergence">
-            <summary>Gets the details of the convergence (value, error)</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.SimulatedAnnealing.Optimize">
-            <summary>Optimizes the function</summary>
-        </member>
-        <member name="T:Euclid.Optimizers.GaussianHillClimb1D">
-            <summary>Gaussian hill-climbing optimization  algorithm for a 1D function</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.GaussianHillClimb1D.#ctor(System.Double,System.Func{System.Double,System.Double},System.Func{System.Double,System.Boolean},Euclid.Optimizers.OptimizationType,System.Double,System.Double,System.Int32)">
-            <summary>Builds a solver using the simulated annealing method</summary>
-            <param name="initialGuess">the initial guess</param>
-            <param name="fitness">the function to solve for</param>
-            <param name="feasibility">the feasibility function</param>
-            <param name="sigma0">the initial standard deviation</param>
-            <param name="gamma">the cooling down speed</param>
-            <param name="iterations">the maximum number of iterations</param>
-            <param name="optimizationType">the optimization type</param>
-        </member>
-        <member name="M:Euclid.Optimizers.GaussianHillClimb1D.#ctor(System.Double,System.Func{System.Double,System.Double},Euclid.Optimizers.OptimizationType,System.Double,System.Double,System.Double,System.Int32)">
-            <summary>Builds a solver using the simulated annealing method</summary>
-            <param name="initialGuess">the initial guess</param>
-            <param name="fitness">the function to solve for</param>
-            <param name="optimizationType">the optimization type</param>
-            <param name="lowerBound">the lower bound of the searching scope</param>
-            <param name="upperBound">the upper bound of the searching scope</param>
-            <param name="tolerance">the final accuracy</param>
-            <param name="iterations">the maximum number of iterations</param>
-        </member>
-        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.Function">
-            <summary>Gets and sets the function to solve for</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.InitialGuess">
-            <summary>Gets and sets the initial guess</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.Iterations">
-            <summary>Gets and sets the number of iterations</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.TrackConvergence">
-            <summary>Gets and sets whether the details of the convergence are tracked</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.Result">
-            <summary> Gets the result of the solver</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GaussianHillClimb1D.Convergence">
-            <summary>Gets the details of the convergence (value, error)</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.GaussianHillClimb1D.Optimize">
-            <summary>Optimizes the function</summary>
-        </member>
-        <member name="T:Euclid.Optimizers.GradientDescent">
-            <summary>Class used to perform a gradient descent on any multivariate function</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.GradientDescent.#ctor(Euclid.Vector,Euclid.Optimizers.LineSearch,System.Func{Euclid.Vector,System.Double},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double)">
-            <summary>Builds a GradientDescent helper</summary>
-            <param name="initialGuess">the initial guess Vector</param>
-            <param name="lineSearch">the line search method</param>
-            <param name="function">the function to minimize</param>
-            <param name="optimizationType">the optimization type</param>
-            <param name="maxIterations">the maximum number of iterations in the gradient</param>
-            <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
-            <param name="gradientNormThreshold">the threshold for the gradient norm</param>
-        </member>
-        <member name="M:Euclid.Optimizers.GradientDescent.#ctor(Euclid.Vector,Euclid.Optimizers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double)">
-            <summary>Gradient descent constructor</summary>
-            <param name="initialGuess">the initial guess Vector</param>
-            <param name="lineSearch">the line search method</param>
-            <param name="function">the function to minimize</param>
-            <param name="gradient">the gradient function to minimize</param>
-            <param name="optimizationType">the optimization type</param>
-            <param name="maxIterations">the maximum number of iterations in the gradient</param>
-            <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
-            <param name="gradientNormThreshold">the threshold for the gradient norm</param>
-        </member>
-        <member name="M:Euclid.Optimizers.GradientDescent.#ctor(Euclid.Vector,Euclid.Optimizers.LineSearch,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,Euclid.Vector},System.Func{Euclid.Vector,Euclid.Matrix},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double)">
-            <summary>Gradient descent constructor</summary>
-            <param name="initialGuess">the initial guess Vector</param>
-            <param name="lineSearch">the line search method</param>
-            <param name="function">the function to minimize</param>
-            <param name="gradient">the gradient of the function to minimize</param>
-            <param name="hessian">the hessian matrix of the function to minimize</param>
-            <param name="optimizationType">the optimization type</param>
-            <param name="maxIterations">the maximum number of iterations in the gradient</param>
-            <param name="maxLineSearchIterations">the maximum number of iterations in the line search</param>
-            <param name="gradientNormThreshold">the threshold for the gradient norm</param>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.LineSearch">
-            <summary>Gets and sets the line search method used to optimize the step</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.Function">
-            <summary>Gets and sets the function to minimize</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.Status">
-            <summary>The final status of the solver</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.Error">
-            <summary> Returns the final value of the function</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.Result">
-            <summary>The result of the solver</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.InitialGuess">
-            <summary>Gets and sets the initial guess</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.Feasibility">
-            <summary>Gets and sets the feasibility function</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.Convergence">
-            <summary>Gets the details of the convergence (gradient norm, error)</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.Evaluations">
-            <summary>Gets the number of times the function was evaluated </summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.MaxIterations">
-            <summary>Gets the maximum number of iterations </summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.MaxLineSearchIterations">
-            <summary>Gets the maxium number of iterations in the line search </summary>
-        </member>
-        <member name="P:Euclid.Optimizers.GradientDescent.OptimizationType">
-            <summary>Gets the optimization type</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.GradientDescent.Optimize(System.Double)">
-            <summary>Minimizes the function using classic Gradient Descent algorithm</summary>
-            <param name="momentum">the momentum of the descent</param>
-        </member>
-        <member name="M:Euclid.Optimizers.GradientDescent.OptimizeBFGS">
-            <summary>Minimizes the function using the BFGS gradient descent</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.GradientDescent.OptimizeConjugate">
-            <summary>Optimizes the function using the conjugate gradient descent</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.GradientDescent.OptimizeUnderBoxConstraint(System.Double,Euclid.Vector,Euclid.Vector)">
-            <summary>Optimizes the function using classic Gradient Descent inside a box</summary>
-            <param name="momentum">the momentum of the descent</param>
-            <param name="lowBound">the lower bounds of the box</param>
-            <param name="upBound">the upper bounds of the box</param>
-        </member>
-        <member name="M:Euclid.Optimizers.GradientDescent.ConstrainedDirection(Euclid.Vector,Euclid.Vector,Euclid.Vector,Euclid.Vector)">
-            <summary>Returns a corrected version of the descent direction in order to avoid breaching the box constraints</summary>
-            <param name="x">the position</param>
-            <param name="d">the direction</param>
-            <param name="l">the upper bound</param>
-            <param name="u">the lower bound</param>
-            <returns>a <c>Vector</c></returns>
-        </member>
-        <member name="T:Euclid.Optimizers.LineSearch">
-            <summary>Line search methods used for the gradient descent</summary>
-        </member>
-        <member name="F:Euclid.Optimizers.LineSearch.Naive">
-            <summary>Naïve line search by dividing the alpha until the functional is lowered</summary>
-        </member>
-        <member name="F:Euclid.Optimizers.LineSearch.Lowest">
-            <summary>Line search by finding the lowest point in all the powers of the alpha factor</summary>
-        </member>
-        <member name="F:Euclid.Optimizers.LineSearch.Armijo">
-            <summary>Armijo criteria</summary>
-        </member>
-        <member name="F:Euclid.Optimizers.LineSearch.ArmijoGoldStein">
-            <summary>Armijo Goldstein criteria </summary>
-        </member>
-        <member name="F:Euclid.Optimizers.LineSearch.StrongWolfe">
-            <summary>Strong Wolfe criteria </summary>
-        </member>
-        <member name="T:Euclid.Optimizers.OptimizationType">
-            <summary>The type of optimization</summary>
-        </member>
-        <member name="F:Euclid.Optimizers.OptimizationType.Min">
-            <summary>Minimization</summary>
-        </member>
-        <member name="F:Euclid.Optimizers.OptimizationType.Max">
-            <summary>Maximization</summary>
-        </member>
-        <member name="T:Euclid.Optimizers.NelderMead">
-            <summary>Nelder-Mead optimization class</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.NelderMead.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
-            <summary>Builds a Nelder Mead optimizer</summary>
-            <param name="feasibility">the feasibility function</param>
-            <param name="function">the function to optimize</param>
-            <param name="optimizationType">the optimization type</param>
-            <param name="initialSimplex">the initial population</param>
-            <param name="maxIterations">the maximum number of iterations</param>
-            <param name="epsilon">the convergence threshold</param>
-            <param name="alpha">the reflection coefficient</param>
-            <param name="gamma">the expansion coefficient</param>
-            <param name="rho">the contaction coefficient</param>
-            <param name="sigma">the shrink coefficient</param>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Epsilon">
-            <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.MaxIterations">
-            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Status">
-            <summary>Gets the current status of the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.OptimizationType">
-            <summary>Gets the type of optimization performed (min or max)</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Dimension">
-            <summary> Returns the problem's dimension</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Alpha">
-            <summary>Returns the reflexion coefficient</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Gamma">
-            <summary>Returns the expansion coefficient</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Rho">
-            <summary>Returns the contraction coefficient</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Sigma">
-            <summary>Returns the shrink coefficient</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Result">
-            <summary>The result of the solver</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.NelderMead.Convergence">
-            <summary>Gets the details of the convergence (Vector, error)</summary>
-        </member>
-        <member name="T:Euclid.Optimizers.NelderMead.VectorValuePair">
-            <summary>Minimizes the function using the Nelder Mead algorithm</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.NelderMead.Optimize">
-            <summary>Minimizes the function</summary>
-        </member>
-        <member name="T:Euclid.Optimizers.DifferentialEvolutionOptimizer">
-            <summary>Optimizes a function on a space using Differential Evolution</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.DifferentialEvolutionOptimizer.#ctor(System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Func{Euclid.Vector,System.Double},System.Func{Euclid.Vector,System.Boolean},System.Int32,System.Double,System.Double)">
-            <summary>Builds a differential evolution optimizer for a constrained space</summary>
-            <param name="initialPopulation">the initial population of agents</param>
-            <param name="optimizationType">the optimization type (maximize or minimize)</param>
-            <param name="fitnessFunction">the fitness function</param>
-            <param name="feasabilityFunction">the feasability function</param>
-            <param name="maxIterations">the maximum iterations</param>
-            <param name="crossoverProbability">the crossover probability (handles the frequency of crossover)</param>
-            <param name="differentialWeight">the differential weight (handles the intensity of mutation)</param>
-        </member>
-        <member name="M:Euclid.Optimizers.DifferentialEvolutionOptimizer.#ctor(System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Func{Euclid.Vector,System.Double},System.Int32,System.Double,System.Double)">
-            <summary>Builds a differential evolution optimizer for a constrained space</summary>
-            <param name="initialPopulation">the initial population of agents</param>
-            <param name="optimizationType">the optimization type (maximize or minimize)</param>
-            <param name="fitnessFunction">the fitness function</param>
-            <param name="maxIterations">the maximum iterations</param>
-            <param name="crossoverProbability">the crossover probability (handles the frequency of crossover)</param>
-            <param name="differentialWeight">the differential weight (handles the intensity of mutation)</param>
-        </member>
-        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.MaxIterations">
-            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.Status">
-            <summary>Gets the current status of the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.OptimizationType">
-            <summary>Gets the type of optimization performed (min or max)</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.CrossoverProbability">
-            <summary>Returns the crossover probability</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.DifferentialWeight">
-            <summary>Returns the differential weight</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.Result">
-            <summary>The result of the solver</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.DifferentialEvolutionOptimizer.Convergence">
-            <summary>Gets the details of the convergence (Vector, error)</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.DifferentialEvolutionOptimizer.Optimize(System.Boolean)">
-            <summary>Optimizes the fitness function using Differential Evolution</summary>
-        </member>
-        <member name="T:Euclid.Optimizers.ParticleSwarmOptimizer">
-            <summary>Particle Swarm Optimization class</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.#ctor(System.Func{Euclid.Vector,System.Boolean},System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double)">
-            <summary>Builds a Particle Swarm Optimizer</summary>
-            <param name="function">the function to optimize</param>
-            <param name="feasability">the feasability function</param>
-            <param name="optimizationType">the optimization type</param>
-            <param name="initialPopulation">a generator of seed vectors</param>
-            <param name="maxIterations">the maximum number of iterations</param>
-            <param name="maxStaticIterations">the maximum number of static iterations</param>
-            <param name="epsilon">the convergence threshold</param>
-            <param name="attractionToParticleBest">the attraction to particle best factor</param>
-            <param name="attractionToOverallBest">the attraction to overall best factor</param>
-            <param name="velocityInertia">the velocity inertia</param>
-            <param name="shrinkageFactor">the shrinkage factor</param>
-        </member>
-        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.#ctor(System.Func{Euclid.Vector,System.Double},System.Collections.Generic.IEnumerable{Euclid.Vector},Euclid.Optimizers.OptimizationType,System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
-            <summary>Builds a Particle Swarm Optimizer</summary>
-            <param name="function">the function to optimize</param>
-            <param name="optimizationType">the optimization type</param>
-            <param name="initialPopulation">a generator of seed vectors</param>
-            <param name="maxIterations">the maximum number of iterations</param>
-            <param name="maxStaticIterations">the maximum number of static iterations</param>
-            <param name="epsilon">the convergence threshold</param>
-            <param name="attractionToParticleBest">the attraction to particle best factor</param>
-            <param name="attractionToOverallBest">the attraction to overall best factor</param>
-            <param name="velocityInertia">the velocity inertia</param>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Epsilon">
-            <summary>Gets the tolerance used to check if the optimization process is stationary</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.MaxIterations">
-            <summary>Gets the maximum number of iterations allowed to the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.MaxStaticIterations">
-            <summary>Gets the maximum number of stationary iterations allowed to the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Status">
-            <summary>Gets the current status of the optimization process</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.OptimizationType">
-            <summary>Gets the type of optimization performed (min or max)</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.SwarmSize">
-            <summary> Gets the size of the swarm</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.VelocityInertia">
-            <summary>Gets the inertia applied to the velocity</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.AttractionToParticleBest">
-            <summary>Gets the attraction to particle best</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.AttractionToOverallBest">
-            <summary>Gets the attraction to overall best</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Result">
-            <summary>The result of the solver</summary>
-        </member>
-        <member name="P:Euclid.Optimizers.ParticleSwarmOptimizer.Convergence">
-            <summary>Gets the details of the convergence (Vector, error)</summary>
-        </member>
-        <member name="M:Euclid.Optimizers.ParticleSwarmOptimizer.Optimize(System.Boolean)">
-            <summary>Optimizes the function using Particle Swarm Optimization</summary>
-        </member>
         <member name="T:Euclid.Polynomial">
             <summary>
             Standard polynomial
@@ -5722,9 +6258,7 @@
             <returns>a <c>Complex</c></returns>
         </member>
         <member name="M:Euclid.Polynomial.ComplexRoots">
-            <summary>
-            Computes the roots of polynomial p via Weierstrass iteration.
-            </summary>
+            <summary>Computes the roots of polynomial p via Weierstrass iteration</summary>
             <returns>the complex roots of the <c>Polynomial</c></returns>
         </member>
         <member name="M:Euclid.Polynomial.Roots">
@@ -5992,7 +6526,7 @@
             Class used to specify the end criterion or criteria for all iterative optimisation classes
             </summary>
         </member>
-        <member name="M:Euclid.Solvers.EndCriteria.#ctor(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Double},System.Nullable{System.Double})">
+        <member name="M:Euclid.Solvers.EndCriteria.#ctor(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Double},System.Nullable{System.Double},Euclid.Solvers.FunctionToleranceMode)">
             <summary>End criteria constructor</summary>
             <param name="maxIterations">the maximum number of iterations</param>
             <param name="maxStaticIterations">the maximum number of iterations without substancial change</param>
@@ -6669,36 +7203,71 @@
             <param name="k"></param>
             <returns></returns>
         </member>
-        <member name="T:Euclid.SparseMatrix">
+        <member name="M:Euclid.SparseMatrix.SolveWithBiCGSTAB(Euclid.Vector,System.Int32,System.Double)">
             <summary>
-            Matrix of double
+            Solves the linear system Ax = b for x using the preconditioned BiConjugate Gradient Stabilized (BiCGSTAB) method.
+            This is an iterative solver suitable for large, sparse, non-symmetric square matrices.
             </summary>
+            <param name="b">The right-hand side vector.</param>
+            <param name="maxIterations">The maximum number of iterations to perform.</param>
+            <param name="tolerance">The convergence tolerance for the norm of the residual.</param>
+            <returns>The solution vector x. May be an approximate solution if convergence is not reached.</returns>
         </member>
-        <member name="M:Euclid.SparseMatrix.Create(System.Int32,System.Int32)">
-            <summary> Builds a  sparse matrix filled with the specified value </summary>
-            <param name="rows">the number of rows</param>
-            <param name="cols">the number of columns</param>
+        <member name="M:Euclid.SparseMatrix.ApplyIlu0Preconditioner(Euclid.SparseMatrix,Euclid.Vector)">
+            <summary>
+            Applies the ILU(0) preconditioner by solving Mz = r, where M=LU.
+            </summary>
+            <param name="luFactors">The sparse matrix containing the L and U factors.</param>
+            <param name="inputVector">The vector 'r' to precondition.</param>
+            <returns>The resulting vector 'z'.</returns>
         </member>
-        <member name="P:Euclid.SparseMatrix.Columns">
-            <summary>Returns the number of columns of the <c>Matrix</c></summary>
+        <member name="M:Euclid.SparseMatrix.op_Multiply(Euclid.SparseMatrix,Euclid.Vector)">
+            <summary>Multiplies a sparse matrix by a vector.</summary>
+            <param name="m">The left hand side sparse matrix.</param>
+            <param name="v">The right hand side vector.</param>
+            <returns>The vector result of the multiplication.</returns>
         </member>
-        <member name="P:Euclid.SparseMatrix.Rows">
-            <summary>Returns the number of rows of the <c>Matrix</c></summary>
+        <member name="M:Euclid.SparseMatrix.op_Multiply(Euclid.SparseMatrix,System.Double)">
+            <summary>Multiplies a <c>SparseMatrix</c> by a scalar.</summary>
+            <param name="m">The left hand side <c>SparseMatrix</c>.</param>
+            <param name="f">The scalar.</param>
+            <returns>The <c>SparseMatrix</c> result of the multiplication.</returns>
         </member>
-        <member name="P:Euclid.SparseMatrix.IsSquare">
-            <summary>Specifies whether the <c>Matrix</c> is square</summary>
+        <member name="M:Euclid.SparseMatrix.op_Multiply(System.Double,Euclid.SparseMatrix)">
+            <summary>Multiplies a <c>SparseMatrix</c> by a scalar.</summary>
+            <param name="f">The scalar.</param>
+            <param name="m">The right hand side <c>SparseMatrix</c>.</param>
+            <returns>The <c>SparseMatrix</c> result of the multiplication.</returns>
         </member>
-        <member name="P:Euclid.SparseMatrix.CountNonZeros">
-            <summary>Returns the number of non zero values in the <c>SparseMatrix</c></summary>
+        <member name="M:Euclid.SparseMatrix.op_Division(Euclid.SparseMatrix,System.Double)">
+            <summary>Divides all the coefficients of a <c>SparseMatrix</c> by a scalar.</summary>
+            <param name="m">The left hand side <c>SparseMatrix</c>.</param>
+            <param name="f">The scalar.</param>
+            <returns>The <c>SparseMatrix</c> result of the division.</returns>
         </member>
-        <member name="P:Euclid.SparseMatrix.Item(System.Int32,System.Int32)">
-            <summary>Allows reading and modifying the coefficients of the <c>Matrix</c></summary>
-            <param name="i">the row</param>
-            <param name="j">the column</param>
-            <returns>a double value</returns>
+        <member name="M:Euclid.SparseMatrix.Add(Euclid.SparseMatrix,Euclid.SparseMatrix,System.Double)">
+            <summary>Performs a matrix addition or subtraction, optimized for sparse structures.</summary>
+            <param name="m1">First matrix.</param>
+            <param name="m2">Second matrix.</param>
+            <param name="sign">1.0 for addition (m1 + m2), -1.0 for subtraction (m1 - m2).</param>
+            <returns>The resulting sparse matrix.</returns>
         </member>
-        <member name="P:Euclid.SparseMatrix.Clone">
-            <summary>Returns a deep copy of the <c>Matrix</c></summary>
+        <member name="M:Euclid.SparseMatrix.op_UnaryNegation(Euclid.SparseMatrix)">
+            <summary>Returns the opposite of the <c>SparseMatrix</c>.</summary>
+            <param name="m">The input matrix.</param>
+            <returns>The <c>SparseMatrix</c> opposite.</returns>
+        </member>
+        <member name="M:Euclid.SparseMatrix.op_Addition(Euclid.SparseMatrix,Euclid.SparseMatrix)">
+            <summary>Performs the matrix addition.</summary>
+            <param name="m1">The left hand side matrix.</param>
+            <param name="m2">The right hand side matrix.</param>
+            <returns>A <c>SparseMatrix</c>.</returns>
+        </member>
+        <member name="M:Euclid.SparseMatrix.op_Subtraction(Euclid.SparseMatrix,Euclid.SparseMatrix)">
+            <summary>Performs a matrix subtraction.</summary>
+            <param name="m1">The left hand side.</param>
+            <param name="m2">The right hand side.</param>
+            <returns>The <c>SparseMatrix</c> result of the subtraction.</returns>
         </member>
         <member name="T:Euclid.Text.Distance">
             <summary>Helps computing string distances</summary>

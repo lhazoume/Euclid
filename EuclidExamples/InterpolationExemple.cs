@@ -29,7 +29,7 @@ public class InterpolationExample
             // Sample the function
             double[] yData = xDataPoints.Select(func).ToArray();
 
-            CubicSpline spline = new CubicSpline(allowExtrapolation: true, bcType: BoundaryType.Clamped);
+            CubicSpline spline = new CubicSpline(allowExtrapolation: true, boundaryType: BoundaryType.Clamped);
             spline.SetData(xDataPoints, yData);
 
             Console.WriteLine($"-- Fonction: {name} --");
