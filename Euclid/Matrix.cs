@@ -523,6 +523,173 @@ namespace Euclid
 
             return x;
         }
+        /// <summary>
+        /// Solves the equation Ax = d using the Thomas algorithm (a specialized method for tridiagonal matrices).
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public Vector SolveTridiagonalFast(Vector d)
+        {
+            #region Initial validations
+            if (d == null)
+                throw new ArgumentNullException(nameof(d));
+
+            if (!this.IsSquare)
+                throw new InvalidOperationException("Thomas algorithm can only be applied to square matrices.");
+
+            int n = this.Rows;
+            if (d.Size != n)
+                throw new InvalidOperationException("The dimension of vector d must match the dimension of the matrix.");
+
+            // Trivial case
+            if (n == 0)
+                return Vector.Create(0);
+
+            #endregion
+
+            #region Diagonal extraction
+            // a: sub-diagonal (size n-1)
+            // b: main diagonal (size n)
+            // c: super-diagonal (size n-1)
+            double[] b = new double[n];
+            if (n == 1)
+            {
+                if (Math.Abs(this[0, 0]) < _ACCURACY_) throw new InvalidOperationException("Singular matrix (zero diagonal element).");
+                return Vector.Create(new[] { d[0] / this[0, 0] });
+            }
+
+            double[] a = new double[n - 1];
+            double[] c = new double[n - 1];
+
+            for (int i = 0; i < n; i++)
+            {
+                b[i] = this[i, i];
+                if (i < n - 1) c[i] = this[i, i + 1];
+                if (i > 0) a[i - 1] = this[i, i - 1];
+            }
+            #endregion
+
+            #region Thomas algorithm
+
+            double[] cPrime = new double[n - 1];
+            double[] dPrime = new double[n];
+
+            # region Forward elimination
+            if (Math.Abs(b[0]) < _ACCURACY_)
+                throw new InvalidOperationException("Algorithm failed: the first pivot is zero. The matrix is singular.");
+
+            cPrime[0] = c[0] / b[0];
+            dPrime[0] = d[0] / b[0];
+
+            for (int i = 1; i < n; i++)
+            {
+                double m = b[i] - a[i - 1] * cPrime[i - 1];
+                if (Math.Abs(m) < _ACCURACY_)
+                    throw new InvalidOperationException($"Algorithm failed: null pivot at step {i}. The matrix is singular.");
+
+                if (i < n - 1)
+                    cPrime[i] = c[i] / m;
+                
+                dPrime[i] = (d[i] - a[i - 1] * dPrime[i - 1]) / m;
+            }
+            #endregion
+
+            #region Back substitution
+            Vector x = Vector.Create(n);
+            x[n - 1] = dPrime[n - 1];
+            for (int i = n - 2; i >= 0; i--)
+                x[i] = dPrime[i] - cPrime[i] * x[i + 1];
+            #endregion
+
+            #endregion
+
+            return x;
+        }
+        /// <summary>
+        /// Solves the equation Ax = d using the banded matrix algorithm.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="lower"></param>
+        /// <param name="upper"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public Vector SolveBanded(Vector d, int lower, int upper)
+        {
+            #region Initial validations
+            if (d == null)
+                throw new ArgumentNullException(nameof(d));
+            if (!IsSquare)
+                throw new InvalidOperationException("SolveBanded applies only to square matrices.");
+
+            int n = Rows;
+            if (d.Size != n)
+                throw new InvalidOperationException("The size of the vector must match the dimension of the matrix.");
+            // If the matrix is tridiagonal, use the specialized method
+            if (lower == 1 && upper == 1)
+                return SolveTridiagonalFast(d);
+
+            #endregion
+
+            double[] b = new double[n]; 
+            for (int i = 0; i < n; i++)
+                b[i] = d[i];
+
+            double[,] ab = new double[lower + upper + 1, n];
+            for (int j = 0; j < n; j++)
+            {
+                int iMin = Math.Max(0, j - upper);
+                int iMax = Math.Min(n - 1, j + lower);
+                for (int i = iMin; i <= iMax; i++)
+                    ab[upper + (i - j), j] = this[i, j];
+            }
+
+            #region Forward elimination
+            for (int k = 0; k < n; k++)
+            {
+                double pivot = ab[upper, k];
+                if (Math.Abs(pivot) < _ACCURACY_)
+                    throw new InvalidOperationException($"Null pivot detected at position {k},{k}.");
+
+                int lastRow = Math.Min(n - 1, k + lower);
+                int lastCol = Math.Min(n - 1, k + upper);
+
+                for (int i = k + 1; i <= lastRow; i++)
+                {
+                    double factor = ab[upper + (i - k), k] / pivot;
+                    if (Math.Abs(factor) < _ACCURACY_) continue;
+
+                    for (int j = k; j <= lastCol; j++)
+                    {
+                        int rowIndex = upper + (i - j);
+                        int pivotRowIndex = upper + (k - j);
+                        ab[rowIndex, j] -= factor * ab[pivotRowIndex, j];
+                    }
+                    b[i] -= factor * b[k];
+                }
+            }
+            #endregion
+            #region Back substitution
+            Vector x = Vector.Create(n);
+            for (int i = n - 1; i >= 0; i--)
+            {
+                double sum = 0;
+                int lastCol = Math.Min(n - 1, i + upper);
+                for (int j = i + 1; j <= lastCol; j++)
+                    sum += ab[upper + (i - j), j] * x[j];
+
+                double diag = ab[upper, i];
+                if (Math.Abs(diag) < _ACCURACY_)
+                    throw new InvalidOperationException($"Null pivot in back substitution at position {i},{i}.");
+
+                x[i] = (b[i] - sum) / diag;
+            }
+            #endregion
+
+            return x;
+        }
 
         #endregion
 
@@ -885,6 +1052,8 @@ namespace Euclid
             return matrix;
         }
 
+        public static Matrix CreateIdentityMatrix(int n) => CreateIdentityMatrix(n, n);
+
         /// <summary>Builds a square symmetric band-matrix</summary>
         /// <param name="size">the size of the matrix</param>
         /// <param name="values">the values of the diagonals and sub-diagonals</param>
@@ -1162,6 +1331,8 @@ namespace Euclid
             }
             return sb.ToString();
         }
+
         #endregion
+
     }
 }

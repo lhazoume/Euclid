@@ -136,6 +136,9 @@
     <Compile Include="Interpolations\Interpolator1D\QuadraticSpline.cs" />
     <Compile Include="Interpolations\Interpolator1D\TransformedInterpolator.cs" />
     <Compile Include="Interpolations\KernelInterpolation.cs" />
+    <Compile Include="Numerics\PartialDifferentialEquations\GridGenerator.cs" />
+    <Compile Include="Numerics\PartialDifferentialEquations\SpatialOperator.cs" />
+    <Compile Include="Numerics\PartialDifferentialEquations\Stencil.cs" />
     <Compile Include="Numerics\PiecewiseFunction.cs" />
     <Compile Include="Optimizers\LevenbergMarquardt.cs" />
     <Compile Include="Point3D.cs" />

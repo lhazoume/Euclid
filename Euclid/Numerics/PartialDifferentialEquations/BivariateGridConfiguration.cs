@@ -52,7 +52,6 @@ namespace Euclid.Numerics.PartialDifferentialEquations
         #region Y Buckets
         /// <summary>Returns the number of Y buckets</summary>
         public int YCount => _yBuckets.Length;
-
         /// <summary>Returns the Y buckets</summary>
         public double[] YBuckets => _yBuckets;
 
