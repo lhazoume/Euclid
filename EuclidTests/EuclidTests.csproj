@@ -67,6 +67,7 @@
     <Compile Include="IndexedSeries\DataFrameTests.cs" />
     <Compile Include="IndexedSeries\HeaderTests.cs" />
     <Compile Include="IndexedSeries\SeriesTests.cs" />
+    <Compile Include="Optimizers\LevenbergMarquardtTests.cs" />
     <Compile Include="LinearAlgebra\EigenDecompositionTests.cs" />
     <Compile Include="MatrixTests.cs" />
     <Compile Include="Objects\MapTests.cs" />
@@ -78,7 +79,6 @@
     <Compile Include="Solvers\NewtonRaphsonTests.cs" />
     <Compile Include="Solvers\ParticleSwarmOptimizerTests.cs" />
     <Compile Include="Solvers\RootBracketingTests.cs" />
-    <Compile Include="SparseMatrixTests.cs" />
     <Compile Include="VectorTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -536,9 +536,7 @@ namespace Euclid
 
         #region Gamma functions
 
-        /// <summary>
-        /// Returns the gamma function of the specified number.
-        /// </summary>
+        /// <summary> Returns the gamma function of the specified number </summary>
         /// <param name="x"></param>
         /// <returns></returns>
         public static double Gamma(double x)
@@ -551,8 +549,8 @@ namespace Euclid
                          2.07448227648435975150E-1,
                          4.94214826801497100753E-1,
                          9.99999999999999996796E-1
-                     };
-            double[] Q = {
+                     },
+                     Q = {
                          -2.31581873324120129819E-5,
                          5.39605580493303397842E-4,
                          -4.45641913851797240494E-3,
@@ -563,9 +561,8 @@ namespace Euclid
                          1.00000000000000000320E0
                      };
 
-            double p, z;
-
-            double q = Math.Abs(x);
+            double p, z,
+                q = Math.Abs(x);
 
             if (q > 33.0)
             {
@@ -637,18 +634,16 @@ namespace Euclid
 
         }
 
-        /// <summary>
-        /// Returns the complemented incomplete gamma function.
-        /// </summary>
+        /// <summary> Returns the complemented incomplete gamma function </summary>
         /// <param name="a"></param>
         /// <param name="x"></param>
         /// <returns></returns>
         public static double IncompleteUpperGamma(double a, double x)
         {
-            double big = 4.503599627370496e15;
-            double biginv = 2.22044604925031308085e-16;
-            double ans, ax, c, yc, r, t, y, z;
-            double pk, pkm1, pkm2, qk, qkm1, qkm2;
+            double big = 4.503599627370496e15,
+                biginv = 2.22044604925031308085e-16,
+                ans, ax, c, yc, r, t, y, z,
+                pk, pkm1, pkm2, qk, qkm1, qkm2;
 
             if (x <= 0 || a <= 0) return 1.0;
 
@@ -702,37 +697,118 @@ namespace Euclid
             return ans * ax;
         }
 
+        /// <summary> Returns the lower incomplete regularized gamma function </summary>
+        /// <param name="a"></param>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static double IncompleteRegularizedLowerGamma(double a, double x)
+        {
+            const double epsilon = 0.000000000000001,
+                big = 4503599627370496.0,
+                bigInv = 2.22044604925031308085e-16;
+
+            if (a < 0d)
+            {
+                throw new ArgumentOutOfRangeException(nameof(a), "Value must not be negative (zero is ok).");
+            }
+
+            if (x < 0d)
+            {
+                throw new ArgumentOutOfRangeException(nameof(x), "Value must not be negative (zero is ok).");
+            }
+
+            if (a == 0.0)
+            {
+                return 1d;
+            }
+
+            if (x == 0.0)
+            {
+                return 0d;
+            }
+
+            double ax = (a * Math.Log(x)) - x - lgamma(a);
+            if (ax < -709.78271289338399)
+            {
+                return a < x ? 1d : 0d;
+            }
+
+            if (x <= 1 || x <= a)
+            {
+                double r2 = a,
+                    c2 = 1,
+                    ans2 = 1;
+
+                do
+                {
+                    r2++;
+                    c2 = c2 * x / r2;
+                    ans2 += c2;
+                }
+                while ((c2 / ans2) > epsilon);
+
+                return Math.Exp(ax) * ans2 / a;
+            }
+
+            int c = 0;
+            double y = 1 - a,
+                z = x + y + 1, 
+                p3 = 1, 
+                q3 = x,
+                p2 = x + 1,
+                q2 = z * x, 
+                ans = p2 / q2,
+                error;
+
+            do
+            {
+                c++;
+                y += 1;
+                z += 2;
+                double yc = y * c,
+                    p = (p2 * z) - (p3 * yc),
+                    q = (q2 * z) - (q3 * yc);
+
+                if (q != 0)
+                {
+                    double nextans = p / q;
+                    error = Math.Abs((ans - nextans) / nextans);
+                    ans = nextans;
+                }
+                else
+                {
+                    // zero div, skip
+                    error = 1;
+                }
+
+                // shift
+                p3 = p2;
+                p2 = p;
+                q3 = q2;
+                q2 = q;
+
+                // normalize fraction when the numerator becomes large
+                if (Math.Abs(p) > big)
+                {
+                    p3 *= bigInv;
+                    p2 *= bigInv;
+                    q3 *= bigInv;
+                    q2 *= bigInv;
+                }
+            }
+            while (error > epsilon);
+
+            return 1d - (Math.Exp(ax) * ans);
+
+        }
+
         /// <summary>Returns the incomplete gamma function.</summary>
         /// <param name="a"></param>
         /// <param name="x"></param>
         /// <returns></returns>
         public static double IncompleteLowerGamma(double a, double x)
         {
-            double ans, ax, c, r;
-
-            if (x <= 0 || a <= 0) return 0.0;
-
-            if (x > 1.0 && x > a) return 1.0 - IncompleteUpperGamma(a, x);
-
-            /* Compute  x**a * exp(-x) / gamma(a)  */
-            ax = a * Math.Log(x) - x - lgamma(a);
-            if (ax < -MAXLOG) return (0.0);
-
-            ax = Math.Exp(ax);
-
-            /* power series */
-            r = a;
-            c = 1.0;
-            ans = 1.0;
-
-            do
-            {
-                r += 1.0;
-                c *= x / r;
-                ans += c;
-            } while (c / ans > MACHEP);
-
-            return (ans * ax / a);
+            return IncompleteRegularizedLowerGamma(a, x) * Gamma(a);
 
         }
 
@@ -742,14 +818,14 @@ namespace Euclid
         /// </summary>
         public static double DiGamma(double x)
         {
-            double y;
-            double nz = 0.0;
+            double y,
+                nz = 0.0;
             bool negative = (x <= 0);
 
             if (negative)
             {
-                double q = x;
-                double p = Math.Floor(q);
+                double q = x,
+                    p = Math.Floor(q);
                 negative = true;
 
                 if (Math.Abs(p - q) < 1E-9)
@@ -784,8 +860,7 @@ namespace Euclid
             }
             else
             {
-                double s = x;
-                double w = 0.0;
+                double s = x, w = 0.0;
 
                 while (s < 10.0)
                 {
@@ -820,9 +895,7 @@ namespace Euclid
 
         #region Beta functions
 
-        /// <summary>
-        /// Returns the beta function
-        /// </summary>
+        /// <summary> Returns the beta function </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
@@ -831,116 +904,114 @@ namespace Euclid
             return Gamma(x) * Gamma(y) / Gamma(x + y);
         }
 
-        /// <summary>
-        /// Return the incomplete regularized beta function
-        /// </summary>
+        /// <summary> Return the incomplete regularized beta function </summary>
         /// <param name="t">the integral's upper bound</param>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
         public static double IncompleteRegularizedBeta(double t, double x, double y)
         {
-            return IncompleteBeta(x, y, t) / Beta(x, y);
+            if (x <= 0.0 || y <= 0.0)
+                throw new
+                    ArithmeticException("ibeta: Domain error!");
+            if ((t < 0.0) || (t > 1.0))
+            {
+                throw new ArithmeticException("ibeta: Domain error!");
+            }
+
+            double bt = (t == 0.0 || t == 1.0)
+                ? 0.0
+                : Math.Exp(lgamma(x + y) - lgamma(x) - lgamma(y) + (x * Math.Log(t)) + (y * Math.Log(1.0 - t)));
+
+            bool symmetryTransformation = t >= (x + 1.0) / (x + y + 2.0);
+
+            /* Continued fraction representation */
+            double eps = Math.Pow(2, -53);
+            long intValue = BitConverter.DoubleToInt64Bits(0.0);
+            intValue += 1;
+
+
+            // Note that long.MinValue has the same bit pattern as -0.0.
+            if (intValue == long.MinValue)
+            {
+                return 0;
+            }
+            double fpmin = BitConverter.Int64BitsToDouble(intValue);
+
+            if (symmetryTransformation)
+            {
+                t = 1.0 - t;
+                (x, y) = (y, x);
+            }
+
+            double qab = x + y,
+                qap = x + 1.0,
+                qam = x - 1.0,
+                c = 1.0,
+                d = 1.0 - (qab * t / qap);
+
+            if (Math.Abs(d) < fpmin)
+            {
+                d = fpmin;
+            }
+
+            d = 1.0 / d;
+            double h = d;
+
+            for (int m = 1, m2 = 2; m <= 50000; m++, m2 += 2)
+            {
+                double aa = m * (y - m) * t / ((qam + m2) * (x + m2));
+                d = 1.0 + (aa * d);
+
+                if (Math.Abs(d) < fpmin)
+                {
+                    d = fpmin;
+                }
+
+                c = 1.0 + (aa / c);
+                if (Math.Abs(c) < fpmin)
+                {
+                    c = fpmin;
+                }
+
+                d = 1.0 / d;
+                h *= d * c;
+                aa = -(x + m) * (qab + m) * t / ((x + m2) * (qap + m2));
+                d = 1.0 + (aa * d);
+
+                if (Math.Abs(d) < fpmin)
+                {
+                    d = fpmin;
+                }
+
+                c = 1.0 + (aa / c);
+
+                if (Math.Abs(c) < fpmin)
+                {
+                    c = fpmin;
+                }
+
+                d = 1.0 / d;
+                double del = d * c;
+                h *= del;
+
+                if (Math.Abs(del - 1.0) <= eps)
+                {
+                    return symmetryTransformation ? 1.0 - (bt * h / x) : bt * h / x;
+                }
+            }
+            return symmetryTransformation ? 1.0 - (bt * h / x) : bt * h / x;
         }
 
-        /// <summary>
-        /// Returns the incomplete beta function evaluated from zero to T.
-        /// </summary>
+
+        /// <summary> Returns the incomplete beta function evaluated from zero to T </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="t"></param>
         /// <returns></returns>
         public static double IncompleteBeta(double x, double y, double t)
         {
-            double a_, b_, t_, x_, xc, w, y_;
-            bool flag;
-
-            if (x <= 0.0 || y <= 0.0)
-                throw new
-                    ArithmeticException("ibeta: Domain error!");
-
-            if ((t <= 0.0) || (t >= 1.0))
-            {
-                if (t == 0.0) return 0.0;
-                if (t == 1.0) return 1.0;
-                throw new ArithmeticException("ibeta: Domain error!");
-            }
-
-            flag = false;
-            if ((y * t) <= 1.0 && t <= 0.95)
-            {
-                t_ = PowerSeries(x, y, t);
-                return t_;
-            }
-
-            w = 1.0 - t;
-
-            /* Reverse a and b if x is greater than the mean. */
-            if (t > (x / (x + y)))
-            {
-                flag = true;
-                a_ = y;
-                b_ = x;
-                xc = t;
-                x_ = w;
-            }
-            else
-            {
-                a_ = x;
-                b_ = y;
-                xc = w;
-                x_ = t;
-            }
-
-            if (flag && (b_ * x_) <= 1.0 && x_ <= 0.95)
-            {
-                t_ = PowerSeries(a_, b_, x_);
-                if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
-                else t_ = 1.0 - t_;
-                return t_;
-            }
-
-            /* Choose expansion for better convergence. */
-            y_ = x_ * (a_ + b_ - 2.0) - (a_ - 1.0);
-            if (y_ < 0.0)
-                w = incbcf(a_, b_, x_);
-            else
-                w = incbd(a_, b_, x_) / xc;
-
-            /* Multiply w by the factor
-                   a      b   _             _     _
-                  x  (1-x)   | (a+b) / ( a | (a) | (b) ) .   */
-
-            y_ = a_ * Math.Log(x_);
-            t_ = b_ * Math.Log(xc);
-            if ((a_ + b_) < MAXGAM && Math.Abs(y_) < MAXLOG && Math.Abs(t_) < MAXLOG)
-            {
-                t_ = Math.Pow(xc, b_);
-                t_ *= Math.Pow(x_, a_);
-                t_ /= a_;
-                t_ *= w;
-                t_ *= Gamma(a_ + b_) / (Gamma(a_) * Gamma(b_));
-                if (flag)
-                {
-                    if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
-                    else t_ = 1.0 - t_;
-                }
-                return t_;
-            }
-            /* Resort to logarithms.  */
-            y_ += t_ + lgamma(a_ + b_) - lgamma(a_) - lgamma(b_);
-            y_ += Math.Log(w / a_);
-            if (y_ < MINLOG)
-                t_ = 0.0;
-            else
-                t_ = Math.Exp(y_);
-
-            if (flag)
-            {
-                if (t_ <= MACHEP) t_ = 1.0 - MACHEP;
-                else t_ = 1.0 - t_;
-            }
-            return t_;
+            return IncompleteRegularizedBeta(t, x, y) * Beta(x, y);
         }
 
         #endregion
@@ -1051,9 +1122,9 @@ namespace Euclid
         public static double SupBrownianBridgeCDF(double x)
         {
             if (x <= 0) return 0; // the probability that the sup of an absolute value of a brownian bridge is zero is null. 
-            double sum = 0;
-            double numberOfStep = Math.Min(1000, (3 / x));
-            double u = -1, v = 1, c1 = Math.Exp(-2 * x * x), c2 = Math.Exp(-4 * x * x);
+            double sum = 0,
+                numberOfStep = Math.Min(1000, (3 / x)),
+                u = -1, v = 1, c1 = Math.Exp(-2 * x * x), c2 = Math.Exp(-4 * x * x);
 
             for (int i = 0; i < numberOfStep; i++)
             {
@@ -1061,7 +1132,6 @@ namespace Euclid
                 sum += u;
                 v *= c2;
             }
-
             return 2 * sum;
         }
 
@@ -1604,6 +1674,30 @@ namespace Euclid
                 else s = Math.Exp(t);
             }
             return s;
+        }
+
+        /// <summary>Returns harmonic function</summary>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        public static double Harmonic(double k)
+        {
+            if (Math.Round(k) == k) {
+                double harmonic = 0.0;
+
+                for (int i = 1; i <= k; i++)
+                {
+                    harmonic += 1.0 / i;
+                }
+
+                return harmonic;
+            }
+            else
+            {
+                double eulerGamma = 0.57721566490153286060;
+                return eulerGamma + DiGamma(k+1);
+            };
+
+
         }
     }
 }

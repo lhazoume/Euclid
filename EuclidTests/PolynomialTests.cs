@@ -101,7 +101,7 @@ namespace Euclid.Tests
         public void ToStringTest1()
         {
             Polynomial p = new Polynomial(1, 2, 3);
-            Assert.AreEqual("1.00+2.00x+3.00x^2", p.ToString("0.00"));
+            Assert.AreEqual("1,00+2,00x+3,00x^2", p.ToString("0.00"));
         }
 
         [TestMethod()]

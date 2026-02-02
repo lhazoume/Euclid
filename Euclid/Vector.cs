@@ -638,5 +638,6 @@ namespace Euclid
             return string.Join(";", _data.Select(d => d.ToString(format)));
         }
         #endregion
+
     }
 }

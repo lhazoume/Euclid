@@ -49,10 +49,6 @@
     <Compile Include="VectorCases.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Benchmarking\Benchmarking.csproj">
-      <Project>{c6da9c79-9068-4fc3-a9cf-570238e22f4b}</Project>
-      <Name>Benchmarking</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Euclid\Euclid.csproj">
       <Project>{c685aef9-4e07-40c7-ac2f-ff66c8a3a851}</Project>
       <Name>Euclid</Name>

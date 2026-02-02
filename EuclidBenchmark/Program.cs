@@ -1,4 +1,4 @@
-﻿using Benchmarking;
+﻿using Euclid.Benchmarking;
 using System;
 using System.Collections.Generic;
 
@@ -16,12 +16,14 @@ namespace EuclidBenchmark
 
         private static CaseSet CaseSet()
         {
-            List<Case> cases = new List<Case>();
-            cases.Add(new Case("MultiplyScalar", 10000000, VectorCases.MultiplyScalar));
-            cases.Add(new Case("MultiplyVector", 10000000, VectorCases.MultiplyVector));
-            cases.Add(new Case("AddVector", 10000000, VectorCases.AddVector));
-            cases.Add(new Case("AddVectorScalar", 10000000, VectorCases.AddVectorScalar));
-            cases.Add(new Case("SubstractVectorScalar", 10000000, VectorCases.SubstractVectorScalar));
+            List<Case> cases = new List<Case>
+            {
+                new Case("MultiplyScalar", 10000000, VectorCases.MultiplyScalar),
+                new Case("MultiplyVector", 10000000, VectorCases.MultiplyVector),
+                new Case("AddVector", 10000000, VectorCases.AddVector),
+                new Case("AddVectorScalar", 10000000, VectorCases.AddVectorScalar),
+                new Case("SubstractVectorScalar", 10000000, VectorCases.SubstractVectorScalar)
+            };
             return new CaseSet(cases);
         }
     }

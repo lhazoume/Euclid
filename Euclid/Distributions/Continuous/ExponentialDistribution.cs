@@ -1,6 +1,6 @@
-﻿using Euclid.Histograms;
-using System;
+﻿using System;
 using System.Linq;
+using Euclid.Histograms;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -12,49 +12,53 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private ExponentialDistribution(double lambda, Random randomSource)
-        {
-            if (lambda <= 0) throw new ArgumentException("λ has to be positive");
-            _lambda = lambda;
-            _beta = 1 / _lambda;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
-            _support = new Interval(0, double.PositiveInfinity, true, false);
-        }
-
-        /// <summary>
-        /// Builds a Exponential distribution
-        /// </summary>
+        /// <summary>Builds an exponential distribution</summary>
         /// <param name="lambda">the rate</param>
         public ExponentialDistribution(double lambda)
-            : this(lambda, new Random(Guid.NewGuid().GetHashCode()))
-        { }
+        {
+            if (lambda <= 0) throw new ArgumentException("lambda has to be positive");
+            _lambda = lambda;
+            _beta = 1 / _lambda;
+            _support = new Interval(0, double.PositiveInfinity, true, false);
+        }
+        #endregion
+
+        #region Accessors
+        /// <summary>Gets the distribution's mean</summary>
+        public override double Mean => _beta;
+
+        /// <summary>Gets the distribution's median</summary>
+        public override double Median => _beta * Math.Log(2);
+
+        /// <summary>Gets the distribution's mode </summary>
+        public override double Mode => 0;
+
+        /// <summary>Gets the distribution's standard deviation</summary>
+        public override double StandardDeviation => _beta;
+
+        /// <summary>Gets the distribution's variance</summary>
+        public override double Variance => _beta * _beta;
+
+        /// <summary> Gets the distribution's mode</summary>
+        public override double Skewness => 2;
+
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support => _support;
+
+        /// <summary>Gets the distribution's entropy </summary>
+        public override double Entropy => Math.Log(Math.E * _beta);
+
+        /// <summary>Gets the distribution's lambda parameter</summary>
+        public double Lambda => _lambda;
         #endregion
 
         #region Methods
-
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static ExponentialDistribution Fit(FittingMethod method, double[] sample)
-        {
-            if (method == FittingMethod.Moments)
-            {
-                double avg = sample.Average();
-
-                double beta = (avg * Math.Log(2) + 1) / (1 + Math.Log(2) * Math.Log(2));
-                return new ExponentialDistribution(1 / beta);
-            }
-
-            throw new NotImplementedException();
-        }
-
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>
         /// <returns>the cumulative distribution at location x</returns>
         public override double CumulativeDistribution(double x)
         {
-            if (x < 0) return 0;
-            else return 1 - Math.Exp(-_lambda * x);
+            return (x <= 0) ? 0 : 1 - Math.Exp(-_lambda * x);
         }
 
         /// <summary>Computes the inverse of the cumulative distribution function(InvCDF) for the distribution at the given probability.This is also known as the quantile or percent point function</summary>
@@ -70,8 +74,7 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>double</c></returns>
         public override double ProbabilityDensity(double x)
         {
-            if (x < 0) return 0;
-            else return _lambda * Math.Exp(-_lambda * x);
+            return (x <= 0) ? 0 : _lambda * Math.Exp(-_lambda * x);
         }
 
         /// <summary>Evaluates the moment-generating function for a given t</summary>
@@ -81,54 +84,50 @@ namespace Euclid.Distributions.Continuous
         {
             if (t < _lambda)
                 return _lambda / (_lambda - t);
-            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower than the rate");
+            throw new ArgumentOutOfRangeException(nameof(t), "the argument of the MGF should be lower than the rate");
         }
 
-        /// <summary> Generates a sequence of samples from the normal distribution using the algorithm</summary>
+        /// <summary>Builds a sample of random variables under this distribution</summary>
         /// <param name="numberOfPoints">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int numberOfPoints)
+        public override double[] Sample(int numberOfPoints, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[numberOfPoints];
             for (int i = 0; i < numberOfPoints; i++)
-                result[i] = -Math.Log(_randomSource.NextDouble()) * _beta;
+                result[i] = -Math.Log(random.NextDouble()) * _beta;
             return result;
+        }
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static ExponentialDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
+        public static ExponentialDistribution Fit(FittingMethod method, double[] sample)
+        {
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (sample.Any(d => d < 0))
+                throw new ArgumentOutOfRangeException(nameof(sample), "the sample can't be lower or equal to 0");
+            if (method == FittingMethod.Moments || method == FittingMethod.MaximumLikelihood)
+            {
+                int n = sample.Length;
+                double avg = sample.Average();
+                return new ExponentialDistribution((n - 2) / (n * avg));
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Exponential(λ = {0})", _lambda);
+            return string.Format($"Exponential(λ = {_lambda})");
         }
-
-        #endregion
-
-        #region Accessors
-
-        /// <summary>Gets the distribution's support</summary>
-        public override Interval Support => _support;
-
-        /// <summary>Gets the distribution's entropy </summary>
-        public override double Entropy => Math.Log(Math.E * _beta);
-
-        /// <summary>Gets the distribution's mean</summary>
-        public override double Mean => _beta;
-
-        /// <summary>Gets the distribution's median</summary>
-        public override double Median => _beta * Math.Log(2);
-
-        /// <summary>Gets the distribution's mode </summary>
-        public override double Mode => 0;
-
-        /// <summary> Gets the distribution's mode</summary>
-        public override double Skewness => 2;
-
-        /// <summary>Gets the distribution's variance</summary>
-        public override double Variance => _beta * _beta;
-
-        /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation => _beta;
         #endregion
     }
 }

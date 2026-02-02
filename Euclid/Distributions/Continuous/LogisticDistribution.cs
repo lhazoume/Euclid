@@ -1,5 +1,5 @@
-﻿using Euclid.Histograms;
-using System;
+﻿using System;
+using Euclid.Histograms;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -11,31 +11,21 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private LogisticDistribution(double mu, double s, Random randomSource)
-        {
-            _mu = mu;
-
-            if (s <= 0) throw new ArgumentException("scale has to be positive");
-            _s = s;
-
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
-
-            _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
-        }
-
-        /// <summary>Builds a Logistic distribution</summary>
+        /// <summary>Builds a logistic distribution</summary>
         /// <param name="mu">the location</param>
         /// <param name="s">the scale</param>
         public LogisticDistribution(double mu, double s)
-            : this(mu, s, new Random(Guid.NewGuid().GetHashCode()))
-        { }
+        {
+            _mu = mu;
 
+            if (s <= 0) throw new ArgumentException("the scale has to be positive");
+            _s = s;
+
+            _support = new Interval(double.NegativeInfinity, double.PositiveInfinity, false, false);
+        }
         #endregion
 
         #region Accessors
-        /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => Math.Log(_s) + 2;
-
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean => _mu;
 
@@ -43,32 +33,31 @@ namespace Euclid.Distributions.Continuous
         public override double Median => _mu;
 
         /// <summary>Gets the distribution's mode</summary>
-        public override double Mode=> _mu; 
-
-        /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness=>0.0;
+        public override double Mode => _mu;
 
         /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation => _s * Math.PI / Math.Sqrt(3);
 
-        /// <summary>Gets the distribution's support</summary>
-        public override Interval Support => _support;
-
         /// <summary>Gets the distribution's variance</summary>
         public override double Variance => Math.Pow(_s * Math.PI, 2) / 3;
 
+        /// <summary>Gets the distribution's skewness</summary>
+        public override double Skewness => 0.0;
+
+        /// <summary>Gets the distribution's entropy</summary>
+        public override double Entropy => Math.Log(_s) + 2;
+
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support => _support;
+
+        /// <summary>Gets the distribution's scale parameter</summary>
+        public double Scale => _s;
+
+        /// <summary>Gets the distribution's location parameter</summary>
+        public double Location => _mu;
         #endregion
 
         #region Methods
-
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static LogisticDistribution Fit(FittingMethod method, double[] sample)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">the location at which to compute the function</param>
         /// <returns>a double</returns>
@@ -101,14 +90,43 @@ namespace Euclid.Distributions.Continuous
         {
             if (Math.Abs(t) <= _s)
                 return Math.Exp(_mu * t) * Fn.Beta(1 - _s * t, 1 + _s * t);
-            throw new ArgumentOutOfRangeException(nameof(t), "The argument of the MGF should be lower -in absolute- than the scale");
+            throw new ArgumentOutOfRangeException(nameof(t), "the argument of the MGF should be lower -in absolute value- than the scale");
+        }
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static LogisticDistribution Fit(double[] sample) => Fit(FittingMethod.Moments, sample);
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
+        public static LogisticDistribution Fit(FittingMethod method, double[] sample)
+        {
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (method == FittingMethod.Moments)
+            {
+                int n = sample.Length;
+                double mean = 0,
+                    variance = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    mean += sample[i];
+                    variance += sample[i] * sample[i];
+                }
+                mean /= n;
+                variance = variance / n - mean * mean;
+
+                return new LogisticDistribution(mean, Math.Sqrt(variance * 3) / Math.PI);
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("Logistic(μ = {0} s = {1})", _mu, _s);
+            return string.Format($"Logistic(μ = {_mu} s = {_s})");
         }
         #endregion
     }

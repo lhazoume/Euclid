@@ -1,10 +1,9 @@
-﻿using Euclid.Distributions.Continuous.Kernels;
-using Euclid.Histograms;
-using Euclid.Solvers;
-using Euclid.Solvers.SingleVariableSolver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Euclid.Distributions.Continuous.Kernels;
+using Euclid.Histograms;
+using Euclid.Solvers.SingleVariableSolver;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -20,19 +19,18 @@ namespace Euclid.Distributions.Continuous
         private readonly IDensityKernel _kernel;
         #endregion
 
-        private EmpiricUnivariateDistribution(IList<double> weights, IList<double> values, double h, IDensityKernel kernel, Random randomSource)
+        private EmpiricUnivariateDistribution(IList<double> weights, IList<double> values, double h, IDensityKernel kernel)
         {
             if (weights == null || values == null ||
                 weights.Count == 0 || values.Count == 0 ||
                 weights.Count != values.Count)
-                throw new ArgumentException("The weights and values are not right");
+                throw new ArgumentException("the weights and values are not right");
             _n = weights.Count;
             _weights = new double[_n];
 
             _values = new double[_n];
             _h = h;
             _kernel = kernel ?? throw new ArgumentNullException(nameof(kernel));
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
 
             _sumWeights = 0;
             _m1 = 0;
@@ -78,17 +76,16 @@ namespace Euclid.Distributions.Continuous
         /// <returns>a <c>EmpiricUnivariateDistribution</c></returns>
         public static EmpiricUnivariateDistribution Create(IList<double> weights, IList<double> values, double h, IDensityKernel kernel)
         {
-            return new EmpiricUnivariateDistribution(weights, values, h, kernel, new Random(Guid.NewGuid().GetHashCode()));
+            return new EmpiricUnivariateDistribution(weights, values, h, kernel);
         }
         #endregion
 
         #region Accessors
+        /// <summary>Gets the distribution's mean</summary>
+        public override double Mean => _m1;
 
         /// <summary>Gets the distribution's median</summary>
         public override double Median => InverseCumulativeDistribution(0.5);
-
-        /// <summary>Gets the distribution's mean</summary>
-        public override double Mean => _m1;
 
         /// <summary>Gets the distribution's mode</summary>
         public override double Mode => _values[Array.IndexOf(_weights, _weights.Max())];
@@ -98,11 +95,6 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary>Gets the distribution's variance</summary>
         public override double Variance => _m2 - _m1 * _m1;
-
-        /// <summary>Gets the distribution's support</summary>
-        public override Interval Support => _support;
-
-
 
         /// <summary>Gets the distribution's skewness</summary>
         public override double Skewness
@@ -116,10 +108,12 @@ namespace Euclid.Distributions.Continuous
 
         /// <summary>Gets the distribution's entropy</summary>
         public override double Entropy { get { throw new NotImplementedException(); } }
+
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support => _support;
         #endregion
 
         #region Methods
-
         /// <summary>Computes the cumulative distribution(CDF) of the distribution at x, i.e.P(X ≤ x)</summary>
         /// <param name="x">the location at which to compute the function</param>
         /// <returns>a double</returns>
@@ -166,7 +160,6 @@ namespace Euclid.Distributions.Continuous
                 result += Math.Exp(t * _values[i]) * _weights[i];
             return result;
         }
-
         #endregion
     }
 }

@@ -12,11 +12,12 @@ namespace Euclid.Distributions.Discrete
         private const double _supportWidthInStandardDeviations = 10;
         #endregion
 
-
-        private SkellamDistribution(double mu1, double mu2, Random randomSource)
+        /// <summary>Initializes a new instance of the Skellam distribution</summary>
+        /// <param name="mu1">the rate of the first Poisson</param>
+        /// <param name="mu2">the rate of the second Poisson</param>
+        /// <remarks>Allows to compute the probabilities of a Poisson race</remarks>
+        public SkellamDistribution(double mu1, double mu2)
         {
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
-
             if (mu1 <= 0) throw new ArgumentOutOfRangeException(nameof(mu1), "The mu1 should be >0");
             _mu1 = mu1;
 
@@ -28,21 +29,13 @@ namespace Euclid.Distributions.Discrete
             _support = Enumerable.Range(Convert.ToInt32(lBound), Convert.ToInt32(uBound - lBound) + 1).Select(i => Convert.ToDouble(i)).ToArray();
         }
 
-        /// <summary>Initializes a new instance of the Skellam distribution</summary>
-        /// <param name="mu1">the rate of the first Poisson</param>
-        /// <param name="mu2">the rate of the second Poisson</param>
-        /// <remarks>Allows to compute the probabilities of a Poisson race</remarks>
-        public SkellamDistribution(double mu1, double mu2)
-            : this(mu1, mu2, new Random(Guid.NewGuid().GetHashCode()))
-        { }
-
         #region Accessors
 
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean => _mu1 - _mu2;
 
         /// <summary>Gets the distribution's skewness</summary>
-        public override double Skewness => (_mu1 - _mu2) * Math.Pow(_mu1 + _mu2, 1.5);
+        public override double Skewness => (_mu1 - _mu2) * Math.Pow(_mu1 + _mu2, -1.5);
 
         /// <summary>Gets the distribution's standard deviation</summary>
         public override double StandardDeviation => Math.Sqrt(_mu1 + _mu2);
@@ -140,8 +133,9 @@ namespace Euclid.Distributions.Discrete
         /// <summary>Generates a sequence of samples from the distribution</summary>
         /// <param name="size">the sample's size</param>
         /// <returns>an array of double</returns>
-        public override double[] Sample(int size)
+        public override double[] Sample(int size, int seed)
         {
+            Random random = new Random(seed);
             double[] result = new double[size];
             for (int i = 0; i < size; i++)
             {
@@ -153,7 +147,7 @@ namespace Euclid.Distributions.Discrete
                 do
                 {
                     k1++;
-                    p1 *= (1 - _randomSource.NextDouble());
+                    p1 *= (1 - random.NextDouble());
 
                 } while (p1 > L1);
                 #endregion
@@ -162,7 +156,7 @@ namespace Euclid.Distributions.Discrete
                 do
                 {
                     k2++;
-                    p2 *= (1 - _randomSource.NextDouble());
+                    p2 *= (1 - random.NextDouble());
 
                 } while (p2 > L2);
                 #endregion

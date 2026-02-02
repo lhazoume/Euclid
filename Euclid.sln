@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28729.10
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Euclid", "Euclid\Euclid.csproj", "{C685AEF9-4E07-40C7-AC2F-FF66C8A3A851}"
 EndProject
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidTests", "EuclidTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidBenchmark", "EuclidBenchmark\EuclidBenchmark.csproj", "{AC1CEC78-6AB6-4D6E-948A-26FFDDFAAEC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarking", "Benchmarking\Benchmarking.csproj", "{C6DA9C79-9068-4FC3-A9CF-570238E22F4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuclidExamples", "EuclidExamples\EuclidExamples.csproj", "{C5C4ECB8-874C-4120-B1D2-7C86A0AC943F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,12 +36,12 @@ Global
 		{AC1CEC78-6AB6-4D6E-948A-26FFDDFAAEC5}.Release DEMO|Any CPU.Build.0 = Release|Any CPU
 		{AC1CEC78-6AB6-4D6E-948A-26FFDDFAAEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC1CEC78-6AB6-4D6E-948A-26FFDDFAAEC5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6DA9C79-9068-4FC3-A9CF-570238E22F4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6DA9C79-9068-4FC3-A9CF-570238E22F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6DA9C79-9068-4FC3-A9CF-570238E22F4B}.Release DEMO|Any CPU.ActiveCfg = Release DEMO|Any CPU
-		{C6DA9C79-9068-4FC3-A9CF-570238E22F4B}.Release DEMO|Any CPU.Build.0 = Release DEMO|Any CPU
-		{C6DA9C79-9068-4FC3-A9CF-570238E22F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6DA9C79-9068-4FC3-A9CF-570238E22F4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C4ECB8-874C-4120-B1D2-7C86A0AC943F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C4ECB8-874C-4120-B1D2-7C86A0AC943F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C4ECB8-874C-4120-B1D2-7C86A0AC943F}.Release DEMO|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C4ECB8-874C-4120-B1D2-7C86A0AC943F}.Release DEMO|Any CPU.Build.0 = Release|Any CPU
+		{C5C4ECB8-874C-4120-B1D2-7C86A0AC943F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C4ECB8-874C-4120-B1D2-7C86A0AC943F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

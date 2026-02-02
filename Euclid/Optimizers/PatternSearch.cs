@@ -3,6 +3,7 @@ using Euclid.Solvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Euclid.Optimizers
 {
@@ -14,7 +15,7 @@ namespace Euclid.Optimizers
         private readonly int _maxIterations, _maxStaticIterations;
         private SolverStatus _status;
         private readonly OptimizationType _optimizationType;
-        private readonly double _shrinkageFactor;
+        private readonly double _shrinkageFactor, _expandFactor;
         private double _epsilon;
 
         private readonly Func<Vector, double> _fitnessFunction;
@@ -34,6 +35,7 @@ namespace Euclid.Optimizers
         /// <param name="maxStaticIterations">the maximum number of static iterations</param>
         /// <param name="epsilon">the convergence threshold</param>
         /// <param name="shrinkageFactor">the shrinkage factor</param>
+        /// <param name="expandFactor">the expansion factor</param>
         public PatternSearch(Func<Vector, bool> feasabilityFunction,
             Func<Vector, double> fitnessFunction,
             Vector initialPoint, Vector shocks,
@@ -41,7 +43,8 @@ namespace Euclid.Optimizers
             int maxIterations,
             int maxStaticIterations,
             double epsilon = 1e-8,
-            double shrinkageFactor = 0.5)
+            double shrinkageFactor = 0.5,
+            double expandFactor = 1.0)
         {
             #region Check the initial point
             if (shocks.Data.Min() <= 0)
@@ -60,6 +63,7 @@ namespace Euclid.Optimizers
             #endregion
 
             _shrinkageFactor = shrinkageFactor;
+            _expandFactor = expandFactor;
             _optimizationType = optimizationType;
 
             if (epsilon <= 0)
@@ -137,6 +141,7 @@ namespace Euclid.Optimizers
             while (!endCriteria.ShouldStop(reference))
             {
                 Tuple<Vector, double>[] neighbours = new Tuple<Vector, double>[2 * _initialShocks.Size];
+
                 #region Compute neighbours
                 Loops.For(0, _initialShocks.Size, parallel, i =>
                 {
@@ -152,7 +157,7 @@ namespace Euclid.Optimizers
                 });
                 #endregion
 
-                List<Tuple<Vector, double>> relevantNeighbours = neighbours.Where(t => t != null && Math.Sign(t.Item2 - reference) == sign).ToList();
+                List<Tuple<Vector, double>> relevantNeighbours = neighbours.Where(t => t != null && !double.IsNaN(t.Item2) && Math.Sign(t.Item2 - reference) == sign).ToList();
                 if (relevantNeighbours.Count == 0)
                     shock *= _shrinkageFactor;
                 else
@@ -160,6 +165,7 @@ namespace Euclid.Optimizers
                     double target = _optimizationType == OptimizationType.Min ? relevantNeighbours.Min(t => t.Item2) : relevantNeighbours.Max(t => t.Item2);
                     current = relevantNeighbours.Find(t => t.Item2 == target).Item1.Clone;
                     reference = _fitnessFunction(current);
+                    shock *= _expandFactor;
                 }
 
                 _convergence.Add(new Tuple<Vector, double>(current, reference));

@@ -5,7 +5,11 @@
     {
         /// <summary>Fits the parameters to the moments</summary>
         Moments = 0,
+
         /// <summary>Fits the parameters by using the maximum likehood</summary>
-        MaximumLikelihood = 1
+        MaximumLikelihood = 1,
+
+        /// <summary>Fits the parameters by using the positional arguments</summary>
+        PositionalArgument = 2
     }
 }

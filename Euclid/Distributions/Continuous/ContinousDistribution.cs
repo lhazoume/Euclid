@@ -1,5 +1,5 @@
-﻿using Euclid.Histograms;
-using System;
+﻿using System;
+using Euclid.Histograms;
 
 namespace Euclid.Distributions.Continuous
 {
@@ -8,19 +8,10 @@ namespace Euclid.Distributions.Continuous
     /// <summary>Abstract class base for continuous distributions</summary>
     public abstract class ContinuousDistribution : IDistribution
     {
-        /// <summary>The random number generator</summary>
-        protected Random _randomSource;
-
         /// <summary>The distribution's support </summary>
         protected Interval _support;
 
         #region Accessors
-        /// <summary>Gets the distribution's entropy</summary>
-        public abstract double Entropy { get; }
-
-        /// <summary>Gets the distribution's support</summary>
-        public abstract Interval Support { get; }
-
         /// <summary>Gets the distribution's mean</summary>
         public abstract double Mean { get; }
 
@@ -30,23 +21,20 @@ namespace Euclid.Distributions.Continuous
         /// <summary>Gets the distribution's mode</summary>
         public abstract double Mode { get; }
 
-        /// <summary>Gets the distribution's skewness</summary>
-        public abstract double Skewness { get; }
-
         /// <summary>Gets the distribution's standard deviation</summary>
         public abstract double StandardDeviation { get; }
 
         /// <summary>Gets the distribution's variance</summary>
         public abstract double Variance { get; }
 
-        /// <summary>
-        /// Gets or sets the random number generator which is used to draw random samples
-        /// </summary>
-        public Random RandomSource
-        {
-            get { return _randomSource; }
-            set { _randomSource = value ?? throw new ArgumentException("The random source can not be null"); }
-        }
+        /// <summary>Gets the distribution's skewness</summary>
+        public abstract double Skewness { get; }
+
+        /// <summary>Gets the distribution's entropy</summary>
+        public abstract double Entropy { get; }
+
+        /// <summary>Gets the distribution's support</summary>
+        public abstract Interval Support { get; }
         #endregion
 
         #region Methods
@@ -82,22 +70,28 @@ namespace Euclid.Distributions.Continuous
             return Math.Log(ProbabilityDensity(x));
         }
 
-        /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
-        /// <param name="size">the sample's size</param>
-        /// <returns>an array of double</returns>
-        public virtual double[] Sample(int size)
-        {
-            double[] result = new double[size];
-            for (int i = 0; i < size; i++)
-                result[i] = InverseCumulativeDistribution(_randomSource.NextDouble());
-            return result;
-        }
-
         /// <summary>Evaluates the moment-generating function for a given t</summary>
         /// <param name="t">the argument</param>
         /// <returns>a double</returns>
         public abstract double MomentGeneratingFunction(double t);
 
+        /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
+        /// <param name="size">the sample's size</param>
+        /// <returns>an array of double</returns>
+        public virtual double[] Sample(int size) => Sample(size, Guid.NewGuid().GetHashCode());
+
+        /// <summary>Generates a sequence of samples from the normal distribution using th algorithm</summary>
+        /// <param name="size">the sample's size</param>
+        /// <param name="seed">the random number generator's seed</param>
+        /// <returns>an array of double</returns>
+        public virtual double[] Sample(int size, int seed)
+        {
+            Random random = new Random(seed);
+            double[] result = new double[size];
+            for (int i = 0; i < size; i++)
+                result[i] = InverseCumulativeDistribution(random.NextDouble());
+            return result;
+        }
         #endregion
     }
 }

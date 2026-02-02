@@ -1,11 +1,10 @@
-﻿using Euclid.Histograms;
-using System;
+﻿using System;
+using Euclid.Histograms;
+using Euclid.Optimizers;
 
 namespace Euclid.Distributions.Continuous
 {
-    /// <summary>
-    /// Bounded normal distribution class
-    /// </summary>
+    /// <summary> Bounded normal distribution class </summary>
     public class BoundedNormalDistribution : ContinuousDistribution
     {
         #region Declarations
@@ -20,7 +19,12 @@ namespace Euclid.Distributions.Continuous
         #endregion
 
         #region Constructors
-        private BoundedNormalDistribution(double mu, double sigma, double a, double b, Random randomSource)
+        /// <summary>Builds a truncated normal distribution</summary>
+        /// <param name="mu">the location</param>
+        /// <param name="sigma">the scale</param>
+        /// <param name="a">the interval's lower bound</param>
+        /// <param name="b">the interval's upper bound</param>
+        public BoundedNormalDistribution(double mu, double sigma, double a, double b)
         {
             if (sigma <= 0) throw new ArgumentException("sigma has to be positive");
             if (a >= b) throw new ArgumentException("the interval is not defined");
@@ -43,29 +47,11 @@ namespace Euclid.Distributions.Continuous
             _dGb = (double.IsNegativeInfinity(_a) ? 0 : (_alpha * _gbAlpha)) - (double.IsPositiveInfinity(_b) ? 0 : (_beta * _gbBeta));
 
             _Z = _phiBeta - _phiAlpha;
-            _randomSource = randomSource ?? throw new ArgumentException("The random source can not be null");
             _support = new Interval(_a, _b, true, true);
         }
-
-        /// <summary>
-        /// Builds a truncated normal distribution
-        /// </summary>
-        /// <param name="mu">the location</param>
-        /// <param name="sigma">the scale</param>
-        /// <param name="a">the interval's lower bound</param>
-        /// <param name="b">the interval's upper bound</param>
-        public BoundedNormalDistribution(double mu, double sigma, double a, double b)
-            : this(mu, sigma, a, b, new Random(Guid.NewGuid().GetHashCode()))
-        { }
         #endregion
 
         #region Accessors
-        /// <summary>Gets the distribution's entropy</summary>
-        public override double Entropy => Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + _dGb / (2 * _Z);
-
-        /// <summary>Gets the distribution's support</summary>
-        public override Interval Support => _support;
-
         /// <summary>Gets the distribution's mean</summary>
         public override double Mean => _mu + (_gbAlpha - _gbBeta) * _sigma / _Z;
 
@@ -83,9 +69,13 @@ namespace Euclid.Distributions.Continuous
             }
         }
 
-        /// <summary>
-        /// Gets the distribution's skewness
-        /// </summary>
+        /// <summary>Gets the distribution's standard deviation</summary>
+        public override double StandardDeviation => Math.Sqrt(Variance);
+
+        /// <summary>Gets the distribution's variance</summary>
+        public override double Variance => _sigma2 * (1 + _dGb / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2));
+
+        /// <summary>Gets the distribution's skewness</summary>
         /// <remarks>using Shah and Jaiswal (1966)</remarks>
         public override double Skewness
         {
@@ -102,23 +92,26 @@ namespace Euclid.Distributions.Continuous
             }
         }
 
-        /// <summary>Gets the distribution's standard deviation</summary>
-        public override double StandardDeviation => Math.Sqrt(Variance);
+        /// <summary>Gets the distribution's entropy</summary>
+        public override double Entropy => Math.Log(Math.Sqrt(2 * Math.PI * Math.E) * _sigma * _Z) + _dGb / (2 * _Z);
 
-        /// <summary>Gets the distribution's variance</summary>
-        public override double Variance => _sigma2 * (1 + _dGb / _Z - Math.Pow((_gbAlpha - _gbBeta) / _Z, 2));
+        /// <summary>Gets the distribution's support</summary>
+        public override Interval Support => _support;
+
+        /// <summary>Gets the mean parameter of the distribution</summary>
+        public double Mu => _mu;
+
+        /// <summary>Gets the standard deviation parameter of the distribution</summary>
+        public double Sigma => _sigma;
+
+        /// <summary>Gets the distribution's upper bound</summary>
+        public double UpperBound => _b;
+
+        /// <summary>Gets the distribution's lower bound</summary>
+        public double LowerBound => _a;
         #endregion
 
         #region Methods
-
-        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-        /// <param name="method">the fitting method</param>
-        public static BoundedNormalDistribution Fit(FittingMethod method, double[] sample)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>Computes the cumulative distribution function at x</summary>
         /// <param name="x">the location at which to compute the function</param>
         /// <returns>a double</returns>
@@ -154,11 +147,61 @@ namespace Euclid.Distributions.Continuous
             return Math.Exp(_mu * t + _sigma2 * t * t / 2) * (Fn.Phi(_beta - _sigma * t) - Fn.Phi(_alpha - _sigma * t)) / (Fn.Phi(_beta) - Fn.Phi(_alpha));
         }
 
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        public static BoundedNormalDistribution Fit(double[] sample) => Fit(FittingMethod.MaximumLikelihood, sample);
+
+        /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
+        /// <param name="sample">the sample of data to fit</param>
+        /// <param name="method">the fitting method</param>
+        public static BoundedNormalDistribution Fit(FittingMethod method, double[] sample)
+        {
+            if (sample.Length == 0)
+                throw new ArgumentException("the sample can't be empty");
+            if (method == FittingMethod.MaximumLikelihood)
+            {
+                int n = sample.Length;
+                double mean = 0.0,
+                    sigma = 0.0,
+                    a = sample[0],
+                    b = sample[0];
+                for (int i = 0; i < n; i++)
+                {
+                    mean += sample[i];
+                    sigma += sample[i] * sample[i];
+                    a = (sample[i] > a) ? a : sample[i];
+                    b = (sample[i] < b) ? b : sample[i];
+                }
+                mean /= n;
+                sigma = Math.Sqrt(sigma / n - mean * mean);
+
+                double fitness(Vector v)
+                {
+                    BoundedNormalDistribution dist = new BoundedNormalDistribution(v[0], v[1], a, b);
+                    double sum = 0.0;
+                    for (int i = 0; i < n; i++)
+                        sum -= Math.Log(dist.ProbabilityDensity(sample[i]));
+                    return sum;
+                }
+
+                bool feasibilityFunction(Vector v) => (v[1] > 0);
+
+                Vector[] initialSimplex = {
+                    Vector.Create(mean - 5, sigma),
+                    Vector.Create(mean + 5, sigma + 5),
+                    Vector.Create(mean + 5, sigma) };
+                NelderMead nelderMead = new NelderMead(feasibilityFunction, fitness, initialSimplex, OptimizationType.Min, 1000);
+                nelderMead.Optimize();
+                return new BoundedNormalDistribution(nelderMead.Result[0], nelderMead.Result[1], a, b);
+            }
+            throw new NotImplementedException();
+        }
+
         /// <summary>Returns a string that represents this instance</summary>
         /// <returns>A string</returns>
         public override string ToString()
         {
-            return string.Format("BoundedN(μ = {0}, σ = {1}, a = {2}, b = {3})", _mu, _sigma, _a, _b);
+            return $"BoundedN(μ = {_mu}, σ = {_sigma}, a = {_a}, b = {_b})";
         }
         #endregion
     }

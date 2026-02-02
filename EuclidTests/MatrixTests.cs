@@ -15,7 +15,7 @@ namespace Euclid.Tests
         public void CreateTest()
         {
             Matrix m = Matrix.Create();
-            Assert.AreEqual(m.Size, 4, "Failed on the argument less matrix creation");
+            Assert.AreEqual(m.Size, 4, "Failed on the argumentless matrix creation");
         }
 
         [TestMethod()]
@@ -117,7 +117,21 @@ namespace Euclid.Tests
             Assert.AreEqual(0, (mRef - m).Norm2, 1e-10);
         }
 
+
+        [TestMethod()]
+        public void CreateFromColumnsTest()
+        {
+            Vector v1 = Vector.Create(10, 1.0),
+                v2 = Vector.Create(10, 2.0),
+                v3 = Vector.Create(10, 3.0),
+                v4 = Vector.Create(10, 4.0);
+            Matrix m = Matrix.CreateFromColumns(new Vector[] { v1, v2, v3, v4 });
+            Assert.IsTrue(m.Rows == 10 && m.Columns == 4 && m[2, 1] == 2.0);
+        }
+
         #endregion
+
+        #region Inversions
 
         [TestMethod()]
         public void SolveWithTest()
@@ -131,6 +145,95 @@ namespace Euclid.Tests
             Vector x = a.SolveWith(b);
             Assert.AreEqual((a * x - b).Norm1, 0, 1e-9, "The Solve with does not match the expected result");
         }
+
+        [TestMethod()]
+        public void InverseTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 4.0;
+            m[0, 1] = 7.0;
+            m[1, 0] = 2.0;
+            m[1, 1] = 6.0;
+            Matrix inverse = m.Inverse;
+
+            Assert.IsNotNull(inverse);
+            Assert.AreEqual(0.6, inverse[0, 0], 1e-9);
+            Assert.AreEqual(-0.7, inverse[0, 1], 1e-9);
+            Assert.AreEqual(-0.2, inverse[1, 0], 1e-9);
+            Assert.AreEqual(0.4, inverse[1, 1], 1e-9);
+        }
+
+        [TestMethod()]
+        public void FastInverseTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 4.0;
+            m[0, 1] = 7.0;
+            m[1, 0] = 2.0;
+            m[1, 1] = 6.0;
+            Matrix inverse = m.FastInverse;
+
+            Assert.IsNotNull(inverse);
+            Assert.AreEqual(0.6, inverse[0, 0], 1e-9);
+            Assert.AreEqual(-0.7, inverse[0, 1], 1e-9);
+            Assert.AreEqual(-0.2, inverse[1, 0], 1e-9);
+            Assert.AreEqual(0.4, inverse[1, 1], 1e-9);
+        }
+
+        [TestMethod()]
+        public void DiagonalTest()
+        {
+            Matrix m = Matrix.Create(3, 3);
+            m[0, 0] = 1.0;
+            m[1, 1] = 2.0;
+            m[2, 2] = 3.0;
+            Matrix diagonal = m.Diagonal;
+
+            Assert.AreEqual(1.0, diagonal[0, 0]);
+            Assert.AreEqual(2.0, diagonal[1, 1]);
+            Assert.AreEqual(3.0, diagonal[2, 2]);
+            Assert.AreEqual(0.0, diagonal[0, 1]);
+        }
+
+        [TestMethod()]
+        public void CoMatrixTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 1.0;
+            m[0, 1] = 2.0;
+            m[1, 0] = 3.0;
+            m[1, 1] = 4.0;
+            Matrix coMatrix = m.CoMatrix;
+
+            Assert.AreEqual(4.0, coMatrix[0, 0]);
+            Assert.AreEqual(-3.0, coMatrix[0, 1]);
+            Assert.AreEqual(-2.0, coMatrix[1, 0]);
+            Assert.AreEqual(1.0, coMatrix[1, 1]);
+        }
+
+        [TestMethod()]
+        public void CholeskyLowerTest()
+        {
+            Matrix m = Matrix.Create(3, 3);
+            m[0, 0] = 4.0;
+            m[0, 1] = 12.0;
+            m[0, 2] = -16.0;
+            m[1, 0] = 12.0;
+            m[1, 1] = 37.0;
+            m[1, 2] = -43.0;
+            m[2, 0] = -16.0;
+            m[2, 1] = -43.0;
+            m[2, 2] = 98.0;
+            Matrix cholesky = m.CholeskyLower;
+
+            Assert.AreEqual(2.0, cholesky[0, 0], 1e-9);
+            Assert.AreEqual(6.0, cholesky[1, 0], 1e-9);
+            Assert.AreEqual(1.0, cholesky[1, 1], 1e-9);
+            Assert.AreEqual(-8.0, cholesky[2, 0], 1e-9);
+            Assert.AreEqual(5.0, cholesky[2, 1], 1e-9);
+            Assert.AreEqual(3.0, cholesky[2, 2], 1e-9);
+        }
+        #endregion
 
         #region Rows and columns
 
@@ -181,6 +284,8 @@ namespace Euclid.Tests
 
         #endregion
 
+        #region Manipulations
+
         [TestMethod()]
         public void PowerTest()
         {
@@ -192,6 +297,33 @@ namespace Euclid.Tests
             for (int i = 1; i < n; i++)
                 control *= x;
             Assert.AreEqual((control - y).Norm1, 0, 1e-9, "The power does not behave as expected");
+        }
+
+        [TestMethod()]
+        public void TransposeTest()
+        {
+            Matrix m = Matrix.Create(2, 3);
+            m[0, 1] = 2.0;
+            m[1, 2] = 3.0;
+            Matrix transpose = m.Transpose;
+            Assert.AreEqual(3, transpose.Rows);
+            Assert.AreEqual(2, transpose.Columns);
+            Assert.AreEqual(2.0, transpose[1, 0]);
+            Assert.AreEqual(3.0, transpose[2, 1]);
+        }
+
+        [TestMethod()]
+        public void FastTransposeTest()
+        {
+            Matrix m = Matrix.Create(2, 3);
+            m[0, 1] = 2.0;
+            m[1, 2] = 3.0;
+            Matrix transpose = m.FastTranspose;
+
+            Assert.AreEqual(3, transpose.Rows);
+            Assert.AreEqual(2, transpose.Columns);
+            Assert.AreEqual(2.0, transpose[1, 0]);
+            Assert.AreEqual(3.0, transpose[2, 1]);
         }
 
         [TestMethod()]
@@ -212,8 +344,6 @@ namespace Euclid.Tests
                 tmm2 = Matrix.FastTransposeBySelf(m);
             Assert.IsTrue((tmm1 - tmm2).SumOfSquares == 0);
         }
-
-        #region Apply
 
         [TestMethod()]
         public void ApplyTest()
@@ -249,7 +379,84 @@ namespace Euclid.Tests
             Assert.IsTrue(result.Rows == m.Rows && result.Columns == m.Columns, "The output of Apply does not match the expected size");
         }
 
+
+        [TestMethod()]
+        public void SymmetricPartTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 1] = 2.0;
+            m[1, 0] = 3.0;
+            Matrix symmetricPart = m.SymmetricPart;
+
+            Assert.AreEqual(0.0, symmetricPart[0, 0]);
+            Assert.AreEqual(2.5, symmetricPart[0, 1]);
+            Assert.AreEqual(2.5, symmetricPart[1, 0]);
+            Assert.AreEqual(0.0, symmetricPart[1, 1]);
+        }
+
+        [TestMethod()]
+        public void AntiSymmetricPartTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 1] = 2.0;
+            m[1, 0] = 3.0;
+            Matrix antiSymmetricPart = m.AntiSymmetricPart;
+
+            Assert.AreEqual(0.0, antiSymmetricPart[0, 0]);
+            Assert.AreEqual(-0.5, antiSymmetricPart[0, 1]);
+            Assert.AreEqual(0.5, antiSymmetricPart[1, 0]);
+            Assert.AreEqual(0.0, antiSymmetricPart[1, 1]);
+        }
+
+        [TestMethod()]
+        public void HadamardTest()
+        {
+            Matrix m1 = Matrix.Create(2, 2);
+            m1[0, 0] = 1.0;
+            m1[0, 1] = 2.0;
+            m1[1, 0] = 3.0;
+            m1[1, 1] = 4.0;
+
+            Matrix m2 = Matrix.Create(2, 2);
+            m2[0, 0] = 2.0;
+            m2[0, 1] = 0.5;
+            m2[1, 0] = 1.5;
+            m2[1, 1] = 2.0;
+
+            Matrix hadamard = Matrix.Hadamard(m1, m2);
+
+            Assert.AreEqual(2.0, hadamard[0, 0]);
+            Assert.AreEqual(1.0, hadamard[0, 1]);
+            Assert.AreEqual(4.5, hadamard[1, 0]);
+            Assert.AreEqual(8.0, hadamard[1, 1]);
+        }
+
+        [TestMethod()]
+        public void MaxTest()
+        {
+            Matrix m1 = Matrix.Create(2, 2);
+            m1[0, 0] = 1.0;
+            m1[0, 1] = 2.0;
+            m1[1, 0] = 3.0;
+            m1[1, 1] = 4.0;
+
+            Matrix m2 = Matrix.Create(2, 2);
+            m2[0, 0] = 2.0;
+            m2[0, 1] = 1.5;
+            m2[1, 0] = 2.5;
+            m2[1, 1] = 3.5;
+
+            Matrix max = Matrix.Max(m1, m2);
+
+            Assert.AreEqual(2.0, max[0, 0]);
+            Assert.AreEqual(2.0, max[0, 1]);
+            Assert.AreEqual(3.0, max[1, 0]);
+            Assert.AreEqual(4.0, max[1, 1]);
+        }
+
         #endregion
+
+        #region Miscellaneaous
 
         [TestMethod()]
         public void ScalarTest()
@@ -308,15 +515,327 @@ namespace Euclid.Tests
             Assert.AreEqual(Math.PI + 2 * Math.E, m3.NormSup, 1e-10);
         }
 
+        #endregion
+
         [TestMethod()]
-        public void CreateFromColumnsTest()
+        public void ColumnsTest()
         {
-            Vector v1 = Vector.Create(10, 1.0),
-                v2 = Vector.Create(10, 2.0),
-                v3 = Vector.Create(10, 3.0),
-                v4 = Vector.Create(10, 4.0);
-            Matrix m = Matrix.CreateFromColumns(new Vector[] { v1, v2, v3, v4 });
-            Assert.IsTrue(m.Rows == 10 && m.Columns == 4 && m[2, 1] == 2.0);
+            Matrix m = Matrix.Create(3, 4);
+            Assert.AreEqual(4, m.Columns);
         }
+
+        [TestMethod()]
+        public void RowsTest()
+        {
+            Matrix m = Matrix.Create(3, 4);
+            Assert.AreEqual(3, m.Rows);
+        }
+
+        [TestMethod()]
+        public void IsSquareTest()
+        {
+            Matrix m1 = Matrix.Create(3, 3);
+            Matrix m2 = Matrix.Create(3, 4);
+            Assert.IsTrue(m1.IsSquare);
+            Assert.IsFalse(m2.IsSquare);
+        }
+
+        [TestMethod()]
+        public void IsSymetricTest()
+        {
+            Matrix m1 = Matrix.Create(3, 3);
+            m1[0, 1] = 1;
+            m1[1, 0] = 1;
+            Assert.IsTrue(m1.IsSymetric);
+
+            Matrix m2 = Matrix.Create(3, 3);
+            m2[0, 1] = 1;
+            m2[1, 0] = 2;
+            Assert.IsFalse(m2.IsSymetric);
+        }
+
+        [TestMethod()]
+        public void SizeTest()
+        {
+            Matrix m = Matrix.Create(3, 4);
+            Assert.AreEqual(12, m.Size);
+        }
+
+        [TestMethod()]
+        public void DataTest()
+        {
+            Matrix m = Matrix.Create(2, 2, 5.0);
+            double[] data = m.Data;
+            Assert.AreEqual(5.0, data[0]);
+            Assert.AreEqual(5.0, data[1]);
+            Assert.AreEqual(5.0, data[2]);
+            Assert.AreEqual(5.0, data[3]);
+        }
+
+        [TestMethod()]
+        public void ArrayTest()
+        {
+            Matrix m = Matrix.Create(2, 2, 5.0);
+            double[,] array = m.Array;
+            Assert.AreEqual(5.0, array[0, 0]);
+            Assert.AreEqual(5.0, array[0, 1]);
+            Assert.AreEqual(5.0, array[1, 0]);
+            Assert.AreEqual(5.0, array[1, 1]);
+        }
+
+        [TestMethod()]
+        public void JaggedArrayTest()
+        {
+            Matrix m = Matrix.Create(2, 2, 5.0);
+            double[][] jaggedArray = m.JaggedArray;
+            Assert.AreEqual(5.0, jaggedArray[0][0]);
+            Assert.AreEqual(5.0, jaggedArray[0][1]);
+            Assert.AreEqual(5.0, jaggedArray[1][0]);
+            Assert.AreEqual(5.0, jaggedArray[1][1]);
+        }
+
+        [TestMethod()]
+        public void IndexerTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 1.0;
+            m[1, 1] = 2.0;
+            Assert.AreEqual(1.0, m[0, 0]);
+            Assert.AreEqual(2.0, m[1, 1]);
+        }
+
+        [TestMethod()]
+        public void LTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 4.0;
+            m[0, 1] = 3.0;
+            m[1, 0] = 6.0;
+            m[1, 1] = 3.0;
+            Matrix L = m.L;
+            Assert.AreEqual(1.0, L[0, 0]);
+            Assert.AreEqual(0.0, L[0, 1]);
+            Assert.AreEqual(1.5, L[1, 0]);
+            Assert.AreEqual(1.0, L[1, 1]);
+        }
+
+        [TestMethod()]
+        public void UTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 4.0;
+            m[0, 1] = 3.0;
+            m[1, 0] = 6.0;
+            m[1, 1] = 3.0;
+            Matrix U = m.U;
+            Assert.AreEqual(4.0, U[0, 0]);
+            Assert.AreEqual(3.0, U[0, 1]);
+            Assert.AreEqual(0.0, U[1, 0]);
+            Assert.AreEqual(-1.5, U[1, 1]);
+        }
+
+        [TestMethod()]
+        public void DeterminantTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 4.0;
+            m[0, 1] = 3.0;
+            m[1, 0] = 6.0;
+            m[1, 1] = 3.0;
+            double det = m.Determinant;
+            Assert.AreEqual(-6.0, det, 1e-9);
+        }
+
+        [TestMethod()]
+        public void TraceTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 1.0;
+            m[1, 1] = 2.0;
+            double trace = m.Trace;
+            Assert.AreEqual(3.0, trace);
+        }
+
+
+
+        [TestMethod()]
+        public void Norm1Test()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 1.0;
+            m[0, 1] = -2.0;
+            m[1, 0] = 3.0;
+            m[1, 1] = -4.0;
+            double norm1 = m.Norm1;
+            Assert.AreEqual(10.0, norm1);
+        }
+
+        [TestMethod()]
+        public void Norm2Test()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 1.0;
+            m[0, 1] = -2.0;
+            m[1, 0] = 3.0;
+            m[1, 1] = -4.0;
+            double norm2 = m.Norm2;
+            Assert.AreEqual(5.477225575051661, norm2, 1e-9);
+        }
+
+        [TestMethod()]
+        public void NormSupTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 1.0;
+            m[0, 1] = -2.0;
+            m[1, 0] = 3.0;
+            m[1, 1] = -4.0;
+            double normSup = m.NormSup;
+            Assert.AreEqual(4.0, normSup);
+        }
+
+        [TestMethod()]
+        public void SumOfSquaresTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 1.0;
+            m[0, 1] = -2.0;
+            m[1, 0] = 3.0;
+            m[1, 1] = -4.0;
+            double sumOfSquares = m.SumOfSquares;
+            Assert.AreEqual(30.0, sumOfSquares);
+        }
+
+        [TestMethod()]
+        public void SumTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            m[0, 0] = 1.0;
+            m[0, 1] = -2.0;
+            m[1, 0] = 3.0;
+            m[1, 1] = -4.0;
+            double sum = m.Sum;
+            Assert.AreEqual(-2.0, sum);
+        }
+
+
+        [TestMethod()]
+        public void SetRowTest()
+        {
+            Matrix m = Matrix.Create(2, 2);
+            Vector row = Vector.Create(2);
+            row[0] = 1.0;
+            row[1] = 2.0;
+            m.SetRow(row, 1);
+            Assert.AreEqual(1.0, m[1, 0]);
+            Assert.AreEqual(2.0, m[1, 1]);
+        }
+
+        #region Operators
+
+        [TestMethod()]
+        public void OperatorMultiplyScalarTest()
+        {
+            Matrix m = Matrix.Create(2, 2, 2.0);
+            Matrix result = m * 3.0;
+            Assert.AreEqual(6.0, result[0, 0]);
+            Assert.AreEqual(6.0, result[0, 1]);
+            Assert.AreEqual(6.0, result[1, 0]);
+            Assert.AreEqual(6.0, result[1, 1]);
+        }
+
+        [TestMethod()]
+        public void OperatorMultiplyScalarReverseTest()
+        {
+            Matrix m = Matrix.Create(2, 2, 2.0);
+            Matrix result = 3.0 * m;
+            Assert.AreEqual(6.0, result[0, 0]);
+            Assert.AreEqual(6.0, result[0, 1]);
+            Assert.AreEqual(6.0, result[1, 0]);
+            Assert.AreEqual(6.0, result[1, 1]);
+        }
+
+        [TestMethod()]
+        public void OperatorDivideScalarTest()
+        {
+            Matrix m = Matrix.Create(2, 2, 6.0);
+            Matrix result = m / 3.0;
+            Assert.AreEqual(2.0, result[0, 0]);
+            Assert.AreEqual(2.0, result[0, 1]);
+            Assert.AreEqual(2.0, result[1, 0]);
+            Assert.AreEqual(2.0, result[1, 1]);
+        }
+
+        [TestMethod()]
+        public void OperatorMultiplyMatrixTest()
+        {
+            Matrix m1 = Matrix.Create(2, 2);
+            m1[0, 0] = 1.0;
+            m1[0, 1] = 2.0;
+            m1[1, 0] = 3.0;
+            m1[1, 1] = 4.0;
+
+            Matrix m2 = Matrix.Create(2, 2);
+            m2[0, 0] = 2.0;
+            m2[0, 1] = 0.5;
+            m2[1, 0] = 1.5;
+            m2[1, 1] = 2.0;
+
+            Matrix result = m1 * m2;
+
+            Assert.AreEqual(5.0, result[0, 0]);
+            Assert.AreEqual(4.5, result[0, 1]);
+            Assert.AreEqual(13.0, result[1, 0]);
+            Assert.AreEqual(9.5, result[1, 1]);
+        }
+
+        [TestMethod()]
+        public void OperatorMultiplyMatrixParallelTest()
+        {
+            Matrix m1 = Matrix.Create(2, 2);
+            m1[0, 0] = 1.0;
+            m1[0, 1] = 2.0;
+            m1[1, 0] = 3.0;
+            m1[1, 1] = 4.0;
+
+            Matrix m2 = Matrix.Create(2, 2);
+            m2[0, 0] = 2.0;
+            m2[0, 1] = 0.5;
+            m2[1, 0] = 1.5;
+            m2[1, 1] = 2.0;
+
+            Matrix result = m1 ^ m2;
+
+            Assert.AreEqual(5.0, result[0, 0]);
+            Assert.AreEqual(4.5, result[0, 1]);
+            Assert.AreEqual(13.0, result[1, 0]);
+            Assert.AreEqual(9.5, result[1, 1]);
+        }
+
+        [TestMethod()]
+        public void OperatorAddScalarTest()
+        {
+            Matrix m = Matrix.Create(2, 2, 2.0);
+            Matrix result = m + 3.0;
+            Assert.AreEqual(5.0, result[0, 0]);
+            Assert.AreEqual(5.0, result[0, 1]);
+            Assert.AreEqual(5.0, result[1, 0]);
+            Assert.AreEqual(5.0, result[1, 1]);
+        }
+
+        #endregion
+
+        #region Additional Tests
+
+        [TestMethod()]
+        public void CloneTest()
+        {
+            Matrix m = Matrix.Create(3, 3, 5.0);
+            Matrix clone = m.Clone;
+            Assert.AreEqual(m.Rows, clone.Rows);
+            Assert.AreEqual(m.Columns, clone.Columns);
+            Assert.IsTrue(m.Data.SequenceEqual(clone.Data));
+        }
+        #endregion
     }
 }
