@@ -4,11 +4,14 @@ using System.Linq;
 
 namespace Euclid.Solvers
 {
-
+    /// <summary>Represents the tolerance mode for a function</summary>
     public enum FunctionToleranceMode
     {
+        /// <summary>Absolute tolerance on the value of the fonction</summary>
         AbsoluteOnly,
+        /// <summary>Relative tolerance on the value of the function</summary>
         RelativeOnly,
+        /// <summary>Relative and absolute tolerance on the value of the function</summary>
         Any
     }
 

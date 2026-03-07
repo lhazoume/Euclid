@@ -107,6 +107,7 @@ namespace Euclid.Distributions.Continuous
             return sample;
         }
 
+        ///<inheritdoc/>
         public static CauchyDistribution Fit(double[] sample) => Fit(FittingMethod.PositionalArgument, sample);
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
