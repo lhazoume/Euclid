@@ -752,11 +752,11 @@ namespace Euclid
 
             int c = 0;
             double y = 1 - a,
-                z = x + y + 1, 
-                p3 = 1, 
+                z = x + y + 1,
+                p3 = 1,
                 q3 = x,
                 p2 = x + 1,
-                q2 = z * x, 
+                q2 = z * x,
                 ans = p2 / q2,
                 error;
 
@@ -1275,6 +1275,146 @@ namespace Euclid
 
         }
 
+
+        public static double Phi2(double x, double y, double rho)
+        {
+            if (double.IsNaN(x) || double.IsNaN(y) || double.IsNaN(rho))
+                return double.NaN;
+
+            if (rho > 1.0 || rho < -1.0)
+                throw new ArgumentOutOfRangeException(nameof(rho), "rho must be in [-1, 1].");
+
+            // Trivial independence
+            if (rho == 0.0) return Phi(x) * Phi(y);
+
+            // Perfect correlation limits
+            if (rho >= 1.0) return Phi(Math.Min(x, y));
+            if (rho <= -1.0) return Math.Max(0.0, Phi(x) - Phi(-y));
+
+            return BivariateNormalUpper(-x, -y, rho);
+        }
+
+
+        private static double BivariateNormalUpper(double h, double k, double r)
+        {
+            // Gauss-Legendre points and weights selected by |r|
+            // Source structure follows Genz's published / distributed implementations. :contentReference[oaicite:1]{index=1}
+
+            double[,] x = {
+                { -0.9324695142031522, -0.9815606342467191, -0.9931285991850949 },
+                { -0.6612093864662647, -0.9041172563704749, -0.9639719272779138 },
+                { -0.2386191860831970, -0.7699026741943047, -0.9122344282513259 },
+                {  0.0,                -0.5873179542866175, -0.8391169718222188 },
+                {  0.0,                -0.3678314989981802, -0.7463319064601508 },
+                {  0.0,                -0.1252334085114692, -0.6360536807265150 },
+                {  0.0,                 0.0,                -0.5108670019508271 },
+                {  0.0,                 0.0,                -0.3737060887154196 },
+                {  0.0,                 0.0,                -0.2277858511416451 },
+                {  0.0,                 0.0,                -0.07652652113349733 }};
+
+            double[,] w = {
+                { 0.1713244923791705, 0.04717533638651177, 0.01761400713915212 },
+                { 0.3607615730481384, 0.1069393259953183,  0.04060142980038694 },
+                { 0.4679139345726904, 0.1600783285433464,  0.06267204833410906 },
+                { 0.0,                0.2031674267230659,  0.08327674157670475 },
+                { 0.0,                0.2334925365383547,  0.1019301198172404  },
+                { 0.0,                0.2491470458134029,  0.1181945319615184  },
+                { 0.0,                0.0,                 0.1316886384491766  },
+                { 0.0,                0.0,                 0.1420961093183821  },
+                { 0.0,                0.0,                 0.1491729864726037  },
+                { 0.0,                0.0,                 0.1527533871307259  }};
+
+            int ng;   // column index in the tables above
+            int lg;   // number of points
+
+            double ar = Math.Abs(r);
+            if (ar < 0.3)
+            {
+                ng = 0; // 6-point rule stored as 3 nonnegative nodes mirrored
+                lg = 3;
+            }
+            else if (ar < 0.75)
+            {
+                ng = 1; // 12-point rule stored as 6 nonnegative nodes mirrored
+                lg = 6;
+            }
+            else
+            {
+                ng = 2; // 20-point rule stored as 10 nonnegative nodes mirrored
+                lg = 10;
+            }
+
+            double hk = h * k;
+            double bvn = 0.0;
+
+            if (ar < 0.925)
+            {
+                double hs = (h * h + k * k) / 2.0;
+                double asr = Math.Asin(r);
+
+                for (int i = 0; i < lg; i++)
+                    for (int s = -1; s <= 1; s += 2)
+                    {
+                        double sn = Math.Sin(asr * (s * x[i, ng] + 1.0) / 2.0);
+                        bvn += w[i, ng] * Math.Exp((sn * hk - hs) / (1.0 - sn * sn));
+                    }
+                bvn = bvn * asr / (4.0 * Math.PI) + Phi(-h) * Phi(-k);
+            }
+            else
+            {
+                if (r < 0.0)
+                {
+                    k = -k;
+                    hk = -hk;
+                }
+
+                if (ar < 1.0)
+                {
+                    double @as = (1.0 - r) * (1.0 + r),
+                        a = Math.Sqrt(@as),
+                        bs = (h - k) * (h - k),
+                        c = (4.0 - hk) / 8.0,
+                        d = (12.0 - hk) / 16.0,
+                        asr = -(bs / @as + hk) / 2.0;
+
+                    if (asr > -100.0)
+                        bvn = a * Math.Exp(asr) * (1.0 - c * (bs - @as) * (1.0 - d * bs / 5.0) / 3.0 + c * d * @as * @as / 5.0);
+
+                    if (-hk < 100.0)
+                    {
+                        double b = Math.Sqrt(bs);
+                        bvn -= Math.Exp(-hk / 2.0) * Math.Sqrt(2.0 * Math.PI) * Phi(-b / a) * b * (1.0 - c * bs * (1.0 - d * bs / 5.0) / 3.0);
+                    }
+
+                    a /= 2.0;
+
+                    for (int i = 0; i < lg; i++)
+                        for (int s = -1; s <= 1; s += 2)
+                        {
+                            double xs = a * (s * x[i, ng] + 1.0);
+                            xs *= xs;
+
+                            double rs = Math.Sqrt(1.0 - xs);
+                            asr = -(bs / xs + hk) / 2.0;
+
+                            if (asr > -100.0)
+                                bvn += a * w[i, ng] * Math.Exp(asr) * (Math.Exp(-hk * (1.0 - rs) / (2.0 * (1.0 + rs))) / rs - (1.0 + c * xs * (1.0 + d * xs)));
+                        }
+
+                    bvn = -bvn / (2.0 * Math.PI);
+                }
+
+                if (r > 0.0) bvn += Phi(-Math.Max(h, k));
+                if (r < 0.0) bvn = -bvn + Math.Max(0.0, Phi(-h) - Phi(-k));
+            }
+
+            // Clamp minor roundoff outside [0,1]
+            if (bvn < 0.0) return 0.0;
+            if (bvn > 1.0) return 1.0;
+            return bvn;
+        }
+
+
         /// <summary>Computes the inverse of the Phi function</summary>
         /// <param name="p">The location at which to compute the inverse Phi function</param>
         /// <returns> a <c>double</c></returns>
@@ -1681,7 +1821,8 @@ namespace Euclid
         /// <returns></returns>
         public static double Harmonic(double k)
         {
-            if (Math.Round(k) == k) {
+            if (Math.Round(k) == k)
+            {
                 double harmonic = 0.0;
 
                 for (int i = 1; i <= k; i++)
@@ -1694,8 +1835,9 @@ namespace Euclid
             else
             {
                 double eulerGamma = 0.57721566490153286060;
-                return eulerGamma + DiGamma(k+1);
-            };
+                return eulerGamma + DiGamma(k + 1);
+            }
+            ;
 
 
         }
