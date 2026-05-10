@@ -219,6 +219,11 @@ namespace Euclid.DataStructures.IndexedSeries
             return new Slice<T, TU, TV>(labels, legend, data);
         }
 
+        /// <summary>Builds a slice from generic enumerable labels and data</summary>
+        /// <param name="labels">the labels</param>
+        /// <param name="legend">the legend</param>
+        /// <param name="data">the data</param>
+        /// <returns>a <c>Slice</c></returns>
         public static Slice<T, TU, TV> Create(T legend, IEnumerable<TV> labels, IEnumerable<TU> data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));

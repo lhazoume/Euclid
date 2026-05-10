@@ -26,22 +26,24 @@ namespace Euclid
 
         #region Create Matrices
 
+        /// <summary>Creates a matrix of size rows x cols</summary>
+        /// <param name="rows">the number of rows</param>
+        /// <param name="cols">the number of columns</param>
+        /// <returns>a <c>SparseMatrix</c></returns>
         public static SparseMatrix Create(int rows, int cols)
         {
             return new SparseMatrix(rows, cols);
         }
 
+        /// <summary>Creates a square matrix of size n x n</summary>
+        /// <param name="n">the size of the matrix</param>
         public static SparseMatrix Create(int n) => new SparseMatrix(n, n);
 
-        public static SparseMatrix Create(int rows, int cols, double value)
-        {
-            SparseMatrix m = new SparseMatrix(rows, cols);
-            if (Math.Abs(value) < _ACCURACY_) return m;
-            for (int i = 0; i < rows; i++)
-                for (int j = 0; j < cols; j++)
-                    m[i, j] = value;
-            return m;
-        }
+        /// <summary>Creates a matrix of size rows x cols with all coefficients initialized to the given value</summary>
+        /// <param name="cols">the number of columns</param>
+        /// <param name="rows">the number of rows</param>
+        /// <param name="generator">a function that takes row and column indices and returns the value to set at that position</param>
+        /// <returns>a <c>SparseMatrix</c></returns>
         public static SparseMatrix Create(int rows, int cols, Func<int, int, double> generator)
         {
             if (generator == null) throw new ArgumentNullException(nameof(generator));
@@ -54,6 +56,11 @@ namespace Euclid
                 }
             return m;
         }
+
+        /// <summary>Creates an identity matrix of size rows x cols</summary>
+        /// <param name="cols">the number of columns</param>
+        /// <param name="rows">the number of rows</param>
+        /// <returns>a <c>SparseMatrix</c></returns>
         public static SparseMatrix CreateIdentityMatrix(int rows, int cols)
         {
             if (rows != cols) throw new ArgumentException("Identity matrix must be square.");
@@ -62,15 +69,29 @@ namespace Euclid
                 matrix[i, i] = 1.0;
             return matrix;
         }
+
+        /// <summary>Creates an identity matrix of size n x n</summary>
+        /// <param name="n">the size of the matrix</param>
+        /// <returns>a <c>SparseMatrix</c></returns>
         public static SparseMatrix CreateIdentityMatrix(int n) => CreateIdentityMatrix(n, n);
         #endregion
 
         #region Accessors
+        /// <summary>Returns the number of columns</summary>
         public int Columns => _cols;
+
+        /// <summary>Returns the number of rows</summary>
         public int Rows => _rows;
+
+        /// <summary>Returns <c>true</c> if the matrix is square, <c>false</c> otherwise</summary>
         public bool IsSquare => (_rows == _cols);
+
+        /// <summary>Returns the number of non-zero coefficients in the matrix</summary>
         public int CountNonZeros => _data.Sum(d => d.Value.Count);
 
+        /// <summary>Gets or sets the value at position (i, j). Setting a value close to zero will remove the entry from the sparse structure.</summary>
+        /// <param name="i">the row index</param>
+        /// <param name="j">the column index</param>
         public double this[int i, int j]
         {
             get
@@ -107,6 +128,7 @@ namespace Euclid
             }
         }
 
+        /// <summary>Returns a deep copy of the matrix</summary>
         public SparseMatrix Clone
         {
             get
