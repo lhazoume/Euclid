@@ -1052,6 +1052,9 @@ namespace Euclid
             return matrix;
         }
 
+        /// <summary>Returns a square matrix with ones on the diagonal of ones starting at the (0,0) element, also known as the identity matrix</summary>
+        /// <param name="n">The number of rows and columns of the output</param>
+        /// <returns>A square matrix with ones on the diagonal of ones starting at the (0,0) element</returns>
         public static Matrix CreateIdentityMatrix(int n) => CreateIdentityMatrix(n, n);
 
         /// <summary>Builds a square symmetric band-matrix</summary>

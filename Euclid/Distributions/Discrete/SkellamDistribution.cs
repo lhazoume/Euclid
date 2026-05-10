@@ -132,6 +132,7 @@ namespace Euclid.Distributions.Discrete
 
         /// <summary>Generates a sequence of samples from the distribution</summary>
         /// <param name="size">the sample's size</param>
+        /// <param name="seed">the random seed</param>
         /// <returns>an array of double</returns>
         public override double[] Sample(int size, int seed)
         {

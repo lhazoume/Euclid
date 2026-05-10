@@ -34,7 +34,8 @@ namespace Euclid.Solvers
         /// <param name="maxStaticIterations">the maximum number of iterations without substancial change</param>
         /// <param name="functionEpsilon">the error tolerance (beyond that value, convergence is assumed)</param>
         /// <param name="gradientEpsilon">the gradient tolerance (beyond that value, convergence is assumed)</param>
-        public EndCriteria(int? maxIterations = null,int? maxStaticIterations = null,double? functionEpsilon = null,double? gradientEpsilon = null,FunctionToleranceMode mode = FunctionToleranceMode.AbsoluteOnly)
+        /// <param name="mode">the tolerance mode for the function</param>
+        public EndCriteria(int? maxIterations = null, int? maxStaticIterations = null, double? functionEpsilon = null, double? gradientEpsilon = null, FunctionToleranceMode mode = FunctionToleranceMode.AbsoluteOnly)
         {
             _iterations = 0;
             _history = new List<double>();
@@ -62,10 +63,10 @@ namespace Euclid.Solvers
 
             return ExceededIterations() || ExceededMaxStaticIterations() || BelowGradientEpsilon(gradient) || CheckFunctionTolerance();
         }
+
         /// <summary>Specifies whether the end criteria are met for the current value</summary>
         /// <param name="value">the current value of the optimizated function</param>
         /// <returns>a boolean</returns>
-
         public bool ShouldStop(double value)
         {
             _iterations++;
@@ -85,7 +86,7 @@ namespace Euclid.Solvers
             _iterations++;
             return ExceededIterations();
         }
-        
+
         /// <summary>Gets the current status of the optimization controlled by this end criteria</summary>
         public SolverStatus Status => _status;
 
