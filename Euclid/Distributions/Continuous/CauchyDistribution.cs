@@ -91,8 +91,8 @@ namespace Euclid.Distributions.Continuous
         public override double MomentGeneratingFunction(double t) => double.NaN;
 
         /// <summary>Creates a new instance of the distribution fitted on the data sample</summary>
-        /// <param name="sample">the sample of data to fit</param>
-
+        /// <param name="size">the size of the sample</param>
+        /// <param name="seed">the seed to use for the random number generator</param>
         public override double[] Sample(int size, int seed)
         {
             Random random = new Random(seed);
