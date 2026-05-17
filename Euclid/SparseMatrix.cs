@@ -319,6 +319,8 @@ namespace Euclid
 
         #endregion
 
+        /// <summary>Returns a string representation of the sparse matrix</summary>
+        /// <returns>A string representation of the sparse matrix</returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

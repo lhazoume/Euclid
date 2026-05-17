@@ -16,8 +16,10 @@ namespace Euclid.Numerics.PartialDifferentialEquations
     }
 
     // Grilles "classiques"
+    /// <summary>Represents a classic uniform step grid generator</summary>
     public class UniformGridGenerator : IGridGenerator
     {
+        /// <inheritdoc/>
         public double[] Generate(double min, double max, int count)
         {
             if (count <= 0) return Array.Empty<double>();
@@ -27,6 +29,7 @@ namespace Euclid.Numerics.PartialDifferentialEquations
         }
     }
 
+    /// <summary>Represents a sinh-transformed grid generator</summary>
     public class SinhGridGenerator : IGridGenerator
     {
         private readonly double _concentrationPoint;
@@ -41,6 +44,7 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             _concentrationFactor = concentrationFactor;
         }
 
+        /// <inheritdoc/>
         public double[] Generate(double min, double max, int count)
         {
             if (count <= 0) return Array.Empty<double>();
@@ -60,7 +64,7 @@ namespace Euclid.Numerics.PartialDifferentialEquations
             return points;
         }
 
-        static double Arcsinh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
+        private static double Arcsinh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
     }
 
 

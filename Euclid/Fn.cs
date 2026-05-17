@@ -1276,6 +1276,13 @@ namespace Euclid
         }
 
 
+        /// <summary>Calculates the cumulative distribution function of the bivariate normal distribution for the specified
+        /// values and correlation coefficient.</summary>
+        /// <param name="x">The first variable for which to evaluate the cumulative distribution function.</param>
+        /// <param name="y">The second variable for which to evaluate the cumulative distribution function.</param>
+        /// <param name="rho">The correlation coefficient between the two variables, in the range [-1, 1].</param>
+        /// <returns>The cumulative probability for the bivariate normal distribution.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when rho is outside the range [-1, 1].</exception>
         public static double Phi2(double x, double y, double rho)
         {
             if (double.IsNaN(x) || double.IsNaN(y) || double.IsNaN(rho))

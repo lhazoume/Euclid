@@ -17,9 +17,7 @@ namespace Euclid.Interpolations.Interpolator1D
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Builds the quadratic spline interpolator.
-        /// </summary>
+        /// <summary>Builds the quadratic spline interpolator.</summary>
         /// <param name="allowExtrapolation">specifies whether extrapolation is allowed</param>
         public QuadraticSpline(bool allowExtrapolation)
         {
@@ -28,19 +26,24 @@ namespace Euclid.Interpolations.Interpolator1D
         #endregion
 
         #region Accessors
+        /// <inheritdoc/>
         public Interval Range => new Interval(_min, _max);
+
+        /// <inheritdoc/>
         public bool Extrapolation => _extrapolate;
+
+        /// <inheritdoc/>
         public bool Local => true;
         #endregion
 
         #region Public methods
+        /// <inheritdoc/>
         public IInterpolator1D Clone() => new QuadraticSpline(_extrapolate);
 
-        public bool IsInRange(double x)
-        {
-            return _extrapolate || (x >= _min && x <= _max);
-        }
+        /// <inheritdoc/>
+        public bool IsInRange(double x)=> _extrapolate || (x >= _min && x <= _max);
 
+        /// <inheritdoc/>
         public double ValueAt(double x)
         {
             if (!IsInRange(x))
@@ -64,7 +67,7 @@ namespace Euclid.Interpolations.Interpolator1D
             return _a[i] * h * h + _b[i] * h + _c[i];
         }
 
-
+        /// <inheritdoc/>
         public void SetData(IList<double> x, IList<double> y)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
@@ -77,6 +80,7 @@ namespace Euclid.Interpolations.Interpolator1D
             OrganizeTheData();
         }
 
+        /// <inheritdoc/>
         public void SetData(IEnumerable<Point2D> points)
         {
             if (points is null) throw new ArgumentNullException(nameof(points));

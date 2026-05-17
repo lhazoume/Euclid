@@ -5,6 +5,7 @@ using Euclid.Histograms;
 
 namespace Euclid.Interpolations.Interpolator1D
 {
+    /// <summary> A class that transforms the data points of an interpolator using a forward function and applies a backward function to the interpolated values. </summary>
     public class TransformedInterpolator : IInterpolator1D
     {
         #region Private fields
@@ -14,6 +15,11 @@ namespace Euclid.Interpolations.Interpolator1D
         #endregion
 
         #region Constructors
+        /// <summary>Initializes a new instance of the <see cref="TransformedInterpolator"/> class.</summary>
+        /// <param name="interpolator">The underlying interpolator to be transformed</param>
+        /// <param name="forward">The function to transform the data points before interpolation</param>
+        /// <param name="backward">The function to transform the interpolated values back</param>
+        /// <exception cref="ArgumentNullException">Thrown if any of the parameters are null.</exception>
         public TransformedInterpolator(IInterpolator1D interpolator,Func<double, double, double> forward,Func<double, double, double> backward)
         {
             _interpolator = interpolator ?? throw new ArgumentNullException(nameof(interpolator));
@@ -33,7 +39,7 @@ namespace Euclid.Interpolations.Interpolator1D
         /// <param name="x">The x-value to check.</param>
         /// <returns><c>true</c> if the value is in range; otherwise, <c>false</c>.</returns>
         public bool IsInRange(double x) => _interpolator.IsInRange(x);
-        /// <summary> Returns a clone of the current <see cref="Transformateur"/> instance. </summary>
+        /// <summary> Returns a clone of the current <see cref="TransformedInterpolator"/> instance. </summary>
         /// <returns>A new <see cref="IInterpolator1D"/> that is a copy of this instance.</returns>
         public IInterpolator1D Clone() => new TransformedInterpolator(_interpolator.Clone(), _forward, _backward);
         #endregion

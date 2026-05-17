@@ -10,7 +10,7 @@ namespace Euclid.Numerics.PartialDifferentialEquations
         public SparseMatrix SparseOperatorMatrix { get; }
         public Vector BoundaryVector { get; }
 
-        //Split (dense) 
+        //Split (dense)
         public Matrix OperatorMatrixX { get; }
         public Matrix OperatorMatrixY { get; }
         public Matrix OperatorMatrixXY { get; }

@@ -126,9 +126,7 @@ namespace Euclid.Distributions.Discrete
             return Math.Exp(_lambda * (Math.Exp(t) - 1));
         }
 
-        /// <summary>Generates a sequence of samples from the distribution</summary>
-        /// <param name="size">the sample's size</param>
-        /// <returns>an array of double</returns>
+        /// <inheritdoc/>
         public override double[] Sample(int size, int seed)
         {
             Random random = new Random(seed);
