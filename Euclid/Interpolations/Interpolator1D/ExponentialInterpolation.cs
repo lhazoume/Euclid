@@ -5,52 +5,41 @@ using System.Linq;
 
 namespace Euclid.Interpolations.Interpolator1D
 {
-    /// <summary>Defines the interpolation mode when using piecewise constant</summary>
-    public enum PiecewiseConstantInterpolationMode
+    /// <summary>Helps piecewise-exponential ramp interpolation between consecutive points</summary>
+    public class ExponentialInterpolation1D : IInterpolator1D
     {
-        /// <summary>Piecewise constant right interpolation</summary>
-        Right = 0,
-        /// <summary>Piecewise constant left interpolation</summary>
-        Left = 1,
-        /// <summary>Piecewise constant nearest interpolation</summary>
-        Nearest = 2
-    }
-
-    /// <summary>Allows piecewise constant interpolation</summary>
-    public class PiecewiseConstantInterpolation1D : IInterpolator1D
-    {
-        #region Variables
         private double _min, _max;
         private readonly bool _extrapolate;
+        private readonly double _k;
         private List<Point2D> _values;
-        private readonly PiecewiseConstantInterpolationMode _mode;
-        #endregion
 
-        /// <summary>Buils a piecewise constant interpolator</summary>
-        /// <param name="mode">the mode (left, right, nearest)</param>
+        /// <summary>Builds an exponential ramp interpolator</summary>
+        /// <param name="k">the exponential ramp parameter</param>
         /// <param name="allowExtrapolation">specifies whether extrapolations are allowed</param>
-        public PiecewiseConstantInterpolation1D(PiecewiseConstantInterpolationMode mode,
-            bool allowExtrapolation)
+        public ExponentialInterpolation1D(double k, bool allowExtrapolation)
         {
+            _k = k;
             _extrapolate = allowExtrapolation;
-            _mode = mode;
         }
 
         #region Accessors
         /// <summary>The natural range of the x values</summary>
         public Interval Range => new Interval(_min, _max);
 
-        /// <summary>Indicates if the interpolator allows extrapolation</summary>
+        /// <summary>Specifies if the interpolator allows extrapolation</summary>
         public bool Extrapolation => _extrapolate;
-
-        /// <summary>Returns the interpolation mode</summary>
-        public PiecewiseConstantInterpolationMode Mode => _mode;
 
         /// <summary>Specifies if the interpolator is local (vs global)</summary>
         public bool Local => true;
+
+        /// <summary>Returns the exponential ramp parameter</summary>
+        public double K => _k;
         #endregion
 
-        #region Method
+        #region Methods
+        /// <summary>Returns a clone of the current interpolator</summary>
+        public IInterpolator1D Clone() => new ExponentialInterpolation1D(_k, _extrapolate);
+
         /// <summary>Checks if the value is inside the interpolalor's range</summary>
         /// <param name="x">the value</param>
         /// <returns><c>true</c> if the value fits in the range, <c>false</c> otherwise</returns>
@@ -67,11 +56,6 @@ namespace Euclid.Interpolations.Interpolator1D
             if (!IsInRange(x))
                 throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range");
 
-            // Return exact value if it exists
-            int exactIdx = _values.FindIndex(t => t.X == x);
-            if (exactIdx >= 0)
-                return _values[exactIdx].Y;
-
             int i;
             if (_extrapolate)
             {
@@ -84,24 +68,21 @@ namespace Euclid.Interpolations.Interpolator1D
             }
             else
             {
-                i = _values.FindIndex(t => t.X > x) - 1;
+                int idx = _values.FindIndex(t => t.X > x);
+                i = idx == -1 ? _values.Count - 2 : (idx > 0 ? idx - 1 : 0);
             }
 
-            if (_mode == PiecewiseConstantInterpolationMode.Right)
-                // Right-continuous : we take the value to the right of the cut point
-                return _values[i + 1].Y;
-            else if (_mode == PiecewiseConstantInterpolationMode.Left)
-                // Left-continuous : we take the value to the left of the cut point
-                return _values[i].Y;
-            else
-            {
-                // Nearest
-                double mid = 0.5 * (_values[i].X + _values[i + 1].X);
-                return _values[x <= mid ? i : i + 1].Y;
-            }
+            double x0 = _values[i].X, x1 = _values[i + 1].X;
+            double y0 = _values[i].Y, y1 = _values[i + 1].Y;
+
+            double w = x1 > x0 ? Math.Max(0.0, Math.Min(1.0, (x - x0) / (x1 - x0))) : 1.0;
+
+            double shape = Math.Abs(_k) < 1e-10
+                ? w
+                : (1.0 - Math.Exp(-_k * w)) / (1.0 - Math.Exp(-_k));
+
+            return y0 + shape * (y1 - y0);
         }
-
-
 
         /// <summary>Sets the data for the interpolation</summary>
         /// <param name="x">the abscisses</param>
@@ -110,37 +91,28 @@ namespace Euclid.Interpolations.Interpolator1D
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
             if (y == null) throw new ArgumentNullException(nameof(y));
-
             if (x.Count != y.Count) throw new Exception("the x-values and y-values do not match");
-            _values = new List<Point2D>();
 
-            for (int i = 0; i < x.Count; i++)
-                _values.Add(new Point2D(x[i], y[i]));
+            _values = new List<Point2D>();
+            for (int idx = 0; idx < x.Count; idx++)
+                _values.Add(new Point2D(x[idx], y[idx]));
 
             _values.Sort((a, b) => a.X.CompareTo(b.X));
-
             _min = _values[0].X;
             _max = _values.Last().X;
         }
 
         /// <summary>Sets the data for the interpolation</summary>
-        /// <param name="points">the abscisses</param>
+        /// <param name="points">the points</param>
         public void SetData(IEnumerable<Point2D> points)
         {
             if (points == null) throw new ArgumentNullException(nameof(points));
 
             _values = points.ToList();
-
             _values.Sort((a, b) => a.X.CompareTo(b.X));
-
             _min = _values[0].X;
             _max = _values.Last().X;
         }
-        /// <summary>
-        /// Returns a clone of the current interpolator
-        /// </summary>
-        /// <returns></returns>
-        public IInterpolator1D Clone() => new PiecewiseConstantInterpolation1D(_mode, _extrapolate);
         #endregion
     }
 }
