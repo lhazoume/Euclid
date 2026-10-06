@@ -9,8 +9,8 @@ namespace Euclid.Solvers.SingleVariableSolver
         #region Declarations
         private bool _trackConvergence;
         private double _lowerBound, _upperBound,
-            _absoluteTolerance,
-            _slopeTolerance,
+            _absoluteXTolerance,
+            _absoluteYTolerance,
             _result = 0,
             _error = 0;
         private readonly List<Tuple<double, double>> _convergence = new List<Tuple<double, double>>();
@@ -33,8 +33,8 @@ namespace Euclid.Solvers.SingleVariableSolver
             _upperBound = initialUpperBound;
             _f = f;
             _maxIterations = maxIterations;
-            _absoluteTolerance = Descents.ERR_EPSILON;
-            _slopeTolerance = Descents.GRADIENT_EPSILON;
+            _absoluteXTolerance = Descents.ERR_EPSILON;
+            _absoluteYTolerance = Descents.ERR_EPSILON;
         }
 
         #region Accessors
@@ -72,18 +72,18 @@ namespace Euclid.Solvers.SingleVariableSolver
             }
         }
 
-        /// <summary>Gets and sets the tolerance for the target (threshold for target reached)</summary>
-        public double AbsoluteTolerance
+        /// <summary>Gets and sets the tolerance for the input range</summary>
+        public double AbsoluteXTolerance
         {
-            get => _absoluteTolerance;
-            set => _absoluteTolerance = value;
+            get => _absoluteXTolerance;
+            set => _absoluteXTolerance = value;
         }
 
-        /// <summary>Gets and sets the tolerance for the slope (threshold for stationarity)</summary>
-        public double SlopeTolerance
+        /// <summary>Gets and sets the tolerance for the function error</summary>
+        public double AbsoluteYTolerance
         {
-            get => _slopeTolerance;
-            set => _slopeTolerance = value;
+            get => _absoluteYTolerance;
+            set => _absoluteYTolerance = value;
         }
 
         /// <summary>Gets and sets whether the details of the convergence are tracked</summary>
@@ -106,7 +106,7 @@ namespace Euclid.Solvers.SingleVariableSolver
         public double Result => _result;
 
         /// <summary>Gets the details of the convergence (value, error)</summary>
-        public IEnumerable<Tuple<double, double>> Convergence =>_convergence; 
+        public IEnumerable<Tuple<double, double>> Convergence => _convergence;
 
         #endregion
 
@@ -163,7 +163,7 @@ namespace Euclid.Solvers.SingleVariableSolver
             EndCriteria endCriteria = new EndCriteria(maxIterations: _maxIterations);
             while (!endCriteria.ShouldStop(_error))
             {
-                if (Math.Abs(b - a) < _absoluteTolerance)
+                if (Math.Abs(b - a) < _absoluteXTolerance)
                 {
                     _status = SolverStatus.FunctionConvergence;
                     _result = 0.5 * (b + a);
@@ -181,8 +181,8 @@ namespace Euclid.Solvers.SingleVariableSolver
                 #region Checks if bisection is relevant or not
                 double tmp2 = (3 * a + b) / 4;
                 if (!((s > tmp2 && s < b) || (s < tmp2 && s > b)) ||
-                    (mFlag && (Math.Abs(s - b) >= 0.5 * Math.Abs(b - c) || Math.Abs(b - c) < _absoluteTolerance)) ||
-                    (!mFlag && (Math.Abs(s - b) >= 0.5 * Math.Abs(c - d) || Math.Abs(c - d) < _absoluteTolerance)))
+                    (mFlag && (Math.Abs(s - b) >= 0.5 * Math.Abs(b - c) || Math.Abs(b - c) < _absoluteXTolerance)) ||
+                    (!mFlag && (Math.Abs(s - b) >= 0.5 * Math.Abs(c - d) || Math.Abs(c - d) < _absoluteXTolerance)))
                 {
                     s = 0.5 * (a + b);
                     mFlag = true;
@@ -193,6 +193,13 @@ namespace Euclid.Solvers.SingleVariableSolver
 
                 #region Calculate error
                 fs = _f(s) - target;
+                if (Math.Abs(fs) < _absoluteYTolerance)
+                {
+                    _status = SolverStatus.FunctionConvergence;
+                    _result = s;
+                    _error = fs;
+                    return;
+                }
                 if (_trackConvergence)
                     _convergence.Add(new Tuple<double, double>(s, fs));
                 #endregion
