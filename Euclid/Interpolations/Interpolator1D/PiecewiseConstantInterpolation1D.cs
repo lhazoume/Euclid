@@ -64,7 +64,7 @@ namespace Euclid.Interpolations.Interpolator1D
         /// <returns>the interpolated result</returns>
         public double ValueAt(double x)
         {
-            if (!IsInRange(x))
+            if (!IsInRange(x) && !_extrapolate)
                 throw new ArgumentOutOfRangeException(nameof(x), "out of the interpolation range");
 
             // Return exact value if it exists
@@ -72,20 +72,16 @@ namespace Euclid.Interpolations.Interpolator1D
             if (exactIdx >= 0)
                 return _values[exactIdx].Y;
 
-            int i;
+            // Return flat extrapolation outside the boundary values, regardless of the interpolation mode 
             if (_extrapolate)
             {
-                if (x <= _values[1].X)
-                    i = 0;
-                else if (x > _values[_values.Count - 2].X)
-                    i = _values.Count - 2;
-                else
-                    i = _values.FindIndex(t => t.X > x) - 1;
+                if (x < _values[0].X)
+                    return _values[0].Y;
+                if (x > _values[_values.Count - 1].X)
+                    return _values[_values.Count - 1].Y;
             }
-            else
-            {
-                i = _values.FindIndex(t => t.X > x) - 1;
-            }
+
+            int i = _values.FindIndex(t => t.X > x) - 1;
 
             if (_mode == PiecewiseConstantInterpolationMode.Right)
                 // Right-continuous : we take the value to the right of the cut point
